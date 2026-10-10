@@ -4,6 +4,7 @@
 #include "miniinfer/mlp_input.hpp"
 #include "miniinfer/mlp_model.hpp"
 #include "miniinfer/mlp_result.hpp"
+#include "miniinfer/runtime.hpp"
 #include "miniinfer/workspace.hpp"
 
 #include <algorithm>
@@ -19,7 +20,9 @@
 #include <iostream>
 #include <limits>
 #include <locale>
+#include <memory>
 #include <new>
+#include <optional>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -81,12 +84,17 @@ struct Options final {
     std::size_t batch = 1;
     std::uint64_t iterations = 1000;
     std::uint64_t warmup = 100;
+    std::string mode = "direct_cpu";
+    std::size_t workers = 1;
+    std::size_t window = 8;
+    std::size_t queue_capacity = 64;
 };
 
 void print_usage() {
     std::cout << "Usage: benchmark_cli --model DIR --input FILE [--batch N] [--iterations N] [--warmup N]\n"
                  "       benchmark_cli --help | -h\n"
-                 "Run synchronous direct CPU inference and report JSON timing and allocation data.\n"
+                 "       [--mode direct_cpu|runtime] [--workers N] [--window N] [--queue-capacity N]\n"
+                 "Run direct CPU or bounded Runtime inference and report JSON metrics.\n"
                  "Defaults: batch=1, iterations=1000, warmup=100. Batch must be in [1,256].\n"
                  "The input file must contain exactly batch*64 finite little-endian FP32 values.\n";
 }
@@ -140,6 +148,7 @@ bool parse_options(int argc, char* argv[], Options& options, std::string& error)
     bool have_batch = false;
     bool have_iterations = false;
     bool have_warmup = false;
+    std::vector<std::string_view> extra_options;
 
     for (int index = 1; index < argc; ++index) {
         const std::string_view argument{argv[index]};
@@ -217,6 +226,32 @@ bool parse_options(int argc, char* argv[], Options& options, std::string& error)
                 return false;
             }
             have_warmup = true;
+        } else if (argument == "--mode" || argument == "--workers" ||
+                   argument == "--window" || argument == "--queue-capacity") {
+            if (std::find(extra_options.begin(), extra_options.end(), argument) != extra_options.end()) {
+                error = "duplicate option '" + std::string(argument) + "'";
+                return false;
+            }
+            extra_options.push_back(argument);
+            std::string_view value;
+            if (!take_value(argc, argv, index, argument, value, error)) return false;
+            if (argument == "--mode") {
+                if (value != "direct_cpu" && value != "runtime") {
+                    error = "invalid value for '--mode'";
+                    return false;
+                }
+                options.mode = std::string(value);
+            } else {
+                std::uint64_t parsed = 0;
+                const std::uint64_t limit = argument == "--workers" ? 256 : 65536;
+                if (!parse_unsigned(value, parsed) || parsed == 0 || parsed > limit) {
+                    error = "invalid value for '" + std::string(argument) + "'";
+                    return false;
+                }
+                if (argument == "--workers") options.workers = static_cast<std::size_t>(parsed);
+                if (argument == "--window") options.window = static_cast<std::size_t>(parsed);
+                if (argument == "--queue-capacity") options.queue_capacity = static_cast<std::size_t>(parsed);
+            }
         } else {
             error = "unknown argument '" + std::string(argument) + "'";
             return false;
@@ -373,169 +408,243 @@ void append_json_string(std::ostream& output, std::string_view value) {
     output.put('"');
 }
 
-std::string build_json_prefix(const Options& options, std::uint64_t allocation_probe_iterations,
-                              std::size_t allocation_probe_new_events, std::uint64_t rss_after_warmup,
-                              std::uint64_t rss_after_timing, double wall_ms,
-                              double req_per_sec, double samples_per_sec, double mean_ms,
-                              double p50_ms, double p95_ms, double p99_ms, double checksum,
-                              unsigned int hardware_threads, std::string_view kernel,
-                              std::string_view architecture) {
-    std::ostringstream json;
-    json.imbue(std::locale::classic());
-    json << std::setprecision(std::numeric_limits<double>::max_digits10);
-    json << "{\"mode\":\"direct_cpu\",\"batch\":" << options.batch
-         << ",\"iterations\":" << options.iterations
-         << ",\"warmup\":" << options.warmup
-         << ",\"successes\":" << options.iterations
-         << ",\"failures\":0,\"rejected\":0"
-         << ",\"wall_ms\":" << wall_ms
-         << ",\"req_per_sec\":" << req_per_sec
-         << ",\"samples_per_sec\":" << samples_per_sec
-         << ",\"mean_ms\":" << mean_ms
-         << ",\"p50_ms\":" << p50_ms
-         << ",\"p95_ms\":" << p95_ms
-         << ",\"p99_ms\":" << p99_ms
-         << ",\"checksum\":" << checksum
-         << ",\"allocation_probe_iterations\":" << allocation_probe_iterations
-         << ",\"allocation_probe_new_events\":" << allocation_probe_new_events
-         << ",\"allocation_probe_scope\":";
-    append_json_string(json,
-        "Counts replaceable global C++ operator new/new[] and aligned forms via a thread-local counter; excludes malloc/mmap and allocations that bypass these operators.");
-    json << ",\"rss_after_warmup_bytes\":" << rss_after_warmup
-         << ",\"rss_after_timing_bytes\":" << rss_after_timing
-         << ",\"peak_rss_scope\":";
-    append_json_string(json, "getrusage(RUSAGE_SELF) ru_maxrss high-water mark for the process, sampled after the benchmark; Linux KiB converted to bytes.");
-    json << ",\"compiler\":";
-    append_json_string(json, __VERSION__);
-#ifdef NDEBUG
-    json << ",\"build_type\":\"Release\"";
-#else
-    json << ",\"build_type\":\"Debug\"";
-#endif
-    json << ",\"cxx_standard\":17,\"kernel\":";
-    append_json_string(json, kernel);
-    json << ",\"architecture\":";
-    append_json_string(json, architecture);
-    json << ",\"hardware_threads\":" << hardware_threads
-         << ",\"hardware_threads_scope\":";
-    append_json_string(json, "std::thread::hardware_concurrency logical-thread hint, not a physical-core count");
-    json << ",\"timer\":\"std::chrono::steady_clock\""
-         << ",\"timing_scope\":";
-    append_json_string(json, "Total steady-clock interval around formal iterations, including result checks/consumption/destruction and latency recording; setup, warmup, allocation probe, and reporting are excluded.");
-    json << ",\"latency_scope\":";
-    append_json_string(json, "Per-iteration steady-clock interval around executor.run, result checks/consumption, and result destruction.");
-    json << ",\"latency_percentile_method\":";
-    append_json_string(json, "nearest-rank: sorted sample at ceil(p*N), one-indexed");
-    json << ",\"rss_scope\":";
-    append_json_string(json, "Resident pages from /proc/self/statm multiplied by sysconf(_SC_PAGESIZE); sampled after warmup and after formal timing.");
-    return json.str();
+using Clock = std::chrono::steady_clock;
+
+double milliseconds(Clock::time_point begin, Clock::time_point end) {
+    return std::chrono::duration<double, std::milli>(end - begin).count();
+}
+
+struct Statistics {
+    std::vector<double> values;
+    void reserve(std::size_t count) { values.reserve(count); }
+    void add(double value) {
+        if (!std::isfinite(value) || value < 0) throw std::runtime_error("invalid timing sample");
+        values.push_back(value);
+    }
+    void emit(std::ostream& json, std::string_view prefix) {
+        std::sort(values.begin(), values.end());
+        double sum = 0;
+        for (double value : values) sum += value;
+        const double mean = values.empty() ? 0 : sum / static_cast<double>(values.size());
+        json << ",\"" << prefix << "mean_ms\":" << mean;
+        for (unsigned int p : {50U, 95U, 99U}) {
+            json << ",\"" << prefix << 'p' << p << "_ms\":"
+                 << (values.empty() ? 0 : percentile_ms(values, p));
+        }
+    }
+};
+
+struct Measurements {
+    std::uint64_t attempts = 0, accepted = 0, successes = 0, failures = 0;
+    std::uint64_t queue_full = 0, closed = 0;
+    std::size_t max_inflight = 0;
+    double checksum = 0, wall_ms = 0;
+    Statistics latency, queue, execution, completion, collection, submit;
+    void reserve(std::size_t count) {
+        for (auto* metric : {&latency, &queue, &execution, &completion, &collection, &submit}) {
+            metric->reserve(count);
+        }
+    }
+    void record(Clock::time_point before, Clock::time_point submitted,
+                Clock::time_point obtained, const miniinfer::TaskTiming& timing) {
+        latency.add(milliseconds(before, obtained));
+        queue.add(milliseconds(timing.enqueued, timing.started));
+        execution.add(milliseconds(timing.started, timing.finished));
+        completion.add(milliseconds(before, timing.finished));
+        collection.add(milliseconds(timing.finished, obtained));
+        submit.add(milliseconds(before, submitted));
+    }
+};
+
+struct Pending {
+    std::future<miniinfer::MlpResult> future;
+    std::shared_ptr<miniinfer::TaskTiming> timing;
+    Clock::time_point before, submitted;
+};
+
+// A bounded closed-loop producer: scan every ready future before replenishment;
+// only block on a future when the window is full or all attempts were submitted.
+Measurements measure(const Options& options, const miniinfer::MlpInput& input,
+                     const miniinfer::MlpModel& model, miniinfer::Workspace* workspace,
+                     miniinfer::Runtime* runtime, std::uint64_t count, bool record) {
+    Measurements metrics;
+    if (record) metrics.reserve(static_cast<std::size_t>(count));
+    std::vector<std::optional<Pending>> slots(runtime ? options.window : 0);
+    std::size_t inflight = 0;
+    const auto total_start = Clock::now();
+    auto collect = [&](std::optional<Pending>& slot) {
+        try {
+            const auto result = slot->future.get();
+            const auto obtained = Clock::now();
+            const double checksum = consume_result(result, options.batch);
+            metrics.checksum += checksum;
+            if (record) metrics.record(slot->before, slot->submitted, obtained, *slot->timing);
+            ++metrics.successes;
+        } catch (const std::exception&) {
+            ++metrics.failures;
+        }
+        slot.reset();
+        --inflight;
+    };
+    if (!runtime) {
+        for (std::uint64_t index = 0; index < count; ++index) {
+            ++metrics.attempts;
+            ++metrics.accepted;
+            metrics.max_inflight = 1;
+            const auto before = Clock::now();
+            try {
+                // Match Runtime's owned request copy, including it in call latency.
+                const miniinfer::MlpInput owned(input);
+                const auto submitted = Clock::now();
+                miniinfer::TaskTiming timing;
+                timing.enqueued = timing.started = Clock::now();
+                const auto result = miniinfer::CpuExecutor{}.run(model, owned, *workspace);
+                timing.finished = Clock::now();
+                const auto obtained = timing.finished;
+                metrics.checksum += consume_result(result, options.batch);
+                if (record) metrics.record(before, submitted, obtained, timing);
+                ++metrics.successes;
+            } catch (const std::exception&) {
+                ++metrics.failures;
+            }
+        }
+    } else {
+        while (metrics.attempts < count || inflight != 0) {
+            for (auto& slot : slots) {
+                if (slot && slot->future.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+                    collect(slot);
+                }
+            }
+            if (metrics.attempts < count && inflight < options.window) {
+                auto timing = std::make_shared<miniinfer::TaskTiming>();
+                const auto before = Clock::now();
+                ++metrics.attempts;
+                try {
+                    auto future = runtime->submit(input, timing);
+                    const auto submitted = Clock::now();
+                    auto empty = std::find_if(slots.begin(), slots.end(), [](const auto& slot) { return !slot; });
+                    empty->emplace(Pending{std::move(future), std::move(timing), before, submitted});
+                    ++metrics.accepted;
+                    ++inflight;
+                    metrics.max_inflight = std::max(metrics.max_inflight, inflight);
+                } catch (const miniinfer::QueueFull&) {
+                    ++metrics.queue_full;
+                } catch (const miniinfer::PoolClosed&) {
+                    ++metrics.closed;
+                }
+            } else if (inflight != 0) {
+                auto pending = std::find_if(slots.begin(), slots.end(), [](const auto& slot) { return bool(slot); });
+                (*pending)->future.wait();
+            }
+        }
+    }
+    metrics.wall_ms = milliseconds(total_start, Clock::now());
+    if (metrics.attempts != metrics.accepted + metrics.queue_full + metrics.closed ||
+        metrics.accepted != metrics.successes + metrics.failures || !std::isfinite(metrics.checksum)) {
+        throw std::runtime_error("benchmark accounting mismatch");
+    }
+    return metrics;
 }
 
 int run_benchmark(const Options& options) {
     try {
-        const std::size_t input_elements = miniinfer::checked_multiply(
-            options.batch, miniinfer::MlpModel::input_features);
-        auto input_buffer = miniinfer::load_f32_file(options.input_file, input_elements);
-        std::vector<float> input_values(input_buffer.data(),
-                                        input_buffer.data() + input_buffer.size());
-        const miniinfer::MlpInput input(options.batch, std::move(input_values));
-        const auto model = miniinfer::MlpModel::load(options.model_directory);
-        miniinfer::Workspace workspace(kMaxBatch);
-        const miniinfer::CpuExecutor executor;
-
-        for (std::uint64_t iteration = 0; iteration < options.warmup; ++iteration) {
-            const auto result = executor.run(model, input, workspace);
-            const double warmup_checksum = consume_result(result, options.batch);
-            if (!std::isfinite(warmup_checksum)) {
-                throw std::runtime_error("warmup result checksum is non-finite");
-            }
+        if (options.iterations > static_cast<std::uint64_t>(std::vector<double>{}.max_size())) {
+            throw std::length_error("iterations exceed the latency sample vector limit");
         }
-        const std::uint64_t rss_after_warmup = read_current_rss_bytes();
+        const auto input_elements = miniinfer::checked_multiply(options.batch, miniinfer::MlpModel::input_features);
+        auto input_buffer = miniinfer::load_f32_file(options.input_file, input_elements);
+        const miniinfer::MlpInput input(options.batch,
+            std::vector<float>(input_buffer.data(), input_buffer.data() + input_buffer.size()));
+        auto model = miniinfer::MlpModel::load(options.model_directory);
+        std::unique_ptr<miniinfer::Workspace> workspace;
+        std::unique_ptr<miniinfer::Runtime> runtime;
+        if (options.mode == "runtime") {
+            runtime = std::make_unique<miniinfer::Runtime>(
+                std::move(model),
+                miniinfer::RuntimeConfig{options.workers, options.queue_capacity, kMaxBatch});
+        } else {
+            workspace = std::make_unique<miniinfer::Workspace>(kMaxBatch);
+        }
+        const auto warmup = measure(options, input, model, workspace.get(), runtime.get(), options.warmup, false);
+        if (warmup.failures != 0) throw std::runtime_error("warmup task failed");
+        const auto rss_after_warmup = read_current_rss_bytes();
 
-        const std::uint64_t allocation_probe_iterations =
-            std::min(options.iterations, kMaxAllocationProbeIterations);
+        // The D8 allocation probe remains a separate direct-executor probe.
+        // Runtime instrumentation/worker allocations are deliberately not counted.
+        const auto probe_iterations = runtime ? 0 : std::min(options.iterations, kMaxAllocationProbeIterations);
+        std::uint64_t probe_failures = 0;
         g_allocation_events = 0;
         {
-            AllocationCountingScope count_allocations;
-            for (std::uint64_t iteration = 0; iteration < allocation_probe_iterations; ++iteration) {
-                const auto result = executor.run(model, input, workspace);
-                const double probe_checksum = consume_result(result, options.batch);
-                if (!std::isfinite(probe_checksum)) {
-                    throw std::runtime_error("allocation probe result checksum is non-finite");
+            AllocationCountingScope scope;
+            for (std::uint64_t index = 0; index < probe_iterations; ++index) {
+                try {
+                    const auto result = miniinfer::CpuExecutor{}.run(model, input, *workspace);
+                    (void)consume_result(result, options.batch);
+                } catch (const std::exception&) {
+                    ++probe_failures;
                 }
             }
         }
-        const std::size_t allocation_probe_new_events = g_allocation_events;
-
-        if (options.iterations > static_cast<std::uint64_t>(
-                                     std::vector<double>{}.max_size())) {
-            throw std::length_error("iterations exceed the latency sample vector limit");
-        }
-        std::vector<double> latencies;
-        latencies.reserve(static_cast<std::size_t>(options.iterations));
-
-        double checksum = 0.0;
-        const auto total_start = std::chrono::steady_clock::now();
-        for (std::uint64_t iteration = 0; iteration < options.iterations; ++iteration) {
-            const auto request_start = std::chrono::steady_clock::now();
-            {
-                const auto result = executor.run(model, input, workspace);
-                checksum += consume_result(result, options.batch);
-            }
-            const auto request_end = std::chrono::steady_clock::now();
-            const double latency_ms =
-                std::chrono::duration<double, std::milli>(request_end - request_start).count();
-            latencies.push_back(latency_ms);
-        }
-        const auto total_end = std::chrono::steady_clock::now();
-        const double wall_ms =
-            std::chrono::duration<double, std::milli>(total_end - total_start).count();
-        const std::uint64_t rss_after_timing = read_current_rss_bytes();
-
-        std::sort(latencies.begin(), latencies.end());
-        double latency_sum = 0.0;
-        for (const double latency : latencies) {
-            latency_sum += latency;
-        }
-        const double mean_ms = latency_sum / static_cast<double>(latencies.size());
-        const double wall_seconds = wall_ms / 1000.0;
-        const double req_per_sec = wall_seconds > 0.0
-                                       ? static_cast<double>(options.iterations) / wall_seconds
-                                       : 0.0;
-        const double samples_per_sec = req_per_sec * static_cast<double>(options.batch);
-        const double p50_ms = percentile_ms(latencies, 50);
-        const double p95_ms = percentile_ms(latencies, 95);
-        const double p99_ms = percentile_ms(latencies, 99);
-        if (!std::isfinite(wall_ms) || !std::isfinite(req_per_sec) ||
-            !std::isfinite(samples_per_sec) || !std::isfinite(mean_ms) ||
-            !std::isfinite(p50_ms) || !std::isfinite(p95_ms) ||
-            !std::isfinite(p99_ms) || !std::isfinite(checksum)) {
-            throw std::runtime_error("benchmark produced a non-finite metric");
-        }
-
+        const auto probe_events = g_allocation_events;
+        auto metrics = measure(options, input, model, workspace.get(), runtime.get(), options.iterations, true);
+        const auto rss_after_timing = read_current_rss_bytes();
+        if (runtime) runtime->shutdown();
         struct utsname system_info {};
-        if (::uname(&system_info) != 0) {
-            throw std::runtime_error("uname failed: " + std::string(std::strerror(errno)));
-        }
-        const unsigned int hardware_threads = std::thread::hardware_concurrency();
-        std::string output = build_json_prefix(
-            options, allocation_probe_iterations, allocation_probe_new_events,
-            rss_after_warmup, rss_after_timing, wall_ms, req_per_sec, samples_per_sec,
-            mean_ms, p50_ms, p95_ms, p99_ms, checksum, hardware_threads,
-            system_info.release, system_info.machine);
-        output.reserve(output.size() + 64);
-
-        const std::uint64_t peak_rss_bytes = read_peak_rss_bytes();
-        char peak_buffer[32];
-        const auto peak_conversion = std::to_chars(
-            peak_buffer, peak_buffer + sizeof(peak_buffer), peak_rss_bytes);
-        if (peak_conversion.ec != std::errc{}) {
-            throw std::runtime_error("could not format peak RSS");
-        }
-        output.append(",\"peak_rss_bytes\":");
-        output.append(peak_buffer, peak_conversion.ptr);
-        output.append("}\n");
-        std::cout << output;
+        if (::uname(&system_info) != 0) throw std::runtime_error("uname failed");
+        const double rate = metrics.wall_ms > 0 ? static_cast<double>(metrics.successes) * 1000 / metrics.wall_ms : 0;
+        if (!std::isfinite(rate) || !std::isfinite(rate * options.batch)) throw std::runtime_error("non-finite throughput");
+        std::ostringstream json;
+        json.imbue(std::locale::classic());
+        json << std::setprecision(std::numeric_limits<double>::max_digits10);
+        json << "{\"mode\":";
+        append_json_string(json, options.mode);
+        json << ",\"workers\":" << (runtime ? options.workers : 0)
+             << ",\"batch\":" << options.batch << ",\"iterations\":" << options.iterations
+             << ",\"warmup\":" << options.warmup << ",\"window\":" << options.window
+             << ",\"queue_capacity\":" << options.queue_capacity << ",\"max_inflight\":" << metrics.max_inflight
+             << ",\"attempts\":" << metrics.attempts << ",\"accepted\":" << metrics.accepted
+             << ",\"successes\":" << metrics.successes << ",\"failures\":" << metrics.failures
+             << ",\"rejected\":" << metrics.queue_full + metrics.closed
+             << ",\"queue_full_rejected\":" << metrics.queue_full << ",\"closed_rejected\":" << metrics.closed
+             << ",\"wall_ms\":" << metrics.wall_ms << ",\"req_per_sec\":" << rate
+             << ",\"samples_per_sec\":" << rate * options.batch << ",\"checksum\":" << metrics.checksum;
+        metrics.latency.emit(json, "");
+        metrics.queue.emit(json, "queue_");
+        metrics.execution.emit(json, "execution_");
+        metrics.completion.emit(json, "completion_");
+        metrics.collection.emit(json, "collection_");
+        metrics.submit.emit(json, "submit_");
+        json << ",\"latency_samples\":" << metrics.latency.values.size()
+             << ",\"allocation_probe_iterations\":" << probe_iterations
+             << ",\"allocation_probe_new_events\":" << probe_events
+             << ",\"allocation_probe_failures\":" << probe_failures
+             << ",\"allocation_probe_available\":" << (runtime ? "false" : "true")
+             << ",\"allocation_probe_scope\":";
+        append_json_string(json, "Separate direct CpuExecutor probe counts replaceable global C++ operator new/new[] and aligned forms using a thread-local counter; excludes malloc/mmap, input copies, timing records, pool setup and worker-thread allocations. Runtime mode has no allocation probe.");
+        json << ",\"rss_after_warmup_bytes\":" << rss_after_warmup
+             << ",\"rss_after_timing_bytes\":" << rss_after_timing
+             << ",\"peak_rss_bytes\":" << read_peak_rss_bytes() << ",\"rss_scope\":";
+        append_json_string(json, "Resident pages from /proc/self/statm times page size; sampled with Runtime still alive after warmup and after timing. Includes model, workspaces, threads, bounded pending futures, latency vectors and allocator retention; results consumed and destroyed promptly.");
+        json << ",\"peak_rss_scope\":";
+        append_json_string(json, "getrusage(RUSAGE_SELF) ru_maxrss process high-water mark, Linux KiB converted to bytes; includes startup, preparation, warmup, timing and reporting, not executor-only peak.");
+        json << ",\"timing_scope\":";
+        append_json_string(json, "Formal wall time includes input copies, submissions, rejected attempts, ready-future scans, waits, successful result consumption/destruction and metric recording; setup, warmup, allocation probe, final shutdown and reporting excluded.");
+        json << ",\"latency_scope\":";
+        append_json_string(json, "Successful requests only: call-before (before owned input copy) to future.get result acquisition. queue=start-enqueued under queue lock; execution=finish-start (callable); completion=finish-call-before; collection=acquired-finish; submit=submit-return-call-before. Direct execution has zero queue/collection. All stages include instrumentation overhead.");
+        json << ",\"latency_percentile_method\":\"nearest-rank: sorted sample at ceil(p*N), one-indexed\""
+             << ",\"timer\":\"std::chrono::steady_clock\",\"compiler\":";
+        append_json_string(json, __VERSION__);
+#ifdef NDEBUG
+        json << ",\"build_type\":\"Release\"";
+#else
+        json << ",\"build_type\":\"Debug\"";
+#endif
+        json << ",\"cxx_standard\":17,\"kernel\":";
+        append_json_string(json, system_info.release);
+        json << ",\"architecture\":";
+        append_json_string(json, system_info.machine);
+        json << ",\"hardware_threads\":" << std::thread::hardware_concurrency() << "}\n";
+        std::cout << json.str();
         return 0;
     } catch (const std::exception& error) {
         return report_error(error.what(), 1);
@@ -543,7 +652,6 @@ int run_benchmark(const Options& options) {
         return report_error("unknown benchmark failure", 1);
     }
 }
-
 }  // namespace
 
 void* operator new(std::size_t size) { return allocate_bytes(size); }

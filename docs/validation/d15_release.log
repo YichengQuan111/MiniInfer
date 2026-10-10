@@ -1,0 +1,35 @@
+Test project /home/qyc/builds/MiniInfer/release
+      Start  1: project_contract
+ 1/15 Test  #1: project_contract ...................   Passed    0.00 sec
+      Start  2: cli_contract
+ 2/15 Test  #2: cli_contract .......................   Passed    0.47 sec
+      Start  3: buffer_contract
+ 3/15 Test  #3: buffer_contract ....................   Passed    0.00 sec
+      Start  4: tensor_view_contract
+ 4/15 Test  #4: tensor_view_contract ...............   Passed    0.00 sec
+      Start  5: model_contract
+ 5/15 Test  #5: model_contract .....................   Passed    0.14 sec
+      Start  6: cpu_ops_contract
+ 6/15 Test  #6: cpu_ops_contract ...................   Passed    0.00 sec
+      Start  7: inference_contract
+ 7/15 Test  #7: inference_contract .................   Passed    0.07 sec
+      Start  8: runtime_contract
+ 8/15 Test  #8: runtime_contract ...................   Passed    0.29 sec
+      Start  9: thread_pool_contract
+ 9/15 Test  #9: thread_pool_contract ...............   Passed    0.00 sec
+      Start 10: concurrency_contract
+10/15 Test #10: concurrency_contract ...............   Passed    0.44 sec
+      Start 11: shutdown_contract
+11/15 Test #11: shutdown_contract ..................   Passed    0.04 sec
+      Start 12: timing_contract
+12/15 Test #12: timing_contract ....................   Passed    0.01 sec
+      Start 13: runtime_demo_contract
+13/15 Test #13: runtime_demo_contract ..............   Passed    0.09 sec
+      Start 14: runtime_baseline_driver_contract
+14/15 Test #14: runtime_baseline_driver_contract ...   Passed    0.35 sec
+      Start 15: benchmark_cli_contract
+15/15 Test #15: benchmark_cli_contract .............   Passed    0.45 sec
+
+100% tests passed, 0 tests failed out of 15
+
+Total Test time (real) =   2.43 sec

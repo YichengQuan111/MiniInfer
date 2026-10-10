@@ -56,6 +56,10 @@ add_executable(benchmark_cli apps/benchmark_cli.cpp)
 target_link_libraries(benchmark_cli PRIVATE miniinfer::core)
 miniinfer_configure_target(benchmark_cli)
 
+add_executable(runtime_demo apps/runtime_demo.cpp)
+target_link_libraries(runtime_demo PRIVATE miniinfer::core)
+miniinfer_configure_target(runtime_demo)
+
 include(CTest)
 if(BUILD_TESTING)
     add_executable(test_project tests/test_project.cpp)
@@ -96,6 +100,24 @@ if(BUILD_TESTING)
     target_link_libraries(test_thread_pool PRIVATE miniinfer::core)
     miniinfer_configure_target(test_thread_pool)
     add_test(NAME thread_pool_contract COMMAND test_thread_pool)
+    foreach(test_name IN ITEMS concurrency shutdown timing)
+        add_executable(test_${test_name} tests/test_${test_name}.cpp)
+        target_link_libraries(test_${test_name} PRIVATE miniinfer::core)
+        miniinfer_configure_target(test_${test_name})
+    endforeach()
+    add_test(NAME concurrency_contract COMMAND test_concurrency "${PROJECT_SOURCE_DIR}/data/reference")
+    add_test(NAME shutdown_contract COMMAND test_shutdown "${PROJECT_SOURCE_DIR}/data/reference")
+    add_test(NAME timing_contract COMMAND test_timing)
+    add_test(NAME runtime_demo_contract COMMAND runtime_demo "${PROJECT_SOURCE_DIR}/data/reference")
+    set_tests_properties(concurrency_contract shutdown_contract PROPERTIES TIMEOUT 90)
+    set_tests_properties(timing_contract runtime_demo_contract PROPERTIES TIMEOUT 20)
+    find_package(Python3 COMPONENTS Interpreter QUIET)
+    if(Python3_Interpreter_FOUND)
+        add_test(NAME runtime_baseline_driver_contract
+            COMMAND "${Python3_EXECUTABLE}" -m unittest discover
+                -s "${PROJECT_SOURCE_DIR}/tests" -p test_runtime_baseline.py -v)
+        set_tests_properties(runtime_baseline_driver_contract PROPERTIES TIMEOUT 20)
+    endif()
     add_test(NAME benchmark_cli_contract
         COMMAND "${CMAKE_COMMAND}" "-DCLI=$<TARGET_FILE:benchmark_cli>"
             "-DREFERENCE=${PROJECT_SOURCE_DIR}/data/reference"

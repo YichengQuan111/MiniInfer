@@ -1,10 +1,10 @@
 # MiniInfer
 
-MiniInfer v0.1 是一个面向 Linux / WSL2 的 C++17 CPU 推理项目：固定 `64 → 128 → 10` MLP，逐步实现标量 FP32 算子、资源所有权、有界任务队列与安全关闭。完整范围见 [项目开发规范](<MiniInfer 项目说明与 AI Agent 开发规范.md>)。
+MiniInfer v0.1 是一个面向 Linux / WSL2 的 C++17 CPU 推理项目：固定 `64 → 128 → 10` MLP，实现标量 FP32 算子、资源所有权、有界任务队列与安全关闭。完整范围见 [项目开发规范](<MiniInfer 项目说明与 AI Agent 开发规范.md>)。
 
-当前完成 **D1–D10**：标量 CPU MLP、同步与异步推理、有界队列、Worker 私有 Workspace 和同步性能基线。Debug / Release / ASan+UBSan 各 **10/10 CTest 通过**。多生产者压力、并发关闭竞争和 TSan 验证将在 D11 / D12 完成，v0.1 最终验收尚未完成。
+当前完成 **D1–D15 的 v0.1 必达范围**：真实同步 / 异步推理、四生产者与 1/2/4 Worker 压力、关闭竞争、线程创建失败回收、阶段计时、Release 对照和可运行演示。Debug / Release / ASan+UBSan 各 **15/15 CTest 通过**；TSan 在关闭进程地址随机化后 **5/5 相关测试通过**。D13 已完成分配分析和工具核查，perf 未安装，未实施可选优化。
 
-切换会话继续开发时，先阅读 [D10 开发交接](docs/HANDOFF_D10.md)，其中包含剩余任务、环境、验证边界和可复制的启动提示。
+设计与当前边界见 [架构说明](docs/architecture.md)，测量方法及原始结果见 [基准报告](docs/benchmark.md)。[D10 开发交接](docs/HANDOFF_D10.md)保留为历史快照，当前进度以本 README 和源码为准。
 
 ## 已实现
 
@@ -19,7 +19,8 @@ MiniInfer v0.1 是一个面向 Linux / WSL2 的 C++17 CPU 推理项目：固定 
 - [MlpModel](include/miniinfer/mlp_model.hpp) 与 [加载器](src/mlp_model.cpp)：拥有四份固定形状权重，只暴露只读视图；严格校验字节数、读取结果和有限数值。
 - [CpuOps](include/miniinfer/cpu_ops.hpp)、[CpuExecutor](include/miniinfer/cpu_executor.hpp) 与 [Workspace](include/miniinfer/workspace.hpp)：标量 Linear / 原地 ReLU / Argmax，串联两层 MLP 并复用隐藏层存储。
 - [Runtime](include/miniinfer/runtime.hpp) 与 [ThreadPool](include/miniinfer/thread_pool.hpp)：输入 / 结果拥有数据，固定 Worker ID、有界等待队列、future 异常交付、drain / join。
-- [同步基准](apps/benchmark_cli.cpp)：直接执行器计时、独立分配探测、RSS 和机器可读结果；[实测报告](docs/benchmark.md)与原始数据可复现。
+- [基准程序](apps/benchmark_cli.cpp)：direct_cpu / Runtime 1/2/4 Worker、有限 future 窗口、成功 / 失败 / 拒绝记账、阶段延迟、独立直接执行器分配探测和 RSS；[采集驱动](tools/run_runtime_baseline.py)按独立进程保存重复结果。
+- [Runtime 演示](apps/runtime_demo.cpp)：混合 Batch、拥有型输入、future 溢出异常与恢复、重复关闭、关闭后拒绝、析构后保留结果并对照参考。
 
 ## Buffer 与尺寸计算契约
 
@@ -55,7 +56,9 @@ MiniInfer v0.1 是一个面向 Linux / WSL2 的 C++17 CPU 推理项目：固定 
 
 `shutdown()` 先停止接收并唤醒 Worker，再排空已接受任务，在队列锁外 join；多个关闭调用由单独 mutex 序列化，重复调用有效。状态依次为 Running、Draining、Stopped，分别由接收标志与 join 完成表示。析构自动执行该流程，线程池先于 Workspace 和模型销毁；部分线程启动失败时也关闭并 join 已启动线程。
 
-通用 ThreadPool 的任务获得稳定 Worker ID，不依赖 MLP 或算子。支持外部调用者并发 submit / shutdown；调用者须保证池 / Runtime 对象本身存活，不能在所属 Worker 回调中销毁池、阻塞等待同池任务或调用 shutdown（自关闭抛出 `std::logic_error`）。基本关闭、异常交付已验证；并发关闭与构造失败注入的系统测试留到 D12。
+通用 ThreadPool 的任务获得稳定 Worker ID，不依赖 MLP 或算子。支持外部调用者并发 submit / shutdown；调用者须保证池 / Runtime 对象本身存活，不能在所属 Worker 回调中销毁池、阻塞等待同池任务或调用 shutdown（自关闭抛出 `std::logic_error`）。可选第三个构造参数 ThreadFactory 用于启动失败注入，默认 std::thread；创建失败关闭并回收已启动线程，非 joinable 工厂结果被拒绝。这些路径及关闭竞争已经测试。
+
+`submit(input, shared_ptr<TaskTiming>)` 可选记录入队 / 开始 / 结束时间，普通 submit 不读时钟。每请求使用独立记录，只在对应 future 完成后读取；拒绝没有完成记录。记录的可见性与错误时完成边界见架构说明。
 
 ## 本机运行方式
 
@@ -75,7 +78,7 @@ wsl -d Ubuntu-24.04 --cd $linuxProject -- $linuxPython -m unittest discover -s t
 wsl -d Ubuntu-24.04 --cd $linuxProject -- $linuxPython tools/export_mlp.py --output-dir data/generated/digits_seed42 --samples 64 --seed 42 --max-iter 500
 ```
 
-Python 基线为 3.12.3，包版本见 [requirements](tools/requirements.txt)。当前环境已可直接运行；新环境应先安装该依赖清单。C++ 配置和构建不依赖 Python，D1 的 Python 测试单独运行。
+Python 基线为 3.12.3，包版本见 [requirements](tools/requirements.txt)。当前环境已可直接运行；新环境重新导出才需要安装该依赖清单。C++ 推理只需现有参考工件，不需要训练或 Python 包；有 Python3 时 CTest 会额外注册仅用标准库的基准驱动测试，无 Python 时为 14 项。D1 的 Python 导出测试单独运行。
 
 ## C++ 构建、测试与 CLI
 
@@ -101,7 +104,7 @@ wsl -d Ubuntu-24.04 --cd $linuxProject --exec /home/qyc/builds/MiniInfer/release
 
 Windows VS Code 直接打开 Windows 主目录：`Ctrl+Shift+B` 使用默认的 `MiniInfer: build Debug (WSL)`；“终端 → 运行任务”可选择 `MiniInfer: test Debug (WSL)` 或对应 Release 任务。测试任务依次完成配置、构建、CTest；定义见 [.vscode/tasks.json](.vscode/tasks.json)。这些任务使用当前项目的固定 WSL 路径，移动源码目录时需同步修改。
 
-`asan-ubsan` 和 `tsan` preset 分别启用独立安全检查选项；同时开启 `MINIINFER_ENABLE_ASAN_UBSAN` 与 `MINIINFER_ENABLE_TSAN` 会在配置时报错。本轮已在 ASan+UBSan 下运行全套同步 / 异步基本契约测试；TSan 并发检查仍在 D12。目录、工具和后续升级约定见 [技术栈](docs/tech_stack.md)。
+`asan-ubsan` 和 `tsan` preset 分别启用独立安全检查选项；同时开启 `MINIINFER_ENABLE_ASAN_UBSAN` 与 `MINIINFER_ENABLE_TSAN` 会在配置时报错。全套 ASan+UBSan 与独立 TSan 并发检查已经执行，命令及限制见下方 D11–D15 记录。目录、工具和后续升级约定见 [技术栈](docs/tech_stack.md)。
 
 ## D1 验收记录
 
@@ -170,7 +173,7 @@ wsl -d Ubuntu-24.04 --cd $linuxProject --exec env ASAN_OPTIONS=detect_leaks=1:ha
 | D10 | 通用 ThreadPool + Runtime，Worker ID 稳定；双 Worker Batch 1/8 与直接执行器一致，Input / Result 所有权、异常 future 后恢复、重复关闭、析构回收均通过 |
 
 - Debug / Release / ASan+UBSan 均构建成功，无编译警告，各 **10/10 CTest 通过**。ASan 启用泄漏检查，UBSan 错误即停止，本次没有报告泄漏、越界或未定义行为。该结果限于已执行契约测试，不替代 D11 / D12 压力与数据竞争检查。
-- 同步参考验证通过后才进入并发；D10 已具备可用的异步执行路径。当前尚未实现 Runtime 性能统计与完整最终演示，未创建 Git 提交。
+- 同步参考验证通过后才进入并发；D10 已具备可用的异步执行路径。这是 D10 当时的验收快照；Runtime 统计、完整演示及之后的进度见 D11–D15。
 
 复现全套安全检查：
 
@@ -180,4 +183,47 @@ wsl -d Ubuntu-24.04 --cd $linuxProject --exec cmake --build --preset asan-ubsan
 wsl -d Ubuntu-24.04 --cd $linuxProject --exec env ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1 ctest --preset asan-ubsan
 ```
 
-下一任务是 **D11：多生产者、1/2/4 Worker 正确性与压力测试**，随后 D12 关闭竞争与 TSan。V1 / V2 升级边界保持 [实施策略](docs/MiniInfer_V0.1_ISO_策略.md) 中的约定。
+V1 / V2 升级边界保持 [实施策略](docs/MiniInfer_V0.1_ISO_策略.md) 中的约定，后续阶段按用户选择推进。
+
+## D11–D15 最终验收记录
+
+2026-10-10，继续使用同一 Windows 主源码 / WSL 构建；没有重新训练或覆盖正式模型。
+
+| 工作单元 | 完成内容与证据 |
+|---|---|
+| D11 | 四生产者 × 每人 40 个已接受请求，1/2/4 Worker、混合 Batch 1/8/32/64/256；逐元素精确对照 CpuExecutor，重试 / QueueFull 单独记账；每生产者 future 窗口 2。每配置含附加用例共接受 167，成功 166、预期任务失败 1，结果隔离和异常后恢复通过；[详细输出](docs/validation/d11_d12_details.log) |
+| D12 | gate 控制满队列 / Worker 状态，验证关闭优先级、并发 / 重复关闭、drain、恰好一次、Runtime 提交竞争和析构后收取 future；工厂第 0 / 2 次启动注入失败及非 joinable 返回。独立 TSan 的 Runtime / Pool / 压力 / 关闭 / 计时五项通过 |
+| D13 | 独立直接执行器探测每请求 2 次 new；perf 实查未安装，保留现有实现，未做可选热点优化；[报告](docs/benchmark.md)记录覆盖范围 |
+| D14 | direct_cpu / Runtime 1/2/4 Worker，Batch 1/8/32 各 3 次独立进程，窗口 8 / 队列 64 / 预热 200 / 尝试 1000，共 36 次；阶段计时、正确记账与 RSS 口径完整；[原始数据](docs/benchmark_data/d14_runtime.json) |
+| D15 | README、[架构](docs/architecture.md)、[基准](docs/benchmark.md)、自验证 Runtime 演示；不存在的 Linux 构建目录完成 Release 配置 / 构建 / 15 项测试 |
+
+最终 Debug / Release / ASan+UBSan 各 **15/15**，构建无编译警告，ASan 泄漏检查开启且 UBSan 错误即停止，无报告泄漏、越界或 UB。日志：[Debug](docs/validation/d15_debug.log)、[Release](docs/validation/d15_release.log)、[ASan/UBSan](docs/validation/d15_asan_ubsan.log)、[干净构建](docs/validation/d15_clean_release.log)。检查结果仅覆盖已执行路径。
+
+TSan 首次默认布局出现 unexpected memory mapping，部分启动失败；[首次日志](docs/validation/d12_tsan.log)保留。使用进程级 `setarch x86_64 -R` 后五项通过，无竞争报告，见 [复测日志](docs/validation/d12_tsan_no_aslr.log)。随后增加的调用线程启动中断 / 异常退栈用例也在 TSan 下 [通过](docs/validation/d12_tsan_unwind.log)，确保先关闭池再 join 无限重试的生产者。该命令只影响此进程及其子进程，不修改系统配置。Windows PowerShell 复现：
+
+```powershell
+wsl -d Ubuntu-24.04 --cd $linuxProject --exec cmake --preset tsan
+wsl -d Ubuntu-24.04 --cd $linuxProject --exec cmake --build --preset tsan
+wsl -d Ubuntu-24.04 --cd $linuxProject --exec setarch x86_64 -R env TSAN_OPTIONS=halt_on_error=1 ctest --preset tsan -R '^(thread_pool_contract|runtime_contract|concurrency_contract|shutdown_contract|timing_contract)$' -V
+```
+
+运行完整 Runtime 演示与基准（Release 构建完成后）：
+
+```powershell
+wsl -d Ubuntu-24.04 --cd $linuxProject --exec /home/qyc/builds/MiniInfer/release/bin/runtime_demo data/reference
+wsl -d Ubuntu-24.04 --cd $linuxProject --exec /usr/bin/python3 tools/run_runtime_baseline.py --cli /home/qyc/builds/MiniInfer/release/bin/benchmark_cli --reference data/reference --output docs/benchmark_data/d14_runtime_rerun.json --iterations 1000 --warmup 200 --repeats 3 --window 8 --queue-capacity 64
+```
+
+演示接受五个任务，四个成功、一个预期溢出异常，成功批大小 1/8/32/1；验证异常后恢复、关闭后拒绝以及 Runtime 析构后的结果。实际 [输出](docs/validation/d15_demo.json)含标签；程序自身对照 FP32 参考，失败退出 1，参数错误退出 2。基准输出路径须未存在，复跑选择新路径；输入必须精确匹配 Batch。
+
+在相近 Linux 环境从零复现，不需要现有本机构建缓存。准备 GCC / Clang、CMake≥3.28、Ninja 和 Python3 标准库，仓库已有正式权重，进入仓库根目录执行（构建路径选择不存在的目录）：
+
+```bash
+cmake -S . -B "$HOME/builds/MiniInfer/clean-release" -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build "$HOME/builds/MiniInfer/clean-release" -j 4
+ctest --test-dir "$HOME/builds/MiniInfer/clean-release" --output-on-failure
+"$HOME/builds/MiniInfer/clean-release/bin/runtime_demo" data/reference
+python3 tools/run_runtime_baseline.py --cli "$HOME/builds/MiniInfer/clean-release/bin/benchmark_cli" --reference data/reference --output docs/benchmark_data/clean_runtime.json
+```
+
+本机最终干净构建目录为 `/home/qyc/builds/MiniInfer/d15-clean-final-release-20261010`。源码和模型仍在 Windows 主目录，智能体保持 Windows；以上 Linux 命令仅用于构建复现。可选 perf 优化、到达率扫描、GPU / 真实视觉模型属于后续工作，v0.1 不扩展这些范围。

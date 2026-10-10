@@ -1,0 +1,106 @@
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Configuring done (9.9s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/qyc/builds/MiniInfer/d15-clean-final-release-20261010
+[1/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/version.cpp.o
+[2/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/checked_size.cpp.o
+[3/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/buffer.cpp.o
+[4/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_model.cpp.o
+[5/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_ops.cpp.o
+[6/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/data_io.cpp.o
+[7/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_input.cpp.o
+[8/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_result.cpp.o
+[9/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/workspace.cpp.o
+[10/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_executor.cpp.o
+[11/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/thread_pool.cpp.o
+[12/41] Building CXX object CMakeFiles/infer_cli.dir/apps/infer_cli.cpp.o
+[13/41] Building CXX object CMakeFiles/test_project.dir/tests/test_project.cpp.o
+[14/41] Building CXX object CMakeFiles/miniinfer_core.dir/src/runtime.cpp.o
+[15/41] Linking CXX static library libminiinfer_core.a
+[16/41] Building CXX object CMakeFiles/test_buffer.dir/tests/test_buffer.cpp.o
+[17/41] Building CXX object CMakeFiles/runtime_demo.dir/apps/runtime_demo.cpp.o
+[18/41] Linking CXX executable bin/infer_cli
+[19/41] Building CXX object CMakeFiles/benchmark_cli.dir/apps/benchmark_cli.cpp.o
+[20/41] Linking CXX executable bin/test_project
+[21/41] Linking CXX executable bin/runtime_demo
+[22/41] Linking CXX executable bin/test_buffer
+[23/41] Linking CXX executable bin/benchmark_cli
+[24/41] Building CXX object CMakeFiles/test_tensor_view.dir/tests/test_tensor_view.cpp.o
+[25/41] Building CXX object CMakeFiles/test_cpu_ops.dir/tests/test_cpu_ops.cpp.o
+[26/41] Linking CXX executable bin/test_tensor_view
+[27/41] Linking CXX executable bin/test_cpu_ops
+[28/41] Building CXX object CMakeFiles/test_model.dir/tests/test_model.cpp.o
+[29/41] Building CXX object CMakeFiles/test_inference.dir/tests/test_inference.cpp.o
+[30/41] Linking CXX executable bin/test_model
+[31/41] Linking CXX executable bin/test_inference
+[32/41] Building CXX object CMakeFiles/test_runtime.dir/tests/test_runtime.cpp.o
+[33/41] Linking CXX executable bin/test_runtime
+[34/41] Building CXX object CMakeFiles/test_concurrency.dir/tests/test_concurrency.cpp.o
+[35/41] Linking CXX executable bin/test_concurrency
+[36/41] Building CXX object CMakeFiles/test_timing.dir/tests/test_timing.cpp.o
+[37/41] Linking CXX executable bin/test_timing
+[38/41] Building CXX object CMakeFiles/test_shutdown.dir/tests/test_shutdown.cpp.o
+[39/41] Building CXX object CMakeFiles/test_thread_pool.dir/tests/test_thread_pool.cpp.o
+[40/41] Linking CXX executable bin/test_shutdown
+[41/41] Linking CXX executable bin/test_thread_pool
+Internal ctest changing into directory: /home/qyc/builds/MiniInfer/d15-clean-final-release-20261010
+Test project /home/qyc/builds/MiniInfer/d15-clean-final-release-20261010
+      Start  1: project_contract
+ 1/15 Test  #1: project_contract ...................   Passed    0.00 sec
+      Start  2: cli_contract
+ 2/15 Test  #2: cli_contract .......................   Passed    0.57 sec
+      Start  3: buffer_contract
+ 3/15 Test  #3: buffer_contract ....................   Passed    0.00 sec
+      Start  4: tensor_view_contract
+ 4/15 Test  #4: tensor_view_contract ...............   Passed    0.00 sec
+      Start  5: model_contract
+ 5/15 Test  #5: model_contract .....................   Passed    0.15 sec
+      Start  6: cpu_ops_contract
+ 6/15 Test  #6: cpu_ops_contract ...................   Passed    0.00 sec
+      Start  7: inference_contract
+ 7/15 Test  #7: inference_contract .................   Passed    0.15 sec
+      Start  8: runtime_contract
+ 8/15 Test  #8: runtime_contract ...................   Passed    0.90 sec
+      Start  9: thread_pool_contract
+ 9/15 Test  #9: thread_pool_contract ...............   Passed    0.00 sec
+      Start 10: concurrency_contract
+10/15 Test #10: concurrency_contract ...............   Passed    0.49 sec
+      Start 11: shutdown_contract
+11/15 Test #11: shutdown_contract ..................   Passed    0.05 sec
+      Start 12: timing_contract
+12/15 Test #12: timing_contract ....................   Passed    0.00 sec
+      Start 13: runtime_demo_contract
+13/15 Test #13: runtime_demo_contract ..............   Passed    0.07 sec
+      Start 14: runtime_baseline_driver_contract
+14/15 Test #14: runtime_baseline_driver_contract ...   Passed    0.37 sec
+      Start 15: benchmark_cli_contract
+15/15 Test #15: benchmark_cli_contract .............   Passed    0.45 sec
+
+100% tests passed, 0 tests failed out of 15
+
+Total Test time (real) =   3.27 sec
+11/15 Testing: shutdown_contract
+11/15 Test: shutdown_contract
+Command: "/home/qyc/builds/MiniInfer/d15-clean-final-release-20261010/bin/test_shutdown" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/d15-clean-final-release-20261010
+"shutdown_contract" start time: Oct 10 20:55 +08
+Output:
+----------------------------------------------------------
+test_shutdown: thread creation rollback, shutdown races, and Runtime future lifetimes passed
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"shutdown_contract" end time: Oct 10 20:55 +08
+"shutdown_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/15 Testing: timing_contract

@@ -27,11 +27,11 @@ Runtime::Runtime(MlpModel model, RuntimeConfig config)
     : model_(std::move(model)), config_(config), workspaces_(prepare_workspaces(config)),
       pool_(config.workers, config.queue_capacity) {}
 
-std::future<MlpResult> Runtime::submit(MlpInput input) {
+std::future<MlpResult> Runtime::submit(MlpInput input, std::shared_ptr<TaskTiming> timing) {
     input.validate(config_.max_batch);
     return pool_.submit([this, input = std::move(input)](std::size_t worker_id) {
         return CpuExecutor{}.run(model_, input, workspaces_.at(worker_id));
-    });
+    }, std::move(timing));
 }
 
 MlpResult Runtime::run(MlpInput input) {

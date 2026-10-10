@@ -28,7 +28,7 @@ public:
     Runtime(Runtime&&) = delete;
     Runtime& operator=(Runtime&&) = delete;
 
-    std::future<MlpResult> submit(MlpInput input);
+    std::future<MlpResult> submit(MlpInput input, std::shared_ptr<TaskTiming> timing = {});
     MlpResult run(MlpInput input);
     void shutdown();
     const RuntimeConfig& config() const noexcept { return config_; }

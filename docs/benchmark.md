@@ -1,6 +1,87 @@
-# D8 同步 CPU 基准
+# D14 CPU / Runtime 实测报告
 
-2026-10-10 已测量直接 CpuExecutor 路径。原始九次结果及环境见 [d8_sync.json](benchmark_data/d8_sync.json)，短内存诊断见 [d8_peak_probe.json](benchmark_data/d8_peak_probe.json)。Runtime 多 Worker 基准、队列耗时和拒绝负载实验属于后续任务，当前数据没有加速对照。
+2026-10-10，Release 下完成 **36 次独立进程测量**。原始参数、环境、工件摘要、命令和完整 JSON 保存在 [d14_runtime.json](benchmark_data/d14_runtime.json)。这是本机固定小 MLP 的测量，未控制供电、频率和后台负载，不承诺稳定加速。
+
+## 环境与负载
+
+Windows 主源码经 Ubuntu 24.04 / WSL2 执行，内核 `6.18.40.1-microsoft-standard-WSL2`；来宾 lscpu 为 i9-13980HX、32 个逻辑 CPU，MemTotal 16177024 KiB。GCC 13.3.0、C++17、`-O3 -DNDEBUG -Wall -Wextra -Wpedantic`，无 sanitizer / fast-math / 指定本机 ISA。亲和集合、采集时系统负载、实际编译命令及可执行文件 SHA-256 保留在 JSON；未绑核。
+
+Batch=1/8/32，重复正式参考输入的前 B 行，模型和输入不改变。每个 Batch / 重复按 direct_cpu、Runtime 1/2/4 Worker 顺序执行；预热 200 次、正式 **1000 次提交尝试**、重复 3 次。队列容量 64，调用者 future 窗口 8。直接路径是串行执行，实际在途为 1；Runtime 会扫描全部已就绪 future 后补充提交，仅在窗口满或全部尝试完成时阻塞等待。无独立生产速率控制。这轮各进程接受 / 成功均为 1000，任务失败 / 拒绝均为 0，总成功 36000；各 Batch 的每成功请求 checksum 一致。
+
+两种模式都包含拥有型 Input 的复制。直接路径没有队列或 future；Runtime 普通 API 另有输入校验和任务 / future 构造。不能把这两条路径当作相同的 kernel 微基准。
+
+## 时间与统计口径
+
+使用 steady_clock：call_before 在输入复制前，enqueued 在队列锁内接受后，start / finish 在 Worker 的 callable 内，acquired 在 future.get 返回后。记录 finish 后才发布 future 完成；异常退出也记录 finish。
+
+| 指标 | 计算与范围 |
+|---|---|
+| 端到端 mean / P50 / P95 / P99 | acquired−call_before；成功请求，包含输入复制和结果取得，不包含随后 checksum 消费 / 销毁 |
+| queue_* | start−enqueued；直接执行为 0 |
+| execution_* | finish−start；Runtime 包含 CpuExecutor callable 的执行，不是纯 Linear kernel |
+| completion_* | finish−call_before；包含提交和执行，便于区分回收延迟 |
+| collection_* | acquired−finish；包括完成发布、调度、future 扫描与采集等待；直接执行为 0 |
+| submit_* | submit_return−call_before；直接路径为拥有型输入复制时间，不冒称排队时间 |
+| 成功请求吞吐 | successes / 正式墙钟秒数；样本吞吐另乘 Batch |
+
+正式墙钟还包括拒绝尝试、就绪扫描、等待、结果检查 / checksum 消费 / 销毁和指标记录；不含准备、预热、独立分配探测、最终 shutdown / 报告。结束前回收本轮全部接受请求，核验 `attempts=accepted+rejected`、`accepted=successes+failures`。拒绝不重试；错误不计成功吞吐。延迟统计只含成功样本，全部失败时统计为 0、样本数为 0。所有计时含测量开销。
+
+百分位采用最近秩 `ceil(p*N)-1`。下表为三次进程指标的中位数，延迟单位均为 **μs**；各阶段分别取中位数，不能把不同列直接相加。原始文件包含每次所有百分位与吞吐、计数。
+
+| Batch | 模式 / Worker | req/s | P50 | P95 | P99 | 排队均值 | 执行均值 | 回收均值 |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|
+| 1 | direct | 66736 | 14.702 | 17.119 | 27.239 | 0.000 | 14.837 | 0.000 |
+| 1 | Runtime 1 | 37398 | 187.296 | 329.764 | 413.385 | 89.845 | 16.198 | 91.558 |
+| 1 | Runtime 2 | 45954 | 119.890 | 203.019 | 262.723 | 51.256 | 19.388 | 50.323 |
+| 1 | Runtime 4 | 50389 | 37.657 | 93.795 | 173.839 | 8.634 | 14.053 | 17.585 |
+| 8 | direct | 20388 | 37.387 | 88.428 | 102.712 | 0.000 | 48.811 | 0.000 |
+| 8 | Runtime 1 | 19817 | 376.586 | 629.020 | 785.600 | 205.958 | 43.455 | 145.698 |
+| 8 | Runtime 2 | 25878 | 269.612 | 526.093 | 598.964 | 123.693 | 58.495 | 96.385 |
+| 8 | Runtime 4 | 36223 | 154.928 | 329.749 | 433.131 | 48.348 | 63.767 | 62.612 |
+| 32 | direct | 7179 | 137.061 | 154.766 | 205.970 | 0.000 | 138.766 | 0.000 |
+| 32 | Runtime 1 | 6676 | 1271.308 | 1526.389 | 1651.838 | 586.138 | 139.458 | 464.759 |
+| 32 | Runtime 2 | 12108 | 732.969 | 845.212 | 874.679 | 272.801 | 143.861 | 214.596 |
+| 32 | Runtime 4 | 17753 | 417.437 | 697.504 | 981.348 | 123.231 | 159.395 | 132.534 |
+
+Batch=1 的 Runtime 4 吞吐三次为 34437–61014 req/s，直接执行为 48810–78200 req/s，小任务上线程、future 和采集成本明显；本轮中位数没有超过直接执行。Batch=32 的 Runtime 4 为 17446–20516 req/s，直接为 6488–7208 req/s，计算增加后观察到并行收益；端到端尾延迟仍含窗口排队与回收。Batch=32 从 2 增到 4 Worker 时吞吐提高而 P99 中位数增大，不能仅凭吞吐宣称尾延迟改善，也不能把三次短运行推广到生产服务。
+
+## 内存与 D13 分配分析
+
+RSS 为 `/proc/self/statm` resident pages × page_size。下表覆盖所有 Batch / 重复，单位 MiB，采样时 Runtime 和线程仍存活，结果取得后及时消费并销毁；最多保留窗口内 futures。六组正式延迟数组预留 `6*1000*sizeof(double)=48000` 字节；这属于采集存储。
+
+| 模式 | 预热后 RSS 范围 | 正式计时后 RSS 范围 |
+|---|---:|---:|
+| direct | 3.770–3.828 | 3.809–3.875 |
+| Runtime 1 | 4.008–4.105 | 4.055–4.160 |
+| Runtime 2 | 4.145–4.250 | 4.195–4.297 |
+| Runtime 4 | 4.402–4.543 | 4.449–4.590 |
+
+每 Worker 的隐藏层 Workspace 预留 128 KiB，四份权重有效载荷共 38440 字节，每份 Result 有效载荷 `B*44` 字节。RSS 另含输入加载 Buffer、拥有型 Input、队列 / future、线程实际驻留栈、标准库与分配器保留，不能只按这些有效载荷求和。
+
+getrusage 高水位在本轮 36 次均为 **19.695 MiB**，包含启动、准备、预热和报告阶段，可能继承 Python 启动过程的高水位；没有在本轮分离启动贡献。它不是 Runtime 独占峰值，稳态比较使用以上两次 RSS。D8 也观察到启动方式相关差异，原始数据均保留。
+
+直接执行独立探测 100 次，每进程 **200 个可替换 C++ new/new[] 事件**（每请求 2 次 Result 存储）；不含输入复制、计时记录、pool / Worker，亦不覆盖 malloc / mmap。Runtime 该字段 `allocation_probe_available=false`，计数 0 表示未测，不能解释为零分配。D13 实查 perf 命令不存在，`perf_event_paranoid=2`，见 [诊断](validation/d13_perf.log)；本轮没有热点采样，没有选择算子或内存优化，P1 不阻塞 v0.1 验收。
+
+## 拒绝诊断与复现
+
+[饱和诊断](benchmark_data/d14_saturation_probe.json)单独使用 Batch=64、Worker=1、队列=1、窗口=64、预热=20、尝试=1000：实际接受 / 成功 11、拒绝 989、任务失败 0；成功吞吐约 2214 req/s，以 11 个成功请求计算。此单次诊断用于核验拒绝记账，不作为主对照、稳定拒绝率或到达率曲线。
+
+Windows PowerShell，从项目主目录执行，输出路径必须未存在：
+
+```powershell
+$linuxProject = '/mnt/c/Users/ASUS/Documents/MiniInfer'
+wsl -d Ubuntu-24.04 --cd $linuxProject --exec cmake --preset release
+wsl -d Ubuntu-24.04 --cd $linuxProject --exec cmake --build --preset release
+wsl -d Ubuntu-24.04 --cd $linuxProject --exec /usr/bin/python3 tools/run_runtime_baseline.py --cli /home/qyc/builds/MiniInfer/release/bin/benchmark_cli --reference data/reference --output docs/benchmark_data/d14_runtime_rerun.json --iterations 1000 --warmup 200 --repeats 3 --window 8 --queue-capacity 64
+```
+
+Linux 在仓库根目录使用相同驱动，将 CLI 路径换为本机构建目录。驱动只需 Python 标准库，临时截取精确 Batch 输入，逐项校验有限 JSON、计数关系与每成功请求 checksum；文件已存在时拒绝覆盖。C++ 基准的参数错误退出 2，加载 / 设置错误退出 1，正常统计（包含已接受任务失败）退出 0；正式驱动会拒绝任务失败、无成功或契约不一致的报告。
+
+D14 对齐了输入复制、提交阶段和取得结果边界，增加了阶段记录；D8 当时的单次延迟包含结果消费和销毁。两轮口径不同，不用 D8 数字计算本轮加速比。下面保留历史原始记录。
+
+# D8 历史同步 CPU 基准
+
+2026-10-10 已测量直接 CpuExecutor 路径。原始九次结果及环境见 [d8_sync.json](benchmark_data/d8_sync.json)，短内存诊断见 [d8_peak_probe.json](benchmark_data/d8_peak_probe.json)。这一节保留 D8 当时的计时口径；当前 Runtime 对照见上方 D14。
 
 ## 环境与方法
 

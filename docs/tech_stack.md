@@ -137,10 +137,10 @@ CpuExecutor 已串联两层 Linear / ReLU / Argmax，Workspace 复用隐藏层�
 
 固定 MLP 的输入和 `.f32` 工件继续保留。真实视觉模型使用新契约；主机 TensorView 不承载可直接解引用的设备地址。共用执行接口在第二种实际执行路径出现时提取，避免提前设计通用框架。
 
-## 6. 本轮完成范围与下一项工作
+## 6. 当前完成范围
 
-当前交付：Windows 编辑 / WSL 编译与 Git 主目录，D1–D4 数据与基础资源，D5–D7 算子 / 前向 / 输入校验与安全检查，D8 同步基准与分配记录，D9–D10 有界队列 / 通用 ThreadPool / Runtime。源码、工件、测试及文档均维护在 Windows 主目录；旧 Linux 副本不再作为活动源码或文档维护。
+当前交付已覆盖 D1–D15 的 v0.1 必达范围：Windows 编辑 / WSL 编译与 Git 主目录、真实 CPU MLP、有界队列 / 通用 ThreadPool / Runtime、多生产者压力、关闭竞争 / 创建失败、阶段计时、Release 对照、演示与干净构建。源码、工件、测试及文档均维护在 Windows 主目录；旧 Linux 副本不再作为活动源码或文档维护。
 
-D1 的 4 项 Python 契约测试及同环境逐字节复现已验收。D10 主线 Debug / Release / ASan+UBSan 各 10/10 CTest 通过，正式推理类别一致，基本异步结果 / 所有权 / 错误交付 / drain 成立。D8 保存 Batch 1/8/32 各三次独立进程的 Release 原始结果和环境，分配探测每请求两次 new；RSS 与进程高水位口径分别记录。并发竞争安全和完整 Runtime 性能对照仍待后续工作单元；运行命令与证据见项目 README 和 benchmark。
+D1 的四项导出测试及同环境逐字节复现保留原验收证据；本轮不重训。最终 Debug / Release / ASan+UBSan 各 15/15 CTest 通过，独立 TSan 用进程级 setarch 关闭地址随机化后五项相关测试通过；默认布局启动失败及成功复测日志均保存。D14 保存 36 次独立进程的直接 CPU / Runtime 1/2/4 Worker 结果，RSS 与高水位分别解释。Python3 可选注册驱动测试；无 Python 时 CTest 为 14 项。
 
-下一项编码任务是 D11：多生产者与 1/2/4 Worker 正确性 / 压力测试；D12 补并发关闭、构造失败注入和 TSan。随后完成 Runtime 基准与最终交付，V1 / V2 依赖仍在对应阶段核验。
+当前没有安装 perf，也没有做可选热点优化；V1 / V2 依赖仍在对应阶段核验。当前 API / 所有权见 [architecture](architecture.md)，验收及复现命令见 [README](../README.md)，实际测量与限制见 [benchmark](benchmark.md)。D10 交接与 I/S 规划保留为历史材料，不能替代当前证据。

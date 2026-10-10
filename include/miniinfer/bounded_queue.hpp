@@ -38,6 +38,15 @@ public:
     BoundedQueue& operator=(BoundedQueue&&) = delete;
 
     void push(T task) {
+        push(std::move(task), []() noexcept {});
+    }
+
+    // Runs under the queue lock after acceptance, before any worker can pop.
+    // The hook must not throw or call back into this queue.
+    template <class OnAccepted>
+    void push(T task, OnAccepted&& on_accepted) {
+        static_assert(std::is_nothrow_invocable_v<OnAccepted&>,
+                      "queue acceptance hook must be noexcept");
         {
             std::lock_guard<std::mutex> lock(mutex_);
             if (closed_) {
@@ -50,6 +59,7 @@ public:
             slots_[tail_].emplace(std::move(task));
             tail_ = next_index(tail_);
             ++size_;
+            on_accepted();
         }
         available_.notify_one();
     }

@@ -1,0 +1,36 @@
+10/15 Testing: concurrency_contract
+10/15 Test: concurrency_contract
+Command: "/home/qyc/builds/MiniInfer/release/bin/test_concurrency" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/release
+"concurrency_contract" start time: Oct 10 20:46 +08
+Output:
+----------------------------------------------------------
+  workers=1: producers=4, attempted=11421, accepted=167, QueueFull_rejected=11254, successful=166, task_errors=1, retained_batches=1/8/32/64/256, future_window<=8
+  workers=2: producers=4, attempted=10116, accepted=167, QueueFull_rejected=9949, successful=166, task_errors=1, retained_batches=1/8/32/64/256, future_window<=8
+  workers=4: producers=4, attempted=381, accepted=167, QueueFull_rejected=214, successful=166, task_errors=1, retained_batches=1/8/32/64/256, future_window<=8
+test_concurrency: 1/2/4 Worker configurations passed; 4 producers; mixed batches=1/8/32/64/256
+<end of output>
+Test time =   0.51 sec
+----------------------------------------------------------
+Test Passed.
+"concurrency_contract" end time: Oct 10 20:46 +08
+"concurrency_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/15 Testing: shutdown_contract
+11/15 Test: shutdown_contract
+Command: "/home/qyc/builds/MiniInfer/release/bin/test_shutdown" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/release
+"shutdown_contract" start time: Oct 10 20:46 +08
+Output:
+----------------------------------------------------------
+test_shutdown: thread creation rollback, shutdown races, and Runtime future lifetimes passed
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"shutdown_contract" end time: Oct 10 20:46 +08
+"shutdown_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/15 Testing: timing_contract

@@ -1,0 +1,15 @@
+Test project /home/qyc/builds/MiniInfer/tsan
+    Start  8: runtime_contract
+1/5 Test  #8: runtime_contract .................   Passed    0.75 sec
+    Start  9: thread_pool_contract
+2/5 Test  #9: thread_pool_contract .............   Passed    0.03 sec
+    Start 10: concurrency_contract
+3/5 Test #10: concurrency_contract .............   Passed   17.64 sec
+    Start 11: shutdown_contract
+4/5 Test #11: shutdown_contract ................   Passed    0.24 sec
+    Start 12: timing_contract
+5/5 Test #12: timing_contract ..................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =  18.72 sec

@@ -44,6 +44,11 @@ check_error(invalid_batch "invalid value.*--batch" --model "${REFERENCE}" --inpu
 check_error(negative_iterations "invalid value.*--iterations" --model "${REFERENCE}" --input "${REFERENCE}/inputs.f32" --iterations -1)
 check_error(invalid_warmup "invalid value.*--warmup" --model "${REFERENCE}" --input "${REFERENCE}/inputs.f32" --warmup -1)
 check_error(overflow_iterations "invalid value.*--iterations" --model "${REFERENCE}" --input "${REFERENCE}/inputs.f32" --iterations 18446744073709551616)
+check_error(invalid_mode "invalid value.*--mode" --model "${REFERENCE}" --input "${REFERENCE}/inputs.f32" --mode unknown)
+check_error(zero_workers "invalid value.*--workers" --model "${REFERENCE}" --input "${REFERENCE}/inputs.f32" --workers 0)
+check_error(zero_window "invalid value.*--window" --model "${REFERENCE}" --input "${REFERENCE}/inputs.f32" --window 0)
+check_error(zero_capacity "invalid value.*--queue-capacity" --model "${REFERENCE}" --input "${REFERENCE}/inputs.f32" --queue-capacity 0)
+check_error(duplicate_mode "duplicate option.*--mode" --model "${REFERENCE}" --input "${REFERENCE}/inputs.f32" --mode runtime --mode runtime)
 
 execute_process(
     COMMAND "${CLI}" --model "${REFERENCE}" --input "${REFERENCE}/inputs.f32"
@@ -120,3 +125,56 @@ string(FIND "${allocation_scope}" "excludes malloc/mmap" allocation_exclusion_ma
 if(allocation_scope_match EQUAL -1 OR allocation_exclusion_match EQUAL -1)
     message(FATAL_ERROR "benchmark: allocation scope does not describe its counting limits: '${allocation_scope}'")
 endif()
+
+foreach(worker_count IN ITEMS 1 2 4)
+    execute_process(COMMAND "${CLI}" --mode runtime --workers ${worker_count}
+        --model "${REFERENCE}" --input "${REFERENCE}/inputs.f32" --batch 64
+        --iterations 24 --warmup 3 --window 8 --queue-capacity 64
+        RESULT_VARIABLE runtime_exit OUTPUT_VARIABLE benchmark_stdout ERROR_VARIABLE runtime_stderr
+        TIMEOUT ${CLI_TIMEOUT_SECONDS})
+    if(NOT runtime_exit EQUAL 0 OR NOT runtime_stderr STREQUAL "")
+        message(FATAL_ERROR "Runtime ${worker_count}: exit ${runtime_exit}: ${runtime_stderr}")
+    endif()
+    assert_json_string(mode "runtime")
+    assert_json_number(workers ${worker_count})
+    assert_json_number(attempts 24)
+    assert_json_number(accepted 24)
+    assert_json_number(successes 24)
+    assert_json_number(failures 0)
+    assert_json_number(rejected 0)
+    assert_json_number(latency_samples 24)
+    assert_json_number(allocation_probe_iterations 0)
+    foreach(group IN ITEMS queue execution completion collection submit)
+        foreach(statistic IN ITEMS mean p50 p95 p99)
+            assert_json_nonnegative_number("${group}_${statistic}_ms")
+        endforeach()
+    endforeach()
+    string(JSON max_inflight GET "${benchmark_stdout}" max_inflight)
+    if(max_inflight GREATER 8 OR max_inflight LESS 1)
+        message(FATAL_ERROR "Runtime exceeded its finite future window")
+    endif()
+endforeach()
+
+# Finite inputs can cause execution overflow; every accepted failure must be
+# recovered and excluded from throughput and successful latency samples.
+string(ASCII 255 255 127 127 float_max_bytes)
+string(REPEAT "${float_max_bytes}" 64 overflowing_values)
+set(overflow_path "${CMAKE_CURRENT_BINARY_DIR}/benchmark_overflow.f32")
+file(WRITE "${overflow_path}" "${overflowing_values}")
+foreach(mode IN ITEMS direct_cpu runtime)
+    execute_process(COMMAND "${CLI}" --mode ${mode} --model "${REFERENCE}"
+        --input "${overflow_path}" --batch 1 --iterations 4 --warmup 0 --window 2
+        RESULT_VARIABLE failure_exit OUTPUT_VARIABLE benchmark_stdout ERROR_VARIABLE failure_stderr
+        TIMEOUT ${CLI_TIMEOUT_SECONDS})
+    if(NOT failure_exit EQUAL 0 OR NOT failure_stderr STREQUAL "")
+        message(FATAL_ERROR "Failure accounting ${mode}: ${failure_exit}: ${failure_stderr}")
+    endif()
+    assert_json_number(attempts 4)
+    assert_json_number(accepted 4)
+    assert_json_number(successes 0)
+    assert_json_number(failures 4)
+    assert_json_number(rejected 0)
+    assert_json_number(latency_samples 0)
+    assert_json_number(req_per_sec 0)
+endforeach()
+file(REMOVE "${overflow_path}")
