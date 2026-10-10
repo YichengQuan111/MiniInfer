@@ -1,0 +1,169 @@
+{
+  "environment": {
+    "joblib": "1.6.0",
+    "numpy": "2.5.3",
+    "python": "3.12.3",
+    "scikit_learn": "1.9.1",
+    "scipy": "1.18.1",
+    "thread_limit": 1,
+    "threadpoolctl": "3.7.0"
+  },
+  "files": {
+    "b1.f32": {
+      "bytes": 512,
+      "dtype": "<f4",
+      "elements": 128,
+      "sha256": "eca9ab8ca77dc8b5104625cbc535ba73e5b9fbb9ae3e0cbec149110a4b7eebbf",
+      "shape": [
+        128
+      ]
+    },
+    "b2.f32": {
+      "bytes": 40,
+      "dtype": "<f4",
+      "elements": 10,
+      "sha256": "0cd9acb3ca66cb98de76e7958e6ab260e2313933058c83e0a0d2aff5e125f4f8",
+      "shape": [
+        10
+      ]
+    },
+    "inputs.f32": {
+      "bytes": 16384,
+      "dtype": "<f4",
+      "elements": 4096,
+      "sha256": "a89f245af273f3cdd73b5c962ad997170b447a5f091a3e23a0e5b19b7eff9574",
+      "shape": [
+        64,
+        64
+      ]
+    },
+    "labels.i32": {
+      "bytes": 256,
+      "dtype": "<i4",
+      "elements": 64,
+      "sha256": "106d4a3cc85d33189a6e8a4feecac2c3f2514e5de92c8ac8825d5889554b7d14",
+      "shape": [
+        64
+      ]
+    },
+    "logits.f32": {
+      "bytes": 2560,
+      "dtype": "<f4",
+      "elements": 640,
+      "sha256": "60a90b14281eb41467057a76a58618facf0a878212784876353d0c15efdb7039",
+      "shape": [
+        64,
+        10
+      ]
+    },
+    "sample_indices.i32": {
+      "bytes": 256,
+      "dtype": "<i4",
+      "elements": 64,
+      "sha256": "4645fa49e7f2ca48611ef3d1605f4c670dee9b66c0f1568bb54c1ff819d9bb82",
+      "shape": [
+        64
+      ]
+    },
+    "targets.i32": {
+      "bytes": 256,
+      "dtype": "<i4",
+      "elements": 64,
+      "sha256": "02c72dc87daec00ecf40b945654e5d21a15f28758abb09e6bc8c2fc4181651cc",
+      "shape": [
+        64
+      ]
+    },
+    "w1.f32": {
+      "bytes": 32768,
+      "dtype": "<f4",
+      "elements": 8192,
+      "sha256": "67609701697769c06cecf5bb9ea59a283423bb3116d3a10b254de693f291a875",
+      "shape": [
+        128,
+        64
+      ]
+    },
+    "w2.f32": {
+      "bytes": 5120,
+      "dtype": "<f4",
+      "elements": 1280,
+      "sha256": "0cf501b19a4dfaea2d835d3030bbc79a7d015eedd07bfd828b016a4edcba3835",
+      "shape": [
+        10,
+        128
+      ]
+    }
+  },
+  "format_version": 1,
+  "metrics": {
+    "holdout_accuracy": 0.9833333333333333,
+    "holdout_matches_sklearn": true,
+    "holdout_sklearn_match_count": 360,
+    "reference_accuracy": 0.96875,
+    "reference_matches_sklearn": true,
+    "reference_sklearn_match_count": 64,
+    "sklearn_holdout_accuracy": 0.9833333333333333
+  },
+  "model": {
+    "activation": "relu",
+    "byte_order": "little",
+    "dtype": "float32",
+    "hidden_features": 128,
+    "input_features": 64,
+    "max_batch_size": 256,
+    "order": "C",
+    "output_features": 10,
+    "weights_layout": "out_in"
+  },
+  "preprocessing": {
+    "divisor": 16.0
+  },
+  "reference": {
+    "argmax_tie_break": "lowest_index",
+    "atol": 0.0001,
+    "rtol": 0.0001,
+    "sample_count": 64,
+    "selection": "first_held_out_indices"
+  },
+  "training": {
+    "convergence_warnings": [],
+    "loss": 0.00203954714360772,
+    "n_iter": 189,
+    "parameters": {
+      "activation": "relu",
+      "alpha": 0.0001,
+      "batch_size": 64,
+      "beta_1": 0.9,
+      "beta_2": 0.999,
+      "early_stopping": false,
+      "epsilon": 1e-08,
+      "hidden_layer_sizes": [
+        128
+      ],
+      "learning_rate": "constant",
+      "learning_rate_init": 0.001,
+      "max_fun": 15000,
+      "max_iter": 500,
+      "momentum": 0.9,
+      "n_iter_no_change": 20,
+      "nesterovs_momentum": true,
+      "power_t": 0.5,
+      "random_state": 42,
+      "shuffle": true,
+      "solver": "adam",
+      "tol": 0.0001,
+      "validation_fraction": 0.1,
+      "verbose": false,
+      "warm_start": false
+    },
+    "seed": 42,
+    "split": {
+      "random_state": 42,
+      "stratify": true,
+      "test_samples": 360,
+      "test_size": 0.2,
+      "train_samples": 1437
+    }
+  }
+}

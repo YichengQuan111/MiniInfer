@@ -1,0 +1,55 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "MiniInfer: configure Debug (WSL)",
+      "type": "process",
+      "command": "wsl.exe",
+      "args": ["-d", "Ubuntu-24.04", "--cd", "/mnt/c/Users/ASUS/Documents/MiniInfer", "--", "cmake", "--preset", "debug"],
+      "problemMatcher": []
+    },
+    {
+      "label": "MiniInfer: build Debug (WSL)",
+      "type": "process",
+      "command": "wsl.exe",
+      "args": ["-d", "Ubuntu-24.04", "--cd", "/mnt/c/Users/ASUS/Documents/MiniInfer", "--", "cmake", "--build", "--preset", "debug"],
+      "dependsOn": "MiniInfer: configure Debug (WSL)",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "MiniInfer: test Debug (WSL)",
+      "type": "process",
+      "command": "wsl.exe",
+      "args": ["-d", "Ubuntu-24.04", "--cd", "/mnt/c/Users/ASUS/Documents/MiniInfer", "--", "ctest", "--preset", "debug"],
+      "dependsOn": "MiniInfer: build Debug (WSL)",
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "MiniInfer: configure Release (WSL)",
+      "type": "process",
+      "command": "wsl.exe",
+      "args": ["-d", "Ubuntu-24.04", "--cd", "/mnt/c/Users/ASUS/Documents/MiniInfer", "--", "cmake", "--preset", "release"],
+      "problemMatcher": []
+    },
+    {
+      "label": "MiniInfer: build Release (WSL)",
+      "type": "process",
+      "command": "wsl.exe",
+      "args": ["-d", "Ubuntu-24.04", "--cd", "/mnt/c/Users/ASUS/Documents/MiniInfer", "--", "cmake", "--build", "--preset", "release"],
+      "dependsOn": "MiniInfer: configure Release (WSL)",
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "MiniInfer: test Release (WSL)",
+      "type": "process",
+      "command": "wsl.exe",
+      "args": ["-d", "Ubuntu-24.04", "--cd", "/mnt/c/Users/ASUS/Documents/MiniInfer", "--", "ctest", "--preset", "release"],
+      "dependsOn": "MiniInfer: build Release (WSL)",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

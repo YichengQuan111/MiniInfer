@@ -1,0 +1,36 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 28, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "linux-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "$env{HOME}/builds/MiniInfer/${presetName}",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "BUILD_TESTING": "ON",
+        "MINIINFER_ENABLE_ASAN_UBSAN": "OFF",
+        "MINIINFER_ENABLE_TSAN": "OFF"
+      }
+    },
+    { "name": "debug", "inherits": "linux-base", "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" } },
+    { "name": "release", "inherits": "linux-base", "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" } },
+    { "name": "asan-ubsan", "inherits": "debug", "cacheVariables": { "MINIINFER_ENABLE_ASAN_UBSAN": "ON" } },
+    { "name": "tsan", "inherits": "debug", "cacheVariables": { "MINIINFER_ENABLE_TSAN": "ON" } }
+  ],
+  "buildPresets": [
+    { "name": "debug", "configurePreset": "debug", "jobs": 4 },
+    { "name": "release", "configurePreset": "release", "jobs": 4 },
+    { "name": "asan-ubsan", "configurePreset": "asan-ubsan", "jobs": 4 },
+    { "name": "tsan", "configurePreset": "tsan", "jobs": 4 }
+  ],
+  "testPresets": [
+    { "name": "debug", "configurePreset": "debug", "output": { "outputOnFailure": true }, "execution": { "noTestsAction": "error" } },
+    { "name": "release", "configurePreset": "release", "output": { "outputOnFailure": true }, "execution": { "noTestsAction": "error" } },
+    { "name": "asan-ubsan", "configurePreset": "asan-ubsan", "output": { "outputOnFailure": true }, "execution": { "noTestsAction": "error" } },
+    { "name": "tsan", "configurePreset": "tsan", "output": { "outputOnFailure": true }, "execution": { "noTestsAction": "error" } }
+  ]
+}
