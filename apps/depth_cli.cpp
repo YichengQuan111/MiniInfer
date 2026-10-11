@@ -1,4 +1,8 @@
+#ifdef MINIINFER_CLI_TRT
+#include "miniinfer/depth/trt_runner.hpp"
+#else
 #include "miniinfer/depth/ort_runner.hpp"
+#endif
 
 #include <charconv>
 #include <chrono>
@@ -22,7 +26,7 @@ struct Arguments {
 void help() {
     std::cout << "Usage: depth_cli --model MODEL --image IMAGE.ppm --output PREFIX [--threads 4]\n"
                  "       depth_cli --model MODEL --tensor INPUT.f32 --width W --height H --output PREFIX [--threads 4]\n"
-                 "CPU FP32 ORT, static image[1,3,518,518] -> depth[1,518,518].\n"
+                 "Static image[1,3,518,518] -> depth[1,518,518]; depth_trt_cli accepts an engine as MODEL.\n"
                  "Tensor mode expects normalized NCHW little-endian FP32; W/H are original image dimensions.\n"
                  "Writes PREFIX.preprocessed.f32, PREFIX.raw.f32, PREFIX.depth.f32, PREFIX.json.\n"
                  "All four output paths must be absent; parent directory must exist.\n"
@@ -52,6 +56,9 @@ Arguments parse(int argc, char** argv) {
         else if (name == "--width") args.width = positive(value, name);
         else if (name == "--height") args.height = positive(value, name);
         else if (name == "--threads") {
+#ifdef MINIINFER_CLI_TRT
+            throw std::invalid_argument("--threads applies only to ORT depth_cli");
+#endif
             const auto threads = positive(value, name);
             if (threads > static_cast<std::size_t>(std::numeric_limits<int>::max())) throw std::invalid_argument("--threads out of range");
             args.threads = static_cast<int>(threads);
@@ -102,7 +109,15 @@ int main(int argc, char** argv) {
             if (!args.image.empty()) return preprocess(read_ppm(args.image));
             return PreparedImage(read_f32(args.tensor, input_elements), geometry(*args.width, *args.height));
         }();
+#ifdef MINIINFER_CLI_TRT
+        TrtRunner runner(args.model);
+        const std::string backend="tensorrt_"+runner.manifest().at("precision");
+        const int host_threads=1;
+#else
         OrtRunner runner(args.model, args.threads);
+        const std::string backend="ort_cpu_fp32";
+        const int host_threads=runner.threads();
+#endif
         const auto model_start = std::chrono::steady_clock::now();
         const auto raw = runner.run_raw(prepared);
         const double model_seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - model_start).count();
@@ -114,10 +129,10 @@ int main(int argc, char** argv) {
         const auto transform = prepared.transform();
         std::ostringstream metadata;
         metadata << std::setprecision(17)
-                 << "{\n  \"contract_version\": \"depth-v1\",\n  \"backend\": \"ort_cpu_fp32\",\n"
+                 << "{\n  \"contract_version\": \"depth-v1\",\n  \"backend\": " << quoted(backend) << ",\n"
                  << "  \"model_path\": " << quoted(std::filesystem::absolute(args.model).string()) << ",\n"
                  << "  \"source_path\": " << quoted(std::filesystem::absolute(args.image.empty() ? args.tensor : args.image).string()) << ",\n"
-                 << "  \"threads\": " << runner.threads() << ",\n  \"geometry\": {"
+                 << "  \"threads\": " << host_threads << ",\n  \"geometry\": {"
                  << "\"original_width\": " << transform.original_width << ", \"original_height\": " << transform.original_height
                  << ", \"resized_width\": " << transform.resized_width << ", \"resized_height\": " << transform.resized_height
                  << ", \"pad_left\": " << transform.pad_left << ", \"pad_top\": " << transform.pad_top

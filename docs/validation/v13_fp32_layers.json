@@ -1,0 +1,6465 @@
+{"Layers": [{
+  "Name": "/patch_embed/proj/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "image",
+    "Location": "Device",
+    "Dimensions": [1,3,518,518],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/patch_embed/proj/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,384,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [14,14],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [14,14],
+  "Dilation": [1,1],
+  "OutMaps": 384,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 225792},
+  "Bias": {"Type": "Float", "Count": 384},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_128x128_relu_interior_nn_v1",
+  "TacticValue": "0xa8ef60e712f8ad24",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /patch_embed/proj/Conv]"
+},{
+  "Name": "dummy_shape_call__mye46628_0_myl1_0",
+  "LayerType": "shape_call",
+  "Inputs": [],
+  "Outputs": [],
+  "TacticName": "",
+  "StreamId": 0,
+  "Metadata": ""
+},{
+  "Name": "__myl_Tra_myl1_1",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "/patch_embed/proj/Conv_output_0",
+    "Dimensions": [1,384,1369],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_2",
+    "Dimensions": [1,1369,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_Tra_0xb8f2a0bca5c0b7f9b9993285258c5ab3",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /patch_embed/Reshape]\u001e[ONNX Layer: /patch_embed/Transpose]"
+},{
+  "Name": "__myl_ConAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_2",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_0_norm1_weight _ ONNXTRT_Broadcast_44_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_0_norm1_bias _ ONNXTRT_Broadcast_46_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_pos_embed_constantFloat",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41390_dconst_concat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_2",
+    "Dimensions": [1,1369,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43852_4",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_3",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_ConAddMeaSubMulMeaAddSqrDivMulMulAdd_0x078956a3ffb6fb09feddc3b3edf436b4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /Concat]\u001f[ONNX Layer: /blocks.0/norm1/LayerNormalization]\u001f[ONNX Layer: /Add]"
+},{
+  "Name": "__mye41444+__mye41432+__mye41420_myl1_3",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43852_4",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43861_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41446__mye41444_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41447__mye41444_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43866_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43852",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.0/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.0/attn/qkv/Add]"
+},{
+  "Name": "/blocks_0/attn/MatMul_myl1_4",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43852",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43852",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43609",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40037/blocks_0/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40033",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.0/attn/MatMul]\u001f[ONNX Layer: /blocks.0/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_5",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40033",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40033",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_0/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.0/attn/Softmax]"
+},{
+  "Name": "/blocks_0/attn/MatMul_1_myl1_6",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_0/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43852",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40057/blocks_0/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40058/blocks_0/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40054",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.0/attn/MatMul_1]"
+},{
+  "Name": "/blocks_0/attn/proj/MatMul_myl1_7",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40054",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1247 _ ONNXTRT_Broadcast_60_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40070/blocks_0/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40071/blocks_0/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_0_attn_proj_bias _ ONNXTRT_Broadcast_62_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_9",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.0/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.0/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_8",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_0_norm2_weight _ ONNXTRT_Broadcast_68_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_0_norm2_bias _ ONNXTRT_Broadcast_70_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_3",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_9",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_0_ls1_gamma _ ONNXTRT_Broadcast_64_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_0/mlp/fc1/Add_output_0'.1_11",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_10",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.0/ls1/Mul]\u001f[ONNX Layer: /blocks.0/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.0/Add]"
+},{
+  "Name": "/blocks_0/mlp/fc1/MatMul_myl1_9",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_0/mlp/fc1/Add_output_0'.1_11",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1248 _ ONNXTRT_Broadcast_72_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40081/blocks_0/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40082/blocks_0/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_0_mlp_fc1_bias _ ONNXTRT_Broadcast_74_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_12",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.0/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.0/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_10",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_12",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_12",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_0/mlp/fc2/Add_output_0'.1_13",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.0/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.0/mlp/act/Mul]\u001f[ONNX Layer: /blocks.0/mlp/act/Add]\u001f[ONNX Layer: /blocks.0/mlp/act/Div]\u001f[ONNX Layer: /blocks.0/mlp/act/Erf]"
+},{
+  "Name": "/blocks_0/mlp/fc2/MatMul_myl1_11",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_0/mlp/fc2/Add_output_0'.1_13",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1249 _ ONNXTRT_Broadcast_82_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40092/blocks_0/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40093/blocks_0/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_0_mlp_fc2_bias _ ONNXTRT_Broadcast_84_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_14",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.0/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.0/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_12",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_1_norm1_weight _ ONNXTRT_Broadcast_90_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_1_norm1_bias _ ONNXTRT_Broadcast_92_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_10",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_14",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_0_ls2_gamma _ ONNXTRT_Broadcast_86_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43835_16",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_15",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.0/ls2/Mul]\u001f[ONNX Layer: /blocks.1/norm1/LayerNormalization]\u001f[ONNX Layer: /blocks.0/Add_1]"
+},{
+  "Name": "__mye41559+__mye41547+__mye41535_myl1_13",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43835_16",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43871_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41561__mye41559_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41562__mye41559_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43876_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43835",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.1/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.1/attn/qkv/Add]"
+},{
+  "Name": "/blocks_1/attn/MatMul_myl1_14",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43835",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43835",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43613",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40123/blocks_1/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40119",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.1/attn/MatMul]\u001f[ONNX Layer: /blocks.1/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_15",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40119",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40119",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_1/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.1/attn/Softmax]"
+},{
+  "Name": "/blocks_1/attn/MatMul_1_myl1_16",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_1/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43835",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40143/blocks_1/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40144/blocks_1/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40140",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.1/attn/MatMul_1]"
+},{
+  "Name": "/blocks_1/attn/proj/MatMul_myl1_17",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40140",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1261 _ ONNXTRT_Broadcast_106_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40156/blocks_1/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40157/blocks_1/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_1_attn_proj_bias _ ONNXTRT_Broadcast_108_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_21",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.1/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.1/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_18",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_1_norm2_weight _ ONNXTRT_Broadcast_114_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_1_norm2_bias _ ONNXTRT_Broadcast_116_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_15",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_21",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_1_ls1_gamma _ ONNXTRT_Broadcast_110_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_1/mlp/fc1/Add_output_0'.1_23",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_22",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.1/ls1/Mul]\u001f[ONNX Layer: /blocks.1/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.1/Add]"
+},{
+  "Name": "/blocks_1/mlp/fc1/MatMul_myl1_19",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_1/mlp/fc1/Add_output_0'.1_23",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1262 _ ONNXTRT_Broadcast_118_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40167/blocks_1/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40168/blocks_1/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_1_mlp_fc1_bias _ ONNXTRT_Broadcast_120_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_24",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.1/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.1/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_20",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_24",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_24",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_1/mlp/fc2/Add_output_0'.1_25",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.1/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.1/mlp/act/Mul]\u001f[ONNX Layer: /blocks.1/mlp/act/Add]\u001f[ONNX Layer: /blocks.1/mlp/act/Div]\u001f[ONNX Layer: /blocks.1/mlp/act/Erf]"
+},{
+  "Name": "/blocks_1/mlp/fc2/MatMul_myl1_21",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_1/mlp/fc2/Add_output_0'.1_25",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1263 _ ONNXTRT_Broadcast_128_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40178/blocks_1/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40179/blocks_1/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_1_mlp_fc2_bias _ ONNXTRT_Broadcast_130_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_26",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.1/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.1/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_22",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_2_norm1_weight _ ONNXTRT_Broadcast_136_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_2_norm1_bias _ ONNXTRT_Broadcast_138_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_22",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_26",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_1_ls2_gamma _ ONNXTRT_Broadcast_132_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43818_28",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_27",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.1/ls2/Mul]\u001f[ONNX Layer: /blocks.2/norm1/LayerNormalization]\u001f[ONNX Layer: /blocks.1/Add_1]"
+},{
+  "Name": "__mye41674+__mye41662+__mye41650_myl1_23",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43818_28",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43881_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41676__mye41674_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41677__mye41674_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43886_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43818",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.2/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.2/attn/qkv/Add]"
+},{
+  "Name": "/blocks_2/attn/MatMul_myl1_24",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43818",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43818",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43617",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40209/blocks_2/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40205",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.2/attn/MatMul]\u001f[ONNX Layer: /blocks.2/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_25",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40205",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40205",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_2/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.2/attn/Softmax]"
+},{
+  "Name": "/blocks_2/attn/MatMul_1_myl1_26",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_2/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43818",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40229/blocks_2/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40230/blocks_2/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40226",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.2/attn/MatMul_1]"
+},{
+  "Name": "/blocks_2/attn/proj/MatMul_myl1_27",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40226",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1275 _ ONNXTRT_Broadcast_152_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40242/blocks_2/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40243/blocks_2/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_2_attn_proj_bias _ ONNXTRT_Broadcast_154_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_33",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.2/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.2/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_28",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_2_norm2_weight _ ONNXTRT_Broadcast_160_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_2_norm2_bias _ ONNXTRT_Broadcast_162_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_27",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_33",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_2_ls1_gamma _ ONNXTRT_Broadcast_156_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_2/mlp/fc1/Add_output_0'.1_35",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_34",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.2/ls1/Mul]\u001f[ONNX Layer: /blocks.2/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.2/Add]"
+},{
+  "Name": "/blocks_2/mlp/fc1/MatMul_myl1_29",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_2/mlp/fc1/Add_output_0'.1_35",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1276 _ ONNXTRT_Broadcast_164_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40253/blocks_2/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40254/blocks_2/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_2_mlp_fc1_bias _ ONNXTRT_Broadcast_166_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_36",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.2/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.2/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_30",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_36",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_36",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_2/mlp/fc2/Add_output_0'.1_37",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.2/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.2/mlp/act/Mul]\u001f[ONNX Layer: /blocks.2/mlp/act/Add]\u001f[ONNX Layer: /blocks.2/mlp/act/Div]\u001f[ONNX Layer: /blocks.2/mlp/act/Erf]"
+},{
+  "Name": "/blocks_2/mlp/fc2/MatMul_myl1_31",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_2/mlp/fc2/Add_output_0'.1_37",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1277 _ ONNXTRT_Broadcast_174_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40264/blocks_2/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40265/blocks_2/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_2_mlp_fc2_bias _ ONNXTRT_Broadcast_176_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_38",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.2/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.2/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMea_myl1_32",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__myln_k_arg__bb1_34",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_38",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_2_ls2_gamma _ ONNXTRT_Broadcast_178_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_41",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_40",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_39",
+    "Dimensions": [1,1370,1],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMea_0x57dd8051b6625b663fb3fb9046fdf313",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.2/ls2/Mul]\u001f[ONNX Layer: /norm/LayerNormalization]\u001f[ONNX Layer: /blocks.2/Add_1]"
+},{
+  "Name": "__myl_AddSqrDivMulMulAddSliMulAdd_myl1_33",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_3_norm1_weight _ ONNXTRT_Broadcast_182_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_3_norm1_bias _ ONNXTRT_Broadcast_184_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41206_dconst",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41211_dconst",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_40",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_39",
+    "Dimensions": [1,1370,1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43801_43",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_42",
+    "Dimensions": [1,1369,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_AddSqrDivMulMulAddSliMulAdd_0x89591ce6ba6abde8db48a1e80b309c39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /norm/LayerNormalization]\u001f[ONNX Layer: /Slice]\u001f[ONNX Layer: /blocks.3/norm1/LayerNormalization]"
+},{
+  "Name": "__myl_Tra_myl1_34",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__myln_k_arg__bb1_42",
+    "Dimensions": [1,1369,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/Reshape_output_0",
+    "Dimensions": [1,384,1369],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_Tra_0xa6bd4cf0246dea7751e37adaaa5a07da",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/Transpose]\u001e[ONNX Layer: /depth_head/Reshape]"
+},{
+  "Name": "__mye41789+__mye41777+__mye41765_myl1_35",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43801_43",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43891_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41791__mye41789_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41792__mye41789_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43896_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43801",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.3/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.3/attn/qkv/Add]"
+},{
+  "Name": "/blocks_3/attn/MatMul_myl1_36",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43801",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43801",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43621",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40295/blocks_3/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40291",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.3/attn/MatMul]\u001f[ONNX Layer: /blocks.3/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_37",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40291",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40291",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_3/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.3/attn/Softmax]"
+},{
+  "Name": "/blocks_3/attn/MatMul_1_myl1_38",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_3/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43801",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40315/blocks_3/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40316/blocks_3/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40312",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.3/attn/MatMul_1]"
+},{
+  "Name": "/blocks_3/attn/proj/MatMul_myl1_39",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40312",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1289 _ ONNXTRT_Broadcast_198_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40328/blocks_3/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40329/blocks_3/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_3_attn_proj_bias _ ONNXTRT_Broadcast_200_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_49",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.3/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.3/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_40",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_3_norm2_weight _ ONNXTRT_Broadcast_206_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_3_norm2_bias _ ONNXTRT_Broadcast_208_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_41",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_49",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_3_ls1_gamma _ ONNXTRT_Broadcast_202_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_3/mlp/fc1/Add_output_0'.1_51",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_50",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.3/ls1/Mul]\u001f[ONNX Layer: /blocks.3/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.3/Add]"
+},{
+  "Name": "/blocks_3/mlp/fc1/MatMul_myl1_41",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_3/mlp/fc1/Add_output_0'.1_51",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1290 _ ONNXTRT_Broadcast_210_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40339/blocks_3/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40340/blocks_3/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_3_mlp_fc1_bias _ ONNXTRT_Broadcast_212_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_52",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.3/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.3/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_42",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_52",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_52",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_3/mlp/fc2/Add_output_0'.1_53",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.3/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.3/mlp/act/Mul]\u001f[ONNX Layer: /blocks.3/mlp/act/Add]\u001f[ONNX Layer: /blocks.3/mlp/act/Div]\u001f[ONNX Layer: /blocks.3/mlp/act/Erf]"
+},{
+  "Name": "/blocks_3/mlp/fc2/MatMul_myl1_43",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_3/mlp/fc2/Add_output_0'.1_53",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1291 _ ONNXTRT_Broadcast_220_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40350/blocks_3/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40351/blocks_3/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_3_mlp_fc2_bias _ ONNXTRT_Broadcast_222_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_54",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.3/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.3/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_44",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_4_norm1_weight _ ONNXTRT_Broadcast_228_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_4_norm1_bias _ ONNXTRT_Broadcast_230_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_50",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_54",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_3_ls2_gamma _ ONNXTRT_Broadcast_224_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43784_56",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_55",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.3/ls2/Mul]\u001f[ONNX Layer: /blocks.4/norm1/LayerNormalization]\u001f[ONNX Layer: /blocks.3/Add_1]"
+},{
+  "Name": "__mye41904+__mye41892+__mye41880_myl1_45",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43784_56",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43901_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41906__mye41904_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41907__mye41904_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43906_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43784",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.4/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.4/attn/qkv/Add]"
+},{
+  "Name": "/blocks_4/attn/MatMul_myl1_46",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43784",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43784",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43625",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40381/blocks_4/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40377",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.4/attn/MatMul]\u001f[ONNX Layer: /blocks.4/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_47",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40377",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40377",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_4/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.4/attn/Softmax]"
+},{
+  "Name": "/blocks_4/attn/MatMul_1_myl1_48",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_4/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43784",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40401/blocks_4/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40402/blocks_4/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40398",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.4/attn/MatMul_1]"
+},{
+  "Name": "/blocks_4/attn/proj/MatMul_myl1_49",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40398",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1303 _ ONNXTRT_Broadcast_244_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40414/blocks_4/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40415/blocks_4/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_4_attn_proj_bias _ ONNXTRT_Broadcast_246_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_61",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.4/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.4/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_50",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_4_norm2_weight _ ONNXTRT_Broadcast_252_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_4_norm2_bias _ ONNXTRT_Broadcast_254_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_55",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_61",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_4_ls1_gamma _ ONNXTRT_Broadcast_248_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_4/mlp/fc1/Add_output_0'.1_63",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_62",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.4/ls1/Mul]\u001f[ONNX Layer: /blocks.4/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.4/Add]"
+},{
+  "Name": "/blocks_4/mlp/fc1/MatMul_myl1_51",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_4/mlp/fc1/Add_output_0'.1_63",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1304 _ ONNXTRT_Broadcast_256_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40425/blocks_4/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40426/blocks_4/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_4_mlp_fc1_bias _ ONNXTRT_Broadcast_258_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_64",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.4/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.4/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_52",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_64",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_64",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_4/mlp/fc2/Add_output_0'.1_65",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.4/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.4/mlp/act/Mul]\u001f[ONNX Layer: /blocks.4/mlp/act/Add]\u001f[ONNX Layer: /blocks.4/mlp/act/Div]\u001f[ONNX Layer: /blocks.4/mlp/act/Erf]"
+},{
+  "Name": "/blocks_4/mlp/fc2/MatMul_myl1_53",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_4/mlp/fc2/Add_output_0'.1_65",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1305 _ ONNXTRT_Broadcast_266_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40436/blocks_4/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40437/blocks_4/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_4_mlp_fc2_bias _ ONNXTRT_Broadcast_268_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_66",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.4/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.4/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_54",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_5_norm1_weight _ ONNXTRT_Broadcast_274_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_5_norm1_bias _ ONNXTRT_Broadcast_276_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_62",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_66",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_4_ls2_gamma _ ONNXTRT_Broadcast_270_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43767_68",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_67",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.4/ls2/Mul]\u001f[ONNX Layer: /blocks.5/norm1/LayerNormalization]\u001f[ONNX Layer: /blocks.4/Add_1]"
+},{
+  "Name": "__mye42019+__mye42007+__mye41995_myl1_55",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43767_68",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43911_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42021__mye42019_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42022__mye42019_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43916_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43767",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.5/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.5/attn/qkv/Add]"
+},{
+  "Name": "/blocks_5/attn/MatMul_myl1_56",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43767",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43767",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43629",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40467/blocks_5/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40463",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.5/attn/MatMul]\u001f[ONNX Layer: /blocks.5/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_57",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40463",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40463",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_5/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.5/attn/Softmax]"
+},{
+  "Name": "/blocks_5/attn/MatMul_1_myl1_58",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_5/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43767",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40487/blocks_5/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40488/blocks_5/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40484",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.5/attn/MatMul_1]"
+},{
+  "Name": "/blocks_5/attn/proj/MatMul_myl1_59",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40484",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1317 _ ONNXTRT_Broadcast_290_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40500/blocks_5/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40501/blocks_5/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_5_attn_proj_bias _ ONNXTRT_Broadcast_292_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_73",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.5/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.5/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_60",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_5_norm2_weight _ ONNXTRT_Broadcast_298_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_5_norm2_bias _ ONNXTRT_Broadcast_300_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_67",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_73",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_5_ls1_gamma _ ONNXTRT_Broadcast_294_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_5/mlp/fc1/Add_output_0'.1_75",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_74",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.5/ls1/Mul]\u001f[ONNX Layer: /blocks.5/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.5/Add]"
+},{
+  "Name": "/blocks_5/mlp/fc1/MatMul_myl1_61",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_5/mlp/fc1/Add_output_0'.1_75",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1318 _ ONNXTRT_Broadcast_302_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40511/blocks_5/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40512/blocks_5/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_5_mlp_fc1_bias _ ONNXTRT_Broadcast_304_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_76",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.5/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.5/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_62",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_76",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_76",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_5/mlp/fc2/Add_output_0'.1_77",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.5/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.5/mlp/act/Mul]\u001f[ONNX Layer: /blocks.5/mlp/act/Add]\u001f[ONNX Layer: /blocks.5/mlp/act/Div]\u001f[ONNX Layer: /blocks.5/mlp/act/Erf]"
+},{
+  "Name": "/blocks_5/mlp/fc2/MatMul_myl1_63",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_5/mlp/fc2/Add_output_0'.1_77",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1319 _ ONNXTRT_Broadcast_312_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40522/blocks_5/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40523/blocks_5/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_5_mlp_fc2_bias _ ONNXTRT_Broadcast_314_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_78",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.5/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.5/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMea_myl1_64",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__myln_k_arg__bb1_74",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_78",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_5_ls2_gamma _ ONNXTRT_Broadcast_316_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_81",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_80",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_79",
+    "Dimensions": [1,1370,1],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMea_0x57dd8051b6625b663fb3fb9046fdf313",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.5/ls2/Mul]\u001f[ONNX Layer: /blocks.6/norm1/LayerNormalization]\u001f[ONNX Layer: /blocks.5/Add_1]"
+},{
+  "Name": "__myl_AddSqrDivMulMulAddMulAddSli_myl1_65",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye41264_dconst",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41269_dconst",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_6_norm1_weight _ ONNXTRT_Broadcast_320_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_6_norm1_bias _ ONNXTRT_Broadcast_322_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_80",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_79",
+    "Dimensions": [1,1370,1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_83",
+    "Dimensions": [1,1369,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_82",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_AddSqrDivMulMulAddMulAddSli_0x10c30a3c9628ec0e91172b5f38ec8806",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/norm1/LayerNormalization]\u001f[ONNX Layer: /Slice_1]\u001f[ONNX Layer: /norm_1/LayerNormalization]"
+},{
+  "Name": "__myl_Tra_myl1_66",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__myln_k_arg__bb1_83",
+    "Dimensions": [1,1369,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/Reshape_1_output_0",
+    "Dimensions": [1,384,1369],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_Tra_0xa6bd4cf0246dea7751e37adaaa5a07da",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/Transpose_1]\u001e[ONNX Layer: /depth_head/Reshape_1]"
+},{
+  "Name": "__mye42134+__mye42122+__mye42110_myl1_67",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__myln_k_arg__bb1_82",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43921_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42136__mye42134_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42137__mye42134_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43926_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43750",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.6/attn/qkv/Add]"
+},{
+  "Name": "/blocks_6/attn/MatMul_myl1_68",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43750",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43750",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43633",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40553/blocks_6/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40549",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/attn/MatMul]\u001f[ONNX Layer: /blocks.6/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_69",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40549",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40549",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_6/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/attn/Softmax]"
+},{
+  "Name": "/blocks_6/attn/MatMul_1_myl1_70",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_6/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43750",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40573/blocks_6/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40574/blocks_6/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40570",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/attn/MatMul_1]"
+},{
+  "Name": "/blocks_6/attn/proj/MatMul_myl1_71",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40570",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1331 _ ONNXTRT_Broadcast_336_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40586/blocks_6/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40587/blocks_6/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_6_attn_proj_bias _ ONNXTRT_Broadcast_338_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_89",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.6/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_72",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_6_norm2_weight _ ONNXTRT_Broadcast_344_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_6_norm2_bias _ ONNXTRT_Broadcast_346_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_81",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_89",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_6_ls1_gamma _ ONNXTRT_Broadcast_340_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_6/mlp/fc1/Add_output_0'.1_91",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_90",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/ls1/Mul]\u001f[ONNX Layer: /blocks.6/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.6/Add]"
+},{
+  "Name": "/blocks_6/mlp/fc1/MatMul_myl1_73",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_6/mlp/fc1/Add_output_0'.1_91",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1332 _ ONNXTRT_Broadcast_348_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40597/blocks_6/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40598/blocks_6/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_6_mlp_fc1_bias _ ONNXTRT_Broadcast_350_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_92",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.6/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_74",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_92",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_92",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_6/mlp/fc2/Add_output_0'.1_93",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.6/mlp/act/Mul]\u001f[ONNX Layer: /blocks.6/mlp/act/Add]\u001f[ONNX Layer: /blocks.6/mlp/act/Div]\u001f[ONNX Layer: /blocks.6/mlp/act/Erf]"
+},{
+  "Name": "/blocks_6/mlp/fc2/MatMul_myl1_75",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_6/mlp/fc2/Add_output_0'.1_93",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1333 _ ONNXTRT_Broadcast_358_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40608/blocks_6/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40609/blocks_6/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_6_mlp_fc2_bias _ ONNXTRT_Broadcast_360_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_94",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.6/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_76",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_7_norm1_weight _ ONNXTRT_Broadcast_366_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_7_norm1_bias _ ONNXTRT_Broadcast_368_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_90",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_94",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_6_ls2_gamma _ ONNXTRT_Broadcast_362_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43733_96",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_95",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.6/ls2/Mul]\u001f[ONNX Layer: /blocks.7/norm1/LayerNormalization]\u001f[ONNX Layer: /blocks.6/Add_1]"
+},{
+  "Name": "__mye42249+__mye42237+__mye42225_myl1_77",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43733_96",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43931_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42251__mye42249_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42252__mye42249_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43936_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43733",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.7/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.7/attn/qkv/Add]"
+},{
+  "Name": "/blocks_7/attn/MatMul_myl1_78",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43733",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43733",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43637",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40639/blocks_7/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40635",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.7/attn/MatMul]\u001f[ONNX Layer: /blocks.7/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_79",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40635",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40635",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_7/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.7/attn/Softmax]"
+},{
+  "Name": "/blocks_7/attn/MatMul_1_myl1_80",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_7/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43733",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40659/blocks_7/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40660/blocks_7/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40656",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.7/attn/MatMul_1]"
+},{
+  "Name": "/blocks_7/attn/proj/MatMul_myl1_81",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40656",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1345 _ ONNXTRT_Broadcast_382_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40672/blocks_7/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40673/blocks_7/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_7_attn_proj_bias _ ONNXTRT_Broadcast_384_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_101",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.7/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.7/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_82",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_7_norm2_weight _ ONNXTRT_Broadcast_390_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_7_norm2_bias _ ONNXTRT_Broadcast_392_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_95",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_101",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_7_ls1_gamma _ ONNXTRT_Broadcast_386_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_7/mlp/fc1/Add_output_0'.1_103",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_102",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.7/ls1/Mul]\u001f[ONNX Layer: /blocks.7/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.7/Add]"
+},{
+  "Name": "/blocks_7/mlp/fc1/MatMul_myl1_83",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_7/mlp/fc1/Add_output_0'.1_103",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1346 _ ONNXTRT_Broadcast_394_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40683/blocks_7/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40684/blocks_7/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_7_mlp_fc1_bias _ ONNXTRT_Broadcast_396_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_104",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.7/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.7/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_84",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_104",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_104",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_7/mlp/fc2/Add_output_0'.1_105",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.7/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.7/mlp/act/Mul]\u001f[ONNX Layer: /blocks.7/mlp/act/Add]\u001f[ONNX Layer: /blocks.7/mlp/act/Div]\u001f[ONNX Layer: /blocks.7/mlp/act/Erf]"
+},{
+  "Name": "/blocks_7/mlp/fc2/MatMul_myl1_85",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_7/mlp/fc2/Add_output_0'.1_105",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1347 _ ONNXTRT_Broadcast_404_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40694/blocks_7/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40695/blocks_7/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_7_mlp_fc2_bias _ ONNXTRT_Broadcast_406_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_106",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.7/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.7/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_86",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_8_norm1_weight _ ONNXTRT_Broadcast_412_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_8_norm1_bias _ ONNXTRT_Broadcast_414_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_102",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_106",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_7_ls2_gamma _ ONNXTRT_Broadcast_408_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43716_108",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_107",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.7/ls2/Mul]\u001f[ONNX Layer: /blocks.8/norm1/LayerNormalization]\u001f[ONNX Layer: /blocks.7/Add_1]"
+},{
+  "Name": "__mye42364+__mye42352+__mye42340_myl1_87",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43716_108",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43941_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42366__mye42364_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42367__mye42364_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43946_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43716",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.8/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.8/attn/qkv/Add]"
+},{
+  "Name": "/blocks_8/attn/MatMul_myl1_88",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43716",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43716",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43641",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40725/blocks_8/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40721",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.8/attn/MatMul]\u001f[ONNX Layer: /blocks.8/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_89",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40721",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40721",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_8/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.8/attn/Softmax]"
+},{
+  "Name": "/blocks_8/attn/MatMul_1_myl1_90",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_8/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43716",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40745/blocks_8/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40746/blocks_8/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40742",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.8/attn/MatMul_1]"
+},{
+  "Name": "/blocks_8/attn/proj/MatMul_myl1_91",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40742",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1359 _ ONNXTRT_Broadcast_428_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40758/blocks_8/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40759/blocks_8/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_8_attn_proj_bias _ ONNXTRT_Broadcast_430_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_113",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.8/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.8/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_92",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_8_norm2_weight _ ONNXTRT_Broadcast_436_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_8_norm2_bias _ ONNXTRT_Broadcast_438_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_107",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_113",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_8_ls1_gamma _ ONNXTRT_Broadcast_432_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_8/mlp/fc1/Add_output_0'.1_115",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_114",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.8/ls1/Mul]\u001f[ONNX Layer: /blocks.8/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.8/Add]"
+},{
+  "Name": "/blocks_8/mlp/fc1/MatMul_myl1_93",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_8/mlp/fc1/Add_output_0'.1_115",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1360 _ ONNXTRT_Broadcast_440_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40769/blocks_8/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40770/blocks_8/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_8_mlp_fc1_bias _ ONNXTRT_Broadcast_442_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_116",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.8/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.8/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_94",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_116",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_116",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_8/mlp/fc2/Add_output_0'.1_117",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.8/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.8/mlp/act/Mul]\u001f[ONNX Layer: /blocks.8/mlp/act/Add]\u001f[ONNX Layer: /blocks.8/mlp/act/Div]\u001f[ONNX Layer: /blocks.8/mlp/act/Erf]"
+},{
+  "Name": "/blocks_8/mlp/fc2/MatMul_myl1_95",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_8/mlp/fc2/Add_output_0'.1_117",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1361 _ ONNXTRT_Broadcast_450_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40780/blocks_8/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40781/blocks_8/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_8_mlp_fc2_bias _ ONNXTRT_Broadcast_452_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_118",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.8/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.8/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMea_myl1_96",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__myln_k_arg__bb1_114",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_118",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_8_ls2_gamma _ ONNXTRT_Broadcast_454_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_121",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_120",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_119",
+    "Dimensions": [1,1370,1],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMea_0x57dd8051b6625b663fb3fb9046fdf313",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.8/ls2/Mul]\u001f[ONNX Layer: /blocks.9/norm1/LayerNormalization]\u001f[ONNX Layer: /blocks.8/Add_1]"
+},{
+  "Name": "__myl_AddSqrDivMulMulAddMulAddSli_myl1_97",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye41322_dconst",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41327_dconst",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_9_norm1_weight _ ONNXTRT_Broadcast_458_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_9_norm1_bias _ ONNXTRT_Broadcast_460_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_120",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_119",
+    "Dimensions": [1,1370,1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_123",
+    "Dimensions": [1,1369,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_122",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_AddSqrDivMulMulAddMulAddSli_0x10c30a3c9628ec0e91172b5f38ec8806",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/norm1/LayerNormalization]\u001f[ONNX Layer: /Slice_2]\u001f[ONNX Layer: /norm_2/LayerNormalization]"
+},{
+  "Name": "__myl_Tra_myl1_98",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__myln_k_arg__bb1_123",
+    "Dimensions": [1,1369,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/Reshape_2_output_0",
+    "Dimensions": [1,384,1369],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_Tra_0xa6bd4cf0246dea7751e37adaaa5a07da",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/Transpose_2]\u001e[ONNX Layer: /depth_head/Reshape_2]"
+},{
+  "Name": "__mye42479+__mye42467+__mye42455_myl1_99",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__myln_k_arg__bb1_122",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43951_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42481__mye42479_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42482__mye42479_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43956_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43699",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.9/attn/qkv/Add]"
+},{
+  "Name": "/blocks_9/attn/MatMul_myl1_100",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43699",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43699",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43645",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40811/blocks_9/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40807",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/attn/MatMul]\u001f[ONNX Layer: /blocks.9/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_101",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40807",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40807",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_9/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/attn/Softmax]"
+},{
+  "Name": "/blocks_9/attn/MatMul_1_myl1_102",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_9/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43699",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40831/blocks_9/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40832/blocks_9/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40828",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/attn/MatMul_1]"
+},{
+  "Name": "/blocks_9/attn/proj/MatMul_myl1_103",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40828",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1373 _ ONNXTRT_Broadcast_474_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40844/blocks_9/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40845/blocks_9/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_9_attn_proj_bias _ ONNXTRT_Broadcast_476_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_129",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.9/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_104",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_9_norm2_weight _ ONNXTRT_Broadcast_482_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_9_norm2_bias _ ONNXTRT_Broadcast_484_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_121",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_129",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_9_ls1_gamma _ ONNXTRT_Broadcast_478_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_9/mlp/fc1/Add_output_0'.1_131",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_130",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/ls1/Mul]\u001f[ONNX Layer: /blocks.9/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.9/Add]"
+},{
+  "Name": "/blocks_9/mlp/fc1/MatMul_myl1_105",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_9/mlp/fc1/Add_output_0'.1_131",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1374 _ ONNXTRT_Broadcast_486_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40855/blocks_9/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40856/blocks_9/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_9_mlp_fc1_bias _ ONNXTRT_Broadcast_488_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_132",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.9/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_106",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_132",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_132",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_9/mlp/fc2/Add_output_0'.1_133",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.9/mlp/act/Mul]\u001f[ONNX Layer: /blocks.9/mlp/act/Add]\u001f[ONNX Layer: /blocks.9/mlp/act/Div]\u001f[ONNX Layer: /blocks.9/mlp/act/Erf]"
+},{
+  "Name": "/blocks_9/mlp/fc2/MatMul_myl1_107",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_9/mlp/fc2/Add_output_0'.1_133",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1375 _ ONNXTRT_Broadcast_496_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40866/blocks_9/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40867/blocks_9/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_9_mlp_fc2_bias _ ONNXTRT_Broadcast_498_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_134",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.9/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_108",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_10_norm1_weight _ ONNXTRT_Broadcast_504_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_10_norm1_bias _ ONNXTRT_Broadcast_506_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_130",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_134",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_9_ls2_gamma _ ONNXTRT_Broadcast_500_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43682_136",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_135",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.9/ls2/Mul]\u001f[ONNX Layer: /blocks.10/norm1/LayerNormalization]\u001f[ONNX Layer: /blocks.9/Add_1]"
+},{
+  "Name": "__mye42594+__mye42582+__mye42570_myl1_109",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43682_136",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43961_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42596__mye42594_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42597__mye42594_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43966_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43682",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.10/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.10/attn/qkv/Add]"
+},{
+  "Name": "/blocks_10/attn/MatMul_myl1_110",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43682",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43682",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43649",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40897/blocks_10/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40893",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.10/attn/MatMul]\u001f[ONNX Layer: /blocks.10/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_111",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40893",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40893",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_10/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.10/attn/Softmax]"
+},{
+  "Name": "/blocks_10/attn/MatMul_1_myl1_112",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_10/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43682",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40917/blocks_10/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40918/blocks_10/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40914",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.10/attn/MatMul_1]"
+},{
+  "Name": "/blocks_10/attn/proj/MatMul_myl1_113",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye40914",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1387 _ ONNXTRT_Broadcast_520_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40930/blocks_10/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40931/blocks_10/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_10_attn_proj_bias _ ONNXTRT_Broadcast_522_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_141",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.10/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.10/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_114",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_10_norm2_weight _ ONNXTRT_Broadcast_528_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_10_norm2_bias _ ONNXTRT_Broadcast_530_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_135",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_141",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_10_ls1_gamma _ ONNXTRT_Broadcast_524_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_10/mlp/fc1/Add_output_0'.1_143",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_142",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.10/ls1/Mul]\u001f[ONNX Layer: /blocks.10/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.10/Add]"
+},{
+  "Name": "/blocks_10/mlp/fc1/MatMul_myl1_115",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_10/mlp/fc1/Add_output_0'.1_143",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1388 _ ONNXTRT_Broadcast_532_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40941/blocks_10/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40942/blocks_10/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_10_mlp_fc1_bias _ ONNXTRT_Broadcast_534_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_144",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.10/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.10/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_116",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_144",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_144",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_10/mlp/fc2/Add_output_0'.1_145",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.10/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.10/mlp/act/Mul]\u001f[ONNX Layer: /blocks.10/mlp/act/Add]\u001f[ONNX Layer: /blocks.10/mlp/act/Div]\u001f[ONNX Layer: /blocks.10/mlp/act/Erf]"
+},{
+  "Name": "/blocks_10/mlp/fc2/MatMul_myl1_117",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_10/mlp/fc2/Add_output_0'.1_145",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1389 _ ONNXTRT_Broadcast_542_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40952/blocks_10/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40953/blocks_10/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_10_mlp_fc2_bias _ ONNXTRT_Broadcast_544_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_146",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.10/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.10/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_118",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_11_norm1_weight _ ONNXTRT_Broadcast_550_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_11_norm1_bias _ ONNXTRT_Broadcast_552_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_142",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_146",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_10_ls2_gamma _ ONNXTRT_Broadcast_546_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43665_148",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_147",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.10/ls2/Mul]\u001f[ONNX Layer: /blocks.11/norm1/LayerNormalization]\u001f[ONNX Layer: /blocks.10/Add_1]"
+},{
+  "Name": "__mye42709+__mye42697+__mye42685_myl1_119",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43665_148",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43971_dconst",
+    "Dimensions": [3,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42711__mye42709_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye42712__mye42709_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43976_dconst",
+    "Dimensions": [3,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye43665",
+    "Dimensions": [3,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize256x128x8_stage3_warpsize4x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.11/attn/qkv/MatMul]\u001f[ONNX Layer: /blocks.11/attn/qkv/Add]"
+},{
+  "Name": "/blocks_11/attn/MatMul_myl1_120",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye43665",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43665",
+    "Dimensions": [6,64,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43653",
+    "Dimensions": [1,1,1,1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40983/blocks_11/attn/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye40979",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.11/attn/MatMul]\u001f[ONNX Layer: /blocks.11/attn/Mul]"
+},{
+  "Name": "__myl_MaxSubExpSumDivMul_myl1_121",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye40979",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye40979",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_11/attn/Softmax_output'.1",
+    "Dimensions": [1,6,1370,1370],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.11/attn/Softmax]"
+},{
+  "Name": "/blocks_11/attn/MatMul_1_myl1_122",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_11/attn/Softmax_output'.1",
+    "Dimensions": [6,1370,1370],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye43665",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41003/blocks_11/attn/MatMul_1_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41004/blocks_11/attn/MatMul_1_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__mye41000",
+    "Dimensions": [6,1370,64],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "ampere_sgemm_64x32_sliced1x4_nn_v1",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.11/attn/MatMul_1]"
+},{
+  "Name": "/blocks_11/attn/proj/MatMul_myl1_123",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "__mye41000",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1401 _ ONNXTRT_Broadcast_566_constantFloat",
+    "Dimensions": [1,384,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41016/blocks_11/attn/proj/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41017/blocks_11/attn/proj/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_11_attn_proj_bias _ ONNXTRT_Broadcast_568_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_153",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.11/attn/proj/MatMul]\u001f[ONNX Layer: /blocks.11/attn/proj/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl1_124",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "pretrained_blocks_11_norm2_weight _ ONNXTRT_Broadcast_574_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_11_norm2_bias _ ONNXTRT_Broadcast_576_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_147",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_153",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_11_ls1_gamma _ ONNXTRT_Broadcast_570_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_11/mlp/fc1/Add_output_0'.1_155",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_154",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.11/ls1/Mul]\u001f[ONNX Layer: /blocks.11/norm2/LayerNormalization]\u001f[ONNX Layer: /blocks.11/Add]"
+},{
+  "Name": "/blocks_11/mlp/fc1/MatMul_myl1_125",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_11/mlp/fc1/Add_output_0'.1_155",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1402 _ ONNXTRT_Broadcast_578_constantFloat",
+    "Dimensions": [1,384,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41027/blocks_11/mlp/fc1/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41028/blocks_11/mlp/fc1/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_11_mlp_fc1_bias _ ONNXTRT_Broadcast_580_constantFloat",
+    "Dimensions": [1,1,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_156",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.11/mlp/fc1/MatMul]\u001f[ONNX Layer: /blocks.11/mlp/fc1/Add]"
+},{
+  "Name": "__myl_DivErfAddMulMul_myl1_126",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye46591_const-lit-in",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_156",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_156",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/blocks_11/mlp/fc2/Add_output_0'.1_157",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.11/mlp/act/Mul_1]\u001f[ONNX Layer: /blocks.11/mlp/act/Mul]\u001f[ONNX Layer: /blocks.11/mlp/act/Add]\u001f[ONNX Layer: /blocks.11/mlp/act/Div]\u001f[ONNX Layer: /blocks.11/mlp/act/Erf]"
+},{
+  "Name": "/blocks_11/mlp/fc2/MatMul_myl1_127",
+  "LayerType": "gemm",
+  "Inputs": [
+  {
+    "Name": "/blocks_11/mlp/fc2/Add_output_0'.1_157",
+    "Dimensions": [1,1370,1536],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "onnx__MatMul_1403 _ ONNXTRT_Broadcast_588_constantFloat",
+    "Dimensions": [1,1536,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41038/blocks_11/mlp/fc2/MatMul_alpha",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41039/blocks_11/mlp/fc2/MatMul_beta",
+    "Dimensions": [1],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_11_mlp_fc2_bias _ ONNXTRT_Broadcast_590_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_158",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.11/mlp/fc2/MatMul]\u001f[ONNX Layer: /blocks.11/mlp/fc2/Add]"
+},{
+  "Name": "__myl_MulAddMeaSubMulMea_myl1_128",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__myln_k_arg__bb1_154",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_158",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "pretrained_blocks_11_ls2_gamma _ ONNXTRT_Broadcast_592_constantFloat",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_160",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_159",
+    "Dimensions": [1,1370,1],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_MulAddMeaSubMulMea_0x9f480ab47de3d90521e6560ee0f615ae",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /blocks.11/ls2/Mul]\u001f[ONNX Layer: /norm_3/LayerNormalization]\u001f[ONNX Layer: /blocks.11/Add_1]"
+},{
+  "Name": "__myl_AddSqrDivMulMulAddSli_myl1_129",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__mye41385_dconst",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__mye41380_dconst",
+    "Dimensions": [1,1,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_160",
+    "Dimensions": [1,1370,384],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "__myln_k_arg__bb1_159",
+    "Dimensions": [1,1370,1],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "__myln_k_arg__bb1_161",
+    "Dimensions": [1,1369,384],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_AddSqrDivMulMulAddSli_0x0dbef0403d83f91f1b805fc04db84af5",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /norm_3/LayerNormalization]\u001f[ONNX Layer: /Slice_3]"
+},{
+  "Name": "__myl_Tra_myl1_130",
+  "LayerType": "kgen",
+  "Inputs": [
+  {
+    "Name": "__myln_k_arg__bb1_161",
+    "Dimensions": [1,1369,384],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/Reshape_3_output_0",
+    "Dimensions": [1,384,1369],
+    "Format/Datatype": "Float"
+  }],
+  "TacticName": "__myl_Tra_0xa6bd4cf0246dea7751e37adaaa5a07da",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/Transpose_3]\u001e[ONNX Layer: /depth_head/Reshape_3]"
+},{
+  "Name": "/depth_head/projects.3/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/Reshape_3_output_0",
+    "Location": "Device",
+    "Dimensions": [1,384,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/projects.3/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,384,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 384,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 147456},
+  "Bias": {"Type": "Float", "Count": 384},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_simple_t1r1s1_aligna4_alignc4",
+  "TacticValue": "0x1fc87d7eb370bb7a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/projects.3/Conv]"
+},{
+  "Name": "/depth_head/resize_layers.3/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/projects.3/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,384,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/resize_layers.3/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,384,19,19],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [2,2],
+  "Dilation": [1,1],
+  "OutMaps": 384,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 1327104},
+  "Bias": {"Type": "Float", "Count": 384},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4",
+  "TacticValue": "0x4727434768e46395",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/resize_layers.3/Conv]"
+},{
+  "Name": "/depth_head/layer4_rn/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/resize_layers.3/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,384,19,19],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/layer4_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,19,19],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 221184},
+  "Bias": {"Type": "Float", "Count": 0},
+  "HasBias": 0,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "sm50_xmma_conv_fprop_fused_conv_act_fp32_NCHW_fp32_NCHW_KCRS_fp32_fp32_fp32_Accfloat_1_1_cC1_dC1_srcVec1_fltVec2_2_TP3_TQ7_C8_R3_S3_U1_V1",
+  "TacticValue": "0xacd7fdab1dbcfb17",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/layer4_rn/Conv]"
+},{
+  "Name": "/depth_head/projects.2/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/Reshape_2_output_0",
+    "Location": "Device",
+    "Dimensions": [1,384,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/projects.2/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,192,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 192,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 73728},
+  "Bias": {"Type": "Float", "Count": 192},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize64x128x8_stage3_warpsize1x4x1_g1_ffma_simple_t1r1s1_aligna4_alignc4",
+  "TacticValue": "0x9cd5cdc35441c505",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/projects.2/Conv]"
+},{
+  "Name": "/depth_head/layer3_rn/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/projects.2/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,192,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/layer3_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 110592},
+  "Bias": {"Type": "Float", "Count": 0},
+  "HasBias": 0,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/layer3_rn/Conv]"
+},{
+  "Name": "/depth_head/projects.1/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/Reshape_1_output_0",
+    "Location": "Device",
+    "Dimensions": [1,384,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/projects.1/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,96,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 96,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 96},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_t1r1s1_aligna4_alignc4",
+  "TacticValue": "0x865894c4635db7fd",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/projects.1/Conv]"
+},{
+  "Name": "/depth_head/resize_layers.1/ConvTranspose",
+  "LayerType": "CaskGemmDeconvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/projects.1/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,96,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/resize_layers.1/ConvTranspose_output_0",
+    "Location": "Device",
+    "Dimensions": [1,96,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [2,2],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [2,2],
+  "Dilation": [1,1],
+  "OutMaps": 96,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 96},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticValue": "0x0000000000020275",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/resize_layers.1/ConvTranspose]"
+},{
+  "Name": "/depth_head/layer2_rn/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/resize_layers.1/ConvTranspose_output_0",
+    "Location": "Device",
+    "Dimensions": [1,96,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/layer2_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 55296},
+  "Bias": {"Type": "Float", "Count": 0},
+  "HasBias": 0,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/layer2_rn/Conv]"
+},{
+  "Name": "/depth_head/projects.0/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/Reshape_output_0",
+    "Location": "Device",
+    "Dimensions": [1,384,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/projects.0/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,48,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 48,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 18432},
+  "Bias": {"Type": "Float", "Count": 48},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_aligna4_alignc4",
+  "TacticValue": "0xb0bf940d5e0f9f45",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/projects.0/Conv]"
+},{
+  "Name": "/depth_head/resize_layers.0/ConvTranspose",
+  "LayerType": "CaskGemmDeconvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/projects.0/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,48,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/resize_layers.0/ConvTranspose_output_0",
+    "Location": "Device",
+    "Dimensions": [1,48,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [4,4],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [4,4],
+  "Dilation": [1,1],
+  "OutMaps": 48,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 48},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticValue": "0x0000000000020785",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/resize_layers.0/ConvTranspose]"
+},{
+  "Name": "/depth_head/layer1_rn/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/resize_layers.0/ConvTranspose_output_0",
+    "Location": "Device",
+    "Dimensions": [1,48,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/layer1_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 27648},
+  "Bias": {"Type": "Float", "Count": 0},
+  "HasBias": 0,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/layer1_rn/Conv]"
+},{
+  "Name": "PWN(/depth_head/refinenet4/resConfUnit2/activation/Relu)",
+  "LayerType": "PointWiseV2",
+  "Inputs": [
+  {
+    "Name": "/depth_head/layer4_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,19,19],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet4/resConfUnit2/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,19,19],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "PointWise",
+  "ParameterSubType": "PointWiseExpression",
+  "NbInputArgs": 1,
+  "InputArgs": ["arg0"],
+  "NbOutputVars": 1,
+  "OutputVars": ["var0"],
+  "NbParams": 0,
+  "Params": [],
+  "NbLiterals": 4,
+  "Literals": ["0.000000e+00f", "1.000000e+00f", "0.000000e+00f", "0.000000e+00f"],
+  "NbOperations": 1,
+  "Operations": ["auto const var0 = pwgen::iMax(arg0, literal0);"],
+  "TacticValue": "0x0000000000000005",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet4/resConfUnit2/activation/Relu]"
+},{
+  "Name": "PWN(/depth_head/refinenet3/resConfUnit1/activation/Relu)",
+  "LayerType": "PointWiseV2",
+  "Inputs": [
+  {
+    "Name": "/depth_head/layer3_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit1/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "PointWise",
+  "ParameterSubType": "PointWiseExpression",
+  "NbInputArgs": 1,
+  "InputArgs": ["arg0"],
+  "NbOutputVars": 1,
+  "OutputVars": ["var0"],
+  "NbParams": 0,
+  "Params": [],
+  "NbLiterals": 4,
+  "Literals": ["0.000000e+00f", "1.000000e+00f", "0.000000e+00f", "0.000000e+00f"],
+  "NbOperations": 1,
+  "Operations": ["auto const var0 = pwgen::iMax(arg0, literal0);"],
+  "TacticValue": "0x0000000000000005",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet3/resConfUnit1/activation/Relu]"
+},{
+  "Name": "Reformatting CopyNode for Input Tensor 0 to PWN(/depth_head/refinenet2/resConfUnit1/activation/Relu)",
+  "LayerType": "NoOp",
+  "Inputs": [
+  {
+    "Name": "/depth_head/layer2_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "Reformatted Input Tensor 0 to PWN(/depth_head/refinenet2/resConfUnit1/activation/Relu)",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "TacticValue": "0x0000000000000000",
+  "StreamId": 0,
+  "Metadata": ""
+},{
+  "Name": "PWN(/depth_head/refinenet2/resConfUnit1/activation/Relu)",
+  "LayerType": "PointWiseV2",
+  "Inputs": [
+  {
+    "Name": "Reformatted Input Tensor 0 to PWN(/depth_head/refinenet2/resConfUnit1/activation/Relu)",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit1/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "PointWise",
+  "ParameterSubType": "PointWiseExpression",
+  "NbInputArgs": 1,
+  "InputArgs": ["arg0"],
+  "NbOutputVars": 1,
+  "OutputVars": ["var0"],
+  "NbParams": 0,
+  "Params": [],
+  "NbLiterals": 4,
+  "Literals": ["0.000000e+00f", "1.000000e+00f", "0.000000e+00f", "0.000000e+00f"],
+  "NbOperations": 1,
+  "Operations": ["auto const var0 = pwgen::iMax(arg0, literal0);"],
+  "TacticValue": "0x0000000000000009",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet2/resConfUnit1/activation/Relu]"
+},{
+  "Name": "PWN(/depth_head/refinenet1/resConfUnit1/activation/Relu)",
+  "LayerType": "PointWiseV2",
+  "Inputs": [
+  {
+    "Name": "/depth_head/layer1_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit1/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "PointWise",
+  "ParameterSubType": "PointWiseExpression",
+  "NbInputArgs": 1,
+  "InputArgs": ["arg0"],
+  "NbOutputVars": 1,
+  "OutputVars": ["var0"],
+  "NbParams": 0,
+  "Params": [],
+  "NbLiterals": 4,
+  "Literals": ["0.000000e+00f", "1.000000e+00f", "0.000000e+00f", "0.000000e+00f"],
+  "NbOperations": 1,
+  "Operations": ["auto const var0 = pwgen::iMax(arg0, literal0);"],
+  "TacticValue": "0x0000000000000004",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet1/resConfUnit1/activation/Relu]"
+},{
+  "Name": "/depth_head/refinenet1/resConfUnit1/conv1/Conv + /depth_head/refinenet1/resConfUnit1/activation_1/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit1/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit1/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 1,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "sm80_xmma_fprop_wngd_f32f32_f32_f32_nchwkcrs_nchw_tilesize8x16x64x8_warpsize8x1x1_wngd2x2",
+  "TacticValue": "0x0190806602534cfd",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet1/resConfUnit1/conv1/Conv]\u001e[ONNX Layer: /depth_head/refinenet1/resConfUnit1/activation_1/Relu]"
+},{
+  "Name": "Reformatting CopyNode for Input Tensor 0 to /depth_head/refinenet2/resConfUnit1/conv1/Conv + /depth_head/refinenet2/resConfUnit1/activation_1/Relu",
+  "LayerType": "NoOp",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit1/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "Reformatted Input Tensor 0 to /depth_head/refinenet2/resConfUnit1/conv1/Conv + /depth_head/refinenet2/resConfUnit1/activation_1/Relu",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "TacticValue": "0x0000000000000000",
+  "StreamId": 0,
+  "Metadata": ""
+},{
+  "Name": "/depth_head/refinenet2/resConfUnit1/conv1/Conv + /depth_head/refinenet2/resConfUnit1/activation_1/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "Reformatted Input Tensor 0 to /depth_head/refinenet2/resConfUnit1/conv1/Conv + /depth_head/refinenet2/resConfUnit1/activation_1/Relu",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit1/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 1,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet2/resConfUnit1/conv1/Conv]\u001e[ONNX Layer: /depth_head/refinenet2/resConfUnit1/activation_1/Relu]"
+},{
+  "Name": "/depth_head/refinenet3/resConfUnit1/conv1/Conv + /depth_head/refinenet3/resConfUnit1/activation_1/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit1/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit1/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 1,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet3/resConfUnit1/conv1/Conv]\u001e[ONNX Layer: /depth_head/refinenet3/resConfUnit1/activation_1/Relu]"
+},{
+  "Name": "/depth_head/refinenet4/resConfUnit2/conv1/Conv + /depth_head/refinenet4/resConfUnit2/activation_1/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet4/resConfUnit2/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,19,19],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet4/resConfUnit2/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,19,19],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 1,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "sm50_xmma_conv_fprop_fused_conv_act_fp32_NCHW_fp32_NCHW_KCRS_fp32_fp32_fp32_Accfloat_1_1_cC1_dC1_srcVec1_fltVec2_2_TP3_TQ7_C8_R3_S3_U1_V1",
+  "TacticValue": "0xacd7fdab1dbcfb17",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet4/resConfUnit2/conv1/Conv]\u001e[ONNX Layer: /depth_head/refinenet4/resConfUnit2/activation_1/Relu]"
+},{
+  "Name": "/depth_head/refinenet4/resConfUnit2/conv2/Conv + /depth_head/refinenet4/resConfUnit2/Add",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet4/resConfUnit2/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,19,19],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "/depth_head/layer4_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,19,19],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet4/resConfUnit2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,19,19],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet4/resConfUnit2/conv2/Conv]\u001e[ONNX Layer: /depth_head/refinenet4/resConfUnit2/Add]"
+},{
+  "Name": "/depth_head/refinenet4/Resize",
+  "LayerType": "Resize",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet4/resConfUnit2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,19,19],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet4/Resize_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Resize",
+  "InterpolationMode": "LINEAR",
+  "ResizeScales": [0, 0, 0, 0, 0, 0, 0, 0],
+  "ExcludeOutside": 0,
+  "CubicCoeff": -0.75,
+  "CoordTransform": "kALIGN_CORNERS",
+  "ResizeSelector": "kFORMULA",
+  "NNRounding": "kFLOOR",
+  "TacticValue": "0x0000000000000001",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet4/Resize]"
+},{
+  "Name": "/depth_head/refinenet3/resConfUnit1/conv2/Conv + /depth_head/refinenet3/resConfUnit1/Add",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit1/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "/depth_head/layer3_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit1/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet3/resConfUnit1/conv2/Conv]\u001e[ONNX Layer: /depth_head/refinenet3/resConfUnit1/Add]"
+},{
+  "Name": "/depth_head/refinenet4/out_conv/Conv + /depth_head/refinenet3/Add",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet4/Resize_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit1/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet3/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 4096},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_aligna4_alignc4",
+  "TacticValue": "0xb0bf940d5e0f9f45",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet4/out_conv/Conv]\u001e[ONNX Layer: /depth_head/refinenet3/Add]"
+},{
+  "Name": "PWN(/depth_head/refinenet3/resConfUnit2/activation/Relu)",
+  "LayerType": "PointWiseV2",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet3/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit2/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "PointWise",
+  "ParameterSubType": "PointWiseExpression",
+  "NbInputArgs": 1,
+  "InputArgs": ["arg0"],
+  "NbOutputVars": 1,
+  "OutputVars": ["var0"],
+  "NbParams": 0,
+  "Params": [],
+  "NbLiterals": 4,
+  "Literals": ["0.000000e+00f", "1.000000e+00f", "0.000000e+00f", "0.000000e+00f"],
+  "NbOperations": 1,
+  "Operations": ["auto const var0 = pwgen::iMax(arg0, literal0);"],
+  "TacticValue": "0x0000000000000005",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet3/resConfUnit2/activation/Relu]"
+},{
+  "Name": "/depth_head/refinenet3/resConfUnit2/conv1/Conv + /depth_head/refinenet3/resConfUnit2/activation_1/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit2/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit2/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 1,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet3/resConfUnit2/conv1/Conv]\u001e[ONNX Layer: /depth_head/refinenet3/resConfUnit2/activation_1/Relu]"
+},{
+  "Name": "/depth_head/refinenet3/resConfUnit2/conv2/Conv + /depth_head/refinenet3/resConfUnit2/Add",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit2/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "/depth_head/refinenet3/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet3/resConfUnit2/conv2/Conv]\u001e[ONNX Layer: /depth_head/refinenet3/resConfUnit2/Add]"
+},{
+  "Name": "/depth_head/refinenet3/Resize",
+  "LayerType": "Resize",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet3/resConfUnit2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,37,37],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet3/Resize_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Resize",
+  "InterpolationMode": "LINEAR",
+  "ResizeScales": [0, 0, 0, 0, 0, 0, 0, 0],
+  "ExcludeOutside": 0,
+  "CubicCoeff": -0.75,
+  "CoordTransform": "kALIGN_CORNERS",
+  "ResizeSelector": "kFORMULA",
+  "NNRounding": "kFLOOR",
+  "TacticValue": "0x0000000000000001",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet3/Resize]"
+},{
+  "Name": "/depth_head/refinenet2/resConfUnit1/conv2/Conv + /depth_head/refinenet2/resConfUnit1/Add",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit1/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "/depth_head/layer2_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit1/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet2/resConfUnit1/conv2/Conv]\u001e[ONNX Layer: /depth_head/refinenet2/resConfUnit1/Add]"
+},{
+  "Name": "/depth_head/refinenet3/out_conv/Conv + /depth_head/refinenet2/Add",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet3/Resize_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit1/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 4096},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_t1r1s1_aligna4_alignc4",
+  "TacticValue": "0x865894c4635db7fd",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet3/out_conv/Conv]\u001e[ONNX Layer: /depth_head/refinenet2/Add]"
+},{
+  "Name": "Reformatting CopyNode for Input Tensor 0 to PWN(/depth_head/refinenet2/resConfUnit2/activation/Relu)",
+  "LayerType": "NoOp",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "Reformatted Input Tensor 0 to PWN(/depth_head/refinenet2/resConfUnit2/activation/Relu)",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "TacticValue": "0x0000000000000000",
+  "StreamId": 0,
+  "Metadata": ""
+},{
+  "Name": "PWN(/depth_head/refinenet2/resConfUnit2/activation/Relu)",
+  "LayerType": "PointWiseV2",
+  "Inputs": [
+  {
+    "Name": "Reformatted Input Tensor 0 to PWN(/depth_head/refinenet2/resConfUnit2/activation/Relu)",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit2/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "PointWise",
+  "ParameterSubType": "PointWiseExpression",
+  "NbInputArgs": 1,
+  "InputArgs": ["arg0"],
+  "NbOutputVars": 1,
+  "OutputVars": ["var0"],
+  "NbParams": 0,
+  "Params": [],
+  "NbLiterals": 4,
+  "Literals": ["0.000000e+00f", "1.000000e+00f", "0.000000e+00f", "0.000000e+00f"],
+  "NbOperations": 1,
+  "Operations": ["auto const var0 = pwgen::iMax(arg0, literal0);"],
+  "TacticValue": "0x0000000000000009",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet2/resConfUnit2/activation/Relu]"
+},{
+  "Name": "Reformatting CopyNode for Input Tensor 0 to /depth_head/refinenet2/resConfUnit2/conv1/Conv + /depth_head/refinenet2/resConfUnit2/activation_1/Relu",
+  "LayerType": "NoOp",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit2/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "Reformatted Input Tensor 0 to /depth_head/refinenet2/resConfUnit2/conv1/Conv + /depth_head/refinenet2/resConfUnit2/activation_1/Relu",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "TacticValue": "0x0000000000000000",
+  "StreamId": 0,
+  "Metadata": ""
+},{
+  "Name": "/depth_head/refinenet2/resConfUnit2/conv1/Conv + /depth_head/refinenet2/resConfUnit2/activation_1/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "Reformatted Input Tensor 0 to /depth_head/refinenet2/resConfUnit2/conv1/Conv + /depth_head/refinenet2/resConfUnit2/activation_1/Relu",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit2/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 1,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet2/resConfUnit2/conv1/Conv]\u001e[ONNX Layer: /depth_head/refinenet2/resConfUnit2/activation_1/Relu]"
+},{
+  "Name": "/depth_head/refinenet2/resConfUnit2/conv2/Conv + /depth_head/refinenet2/resConfUnit2/Add",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit2/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "/depth_head/refinenet2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet2/resConfUnit2/conv2/Conv]\u001e[ONNX Layer: /depth_head/refinenet2/resConfUnit2/Add]"
+},{
+  "Name": "/depth_head/refinenet2/Resize",
+  "LayerType": "Resize",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet2/resConfUnit2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,74,74],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet2/Resize_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Resize",
+  "InterpolationMode": "LINEAR",
+  "ResizeScales": [0, 0, 0, 0, 0, 0, 0, 0],
+  "ExcludeOutside": 0,
+  "CubicCoeff": -0.75,
+  "CoordTransform": "kALIGN_CORNERS",
+  "ResizeSelector": "kFORMULA",
+  "NNRounding": "kFLOOR",
+  "TacticValue": "0x0000000000000001",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet2/Resize]"
+},{
+  "Name": "/depth_head/refinenet1/resConfUnit1/conv2/Conv + /depth_head/refinenet1/resConfUnit1/Add",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit1/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "/depth_head/layer1_rn/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit1/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet1/resConfUnit1/conv2/Conv]\u001e[ONNX Layer: /depth_head/refinenet1/resConfUnit1/Add]"
+},{
+  "Name": "/depth_head/refinenet2/out_conv/Conv + /depth_head/refinenet1/Add",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet2/Resize_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit1/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet1/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 4096},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_128x64_relu_interior_nn_v1",
+  "TacticValue": "0xc3cf6e1d1c6aff27",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet2/out_conv/Conv]\u001e[ONNX Layer: /depth_head/refinenet1/Add]"
+},{
+  "Name": "PWN(/depth_head/refinenet1/resConfUnit2/activation/Relu)",
+  "LayerType": "PointWiseV2",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet1/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit2/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "PointWise",
+  "ParameterSubType": "PointWiseExpression",
+  "NbInputArgs": 1,
+  "InputArgs": ["arg0"],
+  "NbOutputVars": 1,
+  "OutputVars": ["var0"],
+  "NbParams": 0,
+  "Params": [],
+  "NbLiterals": 4,
+  "Literals": ["0.000000e+00f", "1.000000e+00f", "0.000000e+00f", "0.000000e+00f"],
+  "NbOperations": 1,
+  "Operations": ["auto const var0 = pwgen::iMax(arg0, literal0);"],
+  "TacticValue": "0x0000000000000004",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet1/resConfUnit2/activation/Relu]"
+},{
+  "Name": "/depth_head/refinenet1/resConfUnit2/conv1/Conv + /depth_head/refinenet1/resConfUnit2/activation_1/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit2/activation/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit2/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 1,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "sm80_xmma_fprop_wngd_f32f32_f32_f32_nchwkcrs_nchw_tilesize8x16x64x8_warpsize8x1x1_wngd2x2",
+  "TacticValue": "0x0190806602534cfd",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet1/resConfUnit2/conv1/Conv]\u001e[ONNX Layer: /depth_head/refinenet1/resConfUnit2/activation_1/Relu]"
+},{
+  "Name": "/depth_head/refinenet1/resConfUnit2/conv2/Conv + /depth_head/refinenet1/resConfUnit2/Add",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit2/activation_1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  },
+  {
+    "Name": "/depth_head/refinenet1/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet1/resConfUnit2/conv2/Conv]\u001e[ONNX Layer: /depth_head/refinenet1/resConfUnit2/Add]"
+},{
+  "Name": "/depth_head/refinenet1/Resize",
+  "LayerType": "Resize",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet1/resConfUnit2/Add_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,148,148],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet1/Resize_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,296,296],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Resize",
+  "InterpolationMode": "LINEAR",
+  "ResizeScales": [1, 1, 2, 2, 0, 0, 0, 0],
+  "ExcludeOutside": 0,
+  "CubicCoeff": -0.75,
+  "CoordTransform": "kALIGN_CORNERS",
+  "ResizeSelector": "kFORMULA",
+  "NNRounding": "kFLOOR",
+  "TacticValue": "0x0000000000000001",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet1/Resize]"
+},{
+  "Name": "/depth_head/refinenet1/out_conv/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet1/Resize_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,296,296],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/refinenet1/out_conv/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,296,296],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 4096},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_128x64_relu_interior_nn_v1",
+  "TacticValue": "0xc3cf6e1d1c6aff27",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/refinenet1/out_conv/Conv]"
+},{
+  "Name": "/depth_head/output_conv1/Conv",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/refinenet1/out_conv/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,296,296],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/output_conv1/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,32,296,296],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 32,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 18432},
+  "Bias": {"Type": "Float", "Count": 32},
+  "HasBias": 1,
+  "HasReLU": 0,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/output_conv1/Conv]"
+},{
+  "Name": "/depth_head/Resize",
+  "LayerType": "Resize",
+  "Inputs": [
+  {
+    "Name": "/depth_head/output_conv1/Conv_output_0",
+    "Location": "Device",
+    "Dimensions": [1,32,296,296],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/Resize_output_0",
+    "Location": "Device",
+    "Dimensions": [1,32,518,518],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Resize",
+  "InterpolationMode": "LINEAR",
+  "ResizeScales": [0, 0, 0, 0, 0, 0, 0, 0],
+  "ExcludeOutside": 0,
+  "CubicCoeff": -0.75,
+  "CoordTransform": "kALIGN_CORNERS",
+  "ResizeSelector": "kFORMULA",
+  "NNRounding": "kFLOOR",
+  "TacticValue": "0x0000000000000001",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/Resize]"
+},{
+  "Name": "/depth_head/output_conv2/output_conv2.0/Conv + /depth_head/output_conv2/output_conv2.1/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/Resize_output_0",
+    "Location": "Device",
+    "Dimensions": [1,32,518,518],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/depth_head/output_conv2/output_conv2.1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,32,518,518],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 32,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 9216},
+  "Bias": {"Type": "Float", "Count": 32},
+  "HasBias": 1,
+  "HasReLU": 1,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "sm80_xmma_fprop_wngd_f32f32_f32_f32_nchwkcrs_nchw_tilesize8x16x32x8_warpsize8x1x1_wngd2x2",
+  "TacticValue": "0xe47e164f4a743900",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/output_conv2/output_conv2.0/Conv]\u001e[ONNX Layer: /depth_head/output_conv2/output_conv2.1/Relu]"
+},{
+  "Name": "/depth_head/output_conv2/output_conv2.2/Conv + /depth_head/output_conv2/output_conv2.3/Relu + /Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/depth_head/output_conv2/output_conv2.1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,32,518,518],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,1,518,518],
+    "Format/Datatype": "Float"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 1,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 32},
+  "Bias": {"Type": "Float", "Count": 1},
+  "HasBias": 1,
+  "HasReLU": 1,
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize128x16x8_stage3_warpsize4x1x1_g1_ffma_aligna4_alignc4",
+  "TacticValue": "0x9d9fdb5fd9945f64",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /depth_head/output_conv2/output_conv2.2/Conv]\u001e[ONNX Layer: /depth_head/output_conv2/output_conv2.3/Relu]\u001e[ONNX Layer: /Relu]"
+},{
+  "Name": "/Squeeze",
+  "LayerType": "NoOp",
+  "Inputs": [
+  {
+    "Name": "/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,1,518,518],
+    "Format/Datatype": "Float"
+  }],
+  "Outputs": [
+  {
+    "Name": "depth",
+    "Location": "Device",
+    "Dimensions": [1,518,518],
+    "Format/Datatype": "Float"
+  }],
+  "TacticValue": "0x0000000000000000",
+  "StreamId": 0,
+  "Metadata": "[ONNX Layer: /Squeeze]"
+}],
+"Bindings": ["image"
+,"depth"
+]}

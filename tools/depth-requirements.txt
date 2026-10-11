@@ -4,3 +4,4 @@ onnxruntime==1.21.0
 opencv-python-headless==4.11.0.86
 Pillow==11.1.0
 tensorrt-cu12==10.8.0.43
+nvidia-cuda-nvcc-cu12==12.4.131

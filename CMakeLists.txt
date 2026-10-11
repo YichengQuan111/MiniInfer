@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(MiniInfer VERSION 1.2.0 LANGUAGES CXX)
+project(MiniInfer VERSION 1.3.0 LANGUAGES CXX)
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
     message(FATAL_ERROR "MiniInfer v0.1 targets Linux. On Windows, configure and build through WSL.")
@@ -76,6 +76,7 @@ miniinfer_configure_target(runtime_demo)
 
 include(CTest)
 include(cmake/Depth.cmake)
+include(cmake/Trt.cmake)
 set(MINIINFER_DEPTH_PYTHON "" CACHE FILEPATH "Optional Python with depth reference dependencies")
 if(BUILD_TESTING AND MINIINFER_DEPTH_PYTHON)
     add_test(NAME depth_reference_contract

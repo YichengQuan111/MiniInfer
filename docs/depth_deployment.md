@@ -95,3 +95,27 @@ python tools/depth/validate_backend.py \
 CLI 同时支持 `--tensor INPUT.f32 --width W --height H` 隔离图执行。它输出 `.preprocessed.f32`、`.raw.f32`、`.depth.f32` 和含几何/计时的 `.json`，拒绝覆盖。`model_seconds` 包括 ORT 同步执行及返回输出，`total_seconds` 额外包含读取、初始化、前后处理，均不含工件写盘；此工具逐图启动，仅用于精度检查，不用于稳态性能报告。
 
 ORT 只通过可选 `miniinfer::depth_ort` 目标链接，默认关闭；图像契约库 `miniinfer::depth_image` 不依赖 ORT、CUDA 或 Python。模型初始化严格校验唯一输入/输出的名称、形状与 FP32 类型。
+
+## V1.3：TensorRT C++ 引擎
+
+`bootstrap_depth.sh` 同时安装 CUDA runtime/compiler headers 与固定 TensorRT/ONNX parser headers，无须系统 nvcc 编译器。项目不在本阶段加入自定义 CUDA kernel。
+
+```bash
+bash tools/configure_depth.sh
+cmake --build $HOME/builds/MiniInfer/depth-release -j4
+mkdir -p data/generated/depth/engines
+$HOME/builds/MiniInfer/depth-release/bin/depth_engine_builder \
+  --onnx data/generated/depth/export-v1/depth_anything_v2_vits_518.onnx \
+  --output data/generated/depth/engines/rebuilt-fp16.engine --precision fp16
+$HOME/builds/MiniInfer/depth-release/bin/depth_trt_cli \
+  --model data/generated/depth/engines/rebuilt-fp16.engine \
+  --image data/generated/depth/images/indoor_0.ppm --output data/generated/depth/trt-local
+```
+
+FP32 与 FP16 均关闭 TF32，workspace 上限为 1 GiB。FP16 的最终策略是 `backbone-fp32-head-fp16-v2`，具体开发取舍和数值门槛见[精度报告](depth_accuracy.md)。构建过程在接收业务请求之前完成，输出 engine、`.manifest` 和 `.layers.json`，拒绝覆盖已有路径。
+
+引擎清单记录 ONNX/engine SHA-256、契约及形状、精度策略、GPU 型号/计算能力、CUDA runtime/driver API 版本、TensorRT 版本、平台、workspace、缓存标识及构建耗时。缓存标识覆盖配置，不包含构建耗时或 engine 二进制哈希；运行时重新计算并验证自洽性，再检查当前环境和 engine 哈希。清单是损坏/误配检测，不是数字签名；模型包由部署方可信提供。engine 不承诺跨硬件、驱动或软件版本通用，应在目标环境重建并复验。
+
+`TrtRunner` 拥有单个 context/stream、设备输入输出和 pinned host 缓冲；并发调用在该实例内串行。返回前等待 stream 完成，输出单独拥有存储。设备执行错误会使该槽位失效，后续调用要求重新初始化；非法输入在设备提交前拒绝。构造失败、损坏 engine、配置错配和反复加载有单独检查。更上层的数量/字节接纳在 V1.4 SDK 实现。
+
+`TrtTiming` 仅在显式请求时记录 CUDA events；H2D、compute、D2H 在同一 stream 计时且同步后读取。当前 WSL 实测曾出现 device compute 时间略大于 host wall 时间，两种时钟分别记录，不用相加、相减或大小关系校验设备完成。

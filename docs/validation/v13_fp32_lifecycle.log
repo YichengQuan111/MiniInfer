@@ -1,0 +1,3 @@
+CUDA timing h2d_ms=0.292928 compute_ms=52.0335 d2h_ms=0.111424 host_ms=52.2252
+TensorRT: [runtime.cpp::parsePlan::603] Error Code 2: Internal Error (Assertion blobSize > numericCast<int64_t>(sizeof(rt::PlanHeader)) failed. )
+TRT ownership, serialization, compatibility and recovery passed

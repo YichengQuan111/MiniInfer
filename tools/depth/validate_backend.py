@@ -174,6 +174,8 @@ def _run(command: list[str], prefix: Path, transform, report: dict) -> dict:
              (("preprocessed", ".preprocessed.f32"), ("raw", ".raw.f32"),
               ("restored", ".depth.f32"), ("metadata", ".json"))}
     metadata = _json(paths["metadata"])
+    if metadata.get("backend", "").replace("_", "-") != report["thresholds"]["backend"].replace("_", "-"):
+        raise DepthError(f"CLI backend differs from threshold identity: {prefix}")
     if metadata.get("geometry") != transform.to_dict():
         raise DepthError(f"CLI geometry differs: {prefix}")
     seconds = metadata.get("seconds")
@@ -189,7 +191,8 @@ def _run(command: list[str], prefix: Path, transform, report: dict) -> dict:
 
 
 def _passes(metrics: dict, thresholds: dict, inference: bool) -> bool:
-    if metrics["violation_fraction"] > thresholds["max_violation_fraction"]:
+    allowed = thresholds["max_violation_fraction"] if inference else 0
+    if metrics["violation_fraction"] > allowed:
         return False
     return not inference or all(metrics[metric] <= thresholds[threshold] for metric, threshold in
                                 (("p99_abs", "max_p99_abs"), ("mae", "max_mae"))

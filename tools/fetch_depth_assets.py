@@ -11,6 +11,7 @@ MODEL_COMMIT = "a561b849ebae10a6f5ef49e26c83cbbcd36c71bf"
 WEIGHT_REVISION = "03876f8651c73a60fe4c2c48294e09fcb6838fcf"
 DATASET_REVISION = "528f83c26f02a6a7a11c5a036dfc9ee19907ebd9"
 ASSETS = {
+    "onnx-parser-header": ("https://raw.githubusercontent.com/onnx/onnx-tensorrt/c5ca8912f30e9ad630a0ef565e3d5f4bd5e91563/NvOnnxParser.h", "NvOnnxParser.h", "6cea65f3ae229ecab699f725182bf9cb29c3080093ca8937822b2d2394ffa95b"),
     "weights": (f"https://huggingface.co/depth-anything/Depth-Anything-V2-Small/resolve/{WEIGHT_REVISION}/depth_anything_v2_vits.pth",
                 "depth_anything_v2_vits.pth", "715fade13be8f229f8a70cc02066f656f2423a59effd0579197bbf57860e1378"),
     "dataset": (f"https://huggingface.co/datasets/depth-anything/DA-2K/resolve/{DATASET_REVISION}/DA-2K.zip", "DA-2K.zip", "ff0e48e7cc53273efd1312610e51f1ec87bea0b8a22daf37125fd81246592b81"),

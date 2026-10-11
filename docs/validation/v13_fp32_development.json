@@ -1,0 +1,2389 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-11T10:54:49.095030+00:00",
+  "split": "development",
+  "input_sha256": {
+    "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli": "82be5768ba1a1b1396e334b85f5ef1da7d906858050e343c0cf0de316d143e82",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine": "eb9fbd41e015f4006918a2503522c054aabcd32d9b0abcfc37a98462e51759ab",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/samples.json": "ee0abd625ae4dcd0bca502b8b2a87914517a46977c8b64f02dda15c56c28ef97",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/thresholds_trt_fp32.json": "4a13c5537bf21eb35379515d2a82af696c84aef521a53b0d69032ca12fe74b72",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/manifest.json": "a5b7c38c348297e8d93a5e5e96ed348703ebabdb5634de633852e96a6fc4c6af",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples.json": "ee0abd625ae4dcd0bca502b8b2a87914517a46977c8b64f02dda15c56c28ef97",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/contract.json": "95fb2b08d6ffe5ee48c90836cab16bc4b902ca5d9d456584421f840d8ca121a8",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/contract.json": "c82cab509da7a04dbae9f371ca8a4ebc0328b53a4be145eeb429d4f18aeaef18",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/adverse_style_0.ppm": "b2bcb7f83bf3bbc7b817fa02e951e20164c741907eadbdc81c302dc4408b7d25",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_0/metadata.json": "36d34a47203f9a4010764b435bc502cb774d95666080f737eb65c6c0a7c2ea49",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_0/original.rgb8": "e324f47ebeb685a630cc94b8d6b6f76082a27c9a95ac3fadd4a97b8cbb1d06da",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_0/preprocessed.f32": "c065dc6b54bb8f68418acb5d097cf89cef9d9da7ea6b30fb9c1b4b2a2bc779e3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_0/raw.f32": "41d9f750ea6a47725417895084ad36e79115bb30856170c9d3b3ec4c700d4d6b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_0/restored.f32": "3f4293fe9e11e1ceabbb74e648e4a38b3652ccc4148242cae2277ae4647bc384",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_0/original.ppm": "b2bcb7f83bf3bbc7b817fa02e951e20164c741907eadbdc81c302dc4408b7d25",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/adverse_style_1.ppm": "3244b4d8ed9d2f359575e9f383c002ced1e5977bd02d91e597b2953abbd9eb84",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_1/metadata.json": "21537d6fd63c849b4870ec82f636580fea958acd177c05fa2ddff2a5dac1b234",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_1/original.rgb8": "d4e71c1c9454aeee9be2c0ce1e430599ea33f5d4e722780f7810453d46797331",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_1/preprocessed.f32": "45febee23f8dfe9991704545b7dc2ca9dfa156c405936f30115341ff47f50866",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_1/raw.f32": "32e2c3bebfeada998d878be2d28dc84fcd88e3a55aed1fa85b734a5267c6abe7",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_1/restored.f32": "df38a17fe7761aa7dd181bce6d1e46a86bd213707c8355de342c6a5b52aa9c7b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_1/original.ppm": "3244b4d8ed9d2f359575e9f383c002ced1e5977bd02d91e597b2953abbd9eb84",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/aerial_0.ppm": "9433715f95fff82e9012f43fd686d7733119e09aebd6effe7d63c52ee73ea89a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_0/metadata.json": "2b54f417b535c763ac629419c5c1f4fcb1d65c906305dcb487a971e10d85abb6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_0/original.rgb8": "635f0d5bf3657055c16e14b0f59a2d8842361869a3671a038e8784d09d8dd9ec",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_0/preprocessed.f32": "03887f5093588ba7246d65e534e09eef88bd1a40d9cec0396d12d959193e3fd0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_0/raw.f32": "707c2a5740cdedd0f7816f4cd482dfabef0016175fe4f9c2c128d966ba4ee4d2",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_0/restored.f32": "332913e23ec5eb18b440da5d0f67d35c11c9a24e70e4d43fec4c05c654ded4aa",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_0/original.ppm": "9433715f95fff82e9012f43fd686d7733119e09aebd6effe7d63c52ee73ea89a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/aerial_1.ppm": "3591f3609ee88264900bcd5dba4d0499cbb9ada3d3c7ed8ca2aea3fa902c5924",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_1/metadata.json": "cca8cbc5c1a7413f0bc5819afbd2903a912f8685a0d676e39d1a6139d5d45409",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_1/original.rgb8": "bf508f1dbc2d01f81fbd21a35bb3622e356e4119001cbbf00554aa1fdfb0e34f",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_1/preprocessed.f32": "3a4910560e19b23caf4456bbd87db31e5abc822093ad690502ea763f91b88057",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_1/raw.f32": "be73ba5acb3c8db718981de16004ea657d6b6b5b6aac20c521d9cd642ad2142c",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_1/restored.f32": "14aef0021df9fb002dfb215b024a7301460612ff26b0b2824170bcb14b827475",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_1/original.ppm": "3591f3609ee88264900bcd5dba4d0499cbb9ada3d3c7ed8ca2aea3fa902c5924",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/indoor_0.ppm": "81c572302cd447e7c8967f71611f6ab879ffefbc10b231237bf5790a70ccee8e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_0/metadata.json": "5120453ae2fb3e26fb58b237fa51fb28754d28d0cfac1b8f77746105d2f3249d",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_0/original.rgb8": "d0c7c7e946a6877b06d6cfd01a0ed07656cca9aa16521d4f9391da2e85622b46",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_0/preprocessed.f32": "8575dc63d457baff9933d10f7cce18c395b000404692e368a7d90745695b12c3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_0/raw.f32": "b94f0fd8236023022abad86f8a66edd524ec12e3210cda08a30d99c72c3359ae",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_0/restored.f32": "450818ef9f36d06197a707e98799dfa134a13e3464c4ba296cb033c658283057",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_0/original.ppm": "81c572302cd447e7c8967f71611f6ab879ffefbc10b231237bf5790a70ccee8e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/indoor_1.ppm": "bda74c36df6dfa1efae08bb13bd8db14638e5410bfbcf1d8c8e68be01b93962e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_1/metadata.json": "d6e1a24fdf5804e11d9287bf12a97696422e09b34f4b845cc37d34185be5a7a3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_1/original.rgb8": "13b9a8fd2f1f4bf2b7b2e3129945722b5a563d682ccdb8ff3045c5b6716e9c19",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_1/preprocessed.f32": "7dc95ee819282b7a5900fa1c513a0c91fbae376c9789fc43600732f30e508c2d",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_1/raw.f32": "1b10420714caf52ef22b35c0dfc00653ee4bb38e995dc4be87747ed5ca68c6f6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_1/restored.f32": "597c5080c6976ad07aa78eff02536b120f8a7c971c6bb58a2339dd31da8d7fc8",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_1/original.ppm": "bda74c36df6dfa1efae08bb13bd8db14638e5410bfbcf1d8c8e68be01b93962e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/non_real_0.ppm": "842552a08e8f8adc160885f010cd3aeac4a90a16ce69427794fb443514436851",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_0/metadata.json": "0498cedb7ec824f26494f8b79680b1c40e81d3145b7162b11a3db9665a45c0fe",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_0/original.rgb8": "f797b421996db1fbf47e3a6ef5089911c45c449c86280c41eac52f803d1c0b75",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_0/preprocessed.f32": "2d8145301fced5b7664aa424e61864d377112913454dd6de58b15cdbd30f7f48",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_0/raw.f32": "e17b5989ed425b157e48aacc0a545f436688dcb493b3e3ef0871fce4af73ad05",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_0/restored.f32": "66f487edebb40ffc8ad5547b6fd798015ecaad9bd0b298b1d2e295b4d9c16ce9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_0/original.ppm": "842552a08e8f8adc160885f010cd3aeac4a90a16ce69427794fb443514436851",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/non_real_1.ppm": "dcd407b6318ec7b9121bb7c4afad05dcd9bea2ac221e494674a85f171595a06f",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_1/metadata.json": "e8a5588c6608925d0a36d0dfbc824b7f629d9af5fd303c5d72d9a42f78f88fee",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_1/original.rgb8": "515c73682ba07f0354d0e3255f6a23a05528537e9e8c4541936c5effbf24b6f2",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_1/preprocessed.f32": "0559582052b685050473bd3deda9011b4ea533e067cf683bce4329cd843a16e1",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_1/raw.f32": "53469c56efe0be7399d39debc92f096e81233e5dce7b33ac945fb6d498091733",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_1/restored.f32": "2922ff6b9f7c6417a538737762ba889896c7f3471ccf5db886b7b31ba7274c09",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_1/original.ppm": "dcd407b6318ec7b9121bb7c4afad05dcd9bea2ac221e494674a85f171595a06f",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/object_0.ppm": "d1e43fb54a916d6799c5b28107303e48de8c8aee55aed55209fdb5b2559f52c8",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_0/metadata.json": "5be75ba2f25f11fd7ff8d19dee1799c3d22d21e552fdbc674f0002539a330de1",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_0/original.rgb8": "1c4ccd0cb98f2bc100c3c942def2ef2733514123ec3bdd0e12b817db99b4ff03",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_0/preprocessed.f32": "6b10424d9b05e34a4c8a2d3a669ec17d05e25e5d81085c7dfc4a8ff3bc0cbc05",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_0/raw.f32": "0953f258f4c3bd0ac089d8d60ab79ea53efb7835517b5dca0e56a2f42bf3a3da",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_0/restored.f32": "c470ab4c4b665dd56b50ca6134d829a1ce686c9f2ee29e40fca6045564379453",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_0/original.ppm": "d1e43fb54a916d6799c5b28107303e48de8c8aee55aed55209fdb5b2559f52c8",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/object_1.ppm": "0e9489b5d5b5ec74174f589d3de1aaaff56d204426fd2ce72805a8ffadca70d3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_1/metadata.json": "acd8003688fccbe2389453beaf0bbe2b042df785e4c60d707473da1fa7e8722c",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_1/original.rgb8": "1be6e9641b36fd2d13d950d7aad8e470d95cc27d11910f78cb7110017bf53d4e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_1/preprocessed.f32": "caf6a093c2e90502f2ecac4aded21d89700ff7ebb9de83f822e8e52f79d64c02",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_1/raw.f32": "afe9f5dc6ede2a1196a95331f9050e68aefb5520d642a8330edbd442090c49fa",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_1/restored.f32": "6843710b65b25f5c315445895f6450005aafffcaffea90ed0ae2bce166c4a316",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_1/original.ppm": "0e9489b5d5b5ec74174f589d3de1aaaff56d204426fd2ce72805a8ffadca70d3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/outdoor_0.ppm": "e77161c9984c889d8e196a009475d0d2aa0e3c05ae30a41327db449c7dcb2133",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_0/metadata.json": "c1d14713eeff2a97137c6ad2aa8d5d2ad7b247e6ad7381a823c44ea4a819fa6b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_0/original.rgb8": "04d9f7081641996573880459a67624f6310177d17acc3f85f2914a159e8fdbca",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_0/preprocessed.f32": "4524b551021d912843c5a90df761c665677cb23f66dac6afc61f71bdddfbec80",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_0/raw.f32": "b9b39ce8b2bae3892d70cdbf9339e41b2200aa7f5232653dd59b07867abecc82",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_0/restored.f32": "fdcf7ecccdb679190b42dd576928031b97e199e4c5fe7343d8233f9da59122fa",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_0/original.ppm": "e77161c9984c889d8e196a009475d0d2aa0e3c05ae30a41327db449c7dcb2133",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/outdoor_1.ppm": "2feeb2c0059ea5286f01bf6bc87378f01da6c20d30df5cb766e0f69cb83e2d73",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_1/metadata.json": "f6435ceb1cf337495ea7cd16b4d349625fb8eccbebe32be7ee31104f939015f1",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_1/original.rgb8": "894ccc07908dab021d8f0813c7dc306029f39fb3f234928ccc08e5f5b0256b77",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_1/preprocessed.f32": "f0b648a05a509616a1541b264f69c8a8239f7ef82aa1c8f6b4ebfd60d9526453",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_1/raw.f32": "3e7ea2e28b5e6f09b0fe1fd0780e3e3c1cad24014bdcc67721894a3d61c28a75",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_1/restored.f32": "a960ebaaef03f2c8dd4a2506e83e99d277843e6feba0845266e081730b684db2",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_1/original.ppm": "2feeb2c0059ea5286f01bf6bc87378f01da6c20d30df5cb766e0f69cb83e2d73",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/transparent_reflective_0.ppm": "734d17eedb6bc75bba6f6893517be65b952f1246d8c1702c130bf1e3846fb49d",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_0/metadata.json": "0bc6d068ea23f1f908d295fc8d87e804987e0e050cc883976c947e1fd0310e40",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_0/original.rgb8": "3f8ed4838e0a197c2fa33ccd378ef5aecb9ecd58a96ce628db09c1dbf2ed2de1",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_0/preprocessed.f32": "46abc9625d4c782201c7145a88f425ac07e7f1e1de1064561ff230657425ffa9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_0/raw.f32": "0cbc47d5893ca6873f071e4e16e9b46d448e59b400c8e6fc47bf0d0d499da92f",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_0/restored.f32": "0e2ce7286cbe9343310eaee79b4014a653903ed784e8d9908c111e42e86464fb",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_0/original.ppm": "734d17eedb6bc75bba6f6893517be65b952f1246d8c1702c130bf1e3846fb49d",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/transparent_reflective_1.ppm": "6a374470826c7adfee9d172028311ad47b46206c147e3aa53d004ca708bb3934",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_1/metadata.json": "5bf24baf8a59e015cbf191137abb0d95cc3e4663bb0f09804a5471322397f33a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_1/original.rgb8": "8cc7e8653af00c23ed5149e55b3a2b9c3869c67e5bf0a0dac2f91636312f6417",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_1/preprocessed.f32": "924a28b29c1d579d3dbc4b20615dc091ec1482c944bcb8d6869404c465bdf817",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_1/raw.f32": "9b6e9e2cbdf13d0b86a891b889f336dd9efaa8823f5302c89df11299aba799bd",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_1/restored.f32": "3c28863a2156d02b7aa9963f2578ec95586aeac0af284a605e92b62b60d770a3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_1/original.ppm": "6a374470826c7adfee9d172028311ad47b46206c147e3aa53d004ca708bb3934",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/underwater_0.ppm": "478f85416da5b27b4fcd2eaab6d3f83309153b7be74118e13227535e7622a957",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_0/metadata.json": "6b1bdb2588c140e53f37b06ce09bb6f6ad77f5a3cf90122cf96bef9583ee76e5",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_0/original.rgb8": "cdb33f75c08990896f399170bd872fdd357638bb857b0b7bf6c194bccc1d0c5b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_0/preprocessed.f32": "11d1aa12d50e9858cdbd53c4e62a7b811e85c813e2451e7142e2133fa318899b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_0/raw.f32": "c9f469b7c7b37e97b81811e7749cd3d413b00b6ca161c24caffa50e2a2063dd9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_0/restored.f32": "ee4eca059de5b953ed7b5c35fbe8c26ea18328308ecf4fab4979555e3de4cc91",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_0/original.ppm": "478f85416da5b27b4fcd2eaab6d3f83309153b7be74118e13227535e7622a957",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images/underwater_1.ppm": "0ce7b7052ae3016fc552c0d10b358c1ab90a3a479338c6ef269ebf3a9a918bc0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_1/metadata.json": "5aa4dd44fcc7b8dab5d0ab0fcde5400b30872c354ab0f00b759b62d733a7cee9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_1/original.rgb8": "347f7973b52aa2eacf8fcfa3daa69fcb57c731108d7abe5cd3a0c3905d32d715",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_1/preprocessed.f32": "61f1cc347ffe35c6ca18b14d0c8ff1560024e9d3fb0b291bbf994f8f459bc9ab",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_1/raw.f32": "c6f560b98c465f577702f1f94fc689bdd09b9535bd299c07bb0231714dddb408",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_1/restored.f32": "d83c4e6049e6ba162a53ff40c10fe72a833a3cfc512761769c86452d33811731",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_1/original.ppm": "0ce7b7052ae3016fc552c0d10b358c1ab90a3a479338c6ef269ebf3a9a918bc0"
+  },
+  "commands": [
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_0/original.ppm",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/image"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/image.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/image.preprocessed.f32": "c065dc6b54bb8f68418acb5d097cf89cef9d9da7ea6b30fb9c1b4b2a2bc779e3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/image.raw.f32": "a5c274e90ee79213b90f6d74aaeed64a1bc3c7e987b4055bf2c72260a13d8d67",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/image.depth.f32": "17bcaddc0469893b93ef2c0b9ea2948bd9829e40b8bf332b79fb31d491859a7a",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/image.json": "63deaa2994f4061767ae22e0320a2ab1e75d84a1145f387cdb23cdf497f38a33"
+      },
+      "seconds": {
+        "model": 0.054393824,
+        "total": 1.500925234
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--tensor",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/adverse_style_0/preprocessed.f32",
+        "--width",
+        "2048",
+        "--height",
+        "998",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/tensor"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/tensor.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/tensor.preprocessed.f32": "c065dc6b54bb8f68418acb5d097cf89cef9d9da7ea6b30fb9c1b4b2a2bc779e3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/tensor.raw.f32": "a5c274e90ee79213b90f6d74aaeed64a1bc3c7e987b4055bf2c72260a13d8d67",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/tensor.depth.f32": "17bcaddc0469893b93ef2c0b9ea2948bd9829e40b8bf332b79fb31d491859a7a",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/adverse_style_0/tensor.json": "e1fd77c5dca050daa5b879a100d5dcb426d9a393c8dda193654b34d775d863c8"
+      },
+      "seconds": {
+        "model": 0.048306402,
+        "total": 1.344737974
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_0/original.ppm",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/image"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/image.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/image.preprocessed.f32": "03887f5093588ba7246d65e534e09eef88bd1a40d9cec0396d12d959193e3fd0",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/image.raw.f32": "1f03b4a0915b23ec8e0ec652624ccb668a99b65e9cbcfa4845b28f63435b3756",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/image.depth.f32": "9a1044a7d8a3487effbfaa4affd5fb89ba0629d097198fd6167870e2d15816c3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/image.json": "b2f85f53a2124604dcbb2e8536e6cad6720271a3cec8b9da3ef481db3f9782d4"
+      },
+      "seconds": {
+        "model": 0.050705248,
+        "total": 1.353972293
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--tensor",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/aerial_0/preprocessed.f32",
+        "--width",
+        "1600",
+        "--height",
+        "1063",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/tensor"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/tensor.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/tensor.preprocessed.f32": "03887f5093588ba7246d65e534e09eef88bd1a40d9cec0396d12d959193e3fd0",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/tensor.raw.f32": "1f03b4a0915b23ec8e0ec652624ccb668a99b65e9cbcfa4845b28f63435b3756",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/tensor.depth.f32": "9a1044a7d8a3487effbfaa4affd5fb89ba0629d097198fd6167870e2d15816c3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/aerial_0/tensor.json": "f306611c47913e756236fb68527c7d2a5c49908192eca85b821ad74bcbab525b"
+      },
+      "seconds": {
+        "model": 0.051458971,
+        "total": 2.3125889
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_0/original.ppm",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/image"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/image.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/image.preprocessed.f32": "8575dc63d457baff9933d10f7cce18c395b000404692e368a7d90745695b12c3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/image.raw.f32": "c80b66cb36a713570b57a2e6e070f8c6c6451b666551551f27214286b361726c",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/image.depth.f32": "f59bf945ee5927618c108e331f79d1eb6b23d6a7de59864309c3b0947c874530",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/image.json": "ffd8a553e730fd80adcbf44760fa04603ab508a8aa2953f8d6e6d5e3f83adbcf"
+      },
+      "seconds": {
+        "model": 0.049029432,
+        "total": 2.109258265
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--tensor",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/indoor_0/preprocessed.f32",
+        "--width",
+        "1024",
+        "--height",
+        "526",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/tensor"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/tensor.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/tensor.preprocessed.f32": "8575dc63d457baff9933d10f7cce18c395b000404692e368a7d90745695b12c3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/tensor.raw.f32": "c80b66cb36a713570b57a2e6e070f8c6c6451b666551551f27214286b361726c",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/tensor.depth.f32": "f59bf945ee5927618c108e331f79d1eb6b23d6a7de59864309c3b0947c874530",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/indoor_0/tensor.json": "7a5a0999a490c4ba12d3d06a7ee22cd5527fc5f27203cdfd4d6220bcd33b5896"
+      },
+      "seconds": {
+        "model": 0.048757129,
+        "total": 1.394072123
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_0/original.ppm",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/image"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/image.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/image.preprocessed.f32": "2d8145301fced5b7664aa424e61864d377112913454dd6de58b15cdbd30f7f48",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/image.raw.f32": "b04f0206949c71c17554fc44b7c3ae3e6f2b37165b8cdb85a090fc2b791ccd1b",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/image.depth.f32": "cd2a073d7184f81b72e78186625a2c27ab7d2cb320b3548e651571af5f474d9a",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/image.json": "4ed0f817be4f76b32b4665e6656e8c766eb0ba11ae6cdf1c84f4017fc24f09c8"
+      },
+      "seconds": {
+        "model": 0.051773029,
+        "total": 1.489869382
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--tensor",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/non_real_0/preprocessed.f32",
+        "--width",
+        "1417",
+        "--height",
+        "905",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/tensor"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/tensor.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/tensor.preprocessed.f32": "2d8145301fced5b7664aa424e61864d377112913454dd6de58b15cdbd30f7f48",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/tensor.raw.f32": "b04f0206949c71c17554fc44b7c3ae3e6f2b37165b8cdb85a090fc2b791ccd1b",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/tensor.depth.f32": "cd2a073d7184f81b72e78186625a2c27ab7d2cb320b3548e651571af5f474d9a",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/non_real_0/tensor.json": "8ce18464bb3b51e24b616f981d638b9c7c43a70f2cd9194b23b265843c263baa"
+      },
+      "seconds": {
+        "model": 0.049925481,
+        "total": 1.620119572
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_0/original.ppm",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/image"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/image.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/image.preprocessed.f32": "6b10424d9b05e34a4c8a2d3a669ec17d05e25e5d81085c7dfc4a8ff3bc0cbc05",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/image.raw.f32": "7c526fc7c156c8734e3660fbe6c9a6cddaa6dfb4f6287614a6d59c5593147636",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/image.depth.f32": "207b0558c1af4c6eba9daee9573c5cf1cd4975955de8e52b35eb864827e4f41d",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/image.json": "d3d0fa1e70886039a1c39cee33eb380c7c8b2e895623ba839bde65a430adf8d3"
+      },
+      "seconds": {
+        "model": 0.050355969,
+        "total": 1.632552674
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--tensor",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/object_0/preprocessed.f32",
+        "--width",
+        "1024",
+        "--height",
+        "683",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/tensor"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/tensor.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/tensor.preprocessed.f32": "6b10424d9b05e34a4c8a2d3a669ec17d05e25e5d81085c7dfc4a8ff3bc0cbc05",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/tensor.raw.f32": "7c526fc7c156c8734e3660fbe6c9a6cddaa6dfb4f6287614a6d59c5593147636",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/tensor.depth.f32": "207b0558c1af4c6eba9daee9573c5cf1cd4975955de8e52b35eb864827e4f41d",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/object_0/tensor.json": "c98e8ff30d4faede879d0a8cc18c63ae23a871c52176ed75a57a9fd36ce7e88d"
+      },
+      "seconds": {
+        "model": 0.05179676,
+        "total": 1.794011634
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_0/original.ppm",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/image"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/image.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/image.preprocessed.f32": "4524b551021d912843c5a90df761c665677cb23f66dac6afc61f71bdddfbec80",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/image.raw.f32": "bfe2b8c3a982c2dfdbd78c46e7bfe9fa6d4630d936448c9a2fbd824828e97f14",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/image.depth.f32": "96d4f3d091ca05f7e5b5f47a5569505424f331f696270c1fc9f19a15f9a1a8f5",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/image.json": "671f8216f46856574d0ae25889efacd97f7d3943015bf315f808aea3d2ffd8c7"
+      },
+      "seconds": {
+        "model": 0.04991352,
+        "total": 1.374955456
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--tensor",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/outdoor_0/preprocessed.f32",
+        "--width",
+        "1600",
+        "--height",
+        "1200",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/tensor"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/tensor.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/tensor.preprocessed.f32": "4524b551021d912843c5a90df761c665677cb23f66dac6afc61f71bdddfbec80",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/tensor.raw.f32": "bfe2b8c3a982c2dfdbd78c46e7bfe9fa6d4630d936448c9a2fbd824828e97f14",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/tensor.depth.f32": "96d4f3d091ca05f7e5b5f47a5569505424f331f696270c1fc9f19a15f9a1a8f5",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/outdoor_0/tensor.json": "26c7b898d8fb53364fafa83313110f67dc19b259c731ac82f43a7e2b854d2298"
+      },
+      "seconds": {
+        "model": 0.049699123,
+        "total": 1.85845279
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_0/original.ppm",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/image"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/image.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/image.preprocessed.f32": "46abc9625d4c782201c7145a88f425ac07e7f1e1de1064561ff230657425ffa9",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/image.raw.f32": "2a92092f678b653b0df3d73a43e183eec480b6d5008687e9ea92db26960a2044",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/image.depth.f32": "67d73e807c539c7f0e48472dda820f15368c749376e3de0c8fd5cbcd322ae5cf",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/image.json": "c2cd451931b2e45679becff0265e6a6cdf443bbc5f0647608571cc466ab887f1"
+      },
+      "seconds": {
+        "model": 0.051747288,
+        "total": 2.035192917
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--tensor",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/transparent_reflective_0/preprocessed.f32",
+        "--width",
+        "1600",
+        "--height",
+        "1067",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/tensor"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/tensor.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/tensor.preprocessed.f32": "46abc9625d4c782201c7145a88f425ac07e7f1e1de1064561ff230657425ffa9",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/tensor.raw.f32": "2a92092f678b653b0df3d73a43e183eec480b6d5008687e9ea92db26960a2044",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/tensor.depth.f32": "67d73e807c539c7f0e48472dda820f15368c749376e3de0c8fd5cbcd322ae5cf",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/transparent_reflective_0/tensor.json": "6aae243b0d1aa857db41bc678fbde2560ba8fdd20e5259267680c0806c478e6e"
+      },
+      "seconds": {
+        "model": 0.05192271,
+        "total": 1.330311722
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_0/original.ppm",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/image"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/image.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/image.preprocessed.f32": "11d1aa12d50e9858cdbd53c4e62a7b811e85c813e2451e7142e2133fa318899b",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/image.raw.f32": "c53ce72a8272270ed3893ddc329887bc4ae5446116a8b9ac4e0b901e9d479a73",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/image.depth.f32": "f3907ed9e36488203c12283325b170e1539f3668a5225a936713f50d01c4d509",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/image.json": "d46cec4e0c65d77e3d508aa0ae563fdcc31bd4c95e4a4ca7a8af9fd00f7903aa"
+      },
+      "seconds": {
+        "model": 0.051487118,
+        "total": 1.174179867
+      }
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+        "--tensor",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1/samples/underwater_0/preprocessed.f32",
+        "--width",
+        "602",
+        "--height",
+        "601",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/tensor"
+      ],
+      "returncode": 0,
+      "stdout": "Saved depth-v1 artifacts to /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/tensor.*\n",
+      "stderr": "",
+      "output_sha256": {
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/tensor.preprocessed.f32": "11d1aa12d50e9858cdbd53c4e62a7b811e85c813e2451e7142e2133fa318899b",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/tensor.raw.f32": "c53ce72a8272270ed3893ddc329887bc4ae5446116a8b9ac4e0b901e9d479a73",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/tensor.depth.f32": "f3907ed9e36488203c12283325b170e1539f3668a5225a936713f50d01c4d509",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/trt-fp32-development/underwater_0/tensor.json": "a429c351bbc7f22e97cd6a7cc760f76e93ccfeca91ff9ddb2f896fb655e9bfca"
+      },
+      "seconds": {
+        "model": 0.050430741,
+        "total": 2.223190186
+      }
+    }
+  ],
+  "samples": [
+    {
+      "id": "adverse_style_0",
+      "split": "development",
+      "numerical": {
+        "preprocessing": {
+          "count": 804972,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw": {
+          "count": 268324,
+          "mae": 2.5195909617180143e-06,
+          "rmse": 4.227429852746313e-06,
+          "max_abs": 3.606081008911133e-05,
+          "p99_abs": 1.2874603271484375e-05,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "restored": {
+          "count": 2043904,
+          "mae": 2.7606803647327736e-07,
+          "rmse": 6.880117740468827e-07,
+          "max_abs": 3.579258918762207e-05,
+          "p99_abs": 2.6226043701171875e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "postprocessing": {
+          "count": 2043904,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_raw": {
+          "count": 268324,
+          "mae": 2.5195909617180143e-06,
+          "rmse": 4.227429852746313e-06,
+          "max_abs": 3.606081008911133e-05,
+          "p99_abs": 1.2874603271484375e-05,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw_path_consistency": {
+          "count": 268324,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_restored": {
+          "count": 2043904,
+          "mae": 2.7606803647327736e-07,
+          "rmse": 6.880117740468827e-07,
+          "max_abs": 3.579258918762207e-05,
+          "p99_abs": 2.6226043701171875e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_postprocessing": {
+          "count": 2043904,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        }
+      },
+      "passed": true,
+      "near_far_pairs": [
+        {
+          "near": [
+            1312,
+            732
+          ],
+          "far": [
+            160,
+            888
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            1235,
+            680
+          ],
+          "far": [
+            1038,
+            632
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            1477,
+            442
+          ],
+          "far": [
+            1581,
+            452
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ],
+      "ordering": {
+        "python": {
+          "correct": 3,
+          "total": 3,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "candidate": {
+          "correct": 3,
+          "total": 3,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "same_input_candidate": {
+          "correct": 3,
+          "total": 3,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        }
+      },
+      "pair_results": [
+        {
+          "near": [
+            1312,
+            732
+          ],
+          "far": [
+            160,
+            888
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 0.9939876198768616,
+            "far_value": 0.2021949738264084,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 0.9939872622489929,
+            "far_value": 0.20219549536705017,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 0.9939872622489929,
+            "far_value": 0.20219549536705017,
+            "correct": true,
+            "tie": false
+          }
+        },
+        {
+          "near": [
+            1235,
+            680
+          ],
+          "far": [
+            1038,
+            632
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 1.0306754112243652,
+            "far_value": 0.8769959807395935,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 1.0306745767593384,
+            "far_value": 0.8769950270652771,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 1.0306745767593384,
+            "far_value": 0.8769950270652771,
+            "correct": true,
+            "tie": false
+          }
+        },
+        {
+          "near": [
+            1477,
+            442
+          ],
+          "far": [
+            1581,
+            452
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 0.8371322751045227,
+            "far_value": 0.6481657028198242,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 0.8371318578720093,
+            "far_value": 0.6481649279594421,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 0.8371318578720093,
+            "far_value": 0.6481649279594421,
+            "correct": true,
+            "tie": false
+          }
+        }
+      ],
+      "ordering_drop": 0.0,
+      "same_input_ordering_drop": 0.0,
+      "ordering_passed": true
+    },
+    {
+      "id": "aerial_0",
+      "split": "development",
+      "numerical": {
+        "preprocessing": {
+          "count": 804972,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw": {
+          "count": 268324,
+          "mae": 4.742798367920587e-06,
+          "rmse": 1.0193196231337776e-05,
+          "max_abs": 0.00029709935188293457,
+          "p99_abs": 4.225969314575195e-05,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "restored": {
+          "count": 1700800,
+          "mae": 7.637045492589426e-07,
+          "rmse": 1.0814389234970224e-06,
+          "max_abs": 1.3828277587890625e-05,
+          "p99_abs": 2.9802322387695312e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "postprocessing": {
+          "count": 1700800,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_raw": {
+          "count": 268324,
+          "mae": 4.742798367920587e-06,
+          "rmse": 1.0193196231337776e-05,
+          "max_abs": 0.00029709935188293457,
+          "p99_abs": 4.225969314575195e-05,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw_path_consistency": {
+          "count": 268324,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_restored": {
+          "count": 1700800,
+          "mae": 7.637045492589426e-07,
+          "rmse": 1.0814389234970224e-06,
+          "max_abs": 1.3828277587890625e-05,
+          "p99_abs": 2.9802322387695312e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_postprocessing": {
+          "count": 1700800,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        }
+      },
+      "passed": true,
+      "near_far_pairs": [
+        {
+          "near": [
+            1100,
+            790
+          ],
+          "far": [
+            952,
+            791
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            1102,
+            784
+          ],
+          "far": [
+            1189,
+            781
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ],
+      "ordering": {
+        "python": {
+          "correct": 2,
+          "total": 2,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "candidate": {
+          "correct": 2,
+          "total": 2,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "same_input_candidate": {
+          "correct": 2,
+          "total": 2,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        }
+      },
+      "pair_results": [
+        {
+          "near": [
+            1100,
+            790
+          ],
+          "far": [
+            952,
+            791
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 1.861427903175354,
+            "far_value": 1.5860127210617065,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 1.8614271879196167,
+            "far_value": 1.5860110521316528,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 1.8614271879196167,
+            "far_value": 1.5860110521316528,
+            "correct": true,
+            "tie": false
+          }
+        },
+        {
+          "near": [
+            1102,
+            784
+          ],
+          "far": [
+            1189,
+            781
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 1.8490781784057617,
+            "far_value": 1.4973498582839966,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 1.8490766286849976,
+            "far_value": 1.4973492622375488,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 1.8490766286849976,
+            "far_value": 1.4973492622375488,
+            "correct": true,
+            "tie": false
+          }
+        }
+      ],
+      "ordering_drop": 0.0,
+      "same_input_ordering_drop": 0.0,
+      "ordering_passed": true
+    },
+    {
+      "id": "indoor_0",
+      "split": "development",
+      "numerical": {
+        "preprocessing": {
+          "count": 804972,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw": {
+          "count": 268324,
+          "mae": 9.10937603260683e-07,
+          "rmse": 1.2206038400546842e-06,
+          "max_abs": 2.193450927734375e-05,
+          "p99_abs": 3.337860107421875e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "restored": {
+          "count": 538624,
+          "mae": 6.078479821888583e-07,
+          "rmse": 8.149516313723949e-07,
+          "max_abs": 1.9788742065429688e-05,
+          "p99_abs": 2.384185791015625e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "postprocessing": {
+          "count": 538624,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_raw": {
+          "count": 268324,
+          "mae": 9.10937603260683e-07,
+          "rmse": 1.2206038400546842e-06,
+          "max_abs": 2.193450927734375e-05,
+          "p99_abs": 3.337860107421875e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw_path_consistency": {
+          "count": 268324,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_restored": {
+          "count": 538624,
+          "mae": 6.078479821888583e-07,
+          "rmse": 8.149516313723949e-07,
+          "max_abs": 1.9788742065429688e-05,
+          "p99_abs": 2.384185791015625e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_postprocessing": {
+          "count": 538624,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        }
+      },
+      "passed": true,
+      "near_far_pairs": [
+        {
+          "near": [
+            400,
+            369
+          ],
+          "far": [
+            624,
+            320
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            614,
+            365
+          ],
+          "far": [
+            449,
+            370
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            251,
+            352
+          ],
+          "far": [
+            223,
+            352
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ],
+      "ordering": {
+        "python": {
+          "correct": 3,
+          "total": 3,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "candidate": {
+          "correct": 3,
+          "total": 3,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "same_input_candidate": {
+          "correct": 3,
+          "total": 3,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        }
+      },
+      "pair_results": [
+        {
+          "near": [
+            400,
+            369
+          ],
+          "far": [
+            624,
+            320
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 0.7825114727020264,
+            "far_value": 0.2980598509311676,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 0.7825118899345398,
+            "far_value": 0.29806026816368103,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 0.7825118899345398,
+            "far_value": 0.29806026816368103,
+            "correct": true,
+            "tie": false
+          }
+        },
+        {
+          "near": [
+            614,
+            365
+          ],
+          "far": [
+            449,
+            370
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 0.21905696392059326,
+            "far_value": 0.07566097378730774,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 0.2190573364496231,
+            "far_value": 0.07566142082214355,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 0.2190573364496231,
+            "far_value": 0.07566142082214355,
+            "correct": true,
+            "tie": false
+          }
+        },
+        {
+          "near": [
+            251,
+            352
+          ],
+          "far": [
+            223,
+            352
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 1.0580788850784302,
+            "far_value": 1.0312944650650024,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 1.0580787658691406,
+            "far_value": 1.0312942266464233,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 1.0580787658691406,
+            "far_value": 1.0312942266464233,
+            "correct": true,
+            "tie": false
+          }
+        }
+      ],
+      "ordering_drop": 0.0,
+      "same_input_ordering_drop": 0.0,
+      "ordering_passed": true
+    },
+    {
+      "id": "non_real_0",
+      "split": "development",
+      "numerical": {
+        "preprocessing": {
+          "count": 804972,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw": {
+          "count": 268324,
+          "mae": 1.178143257457237e-06,
+          "rmse": 2.357671033236825e-06,
+          "max_abs": 0.00013267993927001953,
+          "p99_abs": 5.245208740234375e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "restored": {
+          "count": 1282385,
+          "mae": 9.509093192246543e-07,
+          "rmse": 2.3344411141900673e-06,
+          "max_abs": 0.00012505054473876953,
+          "p99_abs": 5.245208740234375e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "postprocessing": {
+          "count": 1282385,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_raw": {
+          "count": 268324,
+          "mae": 1.178143257457237e-06,
+          "rmse": 2.357671033236825e-06,
+          "max_abs": 0.00013267993927001953,
+          "p99_abs": 5.245208740234375e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw_path_consistency": {
+          "count": 268324,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_restored": {
+          "count": 1282385,
+          "mae": 9.509093192246543e-07,
+          "rmse": 2.3344411141900673e-06,
+          "max_abs": 0.00012505054473876953,
+          "p99_abs": 5.245208740234375e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_postprocessing": {
+          "count": 1282385,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        }
+      },
+      "passed": true,
+      "near_far_pairs": [
+        {
+          "near": [
+            380,
+            295
+          ],
+          "far": [
+            435,
+            169
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ],
+      "ordering": {
+        "python": {
+          "correct": 1,
+          "total": 1,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "candidate": {
+          "correct": 1,
+          "total": 1,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "same_input_candidate": {
+          "correct": 1,
+          "total": 1,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        }
+      },
+      "pair_results": [
+        {
+          "near": [
+            380,
+            295
+          ],
+          "far": [
+            435,
+            169
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 5.192478179931641,
+            "far_value": 1.218126654624939,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 5.192473888397217,
+            "far_value": 1.218126654624939,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 5.192473888397217,
+            "far_value": 1.218126654624939,
+            "correct": true,
+            "tie": false
+          }
+        }
+      ],
+      "ordering_drop": 0.0,
+      "same_input_ordering_drop": 0.0,
+      "ordering_passed": true
+    },
+    {
+      "id": "object_0",
+      "split": "development",
+      "numerical": {
+        "preprocessing": {
+          "count": 804972,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw": {
+          "count": 268324,
+          "mae": 1.1603528215017787e-06,
+          "rmse": 1.785521086547216e-06,
+          "max_abs": 0.00010120868682861328,
+          "p99_abs": 4.783272743225098e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "restored": {
+          "count": 699392,
+          "mae": 1.068466270885004e-06,
+          "rmse": 1.6815016649372752e-06,
+          "max_abs": 8.428096771240234e-05,
+          "p99_abs": 4.76837158203125e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "postprocessing": {
+          "count": 699392,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_raw": {
+          "count": 268324,
+          "mae": 1.1603528215017787e-06,
+          "rmse": 1.785521086547216e-06,
+          "max_abs": 0.00010120868682861328,
+          "p99_abs": 4.783272743225098e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw_path_consistency": {
+          "count": 268324,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_restored": {
+          "count": 699392,
+          "mae": 1.068466270885004e-06,
+          "rmse": 1.6815016649372752e-06,
+          "max_abs": 8.428096771240234e-05,
+          "p99_abs": 4.76837158203125e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_postprocessing": {
+          "count": 699392,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        }
+      },
+      "passed": true,
+      "near_far_pairs": [
+        {
+          "near": [
+            345,
+            280
+          ],
+          "far": [
+            504,
+            292
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            284,
+            294
+          ],
+          "far": [
+            13,
+            290
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ],
+      "ordering": {
+        "python": {
+          "correct": 2,
+          "total": 2,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "candidate": {
+          "correct": 2,
+          "total": 2,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "same_input_candidate": {
+          "correct": 2,
+          "total": 2,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        }
+      },
+      "pair_results": [
+        {
+          "near": [
+            345,
+            280
+          ],
+          "far": [
+            504,
+            292
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 4.187442779541016,
+            "far_value": 3.3816890716552734,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 4.187442302703857,
+            "far_value": 3.3816895484924316,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 4.187442302703857,
+            "far_value": 3.3816895484924316,
+            "correct": true,
+            "tie": false
+          }
+        },
+        {
+          "near": [
+            284,
+            294
+          ],
+          "far": [
+            13,
+            290
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 4.262242317199707,
+            "far_value": 3.1688783168792725,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 4.262240886688232,
+            "far_value": 3.168877601623535,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 4.262240886688232,
+            "far_value": 3.168877601623535,
+            "correct": true,
+            "tie": false
+          }
+        }
+      ],
+      "ordering_drop": 0.0,
+      "same_input_ordering_drop": 0.0,
+      "ordering_passed": true
+    },
+    {
+      "id": "outdoor_0",
+      "split": "development",
+      "numerical": {
+        "preprocessing": {
+          "count": 804972,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw": {
+          "count": 268324,
+          "mae": 1.6766369802182938e-06,
+          "rmse": 2.222071459613058e-06,
+          "max_abs": 1.895427703857422e-05,
+          "p99_abs": 6.198883056640625e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "restored": {
+          "count": 1920000,
+          "mae": 1.5856356670459113e-06,
+          "rmse": 2.0591442798598055e-06,
+          "max_abs": 1.5497207641601562e-05,
+          "p99_abs": 5.245208740234375e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "postprocessing": {
+          "count": 1920000,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_raw": {
+          "count": 268324,
+          "mae": 1.6766369802182938e-06,
+          "rmse": 2.222071459613058e-06,
+          "max_abs": 1.895427703857422e-05,
+          "p99_abs": 6.198883056640625e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw_path_consistency": {
+          "count": 268324,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_restored": {
+          "count": 1920000,
+          "mae": 1.5856356670459113e-06,
+          "rmse": 2.0591442798598055e-06,
+          "max_abs": 1.5497207641601562e-05,
+          "p99_abs": 5.245208740234375e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_postprocessing": {
+          "count": 1920000,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        }
+      },
+      "passed": true,
+      "near_far_pairs": [
+        {
+          "near": [
+            425,
+            543
+          ],
+          "far": [
+            825,
+            468
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            575,
+            468
+          ],
+          "far": [
+            875,
+            581
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            795,
+            703
+          ],
+          "far": [
+            577,
+            552
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ],
+      "ordering": {
+        "python": {
+          "correct": 3,
+          "total": 3,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "candidate": {
+          "correct": 3,
+          "total": 3,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "same_input_candidate": {
+          "correct": 3,
+          "total": 3,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        }
+      },
+      "pair_results": [
+        {
+          "near": [
+            425,
+            543
+          ],
+          "far": [
+            825,
+            468
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 1.1616616249084473,
+            "far_value": 0.30806976556777954,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 1.1616625785827637,
+            "far_value": 0.3080698251724243,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 1.1616625785827637,
+            "far_value": 0.3080698251724243,
+            "correct": true,
+            "tie": false
+          }
+        },
+        {
+          "near": [
+            575,
+            468
+          ],
+          "far": [
+            875,
+            581
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 0.36145251989364624,
+            "far_value": 0.2601514458656311,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 0.36145278811454773,
+            "far_value": 0.260151207447052,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 0.36145278811454773,
+            "far_value": 0.260151207447052,
+            "correct": true,
+            "tie": false
+          }
+        },
+        {
+          "near": [
+            795,
+            703
+          ],
+          "far": [
+            577,
+            552
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 0.8028343319892883,
+            "far_value": 0.40577107667922974,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 0.8028340339660645,
+            "far_value": 0.405771404504776,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 0.8028340339660645,
+            "far_value": 0.405771404504776,
+            "correct": true,
+            "tie": false
+          }
+        }
+      ],
+      "ordering_drop": 0.0,
+      "same_input_ordering_drop": 0.0,
+      "ordering_passed": true
+    },
+    {
+      "id": "transparent_reflective_0",
+      "split": "development",
+      "numerical": {
+        "preprocessing": {
+          "count": 804972,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw": {
+          "count": 268324,
+          "mae": 9.280128928881797e-07,
+          "rmse": 1.3221562063971597e-06,
+          "max_abs": 3.0100345611572266e-05,
+          "p99_abs": 3.814697265625e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "restored": {
+          "count": 1707200,
+          "mae": 7.432612137289247e-07,
+          "rmse": 1.0886600985722226e-06,
+          "max_abs": 2.753734588623047e-05,
+          "p99_abs": 3.0994415283203125e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "postprocessing": {
+          "count": 1707200,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_raw": {
+          "count": 268324,
+          "mae": 9.280128928881797e-07,
+          "rmse": 1.3221562063971597e-06,
+          "max_abs": 3.0100345611572266e-05,
+          "p99_abs": 3.814697265625e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw_path_consistency": {
+          "count": 268324,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_restored": {
+          "count": 1707200,
+          "mae": 7.432612137289247e-07,
+          "rmse": 1.0886600985722226e-06,
+          "max_abs": 2.753734588623047e-05,
+          "p99_abs": 3.0994415283203125e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_postprocessing": {
+          "count": 1707200,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        }
+      },
+      "passed": true,
+      "near_far_pairs": [
+        {
+          "near": [
+            676,
+            606
+          ],
+          "far": [
+            1090,
+            464
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            674,
+            699
+          ],
+          "far": [
+            1105,
+            455
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ],
+      "ordering": {
+        "python": {
+          "correct": 2,
+          "total": 2,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "candidate": {
+          "correct": 2,
+          "total": 2,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "same_input_candidate": {
+          "correct": 2,
+          "total": 2,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        }
+      },
+      "pair_results": [
+        {
+          "near": [
+            676,
+            606
+          ],
+          "far": [
+            1090,
+            464
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 3.6323275566101074,
+            "far_value": 1.7382925748825073,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 3.6323275566101074,
+            "far_value": 1.738293170928955,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 3.6323275566101074,
+            "far_value": 1.738293170928955,
+            "correct": true,
+            "tie": false
+          }
+        },
+        {
+          "near": [
+            674,
+            699
+          ],
+          "far": [
+            1105,
+            455
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 3.6563169956207275,
+            "far_value": 1.7851996421813965,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 3.6563174724578857,
+            "far_value": 1.7852003574371338,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 3.6563174724578857,
+            "far_value": 1.7852003574371338,
+            "correct": true,
+            "tie": false
+          }
+        }
+      ],
+      "ordering_drop": 0.0,
+      "same_input_ordering_drop": 0.0,
+      "ordering_passed": true
+    },
+    {
+      "id": "underwater_0",
+      "split": "development",
+      "numerical": {
+        "preprocessing": {
+          "count": 804972,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw": {
+          "count": 268324,
+          "mae": 1.0938944066252614e-06,
+          "rmse": 1.6530127516476612e-06,
+          "max_abs": 3.409385681152344e-05,
+          "p99_abs": 4.76837158203125e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "restored": {
+          "count": 361802,
+          "mae": 1.0053019541898042e-06,
+          "rmse": 1.4924550689462389e-06,
+          "max_abs": 2.4318695068359375e-05,
+          "p99_abs": 4.291534423828125e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "postprocessing": {
+          "count": 361802,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_raw": {
+          "count": 268324,
+          "mae": 1.0938944066252614e-06,
+          "rmse": 1.6530127516476612e-06,
+          "max_abs": 3.409385681152344e-05,
+          "p99_abs": 4.76837158203125e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "raw_path_consistency": {
+          "count": 268324,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_restored": {
+          "count": 361802,
+          "mae": 1.0053019541898042e-06,
+          "rmse": 1.4924550689462389e-06,
+          "max_abs": 2.4318695068359375e-05,
+          "p99_abs": 4.291534423828125e-06,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        },
+        "same_input_postprocessing": {
+          "count": 361802,
+          "mae": 0.0,
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "p99_abs": 0.0,
+          "nonfinite_count": 0,
+          "violations": 0,
+          "violation_fraction": 0.0,
+          "passed": true
+        }
+      },
+      "passed": true,
+      "near_far_pairs": [
+        {
+          "near": [
+            348,
+            572
+          ],
+          "far": [
+            366,
+            291
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ],
+      "ordering": {
+        "python": {
+          "correct": 1,
+          "total": 1,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "candidate": {
+          "correct": 1,
+          "total": 1,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "same_input_candidate": {
+          "correct": 1,
+          "total": 1,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        }
+      },
+      "pair_results": [
+        {
+          "near": [
+            348,
+            572
+          ],
+          "far": [
+            366,
+            291
+          ],
+          "status": "valid",
+          "python": {
+            "near_value": 5.9756574630737305,
+            "far_value": 3.515096426010132,
+            "correct": true,
+            "tie": false
+          },
+          "candidate": {
+            "near_value": 5.975656032562256,
+            "far_value": 3.5150928497314453,
+            "correct": true,
+            "tie": false
+          },
+          "same_input_candidate": {
+            "near_value": 5.975656032562256,
+            "far_value": 3.5150928497314453,
+            "correct": true,
+            "tie": false
+          }
+        }
+      ],
+      "ordering_drop": 0.0,
+      "same_input_ordering_drop": 0.0,
+      "ordering_passed": true
+    }
+  ],
+  "aggregate": {
+    "numerical": {
+      "preprocessing": {
+        "count": 6439776,
+        "mae": 0.0,
+        "rmse": 0.0,
+        "max_abs": 0.0,
+        "p99_abs": 0.0,
+        "nonfinite_count": 0,
+        "violations": 0,
+        "violation_fraction": 0.0,
+        "passed": true
+      },
+      "raw": {
+        "count": 2146592,
+        "mae": 1.7762959114487544e-06,
+        "rmse": 4.204567967091351e-06,
+        "max_abs": 0.00029709935188293457,
+        "p99_abs": 1.8596649169921875e-05,
+        "nonfinite_count": 0,
+        "violations": 0,
+        "violation_fraction": 0.0,
+        "passed": true
+      },
+      "restored": {
+        "count": 10254107,
+        "mae": 8.615388609514843e-07,
+        "rmse": 1.505799795591533e-06,
+        "max_abs": 0.00012505054473876953,
+        "p99_abs": 4.76837158203125e-06,
+        "nonfinite_count": 0,
+        "violations": 0,
+        "violation_fraction": 0.0,
+        "passed": true
+      },
+      "postprocessing": {
+        "count": 10254107,
+        "mae": 0.0,
+        "rmse": 0.0,
+        "max_abs": 0.0,
+        "p99_abs": 0.0,
+        "nonfinite_count": 0,
+        "violations": 0,
+        "violation_fraction": 0.0,
+        "passed": true
+      },
+      "same_input_raw": {
+        "count": 2146592,
+        "mae": 1.7762959114487544e-06,
+        "rmse": 4.204567967091351e-06,
+        "max_abs": 0.00029709935188293457,
+        "p99_abs": 1.8596649169921875e-05,
+        "nonfinite_count": 0,
+        "violations": 0,
+        "violation_fraction": 0.0,
+        "passed": true
+      },
+      "raw_path_consistency": {
+        "count": 2146592,
+        "mae": 0.0,
+        "rmse": 0.0,
+        "max_abs": 0.0,
+        "p99_abs": 0.0,
+        "nonfinite_count": 0,
+        "violations": 0,
+        "violation_fraction": 0.0,
+        "passed": true
+      },
+      "same_input_restored": {
+        "count": 10254107,
+        "mae": 8.615388609514843e-07,
+        "rmse": 1.505799795591533e-06,
+        "max_abs": 0.00012505054473876953,
+        "p99_abs": 4.76837158203125e-06,
+        "nonfinite_count": 0,
+        "violations": 0,
+        "violation_fraction": 0.0,
+        "passed": true
+      },
+      "same_input_postprocessing": {
+        "count": 10254107,
+        "mae": 0.0,
+        "rmse": 0.0,
+        "max_abs": 0.0,
+        "p99_abs": 0.0,
+        "nonfinite_count": 0,
+        "violations": 0,
+        "violation_fraction": 0.0,
+        "passed": true
+      }
+    },
+    "ordering": {
+      "python": {
+        "correct": 17,
+        "total": 17,
+        "ignored": 0,
+        "ties": 0,
+        "accuracy": 1.0
+      },
+      "candidate": {
+        "correct": 17,
+        "total": 17,
+        "ignored": 0,
+        "ties": 0,
+        "accuracy": 1.0
+      },
+      "same_input_candidate": {
+        "correct": 17,
+        "total": 17,
+        "ignored": 0,
+        "ties": 0,
+        "accuracy": 1.0
+      }
+    },
+    "ordering_drop": 0.0,
+    "same_input_ordering_drop": 0.0,
+    "ordering_passed": true
+  },
+  "errors": [],
+  "passed": true,
+  "inputs": {
+    "cli": "/home/qyc/builds/MiniInfer/depth-release/bin/depth_trt_cli",
+    "model": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+    "reference": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1",
+    "samples": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/samples.json",
+    "thresholds": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/thresholds_trt_fp32.json"
+  },
+  "tools_sha256": {
+    "validate_backend.py": "cd1bb1e04c2337495af1b139604e6d8f98432dd5f6470f3754397061fa09d774",
+    "metrics.py": "fea717dfc0ddb3e87d106ca63d2051a2442a9baeee48b2703b5ed5ccf6956fae",
+    "preprocess.py": "c22e05dd4169a9269e1e4b3573732bba31e5a66635e419e07591dbc9a8d69d54",
+    "reference.py": "73be220a773247bad2abde0cbf7867ba684ef99e40c7977fa370a72fea7dc504"
+  },
+  "thresholds": {
+    "schema_version": 1,
+    "backend": "tensorrt-fp32",
+    "atol": 0.001,
+    "rtol": 0.0001,
+    "max_violation_fraction": 0.0,
+    "preprocess_atol": 0.0,
+    "postprocess_atol": 0.0,
+    "max_ordering_drop": 0.0,
+    "max_p99_abs": 0.001,
+    "max_mae": 0.0005
+  }
+}

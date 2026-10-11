@@ -1,0 +1,6 @@
+[1/6] Building CXX object CMakeFiles/test_depth_trt.dir/tests/test_depth_trt.cpp.o
+[2/6] Building CXX object CMakeFiles/miniinfer_depth_trt.dir/src/depth/trt_runner.cpp.o
+[3/6] Linking CXX static library libminiinfer_depth_trt.a
+[4/6] Linking CXX executable bin/depth_engine_builder
+[5/6] Linking CXX executable bin/depth_trt_cli
+[6/6] Linking CXX executable bin/test_depth_trt

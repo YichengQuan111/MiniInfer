@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "backend": "tensorrt-fp16",
+  "atol": 0.03,
+  "rtol": 0.01,
+  "max_violation_fraction": 0.005,
+  "preprocess_atol": 0.0,
+  "postprocess_atol": 0.0,
+  "max_ordering_drop": 0.0,
+  "max_p99_abs": 0.03,
+  "max_mae": 0.008
+}

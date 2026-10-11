@@ -58,7 +58,7 @@ if mode == "truncated":
 geo = g.to_dict()
 if mode == "geometry":
     geo["pad_left"] += 1
-Path(prefix + ".json").write_text(json.dumps({"geometry": geo, "seconds": {"inference": 0.01}}))
+Path(prefix + ".json").write_text(json.dumps({"backend": "wrong" if mode == "backend" else "synthetic", "geometry": geo, "seconds": {"inference": 0.01}}))
 '''
 
 
