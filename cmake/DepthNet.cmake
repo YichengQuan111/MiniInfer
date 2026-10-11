@@ -1,0 +1,12 @@
+# Include after the depth_image and net targets have been defined.
+add_library(miniinfer_depth_net STATIC "${PROJECT_SOURCE_DIR}/src/depth/net.cpp")
+add_library(miniinfer::depth_net ALIAS miniinfer_depth_net)
+target_link_libraries(miniinfer_depth_net PUBLIC miniinfer::net miniinfer::depth_image)
+miniinfer_configure_target(miniinfer_depth_net)
+if(BUILD_TESTING)
+    add_executable(test_depth_net "${PROJECT_SOURCE_DIR}/tests/test_depth_net.cpp")
+    target_link_libraries(test_depth_net PRIVATE miniinfer::depth_net)
+    miniinfer_configure_target(test_depth_net)
+    add_test(NAME depth_net_contract COMMAND test_depth_net)
+    set_tests_properties(depth_net_contract PROPERTIES TIMEOUT 60)
+endif()

@@ -144,3 +144,7 @@ python tools/verify_depth_sdk.py --cli /tmp/miniinfer-sdk-example/depth_sdk_exam
 ```
 
 所有工件输出目录和结果文件默认拒绝覆盖。项目中已生成的三个包位于 `data/generated/depth/packages/{ort-fp32,trt-fp32,trt-fp16}`，大体积模型和图像不提交到 Git；从固定源、哈希与命令重建。
+
+## V1.5：TCP 深度入口
+
+`depth_server --package DIR` 在模型初始化后接纳连接，`depth_client --image PPM --output F32` 完成一次 RGB8 → FP32 深度请求。MINI v2 的完整格式、数量/字节限流、慢读者和关闭语义见 [TCP 契约](depth_tcp.md)。旧 Echo/MLP 使用独立的 MINI v1 路径并持续回归。

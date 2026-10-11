@@ -29,7 +29,7 @@ struct TcpServer::Impl {
     };
 
     ServerConfig config;
-    RunInference run;
+    RunSession run;
     std::function<void()> drain;
     TcpListener listener;
     const std::uint16_t bound_port;
@@ -48,7 +48,7 @@ struct TcpServer::Impl {
     bool shutdown_done = false;
     std::exception_ptr shutdown_error;
 
-    static TcpListener bind(const ServerConfig& config, const RunInference& run,
+    static TcpListener bind(const ServerConfig& config, const RunSession& run,
                             const std::function<void()>& drain) {
         if (!run || !drain) throw std::invalid_argument("server callbacks must be provided");
         if (config.connection_threads == 0 || config.queue_timeout.count() <= 0 ||
@@ -62,7 +62,7 @@ struct TcpServer::Impl {
         return result;
     }
 
-    Impl(ServerConfig settings, RunInference execute, std::function<void()> finish)
+    Impl(ServerConfig settings, RunSession execute, std::function<void()> finish)
         : config(std::move(settings)), run(std::move(execute)), drain(std::move(finish)),
           listener(bind(config, run, drain)), bound_port(listener.port),
           slots(config.connection_threads) {
@@ -189,7 +189,7 @@ struct TcpServer::Impl {
             if (!stop.load(std::memory_order_relaxed)) {
                 try {
                     ran = true;
-                    session = serve_connection(connection->fd.get(), run, config.session, &stop);
+                    session = run(connection->fd.get(), config.session, &stop);
                 } catch (...) {
                     failed = true;
                 }
@@ -257,6 +257,13 @@ struct TcpServer::Impl {
 };
 
 TcpServer::TcpServer(ServerConfig config, RunInference run, std::function<void()> drain)
+    : TcpServer(std::move(config),
+                run ? RunSession([execute = std::move(run)](int fd, const SessionConfig& session,
+                                                           const std::atomic<bool>* stop) {
+                    return serve_connection(fd, execute, session, stop);
+                }) : RunSession{}, std::move(drain)) {}
+
+TcpServer::TcpServer(ServerConfig config, RunSession run, std::function<void()> drain)
     : impl_(std::make_unique<Impl>(std::move(config), std::move(run), std::move(drain))) {}
 
 TcpServer::~TcpServer() {

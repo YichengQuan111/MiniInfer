@@ -7,6 +7,11 @@
 
 namespace miniinfer::net {
 
+// The callback borrows the connected fd and must return before it is closed.
+// It must honor read cancellation and bound all writes with a deadline.
+using RunSession = std::function<SessionStats(int, const SessionConfig&,
+                                            const std::atomic<bool>*)>;
+
 struct ServerConfig {
     std::string host = "127.0.0.1";
     std::uint16_t port = 9000;
@@ -50,6 +55,7 @@ struct ServerStats {
 class TcpServer final {
 public:
     TcpServer(ServerConfig config, RunInference run, std::function<void()> drain);
+    TcpServer(ServerConfig config, RunSession session, std::function<void()> drain);
     ~TcpServer();
     TcpServer(const TcpServer&) = delete;
     TcpServer& operator=(const TcpServer&) = delete;

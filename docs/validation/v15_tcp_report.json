@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "comparison": "same-package exact little-endian FP32 bytes",
+  "packages": [
+    {
+      "package": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32",
+      "passed": true,
+      "samples": [
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+          "width": 1024,
+          "height": 683,
+          "sdk_sha256": "6b9f045cfa4f0992bfed73d9a51d74226154642b76f992c3d7a96448939d1046",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-000/image-000/tcp-000.f32",
+              "sha256": "6b9f045cfa4f0992bfed73d9a51d74226154642b76f992c3d7a96448939d1046",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-000/image-000/tcp-001.f32",
+              "sha256": "6b9f045cfa4f0992bfed73d9a51d74226154642b76f992c3d7a96448939d1046",
+              "exact_fp32": true
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "server_command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_server",
+        "--package",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "0",
+        "--read-timeout-ms",
+        "180000",
+        "--write-timeout-ms",
+        "180000"
+      ],
+      "ready": {
+        "event": "ready",
+        "pid": 1378,
+        "port": 34077,
+        "startup_ms": 6536.24,
+        "backend": "ort",
+        "precision": "fp32"
+      },
+      "requests": 2,
+      "server_returncode": 0,
+      "stopped": {
+        "event": "stopped",
+        "requests": 2,
+        "responses": 2,
+        "accepted": 2,
+        "completed": 2,
+        "active": 0,
+        "pending": 0,
+        "rejected": 0,
+        "expired": 0,
+        "discarded": 0,
+        "bad_requests": 0,
+        "protocol_errors": 0,
+        "session_failures": 0,
+        "accept_errors": 0,
+        "busy": 0,
+        "inference_failures": 0,
+        "io_failures": 0,
+        "network_bytes": 0,
+        "network_peak_bytes": 10840064,
+        "network_inflight": 0,
+        "sdk_bytes": 0,
+        "sdk_inflight": 0,
+        "sdk_queued": 0,
+        "sdk_executing": 0,
+        "sdk_accepted": 2,
+        "sdk_succeeded": 2,
+        "sdk_failed": 0,
+        "sdk_delivered": 2,
+        "sdk_rejected_busy": 0,
+        "sdk_rejected_closed": 0,
+        "sdk_rejected_invalid": 0,
+        "sdk_accepting": false,
+        "sdk_shutdown_complete": true
+      },
+      "stdout": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-000/server.stdout.log",
+      "stderr": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-000/server.stderr.log"
+    },
+    {
+      "package": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp32",
+      "passed": true,
+      "samples": [
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp32/golden/original.ppm",
+          "width": 1024,
+          "height": 683,
+          "sdk_sha256": "4716a5d852fa1ef0d36a9387387a1737aff8d246b3e8786ffebed91abea108a7",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-001/image-000/tcp-000.f32",
+              "sha256": "4716a5d852fa1ef0d36a9387387a1737aff8d246b3e8786ffebed91abea108a7",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-001/image-000/tcp-001.f32",
+              "sha256": "4716a5d852fa1ef0d36a9387387a1737aff8d246b3e8786ffebed91abea108a7",
+              "exact_fp32": true
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "server_command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_server",
+        "--package",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp32",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "0",
+        "--read-timeout-ms",
+        "180000",
+        "--write-timeout-ms",
+        "180000"
+      ],
+      "ready": {
+        "event": "ready",
+        "pid": 1612,
+        "port": 44489,
+        "startup_ms": 6042.7,
+        "backend": "trt",
+        "precision": "fp32"
+      },
+      "requests": 2,
+      "server_returncode": 0,
+      "stopped": {
+        "event": "stopped",
+        "requests": 2,
+        "responses": 2,
+        "accepted": 2,
+        "completed": 2,
+        "active": 0,
+        "pending": 0,
+        "rejected": 0,
+        "expired": 0,
+        "discarded": 0,
+        "bad_requests": 0,
+        "protocol_errors": 0,
+        "session_failures": 0,
+        "accept_errors": 0,
+        "busy": 0,
+        "inference_failures": 0,
+        "io_failures": 0,
+        "network_bytes": 0,
+        "network_peak_bytes": 10840064,
+        "network_inflight": 0,
+        "sdk_bytes": 0,
+        "sdk_inflight": 0,
+        "sdk_queued": 0,
+        "sdk_executing": 0,
+        "sdk_accepted": 2,
+        "sdk_succeeded": 2,
+        "sdk_failed": 0,
+        "sdk_delivered": 2,
+        "sdk_rejected_busy": 0,
+        "sdk_rejected_closed": 0,
+        "sdk_rejected_invalid": 0,
+        "sdk_accepting": false,
+        "sdk_shutdown_complete": true
+      },
+      "stdout": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-001/server.stdout.log",
+      "stderr": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-001/server.stderr.log"
+    },
+    {
+      "package": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16",
+      "passed": true,
+      "samples": [
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16/golden/original.ppm",
+          "width": 1024,
+          "height": 683,
+          "sdk_sha256": "a1271250899357153ecb1456079ed733e7745fbcca884a94f5aa273f934cb787",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-002/image-000/tcp-000.f32",
+              "sha256": "a1271250899357153ecb1456079ed733e7745fbcca884a94f5aa273f934cb787",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-002/image-000/tcp-001.f32",
+              "sha256": "a1271250899357153ecb1456079ed733e7745fbcca884a94f5aa273f934cb787",
+              "exact_fp32": true
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "server_command": [
+        "/home/qyc/builds/MiniInfer/depth-release/bin/depth_server",
+        "--package",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "0",
+        "--read-timeout-ms",
+        "180000",
+        "--write-timeout-ms",
+        "180000"
+      ],
+      "ready": {
+        "event": "ready",
+        "pid": 1842,
+        "port": 41383,
+        "startup_ms": 6662.77,
+        "backend": "trt",
+        "precision": "fp16"
+      },
+      "requests": 2,
+      "server_returncode": 0,
+      "stopped": {
+        "event": "stopped",
+        "requests": 2,
+        "responses": 2,
+        "accepted": 2,
+        "completed": 2,
+        "active": 0,
+        "pending": 0,
+        "rejected": 0,
+        "expired": 0,
+        "discarded": 0,
+        "bad_requests": 0,
+        "protocol_errors": 0,
+        "session_failures": 0,
+        "accept_errors": 0,
+        "busy": 0,
+        "inference_failures": 0,
+        "io_failures": 0,
+        "network_bytes": 0,
+        "network_peak_bytes": 10840064,
+        "network_inflight": 0,
+        "sdk_bytes": 0,
+        "sdk_inflight": 0,
+        "sdk_queued": 0,
+        "sdk_executing": 0,
+        "sdk_accepted": 2,
+        "sdk_succeeded": 2,
+        "sdk_failed": 0,
+        "sdk_delivered": 2,
+        "sdk_rejected_busy": 0,
+        "sdk_rejected_closed": 0,
+        "sdk_rejected_invalid": 0,
+        "sdk_accepting": false,
+        "sdk_shutdown_complete": true
+      },
+      "stdout": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-002/server.stdout.log",
+      "stderr": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/package-002/server.stderr.log"
+    }
+  ],
+  "errors": [],
+  "invalid_server_cli": {
+    "command": [
+      "/home/qyc/builds/MiniInfer/depth-release/bin/depth_server",
+      "--package",
+      "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32",
+      "--port",
+      "65536"
+    ],
+    "returncode": 1,
+    "stdout": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/invalid-server-port.stdout.log",
+    "stderr": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/tcp-v15/invalid-server-port.stderr.log"
+  }
+}

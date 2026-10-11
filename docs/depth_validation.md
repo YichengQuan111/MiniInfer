@@ -8,7 +8,7 @@
 | V1.2 ONNX / ORT | 通过 | 16 图分层对齐；前后处理逐元素一致；Debug 29/29；Release 28/28 加验收驱动测试通过 |
 | V1.3 TensorRT FP32 / FP16 | 通过 | 两配置最终集各 8/8；真实 GPU 生命周期/并发/坏引擎恢复；全套 31/31 |
 | V1.4 C++ SDK | 通过 | 主构建 32/32；CPU-only 27/27；SDK ASan/UBSan；安装后独立外部项目的三个模型包 golden 通过 |
-| V1.5 TCP 深度接入 | 未开始 | — |
+| V1.5 TCP 深度接入 | 通过 | 全套 33/33；网络与旧 TCP 并发/关闭 ASan/UBSan 3/3；三个实际后端 TCP 输出与本地逐字节一致 |
 | V1.6 部署与基线 | 未开始 | — |
 
 前后处理、版本和复现方式见[部署契约](depth_deployment.md)。既有 CPU / D16 的历史验收与性能记录保留原义。
@@ -46,3 +46,9 @@ CUDA stream 同步之后才读取 events 和拷贝输出。WSL 的 CPU/GPU 独�
 通过 `cmake --install` 生成 CMake package，再从 `examples/depth_sdk` 独立 `find_package` 构建外部程序；不使用源码 `add_subdirectory`，不直接链接工作目录中的库。见[安装记录](validation/v14_install.log)与[外部项目构建](validation/v14_external_build.log)。导出的公共头文件没有 ORT/TRT 类型，依赖库由使用方提供路径。
 
 外部程序从包内读取 RGB 图，推理、关闭 SDK 后写出 owning 结果。三个包都通过完整文件哈希检查及固定阈值 golden 检查：[ORT FP32](validation/v14_sdk_ort-fp32.json)、[TensorRT FP32](validation/v14_sdk_trt-fp32.json)、[TensorRT 混合 FP16](validation/v14_sdk_trt-fp16.json)。该单图用于部署冒烟回归，不替代 V1.2/V1.3 的 8 图最终集；此图本来存在的人工排序错误也原样记录，没有宣称模型任务精度满分。
+
+## V1.5：真实网络结果和资源边界
+
+[全套 Release](validation/v15_tests.log)33/33，包含既有 D16 协议、客户端、服务端、并发与关闭回归；[ASan/UBSan](validation/v15_asan_tests.log)的深度网络、旧 TCP 并发及关闭 3/3。新增测试覆盖手算 wire、大小端、非法元数据/版本/方向/长度、最大尺寸、非有限输出、重复 ID、半包、慢收发、数量/字节限流与恢复、断连及停止后的已接纳任务完成。
+
+[实际 TCP 验证报告](validation/v15_tcp_report.json)记录 ORT FP32、TRT FP32、TRT 混合 FP16 每包两次网络请求。六次输出均与各自本地 SDK 的 1024×683 FP32 输出逐字节一致；三个服务器均 SIGTERM 正常结束，请求/响应/SDK 成功交付计数一致，网络/SDK 在途、等待、执行和字节预留全部为零。该验证是有限请求的正确性回归，持续过载与 30 分钟长稳属于 V2。

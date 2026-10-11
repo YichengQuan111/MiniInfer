@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(MiniInfer VERSION 1.4.0 LANGUAGES CXX)
+project(MiniInfer VERSION 1.5.0 LANGUAGES CXX)
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
     message(FATAL_ERROR "MiniInfer v0.1 targets Linux. On Windows, configure and build through WSL.")
@@ -83,6 +83,13 @@ include(cmake/Sdk.cmake)
 add_executable(depth_sdk_cli examples/depth_sdk/main.cpp)
 target_link_libraries(depth_sdk_cli PRIVATE miniinfer::depth_sdk)
 miniinfer_configure_target(depth_sdk_cli)
+include(cmake/DepthNet.cmake)
+add_executable(depth_server apps/depth_server.cpp)
+target_link_libraries(depth_server PRIVATE miniinfer::depth_sdk miniinfer::depth_net)
+miniinfer_configure_target(depth_server)
+add_executable(depth_client apps/depth_client.cpp)
+target_link_libraries(depth_client PRIVATE miniinfer::depth_net)
+miniinfer_configure_target(depth_client)
 set(MINIINFER_DEPTH_PYTHON "" CACHE FILEPATH "Optional Python with depth reference dependencies")
 if(BUILD_TESTING AND MINIINFER_DEPTH_PYTHON)
     add_test(NAME depth_reference_contract
