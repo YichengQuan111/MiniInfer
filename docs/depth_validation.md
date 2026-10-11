@@ -5,7 +5,7 @@
 | 阶段 | 状态 | 证据 |
 |---|---|---|
 | V1.1 环境与模型契约 | 通过 | 16 图 Python CPU FP32；518 静态 ONNX checker；真实 CUDA/TRT 执行；Python 29 项、CPU/TCP Debug 24/24、Release 24/24 |
-| V1.2 ONNX / ORT | 未开始 | — |
+| V1.2 ONNX / ORT | 通过 | 16 图分层对齐；前后处理逐元素一致；Debug 29/29；Release 28/28 加验收驱动测试通过 |
 | V1.3 TensorRT FP32 / FP16 | 未开始 | — |
 | V1.4 C++ SDK | 未开始 | — |
 | V1.5 TCP 深度接入 | 未开始 | — |
@@ -22,3 +22,9 @@
 导出日志中的 TracerWarning 来自官方模型将固定 518 形状转为 Python 整数或布尔值；本版本明确仅接收固定形状，已核验导出输入输出，动态尺寸不在契约内。未安装可选 xFormers，执行使用 PyTorch 路径。
 
 验证日志：[参考执行](validation/v11_reference.log)、[导出](validation/v11_export.log)、[设备执行](validation/v11_probe.log)、[Python CTest](validation/v11_python_tests.log)、[Debug 回归](validation/v11_debug.log)、[Release 回归](validation/v11_release.log)。Python 前后处理 15 项与统计 14 项测试在 WSL 通过；既有两套 24 项回归全部通过。
+
+## V1.2：C++ ORT 和分层数值验收
+
+[精度报告](depth_accuracy.md)记录门槛冻结和开发/最终集结果。最终集 8/8 张图通过，人工排序 Python 与 ORT 均 11/13，保留了基线中的两组错误；没有将模型本身的错误隐去。[ONNX 工件记录](../data/depth/onnx.json)将静态导出提升为已验收部署工件。
+
+[Debug 全套](validation/v12_debug_tests.log)29/29；[Release](validation/v12_tests.log)28/28，随后新增的 [验收驱动测试](validation/v12_driver_tests.log)单独通过。ORT 关闭的独立 C++ 图像库构建与测试也通过。C++ 测试包含手算前后处理、输入边界、输出所有权、文件损坏/防覆盖，ORT 使用小型模型实测错误形状/名字和正常执行；12 项 Python 驱动测试覆盖损坏工件、错误退出、分层误差与失败报告。

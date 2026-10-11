@@ -1,0 +1,6 @@
+[0/1] Re-running CMake...
+-- Configuring done (7.5s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/qyc/builds/MiniInfer/release
+[1/2] Building CXX object CMakeFiles/depth_cli.dir/apps/depth_cli.cpp.o
+[2/2] Linking CXX executable bin/depth_cli

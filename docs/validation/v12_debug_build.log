@@ -1,0 +1,47 @@
+[1/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/version.cpp.o
+[2/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/checked_size.cpp.o
+[3/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/buffer.cpp.o
+[4/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_model.cpp.o
+[5/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_ops.cpp.o
+[6/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/data_io.cpp.o
+[7/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_input.cpp.o
+[8/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_result.cpp.o
+[9/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/workspace.cpp.o
+[10/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_executor.cpp.o
+[11/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/thread_pool.cpp.o
+[12/47] Building CXX object CMakeFiles/miniinfer_depth_image.dir/src/depth/image.cpp.o
+[13/47] Building CXX object CMakeFiles/miniinfer_depth_image.dir/src/depth/preprocess.cpp.o
+[14/47] Linking CXX static library libminiinfer_depth_image.a
+[15/47] Building CXX object CMakeFiles/miniinfer_core.dir/src/runtime.cpp.o
+[16/47] Linking CXX static library libminiinfer_core.a
+[17/47] Building CXX object CMakeFiles/test_depth_image.dir/tests/test_depth_image.cpp.o
+[18/47] Building CXX object CMakeFiles/depth_cli.dir/apps/depth_cli.cpp.o
+[19/47] Linking CXX executable bin/tcp_echo_server
+[20/47] Building CXX object CMakeFiles/miniinfer_depth_ort.dir/src/depth/ort_runner.cpp.o
+[21/47] Linking CXX executable bin/tcp_echo_client
+[22/47] Linking CXX executable bin/infer_server
+[23/47] Linking CXX executable bin/infer_client
+[24/47] Linking CXX executable bin/infer_cli
+[25/47] Linking CXX static library libminiinfer_depth_ort.a
+[26/47] Linking CXX executable bin/benchmark_cli
+[27/47] Linking CXX executable bin/runtime_demo
+[28/47] Linking CXX executable bin/test_depth_image
+[29/47] Linking CXX executable bin/depth_cli
+[30/47] Linking CXX executable bin/test_net_echo
+[31/47] Linking CXX executable bin/test_net_server
+[32/47] Linking CXX executable bin/test_net_shutdown
+[33/47] Building CXX object CMakeFiles/test_depth_ort.dir/tests/test_depth_ort.cpp.o
+[34/47] Linking CXX executable bin/test_net_io
+[35/47] Linking CXX executable bin/test_net_protocol
+[36/47] Linking CXX executable bin/test_project
+[37/47] Linking CXX executable bin/test_depth_ort
+[38/47] Linking CXX executable bin/test_buffer
+[39/47] Linking CXX executable bin/test_tensor_view
+[40/47] Linking CXX executable bin/test_model
+[41/47] Linking CXX executable bin/test_cpu_ops
+[42/47] Linking CXX executable bin/test_inference
+[43/47] Linking CXX executable bin/test_runtime
+[44/47] Linking CXX executable bin/test_thread_pool
+[45/47] Linking CXX executable bin/test_concurrency
+[46/47] Linking CXX executable bin/test_shutdown
+[47/47] Linking CXX executable bin/test_timing

@@ -1,0 +1,12 @@
+Preset CMake variables:
+
+  BUILD_TESTING="ON"
+  CMAKE_BUILD_TYPE="Debug"
+  CMAKE_CXX_COMPILER="/usr/bin/g++"
+  CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+  MINIINFER_ENABLE_ASAN_UBSAN="OFF"
+  MINIINFER_ENABLE_TSAN="OFF"
+
+-- Configuring done (5.4s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/qyc/builds/MiniInfer/debug

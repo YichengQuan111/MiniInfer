@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "model": "Depth Anything V2 Small",
+  "contract": "depth-v1",
+  "file": "depth_anything_v2_vits_518.onnx",
+  "sha256": "a7d66386939681431d3b7c407b897d00cf205c44c607a33189eb4238bb7c9f80",
+  "bytes": 98941039,
+  "opset": 17,
+  "input": {"name": "image", "shape": [1, 3, 518, 518], "dtype": "float32"},
+  "output": {"name": "depth", "shape": [1, 518, 518], "dtype": "float32"},
+  "status": "validated-ort-cpu-fp32",
+  "validation": "docs/depth_accuracy.md",
+  "thresholds": "data/depth/thresholds_ort_fp32.json"
+}

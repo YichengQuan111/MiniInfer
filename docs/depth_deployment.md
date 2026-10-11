@@ -73,4 +73,25 @@ cmake --build --preset debug
 ctest --preset debug
 ```
 
-`MINIINFER_DEPTH_PYTHON` 为空时不要求深度 Python 依赖，原 CPU / TCP 仍可独立构建。后端执行、SDK 与网络的新增复现步骤随对应阶段验收补充。
+`MINIINFER_DEPTH_PYTHON` 为空时不要求深度 Python 依赖，原 CPU / TCP 仍可独立构建。
+
+## V1.2：ORT C++ 执行与验收
+
+```bash
+cmake --preset release -DMINIINFER_ENABLE_ORT=ON \
+  -DMINIINFER_ORT_ROOT=$HOME/.cache/miniinfer-depth/onnxruntime-linux-x64-1.21.0
+cmake --build --preset release
+$HOME/builds/MiniInfer/release/bin/depth_cli \
+  --model data/generated/depth/export-v1/depth_anything_v2_vits_518.onnx \
+  --image data/generated/depth/images/indoor_0.ppm --output data/generated/depth/local
+python tools/depth/validate_backend.py \
+  --cli $HOME/builds/MiniInfer/release/bin/depth_cli \
+  --model data/generated/depth/export-v1/depth_anything_v2_vits_518.onnx \
+  --reference data/generated/depth/reference-v1 --samples data/depth/samples.json \
+  --split final --thresholds data/depth/thresholds_ort_fp32.json \
+  --output data/generated/depth/ort-final-reproduced
+```
+
+CLI 同时支持 `--tensor INPUT.f32 --width W --height H` 隔离图执行。它输出 `.preprocessed.f32`、`.raw.f32`、`.depth.f32` 和含几何/计时的 `.json`，拒绝覆盖。`model_seconds` 包括 ORT 同步执行及返回输出，`total_seconds` 额外包含读取、初始化、前后处理，均不含工件写盘；此工具逐图启动，仅用于精度检查，不用于稳态性能报告。
+
+ORT 只通过可选 `miniinfer::depth_ort` 目标链接，默认关闭；图像契约库 `miniinfer::depth_image` 不依赖 ORT、CUDA 或 Python。模型初始化严格校验唯一输入/输出的名称、形状与 FP32 类型。

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(MiniInfer VERSION 1.1.0 LANGUAGES CXX)
+project(MiniInfer VERSION 1.2.0 LANGUAGES CXX)
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
     message(FATAL_ERROR "MiniInfer v0.1 targets Linux. On Windows, configure and build through WSL.")
@@ -75,6 +75,7 @@ target_link_libraries(runtime_demo PRIVATE miniinfer::core)
 miniinfer_configure_target(runtime_demo)
 
 include(CTest)
+include(cmake/Depth.cmake)
 set(MINIINFER_DEPTH_PYTHON "" CACHE FILEPATH "Optional Python with depth reference dependencies")
 if(BUILD_TESTING AND MINIINFER_DEPTH_PYTHON)
     add_test(NAME depth_reference_contract
@@ -85,6 +86,10 @@ if(BUILD_TESTING AND MINIINFER_DEPTH_PYTHON)
         COMMAND "${MINIINFER_DEPTH_PYTHON}" -m unittest discover
             -s "${PROJECT_SOURCE_DIR}/tests" -p test_depth_metrics.py -v)
     set_tests_properties(depth_metrics_contract PROPERTIES TIMEOUT 30)
+    add_test(NAME depth_validation_contract
+        COMMAND "${MINIINFER_DEPTH_PYTHON}" -m unittest discover
+            -s "${PROJECT_SOURCE_DIR}/tests" -p test_depth_validation.py -v)
+    set_tests_properties(depth_validation_contract PROPERTIES TIMEOUT 60)
 endif()
 if(BUILD_TESTING)
     add_executable(test_net_echo tests/test_net_echo.cpp)
