@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "packages": {
+    "torch": "2.6.0+cu124",
+    "torchvision": "0.21.0+cu124",
+    "numpy": "2.2.6",
+    "onnx": "1.17.0",
+    "onnxruntime": "1.21.0",
+    "tensorrt-cu12": "10.8.0.43",
+    "opencv-python-headless": "4.11.0.86",
+    "Pillow": "11.1.0"
+  },
+  "gpu_query": "NVIDIA GeForce RTX 4080 Laptop GPU, 12282 MiB, 617.14, 8.9",
+  "torch_cuda": "12.4",
+  "cuda_available": true,
+  "tensorrt": "10.8.0.43",
+  "probe_build_seconds": 0.8490606769999971,
+  "probe": {
+    "operation": "y=x+x",
+    "output": [
+      [
+        2.0,
+        -4.0,
+        7.0,
+        0.0
+      ]
+    ],
+    "device_completion_waited": true,
+    "passed": true
+  }
+}

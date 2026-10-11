@@ -1,0 +1,9 @@
+Test project /home/qyc/builds/MiniInfer/debug
+    Start 1: depth_reference_contract
+1/2 Test #1: depth_reference_contract .........   Passed    1.77 sec
+    Start 2: depth_metrics_contract
+2/2 Test #2: depth_metrics_contract ...........   Passed    0.68 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   2.47 sec

@@ -1,0 +1,77 @@
+{
+  "format_version": 1,
+  "contract_version": "depth-v1",
+  "created_utc": "2026-10-11T10:39:56.523200+00:00",
+  "mode": "export",
+  "model": {
+    "name": "Depth Anything V2 Small",
+    "encoder": "vits",
+    "features": 64,
+    "out_channels": [
+      48,
+      96,
+      192,
+      384
+    ],
+    "weights_path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/assets/depth_anything_v2_vits.pth",
+    "weights_sha256": "715fade13be8f229f8a70cc02066f656f2423a59effd0579197bbf57860e1378",
+    "repo_path": "/home/qyc/.cache/miniinfer-depth/Depth-Anything-V2-a561b849ebae10a6f5ef49e26c83cbbcd36c71bf",
+    "commit": "a561b849ebae10a6f5ef49e26c83cbbcd36c71bf",
+    "git_status": null,
+    "commit_evidence": "caller_pinned_archive_revision",
+    "source_sha256": {
+      "depth_anything_v2/dinov2.py": "d22df8d0da44c8525ebed898fd9c33b3acfcda919a84d577cc2a08bfd3d50ac1",
+      "depth_anything_v2/dinov2_layers/__init__.py": "e3c28c7b775165b6844000eb69f44d104d6c3803ac7da5d59f6ac3ecfb46d9d8",
+      "depth_anything_v2/dinov2_layers/attention.py": "0d2410ce8b8b4499a6b0cdab939ae2bceab8971efd8660d999b0f3088f28cbf7",
+      "depth_anything_v2/dinov2_layers/block.py": "093266ea08084c7cce7b8ddd779ecfaaa13055735faa8a7d68b5924f385b395b",
+      "depth_anything_v2/dinov2_layers/drop_path.py": "949100aac4d9c19c9d65319dbd362886c5d46a72d7586ba4fd500e9f1d51570c",
+      "depth_anything_v2/dinov2_layers/layer_scale.py": "356817b5d1390737128cbcc03a5333fd3060b73beae478772282ccb851d0ef85",
+      "depth_anything_v2/dinov2_layers/mlp.py": "c18c5b3f021408597a473bb710070ec3fb3b39f5a2e42e88ae83ced425a608b5",
+      "depth_anything_v2/dinov2_layers/patch_embed.py": "b3f82e19926c9cfb63f10136aca5e8a723bde1ad62dae1d04f90d405f9439baf",
+      "depth_anything_v2/dinov2_layers/swiglu_ffn.py": "df81d9901240214edc1831ce1b77558dcd6227b29a2f000fc5f546df55d2d09a",
+      "depth_anything_v2/dpt.py": "7cc9a29b41d31e1628e5c8b8705e25ae95bc6490f779dbb695297ce2341566f5",
+      "depth_anything_v2/util/blocks.py": "351aa24b8af4bef923ebe3bed5e5e8503b08e39bf06ee045d6444a485a2036a8",
+      "depth_anything_v2/util/transform.py": "a97df1dbb687457a40c387fdc3482edee7ddc5c142c7d2735ca6235a8ae2885f"
+    }
+  },
+  "environment": {
+    "python": "3.12.3",
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "numpy": "2.2.6",
+    "torch": "2.6.0+cu124",
+    "device": "cpu",
+    "dtype": "float32",
+    "eval": true,
+    "no_grad": true,
+    "tf32": false,
+    "deterministic_algorithms": true,
+    "torch_threads": 4,
+    "onnx": "1.17.0"
+  },
+  "contract_sha256": "95fb2b08d6ffe5ee48c90836cab16bc4b902ca5d9d456584421f840d8ca121a8",
+  "samples_manifest_path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/samples.json",
+  "samples_manifest_file": "samples.json",
+  "samples_manifest_sha256": "ee0abd625ae4dcd0bca502b8b2a87914517a46977c8b64f02dda15c56c28ef97",
+  "tools_sha256": {
+    "__init__.py": "4a01524a5824841b159dfae4d17a608e1f841d1f12af95508cad2e9e34cd5d70",
+    "metrics.py": "fea717dfc0ddb3e87d106ca63d2051a2442a9baeee48b2703b5ed5ccf6956fae",
+    "preprocess.py": "c22e05dd4169a9269e1e4b3573732bba31e5a66635e419e07591dbc9a8d69d54",
+    "reference.py": "73be220a773247bad2abde0cbf7867ba684ef99e40c7977fa370a72fea7dc504"
+  },
+  "samples": [],
+  "reference_bundle": {
+    "path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/reference-v1",
+    "manifest_sha256": "a5b7c38c348297e8d93a5e5e96ed348703ebabdb5634de633852e96a6fc4c6af",
+    "samples": 16
+  },
+  "onnx": {
+    "file": "depth_anything_v2_vits_518.onnx",
+    "sha256": "a7d66386939681431d3b7c407b897d00cf205c44c607a33189eb4238bb7c9f80",
+    "bytes": 98941039,
+    "opset": 17,
+    "dynamo": false,
+    "status": "feasibility_only",
+    "checker": "passed",
+    "backend_numerical_validation": "pending_V1.2"
+  }
+}

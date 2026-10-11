@@ -1,0 +1,54 @@
+Internal ctest changing into directory: /home/qyc/builds/MiniInfer/release
+Test project /home/qyc/builds/MiniInfer/release
+      Start  1: net_echo_contract
+ 1/24 Test  #1: net_echo_contract ..................   Passed    0.00 sec
+      Start  2: net_concurrency_contract
+ 2/24 Test  #2: net_concurrency_contract ...........   Passed    0.50 sec
+      Start  3: net_shutdown_contract
+ 3/24 Test  #3: net_shutdown_contract ..............   Passed    1.34 sec
+      Start  4: net_io_contract
+ 4/24 Test  #4: net_io_contract ....................   Passed    0.01 sec
+      Start  5: net_protocol_contract
+ 5/24 Test  #5: net_protocol_contract ..............   Passed    0.00 sec
+      Start  6: project_contract
+ 6/24 Test  #6: project_contract ...................   Passed    0.00 sec
+      Start  7: cli_contract
+ 7/24 Test  #7: cli_contract .......................   Passed    0.58 sec
+      Start  8: buffer_contract
+ 8/24 Test  #8: buffer_contract ....................   Passed    0.00 sec
+      Start  9: tensor_view_contract
+ 9/24 Test  #9: tensor_view_contract ...............   Passed    0.00 sec
+      Start 10: model_contract
+10/24 Test #10: model_contract .....................   Passed    0.23 sec
+      Start 11: cpu_ops_contract
+11/24 Test #11: cpu_ops_contract ...................   Passed    0.00 sec
+      Start 12: inference_contract
+12/24 Test #12: inference_contract .................   Passed    0.18 sec
+      Start 13: runtime_contract
+13/24 Test #13: runtime_contract ...................   Passed    0.94 sec
+      Start 14: thread_pool_contract
+14/24 Test #14: thread_pool_contract ...............   Passed    0.00 sec
+      Start 15: concurrency_contract
+15/24 Test #15: concurrency_contract ...............   Passed    0.58 sec
+      Start 16: shutdown_contract
+16/24 Test #16: shutdown_contract ..................   Passed    0.09 sec
+      Start 17: timing_contract
+17/24 Test #17: timing_contract ....................   Passed    0.00 sec
+      Start 18: runtime_demo_contract
+18/24 Test #18: runtime_demo_contract ..............   Passed    0.13 sec
+      Start 19: net_baseline_driver_contract
+19/24 Test #19: net_baseline_driver_contract .......   Passed    2.88 sec
+      Start 20: net_client_contract
+20/24 Test #20: net_client_contract ................   Passed    0.23 sec
+      Start 21: net_inference_contract
+21/24 Test #21: net_inference_contract .............   Passed    0.95 sec
+      Start 22: net_cli_contract
+22/24 Test #22: net_cli_contract ...................   Passed    0.22 sec
+      Start 23: runtime_baseline_driver_contract
+23/24 Test #23: runtime_baseline_driver_contract ...   Passed    0.60 sec
+      Start 24: benchmark_cli_contract
+24/24 Test #24: benchmark_cli_contract .............   Passed    0.72 sec
+
+100% tests passed, 0 tests failed out of 24
+
+Total Test time (real) =  10.45 sec

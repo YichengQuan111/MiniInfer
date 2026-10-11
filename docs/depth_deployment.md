@@ -1,0 +1,76 @@
+# MiniInfer V1 深度部署契约与复现
+
+V1 以 Depth Anything V2 Small 为唯一视觉负载，模型输入固定 `[1,3,518,518]`。阶段完成状态与实测证据见 [V1 验收记录](depth_validation.md)。V1.1—V1.6 分别提交 Git，原 CPU MLP 与 D16 回归继续保留。
+
+## 模型与图像契约
+
+机器可读规范位于 [contract.json](../data/depth/contract.json)。源码固定为官方提交 `a561b849ebae10a6f5ef49e26c83cbbcd36c71bf`，Small 权重 SHA-256 为 `715fade13be8f229f8a70cc02066f656f2423a59effd0579197bbf57860e1378`。权重以 `weights_only=True` 严格加载。
+
+外部图像是连续 RGB8 HWC，宽高在 1—4096，像素总数不超过 2,097,152。先将像素转为 FP32 并除以 255，再等比缩放到最长边 518；缩放尺寸采用整数 round-half-up，最短边至少为 1。双线性插值使用 half-pixel 坐标与边界 clamp，不启用抗锯齿。中心 padding 使用 RGB=0，多余一像素放右侧或下侧；随后按 ImageNet mean/std 归一化并变为 NCHW。
+
+Python 中间运算使用 FP32，插值按先水平后垂直的 `a+(b-a)*w` 顺序计算。C++ 对应路径禁用浮点收缩，不使用 fast-math。原始深度为 FP32 `[1,518,518]`，后处理去掉 padding 并按相同插值恢复原图尺寸。对外返回独立拥有的行主序 FP32 HW 数据；数值越大表示越近，单位不是米。伪彩色与逐图 min-max 不参与数值验收。
+
+此几何包装是项目契约，与[官方默认处理](https://github.com/DepthAnything/Depth-Anything-V2/blob/a561b849ebae10a6f5ef49e26c83cbbcd36c71bf/depth_anything_v2/dpt.py)区分；模型图结构和权重保持原样。
+
+## 样本和任务标注
+
+[samples.json](../data/depth/samples.json)固定官方 [DA-2K](https://github.com/DepthAnything/Depth-Anything-V2/blob/a561b849ebae10a6f5ef49e26c83cbbcd36c71bf/DA-2K.md)中的 16 张图像与 30 组独立近远标注。8 个场景各取按路径排序后满足尺寸约束的前 2 张，第 1 张用于开发，第 2 张用于最终验收；选择过程不读取模型预测。原始标注的 `[y,x]` 转为项目 `[x,y]`，保留来源与哈希；相等预测算排序错误，不确定点对排除。
+
+这只是部署与任务保持的小规模检查集，不代表完整 DA-2K 成绩。最终样本不用于选择容差。图片和模型放在忽略的 `data/generated/depth`，Git 保存选择清单、契约、生成工具与检查证据。
+
+## 独立环境与下载
+
+源码继续在 Windows 工作区编辑，Linux 工具从 `/mnt/c/Users/ASUS/Documents/MiniInfer` 读取同一份源码。GPU 环境独立于已有 CPU 虚拟环境，默认 `/home/qyc/.venvs/miniinfer-depth`；模型与 C++ 后端依赖缓存默认 `/home/qyc/.cache/miniinfer-depth`。
+
+在项目根目录的 WSL shell 中执行：
+
+```bash
+bash tools/bootstrap_depth.sh
+```
+
+环境固定 PyTorch 2.6.0+cu124、torchvision 0.21.0+cu124、ORT 1.21.0、TensorRT 10.8.0.43，其他直接依赖见 [depth-requirements.txt](../tools/depth-requirements.txt)。选择一组固定版本进行实际兼容验证，不自动追随最新版本。NVIDIA 驱动来自宿主系统，安装脚本不替换驱动。
+
+WSL 直连下载较慢时，可先在 Windows 项目根目录运行 `python tools/fetch_depth_assets.py --output data/generated/depth/assets`，再在 WSL 使用已有下载；工具核验已冻结的 SHA-256。模型源码 ZIP 解压到缓存目录，使用明确的 `--repo-commit`，参考清单另保存每个 Python 源文件的哈希。
+
+`tools/fetch_depth_wheels.py --output data/generated/depth/wheels` 可从 Windows 获取 Linux CPython 3.12 的辅助依赖，保存 PyPI 发布哈希。它是下载补充，不修改 Windows Python 环境，也不包含完整 PyTorch / NVIDIA CUDA wheel 集；完整环境以安装记录与 `pip freeze` 为准。
+
+样本重新生成到新清单文件后核对，不覆盖已冻结清单：
+
+```bash
+python tools/prepare_depth_samples.py \
+  --archive data/generated/depth/assets/DA-2K.zip \
+  --images data/generated/depth/images \
+  --manifest data/depth/samples-reproduced.json
+```
+
+## Python 参考与静态导出
+
+以下命令中的 `python` 应为独立深度环境解释器，输出目录必须不存在：
+
+```bash
+python tools/probe_depth_env.py --output data/generated/depth/environment-new.json
+python tools/depth/reference.py reference \
+  --repo /home/qyc/.cache/miniinfer-depth/Depth-Anything-V2-a561b849ebae10a6f5ef49e26c83cbbcd36c71bf \
+  --repo-commit a561b849ebae10a6f5ef49e26c83cbbcd36c71bf \
+  --weights data/generated/depth/assets/depth_anything_v2_vits.pth \
+  --samples data/depth/samples.json --output data/generated/depth/reference-v1
+python tools/depth/reference.py export \
+  --repo /home/qyc/.cache/miniinfer-depth/Depth-Anything-V2-a561b849ebae10a6f5ef49e26c83cbbcd36c71bf \
+  --repo-commit a561b849ebae10a6f5ef49e26c83cbbcd36c71bf \
+  --weights data/generated/depth/assets/depth_anything_v2_vits.pth \
+  --samples data/depth/samples.json --reference-dir data/generated/depth/reference-v1 \
+  --output data/generated/depth/export-v1
+```
+
+参考逐图保存原始 RGB、PPM、变换参数、预处理张量、原始深度和还原深度；FP32 工件均为 little-endian 连续无头文件。Python 模型在 CPU FP32、eval/no_grad、禁 TF32 条件下运行，默认 4 个线程。静态导出使用 opset 17 和 legacy exporter，输入名 `image`、输出名 `depth`；导出成功本身不代表 ORT / TRT 精度已通过。
+
+## 基础验证
+
+```bash
+python -m unittest discover -s tests -p test_depth_reference.py -v
+cmake --preset debug -DMINIINFER_DEPTH_PYTHON=/home/qyc/.venvs/miniinfer-depth/bin/python
+cmake --build --preset debug
+ctest --preset debug
+```
+
+`MINIINFER_DEPTH_PYTHON` 为空时不要求深度 Python 依赖，原 CPU / TCP 仍可独立构建。后端执行、SDK 与网络的新增复现步骤随对应阶段验收补充。

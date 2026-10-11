@@ -1,0 +1,144 @@
+{
+  "format_version": 1,
+  "contract_version": "depth-v1",
+  "created_utc": "2026-10-11T10:39:27.027815+00:00",
+  "mode": "reference",
+  "model": {
+    "name": "Depth Anything V2 Small",
+    "encoder": "vits",
+    "features": 64,
+    "out_channels": [
+      48,
+      96,
+      192,
+      384
+    ],
+    "weights_path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/assets/depth_anything_v2_vits.pth",
+    "weights_sha256": "715fade13be8f229f8a70cc02066f656f2423a59effd0579197bbf57860e1378",
+    "repo_path": "/home/qyc/.cache/miniinfer-depth/Depth-Anything-V2-a561b849ebae10a6f5ef49e26c83cbbcd36c71bf",
+    "commit": "a561b849ebae10a6f5ef49e26c83cbbcd36c71bf",
+    "git_status": null,
+    "commit_evidence": "caller_pinned_archive_revision",
+    "source_sha256": {
+      "depth_anything_v2/dinov2.py": "d22df8d0da44c8525ebed898fd9c33b3acfcda919a84d577cc2a08bfd3d50ac1",
+      "depth_anything_v2/dinov2_layers/__init__.py": "e3c28c7b775165b6844000eb69f44d104d6c3803ac7da5d59f6ac3ecfb46d9d8",
+      "depth_anything_v2/dinov2_layers/attention.py": "0d2410ce8b8b4499a6b0cdab939ae2bceab8971efd8660d999b0f3088f28cbf7",
+      "depth_anything_v2/dinov2_layers/block.py": "093266ea08084c7cce7b8ddd779ecfaaa13055735faa8a7d68b5924f385b395b",
+      "depth_anything_v2/dinov2_layers/drop_path.py": "949100aac4d9c19c9d65319dbd362886c5d46a72d7586ba4fd500e9f1d51570c",
+      "depth_anything_v2/dinov2_layers/layer_scale.py": "356817b5d1390737128cbcc03a5333fd3060b73beae478772282ccb851d0ef85",
+      "depth_anything_v2/dinov2_layers/mlp.py": "c18c5b3f021408597a473bb710070ec3fb3b39f5a2e42e88ae83ced425a608b5",
+      "depth_anything_v2/dinov2_layers/patch_embed.py": "b3f82e19926c9cfb63f10136aca5e8a723bde1ad62dae1d04f90d405f9439baf",
+      "depth_anything_v2/dinov2_layers/swiglu_ffn.py": "df81d9901240214edc1831ce1b77558dcd6227b29a2f000fc5f546df55d2d09a",
+      "depth_anything_v2/dpt.py": "7cc9a29b41d31e1628e5c8b8705e25ae95bc6490f779dbb695297ce2341566f5",
+      "depth_anything_v2/util/blocks.py": "351aa24b8af4bef923ebe3bed5e5e8503b08e39bf06ee045d6444a485a2036a8",
+      "depth_anything_v2/util/transform.py": "a97df1dbb687457a40c387fdc3482edee7ddc5c142c7d2735ca6235a8ae2885f"
+    }
+  },
+  "environment": {
+    "python": "3.12.3",
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "numpy": "2.2.6",
+    "torch": "2.6.0+cu124",
+    "device": "cpu",
+    "dtype": "float32",
+    "eval": true,
+    "no_grad": true,
+    "tf32": false,
+    "deterministic_algorithms": true,
+    "torch_threads": 4
+  },
+  "contract_sha256": "95fb2b08d6ffe5ee48c90836cab16bc4b902ca5d9d456584421f840d8ca121a8",
+  "samples_manifest_path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/samples.json",
+  "samples_manifest_file": "samples.json",
+  "samples_manifest_sha256": "ee0abd625ae4dcd0bca502b8b2a87914517a46977c8b64f02dda15c56c28ef97",
+  "tools_sha256": {
+    "__init__.py": "4a01524a5824841b159dfae4d17a608e1f841d1f12af95508cad2e9e34cd5d70",
+    "metrics.py": "fea717dfc0ddb3e87d106ca63d2051a2442a9baeee48b2703b5ed5ccf6956fae",
+    "preprocess.py": "c22e05dd4169a9269e1e4b3573732bba31e5a66635e419e07591dbc9a8d69d54",
+    "reference.py": "73be220a773247bad2abde0cbf7867ba684ef99e40c7977fa370a72fea7dc504"
+  },
+  "samples": [
+    {
+      "id": "adverse_style_0",
+      "metadata": "samples/adverse_style_0/metadata.json",
+      "metadata_sha256": "36d34a47203f9a4010764b435bc502cb774d95666080f737eb65c6c0a7c2ea49"
+    },
+    {
+      "id": "adverse_style_1",
+      "metadata": "samples/adverse_style_1/metadata.json",
+      "metadata_sha256": "21537d6fd63c849b4870ec82f636580fea958acd177c05fa2ddff2a5dac1b234"
+    },
+    {
+      "id": "aerial_0",
+      "metadata": "samples/aerial_0/metadata.json",
+      "metadata_sha256": "2b54f417b535c763ac629419c5c1f4fcb1d65c906305dcb487a971e10d85abb6"
+    },
+    {
+      "id": "aerial_1",
+      "metadata": "samples/aerial_1/metadata.json",
+      "metadata_sha256": "cca8cbc5c1a7413f0bc5819afbd2903a912f8685a0d676e39d1a6139d5d45409"
+    },
+    {
+      "id": "indoor_0",
+      "metadata": "samples/indoor_0/metadata.json",
+      "metadata_sha256": "5120453ae2fb3e26fb58b237fa51fb28754d28d0cfac1b8f77746105d2f3249d"
+    },
+    {
+      "id": "indoor_1",
+      "metadata": "samples/indoor_1/metadata.json",
+      "metadata_sha256": "d6e1a24fdf5804e11d9287bf12a97696422e09b34f4b845cc37d34185be5a7a3"
+    },
+    {
+      "id": "non_real_0",
+      "metadata": "samples/non_real_0/metadata.json",
+      "metadata_sha256": "0498cedb7ec824f26494f8b79680b1c40e81d3145b7162b11a3db9665a45c0fe"
+    },
+    {
+      "id": "non_real_1",
+      "metadata": "samples/non_real_1/metadata.json",
+      "metadata_sha256": "e8a5588c6608925d0a36d0dfbc824b7f629d9af5fd303c5d72d9a42f78f88fee"
+    },
+    {
+      "id": "object_0",
+      "metadata": "samples/object_0/metadata.json",
+      "metadata_sha256": "5be75ba2f25f11fd7ff8d19dee1799c3d22d21e552fdbc674f0002539a330de1"
+    },
+    {
+      "id": "object_1",
+      "metadata": "samples/object_1/metadata.json",
+      "metadata_sha256": "acd8003688fccbe2389453beaf0bbe2b042df785e4c60d707473da1fa7e8722c"
+    },
+    {
+      "id": "outdoor_0",
+      "metadata": "samples/outdoor_0/metadata.json",
+      "metadata_sha256": "c1d14713eeff2a97137c6ad2aa8d5d2ad7b247e6ad7381a823c44ea4a819fa6b"
+    },
+    {
+      "id": "outdoor_1",
+      "metadata": "samples/outdoor_1/metadata.json",
+      "metadata_sha256": "f6435ceb1cf337495ea7cd16b4d349625fb8eccbebe32be7ee31104f939015f1"
+    },
+    {
+      "id": "transparent_reflective_0",
+      "metadata": "samples/transparent_reflective_0/metadata.json",
+      "metadata_sha256": "0bc6d068ea23f1f908d295fc8d87e804987e0e050cc883976c947e1fd0310e40"
+    },
+    {
+      "id": "transparent_reflective_1",
+      "metadata": "samples/transparent_reflective_1/metadata.json",
+      "metadata_sha256": "5bf24baf8a59e015cbf191137abb0d95cc3e4663bb0f09804a5471322397f33a"
+    },
+    {
+      "id": "underwater_0",
+      "metadata": "samples/underwater_0/metadata.json",
+      "metadata_sha256": "6b1bdb2588c140e53f37b06ce09bb6f6ad77f5a3cf90122cf96bef9583ee76e5"
+    },
+    {
+      "id": "underwater_1",
+      "metadata": "samples/underwater_1/metadata.json",
+      "metadata_sha256": "5aa4dd44fcc7b8dab5d0ab0fcde5400b30872c354ab0f00b759b62d733a7cee9"
+    }
+  ],
+  "reference_bundle": null,
+  "onnx": null
+}
