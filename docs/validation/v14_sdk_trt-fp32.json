@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "errors": [],
+  "command": [
+    "/home/qyc/builds/MiniInfer/external-sdk/depth_sdk_example",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp32",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp32/golden/original.ppm",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/sdk-v14-trt-fp32/sdk.f32"
+  ],
+  "returncode": 0,
+  "stdout": "1024x683 relative depth, trt/fp32, delivered=1\n",
+  "stderr": "",
+  "cli_sha256": "7780fe77eb452996362ac186ac4910e5e9ad103fea9d32bc6507b011a5a5caae",
+  "package_sha256": "e21249130ae4b6a45af5ebf198f182aa04d360aebb1a2ffbbaf8093f7513a098",
+  "numerical": {
+    "count": 699392,
+    "mae": 9.4776988212881e-07,
+    "rmse": 1.2726320247701817e-06,
+    "max_abs": 2.5033950805664062e-05,
+    "p99_abs": 4.0531158447265625e-06,
+    "nonfinite_count": 0,
+    "violations": 0,
+    "violation_fraction": 0.0
+  },
+  "python_ordering": {
+    "correct": 0,
+    "total": 1,
+    "ignored": 0,
+    "ties": 0,
+    "accuracy": 0.0
+  },
+  "sdk_ordering": {
+    "correct": 0,
+    "total": 1,
+    "ignored": 0,
+    "ties": 0,
+    "accuracy": 0.0
+  },
+  "output_sha256": "4716a5d852fa1ef0d36a9387387a1737aff8d246b3e8786ffebed91abea108a7"
+}

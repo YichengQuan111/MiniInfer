@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "errors": [],
+  "command": [
+    "/home/qyc/builds/MiniInfer/external-sdk/depth_sdk_example",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/sdk-v14-ort-fp32/sdk.f32"
+  ],
+  "returncode": 0,
+  "stdout": "1024x683 relative depth, ort/fp32, delivered=1\n",
+  "stderr": "",
+  "cli_sha256": "7780fe77eb452996362ac186ac4910e5e9ad103fea9d32bc6507b011a5a5caae",
+  "package_sha256": "f7f036cf187095d72a527e12c56bb529e2a7243f570ce5de0abc6408e8f2cfe1",
+  "numerical": {
+    "count": 699392,
+    "mae": 1.2591975718248489e-06,
+    "rmse": 1.7587356234019084e-06,
+    "max_abs": 8.296966552734375e-05,
+    "p99_abs": 4.5299530029296875e-06,
+    "nonfinite_count": 0,
+    "violations": 0,
+    "violation_fraction": 0.0
+  },
+  "python_ordering": {
+    "correct": 0,
+    "total": 1,
+    "ignored": 0,
+    "ties": 0,
+    "accuracy": 0.0
+  },
+  "sdk_ordering": {
+    "correct": 0,
+    "total": 1,
+    "ignored": 0,
+    "ties": 0,
+    "accuracy": 0.0
+  },
+  "output_sha256": "6b9f045cfa4f0992bfed73d9a51d74226154642b76f992c3d7a96448939d1046"
+}

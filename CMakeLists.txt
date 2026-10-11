@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(MiniInfer VERSION 1.3.0 LANGUAGES CXX)
+project(MiniInfer VERSION 1.4.0 LANGUAGES CXX)
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
     message(FATAL_ERROR "MiniInfer v0.1 targets Linux. On Windows, configure and build through WSL.")
@@ -42,7 +42,8 @@ add_library(miniinfer_core STATIC
     src/data_io.cpp src/cpu_ops.cpp src/mlp_input.cpp src/mlp_result.cpp
     src/workspace.cpp src/cpu_executor.cpp src/thread_pool.cpp src/runtime.cpp)
 add_library(miniinfer::core ALIAS miniinfer_core)
-target_include_directories(miniinfer_core PUBLIC "${PROJECT_SOURCE_DIR}/include")
+target_include_directories(miniinfer_core PUBLIC
+    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>" "$<INSTALL_INTERFACE:include>")
 target_compile_features(miniinfer_core PUBLIC cxx_std_17)
 target_compile_definitions(miniinfer_core PRIVATE MINIINFER_VERSION_STRING="${PROJECT_VERSION}")
 target_link_libraries(miniinfer_core PUBLIC Threads::Threads)
@@ -51,7 +52,8 @@ miniinfer_configure_target(miniinfer_core)
 # The CPU runtime never depends on networking.
 add_library(miniinfer_net STATIC src/net/socket.cpp src/net/io.cpp src/net/protocol.cpp src/net/session.cpp src/net/server.cpp)
 add_library(miniinfer::net ALIAS miniinfer_net)
-target_include_directories(miniinfer_net PUBLIC "${PROJECT_SOURCE_DIR}/include")
+target_include_directories(miniinfer_net PUBLIC
+    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>" "$<INSTALL_INTERFACE:include>")
 target_compile_features(miniinfer_net PUBLIC cxx_std_17)
 target_link_libraries(miniinfer_net PUBLIC miniinfer::core)
 miniinfer_configure_target(miniinfer_net)
@@ -77,6 +79,10 @@ miniinfer_configure_target(runtime_demo)
 include(CTest)
 include(cmake/Depth.cmake)
 include(cmake/Trt.cmake)
+include(cmake/Sdk.cmake)
+add_executable(depth_sdk_cli examples/depth_sdk/main.cpp)
+target_link_libraries(depth_sdk_cli PRIVATE miniinfer::depth_sdk)
+miniinfer_configure_target(depth_sdk_cli)
 set(MINIINFER_DEPTH_PYTHON "" CACHE FILEPATH "Optional Python with depth reference dependencies")
 if(BUILD_TESTING AND MINIINFER_DEPTH_PYTHON)
     add_test(NAME depth_reference_contract
@@ -196,3 +202,4 @@ if(BUILD_TESTING)
         thread_pool_contract benchmark_cli_contract
         PROPERTIES TIMEOUT 20)
 endif()
+include(cmake/Install.cmake)

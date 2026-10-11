@@ -7,7 +7,7 @@
 | V1.1 环境与模型契约 | 通过 | 16 图 Python CPU FP32；518 静态 ONNX checker；真实 CUDA/TRT 执行；Python 29 项、CPU/TCP Debug 24/24、Release 24/24 |
 | V1.2 ONNX / ORT | 通过 | 16 图分层对齐；前后处理逐元素一致；Debug 29/29；Release 28/28 加验收驱动测试通过 |
 | V1.3 TensorRT FP32 / FP16 | 通过 | 两配置最终集各 8/8；真实 GPU 生命周期/并发/坏引擎恢复；全套 31/31 |
-| V1.4 C++ SDK | 未开始 | — |
+| V1.4 C++ SDK | 通过 | 主构建 32/32；CPU-only 27/27；SDK ASan/UBSan；安装后独立外部项目的三个模型包 golden 通过 |
 | V1.5 TCP 深度接入 | 未开始 | — |
 | V1.6 部署与基线 | 未开始 | — |
 
@@ -38,3 +38,11 @@ FP32 engine 构建耗时 **15.608645 秒**，最终 FP16 v2 构建耗时 **151.9
 [全套 CTest](validation/v13_tests.log)31/31；SHA-256 使用标准空串、abc、百万 a 向量验证，并由实际模型工件与 Python 哈希交叉核对。GPU 的[FP32](validation/v13_fp32_lifecycle.log)与[FP16](validation/v13_fp16_lifecycle.log)测试覆盖并发串行、结果跨销毁存活、配置标签错配、SHA 错配、反序列化失败后的资源回收和有效模型重载。日志中故意损坏 engine 的 TensorRT 报错是负例证据。
 
 CUDA stream 同步之后才读取 events 和拷贝输出。WSL 的 CPU/GPU 独立时钟曾测得 compute 大于 host wall，故只分别验证计时有限/非负，不以跨时钟大小比较作为完成条件；性能报告保留两套观测。
+
+## V1.4：SDK、安装导出和模型交付
+
+[全套 Release](validation/v14_tests.log)32/32，[不启用 ORT/TRT 的独立 Release](validation/v14_cpu_tests.log)27/27；[SDK ASan/UBSan](validation/v14_asan_tests.log)通过。生命周期测试覆盖独立输入/输出所有权、执行串行、队列和字节限流、已完成但尚未交付的结果占用额度、失败回收、并发关闭和排空，以及坏清单、模型路径逃逸、哈希错配和不可用后端。
+
+通过 `cmake --install` 生成 CMake package，再从 `examples/depth_sdk` 独立 `find_package` 构建外部程序；不使用源码 `add_subdirectory`，不直接链接工作目录中的库。见[安装记录](validation/v14_install.log)与[外部项目构建](validation/v14_external_build.log)。导出的公共头文件没有 ORT/TRT 类型，依赖库由使用方提供路径。
+
+外部程序从包内读取 RGB 图，推理、关闭 SDK 后写出 owning 结果。三个包都通过完整文件哈希检查及固定阈值 golden 检查：[ORT FP32](validation/v14_sdk_ort-fp32.json)、[TensorRT FP32](validation/v14_sdk_trt-fp32.json)、[TensorRT 混合 FP16](validation/v14_sdk_trt-fp16.json)。该单图用于部署冒烟回归，不替代 V1.2/V1.3 的 8 图最终集；此图本来存在的人工排序错误也原样记录，没有宣称模型任务精度满分。

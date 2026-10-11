@@ -1,0 +1,92 @@
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- Configuring done (15.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/qyc/builds/MiniInfer/v14-cpu
+[1/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/version.cpp.o
+[2/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/checked_size.cpp.o
+[3/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/buffer.cpp.o
+[4/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_ops.cpp.o
+[5/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_model.cpp.o
+[6/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/data_io.cpp.o
+[7/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_input.cpp.o
+[8/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/workspace.cpp.o
+[9/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_result.cpp.o
+[10/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_executor.cpp.o
+[11/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/thread_pool.cpp.o
+[12/80] Building CXX object CMakeFiles/miniinfer_net.dir/src/net/io.cpp.o
+[13/80] Building CXX object CMakeFiles/miniinfer_net.dir/src/net/socket.cpp.o
+[14/80] Building CXX object CMakeFiles/miniinfer_core.dir/src/runtime.cpp.o
+[15/80] Linking CXX static library libminiinfer_core.a
+[16/80] Building CXX object CMakeFiles/miniinfer_net.dir/src/net/session.cpp.o
+[17/80] Building CXX object CMakeFiles/miniinfer_net.dir/src/net/protocol.cpp.o
+[18/80] Building CXX object CMakeFiles/miniinfer_net.dir/src/net/server.cpp.o
+[19/80] Linking CXX static library libminiinfer_net.a
+[20/80] Building CXX object CMakeFiles/tcp_echo_server.dir/apps/tcp_echo_server.cpp.o
+[21/80] Building CXX object CMakeFiles/tcp_echo_client.dir/apps/tcp_echo_client.cpp.o
+[22/80] Building CXX object CMakeFiles/infer_server.dir/apps/infer_server.cpp.o
+[23/80] Linking CXX executable bin/tcp_echo_server
+[24/80] Linking CXX executable bin/tcp_echo_client
+[25/80] Building CXX object CMakeFiles/infer_client.dir/apps/infer_client.cpp.o
+[26/80] Linking CXX executable bin/infer_server
+[27/80] Building CXX object CMakeFiles/infer_cli.dir/apps/infer_cli.cpp.o
+[28/80] Linking CXX executable bin/infer_client
+[29/80] Linking CXX executable bin/infer_cli
+[30/80] Building CXX object CMakeFiles/benchmark_cli.dir/apps/benchmark_cli.cpp.o
+[31/80] Building CXX object CMakeFiles/runtime_demo.dir/apps/runtime_demo.cpp.o
+[32/80] Building CXX object CMakeFiles/miniinfer_depth_image.dir/src/depth/image.cpp.o
+[33/80] Building CXX object CMakeFiles/miniinfer_depth_image.dir/src/depth/preprocess.cpp.o
+[34/80] Linking CXX static library libminiinfer_depth_image.a
+[35/80] Linking CXX executable bin/benchmark_cli
+[36/80] Linking CXX executable bin/runtime_demo
+[37/80] Building CXX object CMakeFiles/test_depth_image.dir/tests/test_depth_image.cpp.o
+[38/80] Building CXX object CMakeFiles/miniinfer_depth_artifact.dir/src/depth/artifact.cpp.o
+[39/80] Linking CXX static library libminiinfer_depth_artifact.a
+[40/80] Building CXX object CMakeFiles/test_depth_artifact.dir/tests/test_depth_artifact.cpp.o
+[41/80] Linking CXX executable bin/test_depth_image
+[42/80] Linking CXX executable bin/test_depth_artifact
+[43/80] Building CXX object CMakeFiles/miniinfer_depth_sdk.dir/src/depth/sdk.cpp.o
+[44/80] Linking CXX static library libminiinfer_depth_sdk.a
+[45/80] Building CXX object CMakeFiles/depth_sdk_cli.dir/examples/depth_sdk/main.cpp.o
+[46/80] Building CXX object CMakeFiles/test_net_echo.dir/tests/test_net_echo.cpp.o
+[47/80] Linking CXX executable bin/depth_sdk_cli
+[48/80] Building CXX object CMakeFiles/test_depth_sdk.dir/tests/test_depth_sdk.cpp.o
+[49/80] Linking CXX executable bin/test_net_echo
+[50/80] Linking CXX executable bin/test_depth_sdk
+[51/80] Building CXX object CMakeFiles/test_net_io.dir/tests/test_net_io.cpp.o
+[52/80] Building CXX object CMakeFiles/test_net_server.dir/tests/test_net_server.cpp.o
+[53/80] Linking CXX executable bin/test_net_io
+[54/80] Linking CXX executable bin/test_net_server
+[55/80] Building CXX object CMakeFiles/test_net_protocol.dir/tests/test_net_protocol.cpp.o
+[56/80] Building CXX object CMakeFiles/test_project.dir/tests/test_project.cpp.o
+[57/80] Building CXX object CMakeFiles/test_net_shutdown.dir/tests/test_net_shutdown.cpp.o
+[58/80] Building CXX object CMakeFiles/test_buffer.dir/tests/test_buffer.cpp.o
+[59/80] Linking CXX executable bin/test_net_protocol
+[60/80] Linking CXX executable bin/test_buffer
+[61/80] Linking CXX executable bin/test_project
+[62/80] Linking CXX executable bin/test_net_shutdown
+[63/80] Building CXX object CMakeFiles/test_tensor_view.dir/tests/test_tensor_view.cpp.o
+[64/80] Building CXX object CMakeFiles/test_cpu_ops.dir/tests/test_cpu_ops.cpp.o
+[65/80] Linking CXX executable bin/test_tensor_view
+[66/80] Building CXX object CMakeFiles/test_inference.dir/tests/test_inference.cpp.o
+[67/80] Linking CXX executable bin/test_cpu_ops
+[68/80] Building CXX object CMakeFiles/test_model.dir/tests/test_model.cpp.o
+[69/80] Linking CXX executable bin/test_inference
+[70/80] Linking CXX executable bin/test_model
+[71/80] Building CXX object CMakeFiles/test_runtime.dir/tests/test_runtime.cpp.o
+[72/80] Building CXX object CMakeFiles/test_concurrency.dir/tests/test_concurrency.cpp.o
+[73/80] Linking CXX executable bin/test_runtime
+[74/80] Linking CXX executable bin/test_concurrency
+[75/80] Building CXX object CMakeFiles/test_shutdown.dir/tests/test_shutdown.cpp.o
+[76/80] Building CXX object CMakeFiles/test_timing.dir/tests/test_timing.cpp.o
+[77/80] Building CXX object CMakeFiles/test_thread_pool.dir/tests/test_thread_pool.cpp.o
+[78/80] Linking CXX executable bin/test_shutdown
+[79/80] Linking CXX executable bin/test_timing
+[80/80] Linking CXX executable bin/test_thread_pool

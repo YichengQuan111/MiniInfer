@@ -119,3 +119,28 @@ FP32 与 FP16 均关闭 TF32，workspace 上限为 1 GiB。FP16 的最终策略�
 `TrtRunner` 拥有单个 context/stream、设备输入输出和 pinned host 缓冲；并发调用在该实例内串行。返回前等待 stream 完成，输出单独拥有存储。设备执行错误会使该槽位失效，后续调用要求重新初始化；非法输入在设备提交前拒绝。构造失败、损坏 engine、配置错配和反复加载有单独检查。更上层的数量/字节接纳在 V1.4 SDK 实现。
 
 `TrtTiming` 仅在显式请求时记录 CUDA events；H2D、compute、D2H 在同一 stream 计时且同步后读取。当前 WSL 实测曾出现 device compute 时间略大于 host wall 时间，两种时钟分别记录，不用相加、相减或大小关系校验设备完成。
+
+## V1.4：同步 SDK 与模型包
+
+`miniinfer::depth_sdk` 提供 `DepthSdk(SdkConfig)` 初始化、`run(RgbImage)` 同步返回 owning `DepthMap`、`config()`、`snapshot()` 和 `shutdown()`。对外头文件不暴露 ORT/TRT 类型。一个实例固定一个后端、一个执行线程和一个 GPU 槽位；调用者可并发调用 `run`，输出在下次调用或 SDK 关闭后仍有效。完整接口、错误分类和外部集成示例见 [examples/depth_sdk](../examples/depth_sdk/README.md)。
+
+默认等待队列为 4，SDK 接纳最多 5 个未交付请求；每个请求在复制图像前预留 `19 × 像素数 + 16 MiB`，128 MiB 总预算不足时立即返回 `Busy`。计数和字节预算同时覆盖等待、执行及等待交付的结果，结果交付后释放。固定模型权重、后端 arena、CUDA context 和调用者持有的已交付结果不属于此预算，不能把预算当作进程 RSS 上限。`shutdown()` 先拒绝新请求，再排空已接受任务及结果交付，最后释放后端；支持重复或并发关闭。
+
+模型包生成要求匹配且通过的最终集报告，不会在打包时放宽阈值。包内包含 ONNX、可选 TensorRT engine/环境清单/层格式、契约、阈值、最终验收报告、参考清单、样本来源和一张 golden 图及中间/最终张量。`package.json` 对所有附带文件记录大小和 SHA-256；SDK 初始化校验最小 `manifest.txt`、模型哈希和 TRT 环境，离线完整检查使用 `verify`。包不是数字签名。
+
+```bash
+python tools/package_depth.py create --backend trt --precision fp16 \
+  --model data/generated/depth/engines/depth-fp16-v2.engine \
+  --onnx data/generated/depth/export-v1/depth_anything_v2_vits_518.onnx \
+  --reference data/generated/depth/reference-v1 --samples data/depth/samples.json \
+  --thresholds data/depth/thresholds_trt_fp16.json \
+  --report docs/validation/v13_fp16_final.json --output /tmp/depth-package-fp16
+python tools/package_depth.py verify /tmp/depth-package-fp16
+cmake --install $HOME/builds/MiniInfer/depth-release --prefix $HOME/miniinfer-install
+# 独立 find_package 构建及依赖库路径参数见 examples/depth_sdk/README.md。
+source tools/depth_env.sh
+python tools/verify_depth_sdk.py --cli /tmp/miniinfer-sdk-example/depth_sdk_example \
+  --package /tmp/depth-package-fp16 --output /tmp/sdk-golden-report
+```
+
+所有工件输出目录和结果文件默认拒绝覆盖。项目中已生成的三个包位于 `data/generated/depth/packages/{ort-fp32,trt-fp32,trt-fp16}`，大体积模型和图像不提交到 Git；从固定源、哈希与命令重建。

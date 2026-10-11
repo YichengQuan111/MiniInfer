@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.28)
+project(MiniInferDepthSdkExample LANGUAGES CXX)
+find_package(MiniInfer CONFIG REQUIRED)
+add_executable(depth_sdk_example main.cpp)
+target_link_libraries(depth_sdk_example PRIVATE miniinfer::depth_sdk)
+target_compile_features(depth_sdk_example PRIVATE cxx_std_17)
+target_compile_options(depth_sdk_example PRIVATE -Wall -Wextra -Wpedantic)

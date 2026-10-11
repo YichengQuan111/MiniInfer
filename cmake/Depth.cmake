@@ -11,7 +11,8 @@ add_library(miniinfer_depth_image STATIC
     "${PROJECT_SOURCE_DIR}/src/depth/image.cpp"
     "${PROJECT_SOURCE_DIR}/src/depth/preprocess.cpp")
 add_library(miniinfer::depth_image ALIAS miniinfer_depth_image)
-target_include_directories(miniinfer_depth_image PUBLIC "${PROJECT_SOURCE_DIR}/include")
+target_include_directories(miniinfer_depth_image PUBLIC
+    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>" "$<INSTALL_INTERFACE:include>")
 target_compile_features(miniinfer_depth_image PUBLIC cxx_std_17)
 miniinfer_configure_target(miniinfer_depth_image)
 target_compile_options(miniinfer_depth_image PRIVATE -ffp-contract=off -fno-fast-math)

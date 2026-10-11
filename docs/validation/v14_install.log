@@ -1,0 +1,51 @@
+-- Install configuration: "Release"
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/libminiinfer_core.a
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/libminiinfer_net.a
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/libminiinfer_depth_image.a
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/libminiinfer_depth_artifact.a
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/libminiinfer_depth_sdk.a
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/libminiinfer_depth_ort.a
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/libminiinfer_depth_trt.a
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/bounded_queue.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/buffer.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/checked_size.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/cpu_executor.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/cpu_ops.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/data_io.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/depth
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/depth/artifact.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/depth/image.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/depth/net.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/depth/ort_runner.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/depth/preprocess.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/depth/sdk.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/depth/trt_runner.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/mlp_input.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/mlp_model.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/mlp_result.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/net
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/net/io.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/net/protocol.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/net/server.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/net/session.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/net/socket.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/net/unique_fd.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/runtime.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/task_timing.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/tensor_view.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/thread_pool.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/version.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/include/miniinfer/workspace.hpp
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/bin/depth_cli
+-- Set non-toolchain portion of runtime path of "/home/qyc/builds/MiniInfer/sdk-install/bin/depth_cli" to ""
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/bin/depth_trt_cli
+-- Set non-toolchain portion of runtime path of "/home/qyc/builds/MiniInfer/sdk-install/bin/depth_trt_cli" to ""
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/bin/depth_engine_builder
+-- Set non-toolchain portion of runtime path of "/home/qyc/builds/MiniInfer/sdk-install/bin/depth_engine_builder" to ""
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/bin/depth_sdk_cli
+-- Set non-toolchain portion of runtime path of "/home/qyc/builds/MiniInfer/sdk-install/bin/depth_sdk_cli" to ""
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/cmake/MiniInfer/MiniInferTargets.cmake
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/cmake/MiniInfer/MiniInferTargets-release.cmake
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/cmake/MiniInfer/MiniInferConfig.cmake
+-- Installing: /home/qyc/builds/MiniInfer/sdk-install/lib/cmake/MiniInfer/MiniInferConfigVersion.cmake
