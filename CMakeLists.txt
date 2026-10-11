@@ -48,6 +48,20 @@ target_compile_definitions(miniinfer_core PRIVATE MINIINFER_VERSION_STRING="${PR
 target_link_libraries(miniinfer_core PUBLIC Threads::Threads)
 miniinfer_configure_target(miniinfer_core)
 
+# The CPU runtime never depends on networking.
+add_library(miniinfer_net STATIC src/net/socket.cpp src/net/io.cpp src/net/protocol.cpp src/net/session.cpp src/net/server.cpp)
+add_library(miniinfer::net ALIAS miniinfer_net)
+target_include_directories(miniinfer_net PUBLIC "${PROJECT_SOURCE_DIR}/include")
+target_compile_features(miniinfer_net PUBLIC cxx_std_17)
+target_link_libraries(miniinfer_net PUBLIC miniinfer::core)
+miniinfer_configure_target(miniinfer_net)
+
+foreach(app IN ITEMS tcp_echo_server tcp_echo_client infer_server infer_client)
+    add_executable(${app} apps/${app}.cpp)
+    target_link_libraries(${app} PRIVATE miniinfer::net)
+    miniinfer_configure_target(${app})
+endforeach()
+
 add_executable(infer_cli apps/infer_cli.cpp)
 target_link_libraries(infer_cli PRIVATE miniinfer::core)
 miniinfer_configure_target(infer_cli)
@@ -62,6 +76,28 @@ miniinfer_configure_target(runtime_demo)
 
 include(CTest)
 if(BUILD_TESTING)
+    add_executable(test_net_echo tests/test_net_echo.cpp)
+    target_link_libraries(test_net_echo PRIVATE miniinfer::net)
+    miniinfer_configure_target(test_net_echo)
+    add_test(NAME net_echo_contract COMMAND test_net_echo)
+    set_tests_properties(net_echo_contract PROPERTIES TIMEOUT 20)
+    add_executable(test_net_server tests/test_net_server.cpp)
+    target_link_libraries(test_net_server PRIVATE miniinfer::net)
+    miniinfer_configure_target(test_net_server)
+    add_test(NAME net_concurrency_contract COMMAND test_net_server "${PROJECT_SOURCE_DIR}/data/reference")
+    set_tests_properties(net_concurrency_contract PROPERTIES TIMEOUT 40)
+    add_executable(test_net_shutdown tests/test_net_shutdown.cpp)
+    target_link_libraries(test_net_shutdown PRIVATE miniinfer::net)
+    miniinfer_configure_target(test_net_shutdown)
+    add_test(NAME net_shutdown_contract COMMAND test_net_shutdown "${PROJECT_SOURCE_DIR}/data/reference")
+    set_tests_properties(net_shutdown_contract PROPERTIES TIMEOUT 40)
+    foreach(test_name IN ITEMS io protocol)
+        add_executable(test_net_${test_name} tests/test_net_${test_name}.cpp)
+        target_link_libraries(test_net_${test_name} PRIVATE miniinfer::net)
+        miniinfer_configure_target(test_net_${test_name})
+        add_test(NAME net_${test_name}_contract COMMAND test_net_${test_name})
+        set_tests_properties(net_${test_name}_contract PROPERTIES TIMEOUT 20)
+    endforeach()
     add_executable(test_project tests/test_project.cpp)
     target_link_libraries(test_project PRIVATE miniinfer::core)
     miniinfer_configure_target(test_project)
@@ -113,6 +149,22 @@ if(BUILD_TESTING)
     set_tests_properties(timing_contract runtime_demo_contract PROPERTIES TIMEOUT 20)
     find_package(Python3 COMPONENTS Interpreter QUIET)
     if(Python3_Interpreter_FOUND)
+        add_test(NAME net_baseline_driver_contract
+            COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/test_tcp_baseline.py"
+                "$<TARGET_FILE_DIR:infer_client>" "${PROJECT_SOURCE_DIR}/data/reference")
+        set_tests_properties(net_baseline_driver_contract PROPERTIES TIMEOUT 40)
+        add_test(NAME net_client_contract
+            COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/test_net_client.py"
+                "$<TARGET_FILE_DIR:infer_client>" "${PROJECT_SOURCE_DIR}/data/reference")
+        set_tests_properties(net_client_contract PROPERTIES TIMEOUT 40)
+        add_test(NAME net_inference_contract
+            COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/test_net_inference.py"
+                "$<TARGET_FILE_DIR:infer_server>" "${PROJECT_SOURCE_DIR}/data/reference")
+        set_tests_properties(net_inference_contract PROPERTIES TIMEOUT 40)
+        add_test(NAME net_cli_contract
+            COMMAND "${Python3_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tests/test_net_cli.py"
+                "$<TARGET_FILE_DIR:tcp_echo_server>")
+        set_tests_properties(net_cli_contract PROPERTIES TIMEOUT 25)
         add_test(NAME runtime_baseline_driver_contract
             COMMAND "${Python3_EXECUTABLE}" -m unittest discover
                 -s "${PROJECT_SOURCE_DIR}/tests" -p test_runtime_baseline.py -v)

@@ -1,0 +1,38 @@
+[HANDLER_OUTPUT]
+Test project /home/qyc/builds/MiniInfer/tsan
+
+    Start  1: net_echo_contract
+1/9 Test  #1: net_echo_contract ................   Passed    0.04 sec
+    Start  2: net_concurrency_contract
+2/9 Test  #2: net_concurrency_contract .........   Passed    1.10 sec
+    Start  3: net_shutdown_contract
+3/9 Test  #3: net_shutdown_contract ............***Failed    2.09 sec
+stop: idle, partial header and queued request exit without submission
+concurrent shutdown: one drain, executing and queued tasks both reply exactly once
+RST during accepted inference: executes once, failed reply reclaimed
+submission race: backend closes between session stop check and Runtime::run, status 3
+closed backend: PoolClosed maps to SHUTTING_DOWN and closes connection
+slow reader: real TCP queue prefilled to EAGAIN, batch256 reply times out
+thread count did not return to baseline
+
+    Start  4: net_io_contract
+4/9 Test  #4: net_io_contract ..................   Passed    0.02 sec
+    Start  5: net_protocol_contract
+5/9 Test  #5: net_protocol_contract ............   Passed    0.02 sec
+    Start 19: net_baseline_driver_contract
+6/9 Test #19: net_baseline_driver_contract .....   Passed    4.04 sec
+    Start 20: net_client_contract
+7/9 Test #20: net_client_contract ..............   Passed    0.43 sec
+    Start 21: net_inference_contract
+8/9 Test #21: net_inference_contract ...........   Passed    1.01 sec
+    Start 22: net_cli_contract
+9/9 Test #22: net_cli_contract .................   Passed    0.18 sec
+
+89% tests passed, 1 tests failed out of 9
+
+Total Test time (real) =   9.00 sec
+
+The following tests FAILED:
+	  3 - net_shutdown_contract (Failed)
+[ERROR_MESSAGE]
+Errors while running CTest

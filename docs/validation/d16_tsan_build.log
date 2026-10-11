@@ -1,0 +1,36 @@
+Preset CMake variables:
+
+  BUILD_TESTING="ON"
+  CMAKE_BUILD_TYPE="Debug"
+  CMAKE_CXX_COMPILER="/usr/bin/g++"
+  CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+  MINIINFER_ENABLE_ASAN_UBSAN="OFF"
+  MINIINFER_ENABLE_TSAN="ON"
+
+-- Configuring done (3.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/qyc/builds/MiniInfer/tsan
+[1/24] Building CXX object CMakeFiles/miniinfer_net.dir/src/net/io.cpp.o
+[2/24] Building CXX object CMakeFiles/miniinfer_net.dir/src/net/socket.cpp.o
+[3/24] Building CXX object CMakeFiles/miniinfer_net.dir/src/net/session.cpp.o
+[4/24] Building CXX object CMakeFiles/miniinfer_net.dir/src/net/protocol.cpp.o
+[5/24] Building CXX object CMakeFiles/tcp_echo_server.dir/apps/tcp_echo_server.cpp.o
+[6/24] Building CXX object CMakeFiles/miniinfer_net.dir/src/net/server.cpp.o
+[7/24] Linking CXX static library libminiinfer_net.a
+[8/24] Building CXX object CMakeFiles/tcp_echo_client.dir/apps/tcp_echo_client.cpp.o
+[9/24] Linking CXX executable bin/tcp_echo_server
+[10/24] Building CXX object CMakeFiles/infer_server.dir/apps/infer_server.cpp.o
+[11/24] Linking CXX executable bin/tcp_echo_client
+[12/24] Building CXX object CMakeFiles/infer_client.dir/apps/infer_client.cpp.o
+[13/24] Linking CXX executable bin/infer_server
+[14/24] Linking CXX executable bin/infer_client
+[15/24] Building CXX object CMakeFiles/test_net_echo.dir/tests/test_net_echo.cpp.o
+[16/24] Linking CXX executable bin/test_net_echo
+[17/24] Building CXX object CMakeFiles/test_net_io.dir/tests/test_net_io.cpp.o
+[18/24] Building CXX object CMakeFiles/test_net_server.dir/tests/test_net_server.cpp.o
+[19/24] Linking CXX executable bin/test_net_io
+[20/24] Building CXX object CMakeFiles/test_net_protocol.dir/tests/test_net_protocol.cpp.o
+[21/24] Linking CXX executable bin/test_net_server
+[22/24] Building CXX object CMakeFiles/test_net_shutdown.dir/tests/test_net_shutdown.cpp.o
+[23/24] Linking CXX executable bin/test_net_protocol
+[24/24] Linking CXX executable bin/test_net_shutdown

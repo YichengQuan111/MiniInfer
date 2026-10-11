@@ -1,0 +1,48 @@
+[HANDLER_VERBOSE_OUTPUT]
+UpdateCTestConfiguration  from :/mnt/c/Users/ASUS/Documents/MiniInfer/DartConfiguration.tcl
+
+UpdateCTestConfiguration  from :/home/qyc/builds/MiniInfer/debug/DartConfiguration.tcl
+Parse Config file:/home/qyc/builds/MiniInfer/debug/DartConfiguration.tcl
+[HANDLER_OUTPUT]
+Test project /home/qyc/builds/MiniInfer/debug
+
+[HANDLER_VERBOSE_OUTPUT]
+Constructing a list of tests
+
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 3
+[HANDLER_OUTPUT]
+    Start 3: net_shutdown_contract
+
+[HANDLER_VERBOSE_OUTPUT]
+
+3: Test command: /home/qyc/builds/MiniInfer/debug/bin/test_net_shutdown "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+
+3: Working Directory: /home/qyc/builds/MiniInfer/debug
+3: Test timeout computed to be: 40
+3: stop: idle, partial header and queued request exit without submission
+3: concurrent shutdown: one drain, executing and queued tasks both reply exactly once
+3: RST during accepted inference: executes once, failed reply reclaimed
+3: submission race: backend closes between session stop check and Runtime::run, status 3
+3: closed backend: PoolClosed maps to SHUTTING_DOWN and closes connection
+3: slow reader: real TCP queue prefilled to EAGAIN, batch256 reply times out
+3: 12 start/connect/stop lifetimes restore fd and thread counts
+3: network shutdown tests passed
+[HANDLER_OUTPUT]
+1/1 Test #3: net_shutdown_contract ............
+   Passed    1.02 sec
+[HANDLER_VERBOSE_OUTPUT]
+
+The following tests passed:
+
+	net_shutdown_contract
+[HANDLER_OUTPUT]
+
+100% tests passed, 0 tests failed out of 1
+
+
+Total Test time (real) =   1.06 sec

@@ -1,4 +1,37 @@
-# D14 CPU / Runtime 实测报告
+# D16 Runtime / TCP 实测报告
+
+2026-10-11 在 Release 下完成 15 组本地/TCP 对照；原始命令、配置、二进制与参考工件 SHA-256、环境和每次结果见 [d16_tcp.json](benchmark_data/d16_tcp.json)。本地和 TCP 各 **15,000 个正式请求成功**，业务拒绝、协议/连接错误和超时均为 0。成功数来自客户端完整解析/校验响应，未用服务端发送计数代替。
+
+环境为同一 Windows 源码 / Ubuntu 24.04 WSL2、i9-13980HX、32 个来宾逻辑 CPU，内核 `6.18.40.1-microsoft-standard-WSL2`，MemTotal 16177044 kB。GCC 13.3.0、C++17、Release `-O3 -DNDEBUG`，无 sanitizer 或 fast-math；未绑核，供电、频率及后台负载未控制。正式测量在本轮 sanitizer 检查结束后执行。
+
+固定模型 `64→128→10`，Batch 1/8/32/64/256；取参考前 B 行，256 由 64 行重复四次。每个 Batch 预热 100、正式 1000、重复 3 次。每组先启动独立进程内 Runtime，再启动独立 TCP 服务端/客户端；Worker=1，推理队列=64，Runtime future 窗口=1；TCP 并发客户端=1、连接线程=1、等待连接=8，一条连接贯穿预热和正式请求。无流水线、重试或到达率控制。
+
+客户端用 `steady_clock` 从 `send_frame` 前量到完整响应校验/解码后；建连单列。输入 FP32 的请求体编码在正式循环外，帧构造/发送、服务端解码/入队/计算/回包及客户端解码都计入请求耗时。Runtime 仍按既有口径包含拥有型输入复制和 future 取得结果。两者不等同于相同算子的微基准，不能将差值全部解释为纯网络耗时，也不与 D14 的 window=8 结果直接计算加速比。
+
+下表单位为 **μs**，每列为三次独立运行指标的中位数。每次运行的百分位采用最近秩 `ceil(p*N)`，只含成功的正式请求；不将不同进程的百分位合并重算。吞吐、每次完整百分位及计数保留在 JSON。
+
+| Batch | Runtime P50 | P95 | P99 | TCP P50 | P95 | P99 | 建连 |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 31.381 | 109.726 | 186.237 | 58.530 | 190.271 | 305.436 | 123.218 |
+| 8 | 68.740 | 184.771 | 276.961 | 90.434 | 241.707 | 337.316 | 61.759 |
+| 32 | 166.682 | 235.640 | 295.805 | 205.726 | 336.966 | 400.840 | 111.779 |
+| 64 | 303.645 | 417.653 | 476.708 | 345.026 | 498.573 | 629.425 | 136.073 |
+| 256 | 1167.052 | 1345.800 | 1520.766 | 1260.972 | 1558.699 | 1813.405 | 75.881 |
+
+本轮 TCP 中位延迟高于本地路径，Batch 越小额外调度、序列化和收发成本越显著。这只是回环、单并发下的小规模基线；不推断局域网、负载饱和、多客户端扩展性或生产性能，也未据此修改算子或网络模型。BUSY 的正确映射与拒绝记账由 gate 契约测试单独验证，本轮未测饱和拒绝率。
+
+PowerShell 复现（输出必须选择新文件）：
+
+```powershell
+$linuxProject = '/mnt/c/Users/ASUS/Documents/MiniInfer'
+wsl -d Ubuntu-24.04 --cd $linuxProject -- cmake --preset release
+wsl -d Ubuntu-24.04 --cd $linuxProject -- cmake --build --preset release
+wsl -d Ubuntu-24.04 --cd $linuxProject -- /usr/bin/python3 tools/run_tcp_baseline.py --bin-dir /home/qyc/builds/MiniInfer/release/bin --reference data/reference --output docs/benchmark_data/d16_tcp_rerun.json --iterations 1000 --warmup 100 --repeats 3
+```
+
+驱动只用 Python 标准库，使用系统分配的回环端口并等待服务就绪，临时输入精确匹配 Batch。每次核验客户端末次 logits/labels 和全部响应计数，再与 Runtime 每成功请求 checksum 对照；失败路径限时终止并回收子进程。正式完整输出已实测，驱动的短流程和已有输出保护也纳入 CTest。
+
+# D14 CPU / Runtime 历史实测报告
 
 2026-10-10，Release 下完成 **36 次独立进程测量**。原始参数、环境、工件摘要、命令和完整 JSON 保存在 [d14_runtime.json](benchmark_data/d14_runtime.json)。这是本机固定小 MLP 的测量，未控制供电、频率和后台负载，不承诺稳定加速。
 

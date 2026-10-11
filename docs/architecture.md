@@ -1,6 +1,6 @@
 # MiniInfer v0.1 架构与契约
 
-2026-10-10。固定 CPU FP32 MLP `64→128→10`，C++17 / Linux；当前实现不包含 GPU 后端。测试、基准和复现入口见 [README](../README.md) 与 [benchmark](benchmark.md)。
+已实现架构记录：2026-10-11，包含 D16 原生 TCP 扩展。固定 CPU FP32 MLP `64→128→10`，C++17 / Linux；当前没有 GPU 后端。测试、基准和复现入口见 [README](../README.md) 与 [benchmark](benchmark.md)。
 
 ## 数据流与所有权
 
@@ -56,3 +56,32 @@ benchmark_cli 另记调用前、submit 返回和 get 取得结果时间。排队
 测试中的关闭守卫在 gate 释放后、调用线程 join 前停止接收，避免部分调用线程启动失败时重试的生产者永远等不到关闭；显式异常注入覆盖该退栈分支。ASan / UBSan 与 TSan 采用互斥配置。本机 GCC TSan 默认地址布局曾启动失败，使用 `setarch x86_64 -R` 后五项相关测试通过，退栈分支另做 TSan 复验；这只是已运行路径的证据。具体日志与复现命令在 README。
 
 未来增加设备存储、Stream / Event 或真实模型执行适配时，应保留拥有型输入 / 结果及实际完成后交付 future 的语义。主机 TensorView 不承载 GPU 地址，多 CPU Worker 测试不证明 GPU 资源共享安全；当前不预建空的 GPU 类或通用后端注册器。
+
+## D16 网络层
+
+`miniinfer_net` 依赖 `miniinfer_core`，核心库不反向依赖网络。`infer_server` 启动时只加载一次模型，连接线程调用 `Runtime::run()`；推理 Worker 不执行 socket I/O。`tcp_echo_server/client` 共用相同的协议及收发实现。
+
+```text
+接入线程 / 唯一 listener fd
+  → 连接线程保留槽（默认 4） + 等待连接队列（默认 8）
+  → serve_connection：整帧接收 / 校验 / 解码拥有型 MlpInput
+  → Runtime::run：有界推理队列 → Worker 私有 Workspace
+  → 拥有型 MlpResult → 编码 / 限时发送 → 读取下一帧
+```
+
+`UniqueFd` 不可复制，移动后源对象为空；Linux close 不重试 EINTR。接入层通过移动交接 fd，活跃 fd 仅由其连接线程关闭；监听 fd 仅由接入线程关闭，避免跨线程关闭后 fd 号码复用。停止时可直接回收尚未交接的等待 fd。`TcpServer` 构造启动固定线程，部分启动失败会停止并 join 已创建线程；析构重复执行 shutdown。
+
+线程槽在分配连接时即计为 active，因此 `active <= connection_threads`、`pending <= waiting_connections`。等待队列满立即关闭新连接，此时尚未读取业务请求，不保证错误帧；内核 listen backlog 是独立、有限的内核队列，不计入应用层统计。等待期限从接入计时，在出队时检查过期。每连接至多一个计算/回包请求，收发缓冲及结果都归连接线程所有，完成一次后才读下一帧；不支持流水线调度、乱序回包或重试。
+
+帧头逐字段编码，整数和 IEEE 754 FP32 位模式统一大端。全局 65540 字节消息体上限在分配前验证，随后校验类型对应长度、Batch、有限浮点数及 labels。ID 在连接内严格递增，客户端验证响应 ID、类型与 Batch。`recv_exact`/`send_all` 使用 `MSG_DONTWAIT`，EAGAIN 时 poll，EINTR 后重新检查同一绝对截止时间；帧头/消息体共享读截止，整帧编码后共享写截止。poll 最多等待 20ms 以观察停止。发送使用 `MSG_NOSIGNAL`。`IoHooks` 仅用于确定性 syscall/时钟注入测试，生产默认调用 Linux API。
+
+关闭由 main 在创建任何 Worker 前屏蔽 SIGINT/SIGTERM，再通过 `sigtimedwait` 同步接收通知，无异步信号 handler 执行锁操作。`TcpServer::shutdown()` 停止接入、清等待队列并通知接收停止，join 接入线程，无锁调用 Runtime drain，再 join 连接线程。已经运行或排队的推理继续完成，回包不被停止标志取消，但仍受写期限限制；断连后仅记录失败并回收。空闲/半帧连接不再提交业务。停止检查与 `Runtime::run()` 调用存在窄竞争窗口，Runtime 的队列关闭是最终接收边界：关闭前已接受者完成，晚到提交抛 `PoolClosed` 并映射 `SHUTTING_DOWN`。测试用 gate 明确覆盖该窗口。
+
+`run` 与 `drain` 回调可能并发，捕获的 Runtime 必须比 TcpServer 存活久；不允许回调自 shutdown。重复、并发 shutdown 只执行一次 drain，其他调用等待相同完成边界。计算排空没有硬性时间保证。`snapshot` / `wait_for_stats` 在 mutex 下访问资源计数，业务/IO计数在会话结束时聚合；`responses` 表示服务端发送完成，不能代表客户端已收到。客户端独立统计成功、业务错误、协议/连接错误、超时、未尝试请求及建连错误。
+
+## 后续版本的计划边界
+
+- V1 新增视觉输入/结果契约，先对齐本地 ORT / TensorRT，再复用 TCP 接入；连接线程与单 GPU 执行槽位分开。
+- V2 用单 I/O 线程 epoll LT 管理连接，拥有型结果经有界完成队列和 eventfd 返回；通过连接标识/代次识别断连后的迟到结果。事件循环不阻塞等待 future 或 GPU，GPU 并发另设有限槽位。
+
+协议与网络验收见 [D16 计划与记录](D16_TCP_网络编程学习扩展.md)，视觉服务与事件循环的后续任务见 [V1 / V2 策略](MiniInfer_V1_V2_求职改进策略.md)。

@@ -1,0 +1,19 @@
+[HANDLER_OUTPUT]
+Test project /home/qyc/builds/MiniInfer/debug
+
+    Start  1: net_echo_contract
+1/6 Test  #1: net_echo_contract ................   Passed    0.00 sec
+    Start  2: net_concurrency_contract
+2/6 Test  #2: net_concurrency_contract .........   Passed    0.26 sec
+    Start  3: net_io_contract
+3/6 Test  #3: net_io_contract ..................   Passed    0.01 sec
+    Start  4: net_protocol_contract
+4/6 Test  #4: net_protocol_contract ............   Passed    0.00 sec
+    Start 18: net_inference_contract
+5/6 Test #18: net_inference_contract ...........   Passed    0.61 sec
+    Start 19: net_cli_contract
+6/6 Test #19: net_cli_contract .................   Passed    0.20 sec
+
+100% tests passed, 0 tests failed out of 6
+
+Total Test time (real) =   1.16 sec

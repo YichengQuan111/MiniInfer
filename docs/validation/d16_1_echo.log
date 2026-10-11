@@ -1,0 +1,32 @@
+D16.1 TCP Echo validation, 2026-10-11, WSL Ubuntu-24.04
+Workspace: /mnt/c/Users/ASUS/Documents/MiniInfer
+
+Executed from PowerShell:
+wsl.exe -d Ubuntu-24.04 --cd /mnt/c/Users/ASUS/Documents/MiniInfer -- cmake --preset debug
+Result: configuration successful; build directory /home/qyc/builds/MiniInfer/debug
+
+wsl.exe -d Ubuntu-24.04 --cd /mnt/c/Users/ASUS/Documents/MiniInfer -- cmake --build --preset debug --target tcp_echo_server tcp_echo_client test_net_echo
+Result: all three executables and miniinfer_net compiled and linked successfully.
+
+wsl.exe -d Ubuntu-24.04 --cd /mnt/c/Users/ASUS/Documents/MiniInfer -- ctest --preset debug -R net_ --output-on-failure
+Test project /home/qyc/builds/MiniInfer/debug
+    Start  1: net_echo_contract
+1/2 Test  #1: net_echo_contract ................   Passed    0.00 sec
+    Start 15: net_cli_contract
+2/2 Test #15: net_cli_contract .................   Passed    0.34 sec
+
+100% tests passed, 0 tests failed out of 2
+Total Test time (real) =   0.34 sec
+
+Coverage: real loopback TCP, ephemeral port, explicit readiness, binary bytes,
+empty request / EOF, eight repeated connections, deterministic refused connect,
+move construction/assignment/self-move/reset/destruction, descriptor recovery.
+Test worker cleanup: socket receive/send timeouts and poll readiness timeout,
+joining RAII guard; no sleep-based synchronization.
+CLI contract is maintained by the main agent and verifies real app processes.
+Production D16.1 helpers remain blocking; deadlines and framed protocol are D16.2.
+
+WSL emitted a host localhost-proxy warning; it did not prevent configure/build/tests.
+A PowerShell/WSL attempt to pass an unescaped regex containing parentheses failed
+in shell parsing before CTest ran; the successful net_ filter above selected
+exactly the two D16.1 network tests.

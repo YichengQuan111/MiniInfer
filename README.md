@@ -2,9 +2,21 @@
 
 MiniInfer v0.1 是一个面向 Linux / WSL2 的 C++17 CPU 推理项目：固定 `64 → 128 → 10` MLP，实现标量 FP32 算子、资源所有权、有界任务队列与安全关闭。完整范围见 [项目开发规范](<MiniInfer 项目说明与 AI Agent 开发规范.md>)。
 
-当前完成 **D1–D15 的 v0.1 必达范围**：真实同步 / 异步推理、四生产者与 1/2/4 Worker 压力、关闭竞争、线程创建失败回收、阶段计时、Release 对照和可运行演示。Debug / Release / ASan+UBSan 各 **15/15 CTest 通过**；TSan 在关闭进程地址随机化后 **5/5 相关测试通过**。D13 已完成分配分析和工具核查，perf 未安装，未实施可选优化。
+当前完成 **D1–D15 的 CPU 基础及 D16 TCP 扩展**：同步 / 异步推理、有界计算与连接队列、远程 MLP、关闭竞争、阶段计时及 Release 对照。Debug / Release / ASan+UBSan 各 **24/24 CTest 通过**；独立 TSan 的 9 项网络测试均通过（关闭测试修正线程运行时基线后单项复验，详见文末）。D13 的 perf 未安装，未实施可选优化。
 
 设计与当前边界见 [架构说明](docs/architecture.md)，测量方法及原始结果见 [基准报告](docs/benchmark.md)。[D10 开发交接](docs/HANDOFF_D10.md)保留为历史快照，当前进度以本 README 和源码为准。
+
+## 后续计划
+
+2026-10-11 按网络编程学习路线完成 D16 实现，逐阶段验收记录见文末。V1 / V2 仍为待实施计划。
+
+| 阶段 | 目标与进入下一阶段的条件 |
+|---|---|
+| [D16 原生 TCP 网络编程与推理服务](docs/D16_TCP_网络编程学习扩展.md) | Echo → 消息协议 → 远程 MLP → 有限并发 → 安全退出；正确收发、过载、断连和关闭有测试 |
+| [V1 真实模型的 C++ 网络推理服务](docs/MiniInfer_V1_V2_求职改进策略.md) | 先完成 ORT / TensorRT 本地精度对齐，再通过 D16 的 TCP 服务传输视觉请求；本地与远程结果及基线完整 |
+| [V2 事件驱动网络与 GPU 性能工程](docs/MiniInfer_V1_V2_求职改进策略.md) | 非阻塞 epoll、完成通知、有限 GPU 并发与资源复用；通过故障回归、Profile、CUDA 实践和同条件优化实验 |
+
+D16 提供原生 TCP 服务端和客户端；V1 / V2 的依赖在对应阶段核验。当前没有 GPU 后端。
 
 ## 已实现
 
@@ -21,6 +33,7 @@ MiniInfer v0.1 是一个面向 Linux / WSL2 的 C++17 CPU 推理项目：固定 
 - [Runtime](include/miniinfer/runtime.hpp) 与 [ThreadPool](include/miniinfer/thread_pool.hpp)：输入 / 结果拥有数据，固定 Worker ID、有界等待队列、future 异常交付、drain / join。
 - [基准程序](apps/benchmark_cli.cpp)：direct_cpu / Runtime 1/2/4 Worker、有限 future 窗口、成功 / 失败 / 拒绝记账、阶段延迟、独立直接执行器分配探测和 RSS；[采集驱动](tools/run_runtime_baseline.py)按独立进程保存重复结果。
 - [Runtime 演示](apps/runtime_demo.cpp)：混合 Batch、拥有型输入、future 溢出异常与恢复、重复关闭、关闭后拒绝、析构后保留结果并对照参考。
+- [TCP 网络层](include/miniinfer/net/server.hpp)：独立 `miniinfer_net` 目标，fd RAII、大端帧协议、绝对收发截止时间、固定连接线程、有界等待连接、推理错误映射和 drain / join；提供 Echo 与远程推理两个客户端/服务端入口。
 
 ## Buffer 与尺寸计算契约
 
@@ -78,7 +91,7 @@ wsl -d Ubuntu-24.04 --cd $linuxProject -- $linuxPython -m unittest discover -s t
 wsl -d Ubuntu-24.04 --cd $linuxProject -- $linuxPython tools/export_mlp.py --output-dir data/generated/digits_seed42 --samples 64 --seed 42 --max-iter 500
 ```
 
-Python 基线为 3.12.3，包版本见 [requirements](tools/requirements.txt)。当前环境已可直接运行；新环境重新导出才需要安装该依赖清单。C++ 推理只需现有参考工件，不需要训练或 Python 包；有 Python3 时 CTest 会额外注册仅用标准库的基准驱动测试，无 Python 时为 14 项。D1 的 Python 导出测试单独运行。
+Python 基线为 3.12.3，包版本见 [requirements](tools/requirements.txt)。当前环境已可直接运行；新环境重新导出才需要安装该依赖清单。C++ 推理只需现有参考工件，不需要训练或 Python 包；CTest 共 24 项，其中 5 项使用 Python 标准库验证程序及基准驱动，无 Python 时注册 19 项。D1 的 Python 导出测试单独运行。
 
 ## C++ 构建、测试与 CLI
 
@@ -100,7 +113,7 @@ Release 使用相同的三个构建/测试命令，将 preset 名称改成 `rele
 wsl -d Ubuntu-24.04 --cd $linuxProject --exec /home/qyc/builds/MiniInfer/release/bin/infer_cli --model data/reference --input data/reference/inputs.f32 --batch 64
 ```
 
-同步基准命令与原始测量见 [benchmark](docs/benchmark.md)。当前 benchmark_cli 只测直接 CPU 路径；Runtime 1/2/4 Worker 性能比较属于后续任务。
+同步及 TCP 基准命令与原始测量见 [benchmark](docs/benchmark.md)。`benchmark_cli` 支持直接 CPU 与 Runtime 1/2/4 Worker 对照；`infer_client` 从发送前计时到完整响应校验完成，建连耗时单列。
 
 Windows VS Code 直接打开 Windows 主目录：`Ctrl+Shift+B` 使用默认的 `MiniInfer: build Debug (WSL)`；“终端 → 运行任务”可选择 `MiniInfer: test Debug (WSL)` 或对应 Release 任务。测试任务依次完成配置、构建、CTest；定义见 [.vscode/tasks.json](.vscode/tasks.json)。这些任务使用当前项目的固定 WSL 路径，移动源码目录时需同步修改。
 
@@ -227,3 +240,74 @@ python3 tools/run_runtime_baseline.py --cli "$HOME/builds/MiniInfer/clean-releas
 ```
 
 本机最终干净构建目录为 `/home/qyc/builds/MiniInfer/d15-clean-final-release-20261010`。源码和模型仍在 Windows 主目录，智能体保持 Windows；以上 Linux 命令仅用于构建复现。可选 perf 优化、到达率扫描、GPU / 真实视觉模型属于后续工作，v0.1 不扩展这些范围。
+
+## D16 TCP 使用方式
+
+客户端与服务端先都在 WSL 中运行，默认只监听 `127.0.0.1:9000`。构建沿用上述 presets。在一个 PowerShell 终端启动服务，在另一个终端运行客户端；服务端输出 `Listening on ...` 后即可连接：
+
+```powershell
+$linuxProject = '/mnt/c/Users/ASUS/Documents/MiniInfer'
+wsl -d Ubuntu-24.04 --cd $linuxProject -- /home/qyc/builds/MiniInfer/release/bin/infer_server --model data/reference
+```
+
+```powershell
+$linuxProject = '/mnt/c/Users/ASUS/Documents/MiniInfer'
+wsl -d Ubuntu-24.04 --cd $linuxProject -- /home/qyc/builds/MiniInfer/release/bin/infer_client --input data/reference/inputs.f32 --batch 64 --requests 10
+```
+
+输入必须恰好包含 `batch*64` 个已归一化 little-endian FP32，不再除以 16；Batch 限制 1–256。`--requests` 在一个连接上依次发送独立请求，不重试失败请求；JSON 包含最后一次成功响应的 logits/labels、正式成功/错误计数和 P50/P95/P99。`--warmup N` 默认 0，预热成功后才开始正式请求；预热失败单列并中止。`connect_ms` 不包含在请求延迟中。`attempts=successes+business_errors+protocol_errors+connection_errors+timeouts`，`requests_planned=attempts+skipped`；建连错误另计。无成功样本时百分位为 0，须同时读取 `latency_samples`。
+
+Echo 演示仍是单连接顺序处理，使用相同帧协议，默认接受一个连接后退出；分别在两个终端执行：
+
+```powershell
+wsl -d Ubuntu-24.04 -- /home/qyc/builds/MiniInfer/release/bin/tcp_echo_server --port 9001
+wsl -d Ubuntu-24.04 -- /home/qyc/builds/MiniInfer/release/bin/tcp_echo_client --port 9001 --message hello
+```
+
+| infer_server 配置 | 默认值与含义 |
+|---|---|
+| `--connection-threads` / `--waiting-connections` | 4 / 8，固定连接处理线程及额外等待连接上限 |
+| `--queue-timeout-ms` | 1000，等待连接在出队时检查是否过期 |
+| `--workers` / `--queue-capacity` | 1 / 64，CPU 推理 Worker 及等待计算上限 |
+| `--read-timeout-ms` / `--write-timeout-ms` | 5000 / 5000，每次整帧接收（含空闲等待）/发送的绝对期限 |
+| `--connections` | 0，无限接入直到退出信号；正数限制累计 accept 次数，含容量拒绝 |
+| `--host` / `--port` | IPv4 字面地址 / 端口；服务端端口 0 由系统分配并通过 readiness 输出 |
+
+`infer_client --timeout-ms` 默认 5000，分别限制建连、整帧发送和整帧接收。连接层满直接关闭新连接；只有完整合法推理请求进入已满计算队列才返回 `BUSY`。
+
+| 协议 status | 连接行为 |
+|---|---|
+| 0 成功 | 可继续发送下一个递增 ID |
+| 1 `BAD_REQUEST` | 完整可信请求参数错误，回包后关闭 |
+| 2 `BUSY` | 可继续发送下一独立请求 |
+| 3 `SHUTTING_DOWN` | 回包后关闭 |
+| 4 `INFERENCE_FAILED` | 当前计算失败，连接可继续使用 |
+
+损坏 magic/version/type、全局超长或半帧 EOF 直接关闭连接。客户端退出码：0 全部请求成功，2 CLI 参数错误，3 正式业务响应包含错误，1 加载/连接/协议/超时或预热失败；JSON `status` 为整体成功标志，具体业务状态读 `bad_request/busy/shutting_down/inference_failed`。服务端参数错误退出 2，运行故障退出 1。
+
+对 `infer_server` 按 Ctrl+C 或发 SIGTERM：停止接入、回收等待连接、让接收退出，Runtime 排空已接受计算，限时回包并 join。对端仅关闭写方向仍可收到已完成请求的结果；断连不取消已接受计算。计算 drain 本身没有硬性耗时上限。所有权、停止竞争边界及计数细节见 [架构](docs/architecture.md)。
+
+## D16 验收记录
+
+2026-10-11 在同一 Windows 源码 / WSL 环境按 D16.1→D16.5 顺序实现验收，未修改既有 CPU 算子、模型、Buffer 或 Runtime 实现。
+
+| 阶段 | 实际证据 |
+|---|---|
+| D16.1 | 原始阻塞 Echo、UniqueFd、真实回环/重复连接/fd 回收，阶段测试 [2/2](docs/validation/d16_1_echo.log)；后续 Echo 已升级为共享帧协议 |
+| D16.2 | 固定字节、逐字节/拼帧、短收发、EINTR/EAGAIN、所有半帧 EOF、整帧截止和上限；网络测试 [4/4](docs/validation/d16_2_protocol_io.log) |
+| D16.3 | Batch 1/8/32/64/256 对照参考；运行中删除临时权重仍正确，证明只加载一次；异常后恢复/半关闭，网络测试 [5/5](docs/validation/d16_3_inference.log) |
+| D16.4 | 四客户端 40 个混合 Batch 请求；gate 在 workers=1/queue=1 稳定制造 BUSY 后恢复；active=1/waiting=1 拒绝与过期，网络测试 [6/6](docs/validation/d16_4_concurrency.log) |
+| D16.5 | 空闲/半帧/等待连接退出，执行与排队任务恰好完成一次，4 路并发 shutdown、提交竞争、RST、小缓冲填满至 EAGAIN 的慢读写超时、12 次启停资源回收；完整日志见下方 |
+
+全套 [Debug 24/24](docs/validation/d16_debug.log)、[Release 24/24](docs/validation/d16_release.log)、[ASan+UBSan 24/24](docs/validation/d16_asan_ubsan.log) 通过。TSan 使用进程级 `setarch x86_64 -R`，网络套件 [首次 8/9](docs/validation/d16_tsan.log)：功能路径无竞争报告，但线程回收基线在 TSan 首次启动后台线程前采样。测试改为先启动/join 空线程并确认该线程退出，再采基线，所有严格资源断言保留；[TSan 关闭用例复验通过](docs/validation/d16_tsan_shutdown_recheck.log)。同一测试修改在 [Debug](docs/validation/d16_debug_shutdown_recheck.log)、[Release](docs/validation/d16_release_shutdown_recheck.log)、[ASan+UBSan](docs/validation/d16_asan-ubsan_shutdown_recheck.log) 也各复验通过；其余代码未变，不重复整套检查。
+
+复现完整验收（各命令成功后再执行下一条，其他构建类型先 configure/build 对应 preset）：
+
+```powershell
+wsl -d Ubuntu-24.04 --cd $linuxProject -- ctest --preset debug
+wsl -d Ubuntu-24.04 --cd $linuxProject -- ctest --preset release
+wsl -d Ubuntu-24.04 --cd $linuxProject -- env ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1 ctest --preset asan-ubsan
+wsl -d Ubuntu-24.04 --cd $linuxProject -- setarch x86_64 -R env TSAN_OPTIONS=halt_on_error=1 ctest --preset tsan -R net_
+```
+
+Release 的进程内 Runtime 与 TCP 各完成 15,000 个正式请求，业务/协议/连接错误及超时均为 0；配置、时延口径及原始记录见 [D16 基准](docs/benchmark.md)。Windows→WSL、局域网、epoll、TLS、GPU 与 V1/V2 仍未实施。

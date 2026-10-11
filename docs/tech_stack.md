@@ -1,6 +1,6 @@
 # MiniInfer 技术栈与开发基线
 
-日期：2026-10-10。I-S-O 阶段：O，已完成 D1–D10：固定 CPU MLP、同步 / 异步执行、有界线程池和同步基准。本文落实 [S 阶段策略](MiniInfer_V0.1_ISO_策略.md)，作为编码依据；多生产者压力、TSan 与完整性能对照尚待后续。当前实现与验收记录见 [项目 README](../README.md)。
+实测基线日期：2026-10-10；D16 验收更新：2026-10-11。D1–D15 的 CPU 基础与 [D16 TCP 扩展](D16_TCP_网络编程学习扩展.md)已完成，当前实现与验收记录见 [项目 README](../README.md)。V1 / V2 为待实施计划，新增技术按对应阶段接入。
 
 ## 1. 技术栈总览
 
@@ -29,9 +29,9 @@ C++ 运行部分保持零第三方强依赖；Python 包不进入 C++ 链接或�
 |---|---|---|
 | Ubuntu | 24.04.5 LTS | WSL2 发行版；架构 x86_64，字节序 little |
 | WSL Linux 内核 | 6.18.40.1-microsoft-standard-WSL2 | 实际运行内核，性能报告需记录 |
-| GCC / g++ | 13.3.0 | 默认编译器；D10 Debug / Release 实际构建通过 |
+| GCC / g++ | 13.3.0 | 默认编译器；D15 Debug / Release 实际构建通过 |
 | Clang / clang++ | 18.1.3 | 可用的备用编译器；尚未构建项目 |
-| CMake / CTest | 3.28.3 | 工程与测试已接入；D10 Debug / Release / ASan+UBSan 各 10/10 CTest 通过 |
+| CMake / CTest | 3.28.3 | 工程与测试已接入；D15 Debug / Release / ASan+UBSan 各 15/15 CTest 通过 |
 | Ninja | 1.11.1 | 默认构建执行器 |
 | Git for Windows | 2.54.0.windows.1 | Windows 主目录已初始化 main；统一从 Windows 管理主仓库 |
 | WSL Git | 2.43.0 | 旧 Linux 目录有一个无提交仓库，保留为旧副本 |
@@ -44,7 +44,7 @@ C++ 运行部分保持零第三方强依赖；Python 包不进入 C++ 链接或�
 | threadpoolctl | 3.7.0 | 当前 Python 环境依赖，导入成功 |
 | perf | 未找到 | 可选项，后续按 WSL 内核及权限条件验证，不阻塞首版 |
 
-ASan / UBSan / TSan 的独立配置与生成编译标志已验证，互斥选项的错误路径通过。本轮全套算子、同步 / 异步推理及基础队列测试已在 ASan+UBSan 下启用泄漏检查运行，10/10 通过；TSan 尚未构建或运行。C++ 已对照正式参考 logits / labels，Release 同步基准原始结果已保存。Python 包基线已锁定在 `tools/requirements.txt`，实际环境记录保存在 `data/reference/manifest.json`；版本更新需重新生成并验证参考工件。
+ASan / UBSan / TSan 的独立配置与互斥检查已验证。D15 全套 ASan+UBSan 在启用泄漏检查时 15/15 通过；独立 TSan 在进程级关闭地址随机化后五项相关测试通过，默认布局启动失败与成功复测均有日志。C++ 已对照正式参考 logits / labels，D14 的直接 CPU / Runtime 对照原始结果已保存。以上沿用既有验收记录，不代表新增网络路径已验证。Python 包基线已锁定在 `tools/requirements.txt`，实际环境记录保存在 `data/reference/manifest.json`；版本更新需重新生成并验证参考工件。
 
 ## 3. Windows 编辑、WSL 编译的目录约定
 
@@ -123,17 +123,20 @@ CpuExecutor 已串联两层 Linear / ReLU / Argmax，Workspace 复用隐藏层�
 
 输入错误、QueueFull、已关闭在调用时明确拒绝；已接受任务的执行异常通过对应 future 返回。关闭停止接收、执行完已接受任务、join 后释放资源。运行时完成的含义是拥有的结果可用，后续 GPU 路径仍须遵守这一约定。
 
-## 5. V1 / V2 技术栈如何增加
+## 5. D16 与 V1 / V2 技术栈如何增加
 
 | 阶段 | 在对应阶段增加的技术 | 接入方式与需要验证的事项 |
 |---|---|---|
+| D16：原生 TCP 入门 | Linux socket API、TCP、fd RAII、长度帧、完整收发、poll 截止时间辅助、固定连接线程 | 网络层独立于 CPU 核心；模型只加载一次；连接、缓冲和计算队列分别有界；断连/超时/关闭有测试 |
 | V1：真实模型参考与导出 | PyTorch、ONNX、一个固定轻量视觉模型；图像处理依赖按实际需求选定 | 增加模型专属输入/输出、颜色与布局、预处理和后处理契约；固定工件与参考样本 |
 | V1：CPU 部署 | ONNX Runtime C++ API | 先建立同步 CPU 路径，与 Python 的预处理张量和原始输出对照 |
 | V1：GPU 部署 | TensorRT C++、CUDA Runtime | 独立引擎与执行适配、设备资源 RAII；FP32 / FP16 同步结果与任务指标对照 |
+| V1：视觉网络服务 | 复用 D16 帧协议与连接线程，新增 RGB8 图像请求和检测响应 | 本地正确后再接入；单 GPU 槽位；视觉尺寸/帧上限独立定义；本地和 TCP 基线分别测量 |
+| V2：事件驱动网络 | 非阻塞 socket、单 I/O 线程 epoll LT、有界完成队列、eventfd | 连接代次识别迟到结果；事件循环不等待 future/GPU；收发、计算和结果交付全链路有界 |
 | V2：资源与并发 | 独立执行上下文、设备缓冲、CUDA Stream / Event、GPU 并发槽位 | 每条同时执行的路径隔离可写资源，CPU Worker 数和 GPU 并发数分开配置；future 和关闭等待实际完成 |
 | V2：性能与 CUDA 实践 | Nsight Systems、CUDA 算子、设备计时 | 根据 Profile 完成一次优化实验；分别测量排队、预处理、传输、计算、后处理和端到端耗时 |
 
-这些新增依赖的版本、驱动兼容性、API 行为与可运行性在对应阶段核验并记录。本轮不安装 GPU / 部署依赖，也不为未实现后端写接口代码。将来通过独立、可选的 CMake 目标接入，CPU 核心和 MLP 回归仍应能独立构建。
+D16 已用系统 API 和标准库实现，不增加第三方网络库；其他为待实施技术。GPU / 部署依赖的版本、驱动兼容性、API 行为与可运行性在 V1 / V2 核验并记录。网络是独立 CMake 目标，CPU 核心和 MLP 回归可独立构建；epoll 不属于 D16 实现。
 
 固定 MLP 的输入和 `.f32` 工件继续保留。真实视觉模型使用新契约；主机 TensorView 不承载可直接解引用的设备地址。共用执行接口在第二种实际执行路径出现时提取，避免提前设计通用框架。
 
@@ -143,4 +146,4 @@ CpuExecutor 已串联两层 Linear / ReLU / Argmax，Workspace 复用隐藏层�
 
 D1 的四项导出测试及同环境逐字节复现保留原验收证据；本轮不重训。最终 Debug / Release / ASan+UBSan 各 15/15 CTest 通过，独立 TSan 用进程级 setarch 关闭地址随机化后五项相关测试通过；默认布局启动失败及成功复测日志均保存。D14 保存 36 次独立进程的直接 CPU / Runtime 1/2/4 Worker 结果，RSS 与高水位分别解释。Python3 可选注册驱动测试；无 Python 时 CTest 为 14 项。
 
-当前没有安装 perf，也没有做可选热点优化；V1 / V2 依赖仍在对应阶段核验。当前 API / 所有权见 [architecture](architecture.md)，验收及复现命令见 [README](../README.md)，实际测量与限制见 [benchmark](benchmark.md)。D10 交接与 I/S 规划保留为历史材料，不能替代当前证据。
+当前没有安装 perf，也没有做可选热点优化；D16 原生 TCP 已实现，V1 / V2 依赖仍在对应阶段核验。当前 API / 所有权见 [architecture](architecture.md)，验收及复现命令见 [README](../README.md)，实际测量与限制见 [benchmark](benchmark.md)。D10 交接及 I/S 文档中的历史快照不能替代当前证据。
