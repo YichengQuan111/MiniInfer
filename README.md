@@ -1,5 +1,19 @@
 # MiniInfer
 
+**当前版本：V1.6，深度模型部署与同步 C++ SDK 已完成。** Depth Anything V2 Small 固定 B=1、518 输入，支持 ORT CPU FP32、TensorRT FP32 与通过精度验收的混合 FP16；提供 owning 输入/输出、单 GPU 槽位、数量/字节限流、本地 CLI、RGB8/FP32 TCP 与可重建模型包。
+
+全新 Release **34/34**、CPU-only Debug **28/28**；安装后的独立 SDK 示例与重建 engine 回归通过。九组性能基线各重复三次，共 **6,732 次请求、零错误**；版本按 V1.1—V1.6 分别提交。V2 的异步、多槽位、CUDA 优化和长稳仍待实施。
+
+- [构建、模型契约与部署](docs/depth_deployment.md)
+- [分版本验收与证据](docs/depth_validation.md)
+- [数值精度与混合 FP16 取舍](docs/depth_accuracy.md)
+- [性能实测及原始数据](docs/depth_performance.md)
+- [TCP 协议](docs/depth_tcp.md)、[外部 SDK 示例](examples/depth_sdk/README.md)、[部署排查](docs/depth_troubleshooting.md)
+
+## V0.1 / D16 历史记录
+
+以下 CPU/D16 状态和“后续计划”保留为 V1 实施前的历史快照；当前 V1 进度以以上入口为准。
+
 MiniInfer v0.1 是一个面向 Linux / WSL2 的 C++17 CPU 推理项目：固定 `64 → 128 → 10` MLP，实现标量 FP32 算子、资源所有权、有界任务队列与安全关闭。完整范围见 [项目开发规范](<MiniInfer 项目说明与 AI Agent 开发规范.md>)。
 
 当前完成 **D1–D15 的 CPU 基础及 D16 TCP 扩展**：同步 / 异步推理、有界计算与连接队列、远程 MLP、关闭竞争、阶段计时及 Release 对照。Debug / Release / ASan+UBSan 各 **24/24 CTest 通过**；独立 TSan 的 9 项网络测试均通过（关闭测试修正线程运行时基线后单项复验，详见文末）。D13 的 perf 未安装，未实施可选优化。

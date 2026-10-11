@@ -1,0 +1,193 @@
+{
+  "command": [
+    "/home/qyc/builds/MiniInfer/v16-clean/bin/depth_benchmark",
+    "--mode",
+    "tcp",
+    "--backend",
+    "ort",
+    "--image",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+    "--iterations",
+    "100",
+    "--warmup",
+    "5",
+    "--output",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/v16_baseline/ort-fp32_tcp/measurements/repeat_02/raw.csv",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "36761",
+    "--timeout-ms",
+    "30000"
+  ],
+  "pid": 3173,
+  "server_pid": 2756,
+  "process_to_ready_ms": 153.7135749999834,
+  "process_summary": {
+    "event": "summary",
+    "startup_ms": 124.405762,
+    "connect_ms": 0.074186,
+    "first_ms": 309.883959,
+    "warmup": 5,
+    "iterations": 100,
+    "counts": {
+      "busy": 0,
+      "closed": 0,
+      "failure": 0,
+      "succeeded": 106,
+      "timeout": 0
+    },
+    "steady_counts": {
+      "busy": 0,
+      "closed": 0,
+      "failure": 0,
+      "succeeded": 100,
+      "timeout": 0
+    },
+    "elapsed_steady_ms": 32397.3511
+  },
+  "statistics": {
+    "attempt_counts": {
+      "succeeded": 106,
+      "busy": 0,
+      "closed": 0,
+      "failure": 0,
+      "timeout": 0
+    },
+    "phase_counts": {
+      "first": {
+        "succeeded": 1,
+        "busy": 0,
+        "closed": 0,
+        "failure": 0,
+        "timeout": 0
+      },
+      "warmup": {
+        "succeeded": 5,
+        "busy": 0,
+        "closed": 0,
+        "failure": 0,
+        "timeout": 0
+      },
+      "steady": {
+        "succeeded": 100,
+        "busy": 0,
+        "closed": 0,
+        "failure": 0,
+        "timeout": 0
+      }
+    },
+    "successful_steady_latency": {
+      "samples": 100,
+      "p50_ms": 323.45813150000004,
+      "p95_ms": 343.86565945,
+      "p99_ms": 346.76438085
+    },
+    "successful_throughput_per_second": 3.0866721075847465,
+    "elapsed_steady_ms": 32397.3511,
+    "device_successful_steady": {
+      "h2d_ms": {
+        "samples": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null
+      },
+      "compute_ms": {
+        "samples": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null
+      },
+      "d2h_ms": {
+        "samples": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null
+      }
+    }
+  },
+  "memory": {
+    "client:rss_kib": {
+      "whole": {
+        "samples": 1698,
+        "peak": 183156
+      },
+      "startup": {
+        "samples": 8,
+        "peak": 180300
+      },
+      "first": {
+        "samples": 15,
+        "peak": 180428
+      },
+      "warmup": {
+        "samples": 80,
+        "peak": 183156
+      },
+      "steady": {
+        "samples": 1594,
+        "peak": 183156
+      },
+      "teardown": {
+        "samples": 1,
+        "peak": 181104
+      }
+    },
+    "gpu_device_0_total:used_mib": {
+      "whole": {
+        "samples": 170,
+        "peak": 680.0
+      },
+      "startup": {
+        "samples": 0,
+        "peak": null
+      },
+      "first": {
+        "samples": 2,
+        "peak": 680.0
+      },
+      "warmup": {
+        "samples": 8,
+        "peak": 680.0
+      },
+      "steady": {
+        "samples": 160,
+        "peak": 680.0
+      },
+      "teardown": {
+        "samples": 0,
+        "peak": null
+      }
+    },
+    "server:rss_kib": {
+      "whole": {
+        "samples": 1699,
+        "peak": 544044
+      },
+      "startup": {
+        "samples": 8,
+        "peak": 544044
+      },
+      "first": {
+        "samples": 15,
+        "peak": 544044
+      },
+      "warmup": {
+        "samples": 80,
+        "peak": 544044
+      },
+      "steady": {
+        "samples": 1594,
+        "peak": 544044
+      },
+      "teardown": {
+        "samples": 2,
+        "peak": 544044
+      }
+    }
+  },
+  "errors": [],
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "{\"event\":\"ready\",\"startup_ms\":124.405762,\"connect_ms\":0.074186000000000002,\"main_to_ready_ms\":124.512513}\n{\"event\":\"phase\",\"phase\":\"first\",\"main_ms\":124.529415}\n{\"event\":\"phase\",\"phase\":\"warmup\",\"main_ms\":434.49341800000002}\n{\"event\":\"phase\",\"phase\":\"steady\",\"main_ms\":2047.782958}\n{\"event\":\"summary\",\"startup_ms\":124.405762,\"connect_ms\":0.074186000000000002,\"first_ms\":309.883959,\"warmup\":5,\"iterations\":100,\"counts\":{\"busy\":0,\"closed\":0,\"failure\":0,\"succeeded\":106,\"timeout\":0},\"steady_counts\":{\"busy\":0,\"closed\":0,\"failure\":0,\"succeeded\":100,\"timeout\":0},\"elapsed_steady_ms\":32397.3511}\n"
+}

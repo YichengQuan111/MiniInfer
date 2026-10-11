@@ -31,3 +31,16 @@ write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/MiniInferConfigVer
 install(EXPORT MiniInferTargets NAMESPACE miniinfer:: DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MiniInfer)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/MiniInferConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/MiniInferConfigVersion.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MiniInfer)
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/examples/depth_sdk"
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/MiniInfer/examples)
+install(FILES "${PROJECT_SOURCE_DIR}/data/depth/contract.json"
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/MiniInfer)
+install(FILES "${PROJECT_SOURCE_DIR}/docs/depth_deployment.md"
+    "${PROJECT_SOURCE_DIR}/docs/depth_tcp.md" "${PROJECT_SOURCE_DIR}/docs/depth_benchmark_method.md"
+    "${PROJECT_SOURCE_DIR}/docs/depth_accuracy.md" "${PROJECT_SOURCE_DIR}/docs/depth_validation.md"
+    "${PROJECT_SOURCE_DIR}/docs/depth_performance.md" "${PROJECT_SOURCE_DIR}/docs/depth_troubleshooting.md"
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/MiniInfer/docs)
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/depth/"
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/MiniInfer/data/depth)
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/docs/validation/"
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/MiniInfer/docs/validation)

@@ -1,0 +1,941 @@
+{
+  "scope": "min/max across three independent per-repeat statistics; not pooled percentiles",
+  "suite_passed": true,
+  "attempt_counts": {
+    "succeeded": 6732,
+    "busy": 0,
+    "closed": 0,
+    "failure": 0,
+    "timeout": 0
+  },
+  "cases": [
+    {
+      "case": "ort-fp32_raw",
+      "model_hash": "a7d66386939681431d3b7c407b897d00cf205c44c607a33189eb4238bb7c9f80",
+      "p50_ms": [
+        321.86364349999997,
+        335.207923
+      ],
+      "p95_ms": [
+        338.1759714,
+        347.5139493
+      ],
+      "p99_ms": [
+        340.95455271000003,
+        361.33439820000007
+      ],
+      "qps": [
+        2.9812807614563703,
+        3.1582281660161087
+      ],
+      "startup_ms": [
+        1646.20148,
+        1971.368789
+      ],
+      "launch_ready_ms": [
+        1696.3265309999542,
+        2035.3136319999976
+      ],
+      "first_ms_each": [
+        323.971358,
+        340.445119,
+        364.477695
+      ],
+      "gpu_total_mib": [
+        658.0,
+        749.0
+      ],
+      "gpu_startup_mib": [
+        628.0,
+        716.0
+      ],
+      "gpu_steady_mib": [
+        658.0,
+        749.0
+      ],
+      "build_seconds": null,
+      "rss_startup_mib": [
+        402.265625,
+        412.10546875
+      ],
+      "rss_first_mib": [
+        495.36328125,
+        524.21484375
+      ],
+      "rss_steady_mib": [
+        552.97265625,
+        559.92578125
+      ],
+      "rss_whole_mib": [
+        552.97265625,
+        559.92578125
+      ]
+    },
+    {
+      "case": "ort-fp32_sdk",
+      "model_hash": "a7d66386939681431d3b7c407b897d00cf205c44c607a33189eb4238bb7c9f80",
+      "p50_ms": [
+        324.45221549999997,
+        327.5830375
+      ],
+      "p95_ms": [
+        338.38612485,
+        344.24368705
+      ],
+      "p99_ms": [
+        342.14582165,
+        351.18290236
+      ],
+      "qps": [
+        3.0607877554857765,
+        3.0970276732509716
+      ],
+      "startup_ms": [
+        6473.471783,
+        7789.251969
+      ],
+      "launch_ready_ms": [
+        6519.192301999965,
+        7820.209736000038
+      ],
+      "first_ms_each": [
+        341.827588,
+        322.831924,
+        331.465905
+      ],
+      "gpu_total_mib": [
+        700.0,
+        723.0
+      ],
+      "gpu_startup_mib": [
+        700.0,
+        721.0
+      ],
+      "gpu_steady_mib": [
+        698.0,
+        723.0
+      ],
+      "build_seconds": null,
+      "rss_startup_mib": [
+        360.1796875,
+        371.078125
+      ],
+      "rss_first_mib": [
+        482.921875,
+        490.55078125
+      ],
+      "rss_steady_mib": [
+        529.328125,
+        531.3203125
+      ],
+      "rss_whole_mib": [
+        529.328125,
+        531.3203125
+      ]
+    },
+    {
+      "case": "ort-fp32_tcp",
+      "model_hash": "a7d66386939681431d3b7c407b897d00cf205c44c607a33189eb4238bb7c9f80",
+      "p50_ms": [
+        322.3471935,
+        324.8121195
+      ],
+      "p95_ms": [
+        338.45943095,
+        344.23330675
+      ],
+      "p99_ms": [
+        346.76438085,
+        348.31694188
+      ],
+      "qps": [
+        3.0712801656792013,
+        3.096141729088812
+      ],
+      "startup_ms": [
+        72.071985,
+        124.405762
+      ],
+      "launch_ready_ms": [
+        105.58580999997957,
+        153.7135749999834
+      ],
+      "first_ms_each": [
+        352.860227,
+        309.883959,
+        315.135338
+      ],
+      "gpu_total_mib": [
+        680.0,
+        684.0
+      ],
+      "gpu_startup_mib": [
+        null,
+        null
+      ],
+      "gpu_steady_mib": [
+        674.0,
+        684.0
+      ],
+      "build_seconds": null,
+      "rss_startup_mib": [
+        378.47265625,
+        531.29296875
+      ],
+      "rss_first_mib": [
+        488.4296875,
+        531.29296875
+      ],
+      "rss_steady_mib": [
+        531.29296875,
+        531.29296875
+      ],
+      "rss_whole_mib": [
+        531.29296875,
+        531.29296875
+      ],
+      "tcp_client_rss_mib": [
+        178.86328125,
+        178.90234375
+      ],
+      "server": {
+        "pid": 2756,
+        "ready": {
+          "event": "ready",
+          "pid": 2756,
+          "port": 36761,
+          "startup_ms": 6789.24,
+          "backend": "ort",
+          "precision": "fp32"
+        },
+        "process_to_ready_ms": 6843.456325000034,
+        "returncode": 0,
+        "events": [
+          {
+            "event": "ready",
+            "pid": 2756,
+            "port": 36761,
+            "startup_ms": 6789.24,
+            "backend": "ort",
+            "precision": "fp32"
+          },
+          {
+            "event": "stopped",
+            "requests": 318,
+            "responses": 318,
+            "accepted": 3,
+            "completed": 3,
+            "active": 0,
+            "pending": 0,
+            "rejected": 0,
+            "expired": 0,
+            "discarded": 0,
+            "bad_requests": 0,
+            "protocol_errors": 0,
+            "session_failures": 0,
+            "accept_errors": 0,
+            "busy": 0,
+            "inference_failures": 0,
+            "io_failures": 0,
+            "network_bytes": 0,
+            "network_peak_bytes": 10840064,
+            "network_inflight": 0,
+            "sdk_bytes": 0,
+            "sdk_inflight": 0,
+            "sdk_queued": 0,
+            "sdk_executing": 0,
+            "sdk_accepted": 318,
+            "sdk_succeeded": 318,
+            "sdk_failed": 0,
+            "sdk_delivered": 318,
+            "sdk_rejected_busy": 0,
+            "sdk_rejected_closed": 0,
+            "sdk_rejected_invalid": 0,
+            "sdk_accepting": false,
+            "sdk_shutdown_complete": true
+          }
+        ],
+        "stopped": {
+          "event": "stopped",
+          "requests": 318,
+          "responses": 318,
+          "accepted": 3,
+          "completed": 3,
+          "active": 0,
+          "pending": 0,
+          "rejected": 0,
+          "expired": 0,
+          "discarded": 0,
+          "bad_requests": 0,
+          "protocol_errors": 0,
+          "session_failures": 0,
+          "accept_errors": 0,
+          "busy": 0,
+          "inference_failures": 0,
+          "io_failures": 0,
+          "network_bytes": 0,
+          "network_peak_bytes": 10840064,
+          "network_inflight": 0,
+          "sdk_bytes": 0,
+          "sdk_inflight": 0,
+          "sdk_queued": 0,
+          "sdk_executing": 0,
+          "sdk_accepted": 318,
+          "sdk_succeeded": 318,
+          "sdk_failed": 0,
+          "sdk_delivered": 318,
+          "sdk_rejected_busy": 0,
+          "sdk_rejected_closed": 0,
+          "sdk_rejected_invalid": 0,
+          "sdk_accepting": false,
+          "sdk_shutdown_complete": true
+        }
+      },
+      "server_startup_memory": {
+        "metrics": {
+          "server:rss_kib": {
+            "samples": 337,
+            "observed_peak": 351084
+          },
+          "gpu_device_0_total:used_mib": {
+            "samples": 26,
+            "observed_peak": 684.0
+          }
+        },
+        "gpu_tool_available": true,
+        "phase_end": "server ready stdout receipt",
+        "rss_interval_ms": 20,
+        "gpu_target_interval_ms": 200,
+        "gpu_scope": "device 0 total used MiB; includes background, not server allocation"
+      }
+    },
+    {
+      "case": "trt-fp32_raw",
+      "model_hash": "eb9fbd41e015f4006918a2503522c054aabcd32d9b0abcfc37a98462e51759ab",
+      "p50_ms": [
+        12.655817500000001,
+        12.768836499999999
+      ],
+      "p95_ms": [
+        12.9039478,
+        13.0123936
+      ],
+      "p99_ms": [
+        12.97787533,
+        13.08187967
+      ],
+      "qps": [
+        77.7325646775968,
+        79.15421782667721
+      ],
+      "startup_ms": [
+        2253.532457,
+        3010.40428
+      ],
+      "launch_ready_ms": [
+        2288.818257999992,
+        3042.2607419999395
+      ],
+      "first_ms_each": [
+        59.558024,
+        77.277741,
+        52.204394
+      ],
+      "gpu_total_mib": [
+        1131.0,
+        1131.0
+      ],
+      "gpu_startup_mib": [
+        682.0,
+        971.0
+      ],
+      "gpu_steady_mib": [
+        1131.0,
+        1131.0
+      ],
+      "build_seconds": 15.608645,
+      "rss_startup_mib": [
+        459.734375,
+        466.5625
+      ],
+      "rss_first_mib": [
+        450.25,
+        465.5859375
+      ],
+      "rss_steady_mib": [
+        466.734375,
+        467.34765625
+      ],
+      "rss_whole_mib": [
+        467.1171875,
+        494.9140625
+      ],
+      "device_p50_ms": {
+        "h2d_ms": [
+          0.26865600049495697,
+          0.27406400442123413
+        ],
+        "compute_ms": [
+          11.513311862945557,
+          11.580528259277344
+        ],
+        "d2h_ms": [
+          0.12267200276255608,
+          0.13257599622011185
+        ]
+      }
+    },
+    {
+      "case": "trt-fp32_sdk",
+      "model_hash": "eb9fbd41e015f4006918a2503522c054aabcd32d9b0abcfc37a98462e51759ab",
+      "p50_ms": [
+        15.521385500000001,
+        16.630164999999998
+      ],
+      "p95_ms": [
+        17.02931325,
+        17.14452145
+      ],
+      "p99_ms": [
+        17.20032716,
+        17.777311289999997
+      ],
+      "qps": [
+        59.99197872449106,
+        63.10656960578679
+      ],
+      "startup_ms": [
+        4966.748223,
+        6556.982759
+      ],
+      "launch_ready_ms": [
+        5006.395716000043,
+        6591.34240100002
+      ],
+      "first_ms_each": [
+        60.806397,
+        65.993864,
+        62.081431
+      ],
+      "gpu_total_mib": [
+        1131.0,
+        1131.0
+      ],
+      "gpu_startup_mib": [
+        683.0,
+        873.0
+      ],
+      "gpu_steady_mib": [
+        1131.0,
+        1131.0
+      ],
+      "build_seconds": 15.608645,
+      "rss_startup_mib": [
+        455.796875,
+        462.7265625
+      ],
+      "rss_first_mib": [
+        459.0703125,
+        463.875
+      ],
+      "rss_steady_mib": [
+        473.9453125,
+        473.98046875
+      ],
+      "rss_whole_mib": [
+        473.9453125,
+        526.68359375
+      ]
+    },
+    {
+      "case": "trt-fp32_tcp",
+      "model_hash": "eb9fbd41e015f4006918a2503522c054aabcd32d9b0abcfc37a98462e51759ab",
+      "p50_ms": [
+        17.604819,
+        18.6428815
+      ],
+      "p95_ms": [
+        19.15590015,
+        19.5289559
+      ],
+      "p99_ms": [
+        19.447685079999996,
+        20.535061510000002
+      ],
+      "qps": [
+        53.883012489069834,
+        55.83789653947397
+      ],
+      "startup_ms": [
+        73.226603,
+        79.632625
+      ],
+      "launch_ready_ms": [
+        109.79618400006075,
+        120.55521900003896
+      ],
+      "first_ms_each": [
+        73.841883,
+        20.447939,
+        19.477218
+      ],
+      "gpu_total_mib": [
+        1131.0,
+        1131.0
+      ],
+      "gpu_startup_mib": [
+        1129.0,
+        1131.0
+      ],
+      "gpu_steady_mib": [
+        1131.0,
+        1131.0
+      ],
+      "build_seconds": 15.608645,
+      "rss_startup_mib": [
+        366.49609375,
+        474.10546875
+      ],
+      "rss_first_mib": [
+        463.4375,
+        474.10546875
+      ],
+      "rss_steady_mib": [
+        474.09765625,
+        474.10546875
+      ],
+      "rss_whole_mib": [
+        474.09765625,
+        474.10546875
+      ],
+      "tcp_client_rss_mib": [
+        178.87890625,
+        238.6953125
+      ],
+      "server": {
+        "pid": 4466,
+        "ready": {
+          "event": "ready",
+          "pid": 4466,
+          "port": 33935,
+          "startup_ms": 8277.83,
+          "backend": "trt",
+          "precision": "fp32"
+        },
+        "process_to_ready_ms": 8318.312709999987,
+        "returncode": 0,
+        "events": [
+          {
+            "event": "ready",
+            "pid": 4466,
+            "port": 33935,
+            "startup_ms": 8277.83,
+            "backend": "trt",
+            "precision": "fp32"
+          },
+          {
+            "event": "stopped",
+            "requests": 963,
+            "responses": 963,
+            "accepted": 3,
+            "completed": 3,
+            "active": 0,
+            "pending": 0,
+            "rejected": 0,
+            "expired": 0,
+            "discarded": 0,
+            "bad_requests": 0,
+            "protocol_errors": 0,
+            "session_failures": 0,
+            "accept_errors": 0,
+            "busy": 0,
+            "inference_failures": 0,
+            "io_failures": 0,
+            "network_bytes": 0,
+            "network_peak_bytes": 10840064,
+            "network_inflight": 0,
+            "sdk_bytes": 0,
+            "sdk_inflight": 0,
+            "sdk_queued": 0,
+            "sdk_executing": 0,
+            "sdk_accepted": 963,
+            "sdk_succeeded": 963,
+            "sdk_failed": 0,
+            "sdk_delivered": 963,
+            "sdk_rejected_busy": 0,
+            "sdk_rejected_closed": 0,
+            "sdk_rejected_invalid": 0,
+            "sdk_accepting": false,
+            "sdk_shutdown_complete": true
+          }
+        ],
+        "stopped": {
+          "event": "stopped",
+          "requests": 963,
+          "responses": 963,
+          "accepted": 3,
+          "completed": 3,
+          "active": 0,
+          "pending": 0,
+          "rejected": 0,
+          "expired": 0,
+          "discarded": 0,
+          "bad_requests": 0,
+          "protocol_errors": 0,
+          "session_failures": 0,
+          "accept_errors": 0,
+          "busy": 0,
+          "inference_failures": 0,
+          "io_failures": 0,
+          "network_bytes": 0,
+          "network_peak_bytes": 10840064,
+          "network_inflight": 0,
+          "sdk_bytes": 0,
+          "sdk_inflight": 0,
+          "sdk_queued": 0,
+          "sdk_executing": 0,
+          "sdk_accepted": 963,
+          "sdk_succeeded": 963,
+          "sdk_failed": 0,
+          "sdk_delivered": 963,
+          "sdk_rejected_busy": 0,
+          "sdk_rejected_closed": 0,
+          "sdk_rejected_invalid": 0,
+          "sdk_accepting": false,
+          "sdk_shutdown_complete": true
+        }
+      },
+      "server_startup_memory": {
+        "metrics": {
+          "server:rss_kib": {
+            "samples": 410,
+            "observed_peak": 466800
+          },
+          "gpu_device_0_total:used_mib": {
+            "samples": 38,
+            "observed_peak": 859.0
+          }
+        },
+        "gpu_tool_available": true,
+        "phase_end": "server ready stdout receipt",
+        "rss_interval_ms": 20,
+        "gpu_target_interval_ms": 200,
+        "gpu_scope": "device 0 total used MiB; includes background, not server allocation"
+      }
+    },
+    {
+      "case": "trt-fp16_raw",
+      "model_hash": "d1ad5d6ec55508a1e679d48b964f4aee597a3455a50d541c898177039e314815",
+      "p50_ms": [
+        10.970331,
+        11.93485
+      ],
+      "p95_ms": [
+        12.048467800000001,
+        12.24830995
+      ],
+      "p99_ms": [
+        12.164337859999998,
+        12.34037058
+      ],
+      "qps": [
+        83.05446792153856,
+        88.51246567124787
+      ],
+      "startup_ms": [
+        2295.052229,
+        3225.94961
+      ],
+      "launch_ready_ms": [
+        2323.8407869999946,
+        3270.2906979999398
+      ],
+      "first_ms_each": [
+        56.925504,
+        55.214956,
+        56.550344
+      ],
+      "gpu_total_mib": [
+        1127.0,
+        1127.0
+      ],
+      "gpu_startup_mib": [
+        961.0,
+        1121.0
+      ],
+      "gpu_steady_mib": [
+        1127.0,
+        1127.0
+      ],
+      "build_seconds": 151.955208,
+      "rss_startup_mib": [
+        456.33203125,
+        458.6875
+      ],
+      "rss_first_mib": [
+        473.48828125,
+        477.86328125
+      ],
+      "rss_steady_mib": [
+        482.2578125,
+        482.3046875
+      ],
+      "rss_whole_mib": [
+        482.2578125,
+        531.2578125
+      ],
+      "device_p50_ms": {
+        "h2d_ms": [
+          0.2672799974679947,
+          0.2690400034189224
+        ],
+        "compute_ms": [
+          10.71284818649292,
+          10.781792163848877
+        ],
+        "d2h_ms": [
+          0.11648000031709671,
+          0.1300159990787506
+        ]
+      }
+    },
+    {
+      "case": "trt-fp16_sdk",
+      "model_hash": "d1ad5d6ec55508a1e679d48b964f4aee597a3455a50d541c898177039e314815",
+      "p50_ms": [
+        14.9902085,
+        15.744642
+      ],
+      "p95_ms": [
+        16.290061650000002,
+        16.465431650000003
+      ],
+      "p99_ms": [
+        16.717228770000002,
+        17.817934389999994
+      ],
+      "qps": [
+        63.40668687799055,
+        65.76541337888138
+      ],
+      "startup_ms": [
+        6379.283489,
+        8384.714829
+      ],
+      "launch_ready_ms": [
+        6415.782676999925,
+        8413.433382999983
+      ],
+      "first_ms_each": [
+        61.788779,
+        69.341643,
+        67.095677
+      ],
+      "gpu_total_mib": [
+        1127.0,
+        1127.0
+      ],
+      "gpu_startup_mib": [
+        674.0,
+        865.0
+      ],
+      "gpu_steady_mib": [
+        1127.0,
+        1127.0
+      ],
+      "build_seconds": 151.955208,
+      "rss_startup_mib": [
+        454.328125,
+        460.046875
+      ],
+      "rss_first_mib": [
+        474.85546875,
+        478.1484375
+      ],
+      "rss_steady_mib": [
+        491.48828125,
+        491.53515625
+      ],
+      "rss_whole_mib": [
+        491.53125,
+        543.734375
+      ]
+    },
+    {
+      "case": "trt-fp16_tcp",
+      "model_hash": "d1ad5d6ec55508a1e679d48b964f4aee597a3455a50d541c898177039e314815",
+      "p50_ms": [
+        16.865986,
+        17.882766
+      ],
+      "p95_ms": [
+        18.43796945,
+        18.71136065
+      ],
+      "p99_ms": [
+        18.95456654,
+        19.72201655
+      ],
+      "qps": [
+        55.54340369769387,
+        58.14606138470978
+      ],
+      "startup_ms": [
+        60.46529,
+        143.084361
+      ],
+      "launch_ready_ms": [
+        87.49157199986257,
+        194.4818709998799
+      ],
+      "first_ms_each": [
+        70.593539,
+        19.868611,
+        20.983129
+      ],
+      "gpu_total_mib": [
+        1127.0,
+        1127.0
+      ],
+      "gpu_startup_mib": [
+        1127.0,
+        1127.0
+      ],
+      "gpu_steady_mib": [
+        1127.0,
+        1127.0
+      ],
+      "build_seconds": 151.955208,
+      "rss_startup_mib": [
+        370.76171875,
+        491.72265625
+      ],
+      "rss_first_mib": [
+        475.03125,
+        491.72265625
+      ],
+      "rss_steady_mib": [
+        491.7109375,
+        491.72265625
+      ],
+      "rss_whole_mib": [
+        491.7109375,
+        491.72265625
+      ],
+      "tcp_client_rss_mib": [
+        178.86328125,
+        178.87890625
+      ],
+      "server": {
+        "pid": 5379,
+        "ready": {
+          "event": "ready",
+          "pid": 5379,
+          "port": 32907,
+          "startup_ms": 8712.04,
+          "backend": "trt",
+          "precision": "fp16"
+        },
+        "process_to_ready_ms": 8750.609203000067,
+        "returncode": 0,
+        "events": [
+          {
+            "event": "ready",
+            "pid": 5379,
+            "port": 32907,
+            "startup_ms": 8712.04,
+            "backend": "trt",
+            "precision": "fp16"
+          },
+          {
+            "event": "stopped",
+            "requests": 963,
+            "responses": 963,
+            "accepted": 3,
+            "completed": 3,
+            "active": 0,
+            "pending": 0,
+            "rejected": 0,
+            "expired": 0,
+            "discarded": 0,
+            "bad_requests": 0,
+            "protocol_errors": 0,
+            "session_failures": 0,
+            "accept_errors": 0,
+            "busy": 0,
+            "inference_failures": 0,
+            "io_failures": 0,
+            "network_bytes": 0,
+            "network_peak_bytes": 10840064,
+            "network_inflight": 0,
+            "sdk_bytes": 0,
+            "sdk_inflight": 0,
+            "sdk_queued": 0,
+            "sdk_executing": 0,
+            "sdk_accepted": 963,
+            "sdk_succeeded": 963,
+            "sdk_failed": 0,
+            "sdk_delivered": 963,
+            "sdk_rejected_busy": 0,
+            "sdk_rejected_closed": 0,
+            "sdk_rejected_invalid": 0,
+            "sdk_accepting": false,
+            "sdk_shutdown_complete": true
+          }
+        ],
+        "stopped": {
+          "event": "stopped",
+          "requests": 963,
+          "responses": 963,
+          "accepted": 3,
+          "completed": 3,
+          "active": 0,
+          "pending": 0,
+          "rejected": 0,
+          "expired": 0,
+          "discarded": 0,
+          "bad_requests": 0,
+          "protocol_errors": 0,
+          "session_failures": 0,
+          "accept_errors": 0,
+          "busy": 0,
+          "inference_failures": 0,
+          "io_failures": 0,
+          "network_bytes": 0,
+          "network_peak_bytes": 10840064,
+          "network_inflight": 0,
+          "sdk_bytes": 0,
+          "sdk_inflight": 0,
+          "sdk_queued": 0,
+          "sdk_executing": 0,
+          "sdk_accepted": 963,
+          "sdk_succeeded": 963,
+          "sdk_failed": 0,
+          "sdk_delivered": 963,
+          "sdk_rejected_busy": 0,
+          "sdk_rejected_closed": 0,
+          "sdk_rejected_invalid": 0,
+          "sdk_accepting": false,
+          "sdk_shutdown_complete": true
+        }
+      },
+      "server_startup_memory": {
+        "metrics": {
+          "server:rss_kib": {
+            "samples": 432,
+            "observed_peak": 461428
+          },
+          "gpu_device_0_total:used_mib": {
+            "samples": 35,
+            "observed_peak": 961.0
+          }
+        },
+        "gpu_tool_available": true,
+        "phase_end": "server ready stdout receipt",
+        "rss_interval_ms": 20,
+        "gpu_target_interval_ms": 200,
+        "gpu_scope": "device 0 total used MiB; includes background, not server allocation"
+      }
+    }
+  ]
+}

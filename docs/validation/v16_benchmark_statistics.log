@@ -1,0 +1,10 @@
+test_counts_first_and_elapsed_must_match (test_depth_benchmark.DepthBenchmarkTests.test_counts_first_and_elapsed_must_match) ... ok
+test_linear_percentiles_and_empty (test_depth_benchmark.DepthBenchmarkTests.test_linear_percentiles_and_empty) ... ok
+test_malformed_csv_rejected (test_depth_benchmark.DepthBenchmarkTests.test_malformed_csv_rejected) ... ok
+test_phase_boundaries_and_memory_scopes (test_depth_benchmark.DepthBenchmarkTests.test_phase_boundaries_and_memory_scopes) ... ok
+test_success_only_and_whole_steady_throughput (test_depth_benchmark.DepthBenchmarkTests.test_success_only_and_whole_steady_throughput) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.034s
+
+OK

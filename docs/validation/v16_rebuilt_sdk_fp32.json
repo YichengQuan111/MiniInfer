@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "errors": [],
+  "command": [
+    "/home/qyc/builds/MiniInfer/v16-clean/bin/depth_sdk_cli",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/rebuild-v16/fp32-package",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/rebuild-v16/fp32-package/golden/original.ppm",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/rebuild-v16/fp32-sdk/sdk.f32"
+  ],
+  "returncode": 0,
+  "stdout": "1024x683 relative depth, trt/fp32, delivered=1\n",
+  "stderr": "",
+  "cli_sha256": "d7f4f9191333cfde5e4c4daed4691ff4cae0f6f252cc1fd84175740f91506b0a",
+  "package_sha256": "c64cef22cfbee7cd75aa8aeb56b2d5f44edaea4f11f2bb888dd98afcc6884ddc",
+  "numerical": {
+    "count": 699392,
+    "mae": 9.87217695442728e-07,
+    "rmse": 1.325236345028698e-06,
+    "max_abs": 2.47955322265625e-05,
+    "p99_abs": 4.291534423828125e-06,
+    "nonfinite_count": 0,
+    "violations": 0,
+    "violation_fraction": 0.0
+  },
+  "python_ordering": {
+    "correct": 0,
+    "total": 1,
+    "ignored": 0,
+    "ties": 0,
+    "accuracy": 0.0
+  },
+  "sdk_ordering": {
+    "correct": 0,
+    "total": 1,
+    "ignored": 0,
+    "ties": 0,
+    "accuracy": 0.0
+  },
+  "output_sha256": "5f515c4c45dd54a4cda60303c48ebf2b0fb95872d31baa81c9cd6b108a07664a"
+}

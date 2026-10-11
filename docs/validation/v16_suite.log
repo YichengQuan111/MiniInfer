@@ -1,0 +1,9 @@
+{"case": "ort-fp32_raw", "passed": true, "errors": []}
+{"case": "ort-fp32_sdk", "passed": true, "errors": []}
+{"case": "ort-fp32_tcp", "passed": true, "errors": []}
+{"case": "trt-fp32_raw", "passed": true, "errors": []}
+{"case": "trt-fp32_sdk", "passed": true, "errors": []}
+{"case": "trt-fp32_tcp", "passed": true, "errors": []}
+{"case": "trt-fp16_raw", "passed": true, "errors": []}
+{"case": "trt-fp16_sdk", "passed": true, "errors": []}
+{"case": "trt-fp16_tcp", "passed": true, "errors": []}

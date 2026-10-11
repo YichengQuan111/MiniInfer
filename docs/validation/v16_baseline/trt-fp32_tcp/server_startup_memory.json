@@ -1,0 +1,17 @@
+{
+  "metrics": {
+    "server:rss_kib": {
+      "samples": 410,
+      "observed_peak": 466800
+    },
+    "gpu_device_0_total:used_mib": {
+      "samples": 38,
+      "observed_peak": 859.0
+    }
+  },
+  "gpu_tool_available": true,
+  "phase_end": "server ready stdout receipt",
+  "rss_interval_ms": 20,
+  "gpu_target_interval_ms": 200,
+  "gpu_scope": "device 0 total used MiB; includes background, not server allocation"
+}

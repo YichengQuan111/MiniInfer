@@ -9,7 +9,7 @@
 | V1.3 TensorRT FP32 / FP16 | 通过 | 两配置最终集各 8/8；真实 GPU 生命周期/并发/坏引擎恢复；全套 31/31 |
 | V1.4 C++ SDK | 通过 | 主构建 32/32；CPU-only 27/27；SDK ASan/UBSan；安装后独立外部项目的三个模型包 golden 通过 |
 | V1.5 TCP 深度接入 | 通过 | 全套 33/33；网络与旧 TCP 并发/关闭 ASan/UBSan 3/3；三个实际后端 TCP 输出与本地逐字节一致 |
-| V1.6 部署与基线 | 未开始 | — |
+| V1.6 部署与基线 | 通过 | 全新 Release 34/34、CPU-only Debug 28/28；两个重建 engine 最终集及 SDK golden；九组基线、27 次重复、6,732 次请求零错误 |
 
 前后处理、版本和复现方式见[部署契约](depth_deployment.md)。既有 CPU / D16 的历史验收与性能记录保留原义。
 
@@ -52,3 +52,17 @@ CUDA stream 同步之后才读取 events 和拷贝输出。WSL 的 CPU/GPU 独�
 [全套 Release](validation/v15_tests.log)33/33，包含既有 D16 协议、客户端、服务端、并发与关闭回归；[ASan/UBSan](validation/v15_asan_tests.log)的深度网络、旧 TCP 并发及关闭 3/3。新增测试覆盖手算 wire、大小端、非法元数据/版本/方向/长度、最大尺寸、非有限输出、重复 ID、半包、慢收发、数量/字节限流与恢复、断连及停止后的已接纳任务完成。
 
 [实际 TCP 验证报告](validation/v15_tcp_report.json)记录 ORT FP32、TRT FP32、TRT 混合 FP16 每包两次网络请求。六次输出均与各自本地 SDK 的 1024×683 FP32 输出逐字节一致；三个服务器均 SIGTERM 正常结束，请求/响应/SDK 成功交付计数一致，网络/SDK 在途、等待、执行和字节预留全部为零。该验证是有限请求的正确性回归，持续过载与 30 分钟长稳属于 V2。
+
+## V1.6：构建、重建和部署复验
+
+在新的 CMake 构建目录 `/home/qyc/builds/MiniInfer/v16-clean` 从源码执行 Release 全量构建，固定依赖环境不变；[34/34 CTest](validation/v16_tests.log)通过。独立新目录 CPU-only Debug [28/28](validation/v16_cpu_debug_tests.log)通过。基准统计测试涵盖成功样本分位数、含失败的完整分母、状态记账、CSV/summary 不一致与缺失内存值；不使用假模型数据冒充性能。安装后，从安装目录内的示例源码独立 `find_package` 构建，并用重建的混合 FP16 包执行 [golden 回归](validation/v16_installed_golden.json)，通过。
+
+`tools/rebuild_depth_engines.sh` 从固定 ONNX 重建两个 engine。FP32 构建 15.908249 秒、混合 FP16 118.324933 秒，均为 `buildSerializedNetwork` 主机耗时；构建期间未运行性能基准。SHA-256 与此前 engine 不同，预期可由构建策略/tactic 选择产生差异，因此重新做全最终集验收，没有只比二进制文件是否相同。
+
+[重建 FP32](validation/v16_rebuilt_fp32.json)和[重建混合 FP16](validation/v16_rebuilt_fp16.json)各 8/8 通过，前后处理逐元素一致，人工排序仍为 11/13。重建 FP16 的 raw MAE 0.001861、P99 0.011030、超容差比例 0.00340%，保留原冻结阈值。[FP32 SDK](validation/v16_rebuilt_sdk_fp32.json)与[FP16 SDK](validation/v16_rebuilt_sdk_fp16.json)的包内 golden 也通过。重建清单和日志位于本目录 `validation/v16_rebuilt_*`。
+
+部署核验和实际异常的定位、修复、回归见[排查记录](depth_troubleshooting.md)。精度基线只覆盖已冻结的小样本集，V1.6 的新构建只证明本机记录环境的可重建性，不声称已经验证其他 GPU、ARM 或 Jetson。
+
+[九组性能基线](depth_performance.md)覆盖 ORT FP32、TensorRT FP32、混合 FP16 的 raw/SDK/TCP。27 次重复共 6,732 次请求全部成功，拒绝、关闭、失败和超时均为零；三台逐次启动的本地 TCP 服务均按计数正常排空，资源预留归零。引擎构建、主机启动、首请求、稳态 P50/P95/P99、成功吞吐和分阶段 RSS/设备总显存均有原始记录，[完整套件](validation/v16_baseline/suite.json)的 `passed` 与 `all_runs_valid` 均为 true。
+
+V1.1—V1.6 的 P0 交付已完成。V2 的公开异步、多槽位、自定义 CUDA 优化、持续过载与 30 分钟长稳，以及 E1 真机部署均未纳入此完成结论。

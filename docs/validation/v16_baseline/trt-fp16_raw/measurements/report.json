@@ -1,0 +1,536 @@
+{
+  "schema": "miniinfer-depth-baseline-v1",
+  "recorded_at": "2026-10-11T11:43:32.944789+00:00",
+  "case": {
+    "mode": "raw",
+    "backend": "trt",
+    "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+    "model": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16/model.engine",
+    "package": null,
+    "concurrency": 1,
+    "iterations": 300,
+    "warmup": 20,
+    "repeats": 3,
+    "cpu_threads": 4,
+    "gpu_slots": 1,
+    "sdk_queue_capacity": 4,
+    "sdk_byte_budget": 134217728
+  },
+  "identity": {
+    "executable_sha256": "0ca0fa9e54cdbcda89828c344bcacb0152d67a97ab6207ddb7dab9eafa4841ee",
+    "image_sha256": "bda74c36df6dfa1efae08bb13bd8db14638e5410bfbcf1d8c8e68be01b93962e",
+    "model_sha256": "d1ad5d6ec55508a1e679d48b964f4aee597a3455a50d541c898177039e314815"
+  },
+  "engine_build_seconds": {
+    "seconds": 151.955208,
+    "source": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16/model.engine.manifest",
+    "manifest_field": "build_seconds"
+  },
+  "measurement": {
+    "rss_interval_ms": 20,
+    "gpu_target_interval_ms": 200,
+    "gpu_memory_scope": "device 0 total used MiB, includes background processes; NOT process allocation",
+    "phase_boundary": "stdout event reception time; sampling and pipe scheduling can lag the operation boundary",
+    "rss_scope": "VmRSS; TCP client and optional external server reported separately",
+    "startup_ms_scope": "C++ main entry through setup and model/SDK initialization; TCP connect separately",
+    "process_to_ready_ms_scope": "before Popen through flushed ready line reception, includes OS launch and dynamic loader",
+    "first_request": "before any warmup; actual first request after ready",
+    "percentiles": "successful steady attempts only; numpy linear definition",
+    "throughput": "successful steady count / elapsed entire steady phase seconds",
+    "gpu_samples": "sampling can miss short phases; unavailable observations remain null",
+    "tcp_server": "externally started and already ready; server model initialization and first-ever model inference not measured"
+  },
+  "runs": [
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/v16-clean/bin/depth_benchmark",
+        "--mode",
+        "raw",
+        "--backend",
+        "trt",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+        "--iterations",
+        "300",
+        "--warmup",
+        "20",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/v16_baseline/trt-fp16_raw/measurements/repeat_01/raw.csv",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16/model.engine"
+      ],
+      "pid": 4757,
+      "server_pid": null,
+      "process_to_ready_ms": 3270.2906979999398,
+      "process_summary": {
+        "event": "summary",
+        "startup_ms": 3225.94961,
+        "connect_ms": 0,
+        "first_ms": 56.925504,
+        "warmup": 20,
+        "iterations": 300,
+        "counts": {
+          "busy": 0,
+          "closed": 0,
+          "failure": 0,
+          "succeeded": 321,
+          "timeout": 0
+        },
+        "steady_counts": {
+          "busy": 0,
+          "closed": 0,
+          "failure": 0,
+          "succeeded": 300,
+          "timeout": 0
+        },
+        "elapsed_steady_ms": 3389.353101
+      },
+      "statistics": {
+        "attempt_counts": {
+          "succeeded": 321,
+          "busy": 0,
+          "closed": 0,
+          "failure": 0,
+          "timeout": 0
+        },
+        "phase_counts": {
+          "first": {
+            "succeeded": 1,
+            "busy": 0,
+            "closed": 0,
+            "failure": 0,
+            "timeout": 0
+          },
+          "warmup": {
+            "succeeded": 20,
+            "busy": 0,
+            "closed": 0,
+            "failure": 0,
+            "timeout": 0
+          },
+          "steady": {
+            "succeeded": 300,
+            "busy": 0,
+            "closed": 0,
+            "failure": 0,
+            "timeout": 0
+          }
+        },
+        "successful_steady_latency": {
+          "samples": 300,
+          "p50_ms": 10.970331,
+          "p95_ms": 12.048467800000001,
+          "p99_ms": 12.164337859999998
+        },
+        "successful_throughput_per_second": 88.51246567124787,
+        "elapsed_steady_ms": 3389.353101,
+        "device_successful_steady": {
+          "h2d_ms": {
+            "samples": 300,
+            "p50_ms": 0.26796799898147583,
+            "p95_ms": 0.2890127882361412,
+            "p99_ms": 0.3068588763475417
+          },
+          "compute_ms": {
+            "samples": 300,
+            "p50_ms": 10.71284818649292,
+            "p95_ms": 10.962638092041015,
+            "p99_ms": 11.130495281219483
+          },
+          "d2h_ms": {
+            "samples": 300,
+            "p50_ms": 0.11648000031709671,
+            "p95_ms": 0.1553855985403061,
+            "p99_ms": 0.19403711423277847
+          }
+        }
+      },
+      "memory": {
+        "benchmark:rss_kib": {
+          "whole": {
+            "samples": 345,
+            "peak": 493864
+          },
+          "startup": {
+            "samples": 162,
+            "peak": 467956
+          },
+          "first": {
+            "samples": 2,
+            "peak": 486140
+          },
+          "warmup": {
+            "samples": 12,
+            "peak": 493864
+          },
+          "steady": {
+            "samples": 168,
+            "peak": 493864
+          },
+          "teardown": {
+            "samples": 1,
+            "peak": 482916
+          }
+        },
+        "gpu_device_0_total:used_mib": {
+          "whole": {
+            "samples": 34,
+            "peak": 1127.0
+          },
+          "startup": {
+            "samples": 16,
+            "peak": 1121.0
+          },
+          "first": {
+            "samples": 0,
+            "peak": null
+          },
+          "warmup": {
+            "samples": 1,
+            "peak": 1127.0
+          },
+          "steady": {
+            "samples": 17,
+            "peak": 1127.0
+          },
+          "teardown": {
+            "samples": 0,
+            "peak": null
+          }
+        }
+      },
+      "errors": [],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\"event\":\"ready\",\"startup_ms\":3225.9496100000001,\"connect_ms\":0,\"main_to_ready_ms\":3225.966379}\n{\"event\":\"phase\",\"phase\":\"first\",\"main_ms\":3225.9869279999998}\n{\"event\":\"phase\",\"phase\":\"warmup\",\"main_ms\":3282.9238540000001}\n{\"event\":\"phase\",\"phase\":\"steady\",\"main_ms\":3521.306681}\n{\"event\":\"summary\",\"startup_ms\":3225.9496100000001,\"connect_ms\":0,\"first_ms\":56.925503999999997,\"warmup\":20,\"iterations\":300,\"counts\":{\"busy\":0,\"closed\":0,\"failure\":0,\"succeeded\":321,\"timeout\":0},\"steady_counts\":{\"busy\":0,\"closed\":0,\"failure\":0,\"succeeded\":300,\"timeout\":0},\"elapsed_steady_ms\":3389.3531010000002}\n"
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/v16-clean/bin/depth_benchmark",
+        "--mode",
+        "raw",
+        "--backend",
+        "trt",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+        "--iterations",
+        "300",
+        "--warmup",
+        "20",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/v16_baseline/trt-fp16_raw/measurements/repeat_02/raw.csv",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16/model.engine"
+      ],
+      "pid": 4837,
+      "server_pid": null,
+      "process_to_ready_ms": 2323.8407869999946,
+      "process_summary": {
+        "event": "summary",
+        "startup_ms": 2295.052229,
+        "connect_ms": 0,
+        "first_ms": 55.214956,
+        "warmup": 20,
+        "iterations": 300,
+        "counts": {
+          "busy": 0,
+          "closed": 0,
+          "failure": 0,
+          "succeeded": 321,
+          "timeout": 0
+        },
+        "steady_counts": {
+          "busy": 0,
+          "closed": 0,
+          "failure": 0,
+          "succeeded": 300,
+          "timeout": 0
+        },
+        "elapsed_steady_ms": 3560.926037
+      },
+      "statistics": {
+        "attempt_counts": {
+          "succeeded": 321,
+          "busy": 0,
+          "closed": 0,
+          "failure": 0,
+          "timeout": 0
+        },
+        "phase_counts": {
+          "first": {
+            "succeeded": 1,
+            "busy": 0,
+            "closed": 0,
+            "failure": 0,
+            "timeout": 0
+          },
+          "warmup": {
+            "succeeded": 20,
+            "busy": 0,
+            "closed": 0,
+            "failure": 0,
+            "timeout": 0
+          },
+          "steady": {
+            "succeeded": 300,
+            "busy": 0,
+            "closed": 0,
+            "failure": 0,
+            "timeout": 0
+          }
+        },
+        "successful_steady_latency": {
+          "samples": 300,
+          "p50_ms": 11.929385,
+          "p95_ms": 12.24830995,
+          "p99_ms": 12.30360015
+        },
+        "successful_throughput_per_second": 84.24774816517763,
+        "elapsed_steady_ms": 3560.926037,
+        "device_successful_steady": {
+          "h2d_ms": {
+            "samples": 300,
+            "p50_ms": 0.2672799974679947,
+            "p95_ms": 0.28971199989318847,
+            "p99_ms": 0.3027692902088165
+          },
+          "compute_ms": {
+            "samples": 300,
+            "p50_ms": 10.781792163848877,
+            "p95_ms": 11.013864040374756,
+            "p99_ms": 11.053179903030395
+          },
+          "d2h_ms": {
+            "samples": 300,
+            "p50_ms": 0.1300159990787506,
+            "p95_ms": 0.17969759702682497,
+            "p99_ms": 0.22677792519330972
+          }
+        }
+      },
+      "memory": {
+        "benchmark:rss_kib": {
+          "whole": {
+            "samples": 306,
+            "peak": 493832
+          },
+          "startup": {
+            "samples": 115,
+            "peak": 469696
+          },
+          "first": {
+            "samples": 3,
+            "peak": 489332
+          },
+          "warmup": {
+            "samples": 11,
+            "peak": 493832
+          },
+          "steady": {
+            "samples": 176,
+            "peak": 493832
+          },
+          "teardown": {
+            "samples": 1,
+            "peak": 487956
+          }
+        },
+        "gpu_device_0_total:used_mib": {
+          "whole": {
+            "samples": 31,
+            "peak": 1127.0
+          },
+          "startup": {
+            "samples": 12,
+            "peak": 961.0
+          },
+          "first": {
+            "samples": 0,
+            "peak": null
+          },
+          "warmup": {
+            "samples": 1,
+            "peak": 1127.0
+          },
+          "steady": {
+            "samples": 18,
+            "peak": 1127.0
+          },
+          "teardown": {
+            "samples": 0,
+            "peak": null
+          }
+        }
+      },
+      "errors": [],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\"event\":\"ready\",\"startup_ms\":2295.0522289999999,\"connect_ms\":0,\"main_to_ready_ms\":2295.0683789999998}\n{\"event\":\"phase\",\"phase\":\"first\",\"main_ms\":2295.0882919999999}\n{\"event\":\"phase\",\"phase\":\"warmup\",\"main_ms\":2350.3129760000002}\n{\"event\":\"phase\",\"phase\":\"steady\",\"main_ms\":2584.0477989999999}\n{\"event\":\"summary\",\"startup_ms\":2295.0522289999999,\"connect_ms\":0,\"first_ms\":55.214956000000001,\"warmup\":20,\"iterations\":300,\"counts\":{\"busy\":0,\"closed\":0,\"failure\":0,\"succeeded\":321,\"timeout\":0},\"steady_counts\":{\"busy\":0,\"closed\":0,\"failure\":0,\"succeeded\":300,\"timeout\":0},\"elapsed_steady_ms\":3560.9260370000002}\n"
+    },
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/v16-clean/bin/depth_benchmark",
+        "--mode",
+        "raw",
+        "--backend",
+        "trt",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+        "--iterations",
+        "300",
+        "--warmup",
+        "20",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/v16_baseline/trt-fp16_raw/measurements/repeat_03/raw.csv",
+        "--model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16/model.engine"
+      ],
+      "pid": 4911,
+      "server_pid": null,
+      "process_to_ready_ms": 2531.0672279999835,
+      "process_summary": {
+        "event": "summary",
+        "startup_ms": 2486.209185,
+        "connect_ms": 0,
+        "first_ms": 56.550344,
+        "warmup": 20,
+        "iterations": 300,
+        "counts": {
+          "busy": 0,
+          "closed": 0,
+          "failure": 0,
+          "succeeded": 321,
+          "timeout": 0
+        },
+        "steady_counts": {
+          "busy": 0,
+          "closed": 0,
+          "failure": 0,
+          "succeeded": 300,
+          "timeout": 0
+        },
+        "elapsed_steady_ms": 3612.087435
+      },
+      "statistics": {
+        "attempt_counts": {
+          "succeeded": 321,
+          "busy": 0,
+          "closed": 0,
+          "failure": 0,
+          "timeout": 0
+        },
+        "phase_counts": {
+          "first": {
+            "succeeded": 1,
+            "busy": 0,
+            "closed": 0,
+            "failure": 0,
+            "timeout": 0
+          },
+          "warmup": {
+            "succeeded": 20,
+            "busy": 0,
+            "closed": 0,
+            "failure": 0,
+            "timeout": 0
+          },
+          "steady": {
+            "succeeded": 300,
+            "busy": 0,
+            "closed": 0,
+            "failure": 0,
+            "timeout": 0
+          }
+        },
+        "successful_steady_latency": {
+          "samples": 300,
+          "p50_ms": 11.93485,
+          "p95_ms": 12.21874755,
+          "p99_ms": 12.34037058
+        },
+        "successful_throughput_per_second": 83.05446792153856,
+        "elapsed_steady_ms": 3612.087435,
+        "device_successful_steady": {
+          "h2d_ms": {
+            "samples": 300,
+            "p50_ms": 0.2690400034189224,
+            "p95_ms": 0.29350879937410357,
+            "p99_ms": 0.3027420902252197
+          },
+          "compute_ms": {
+            "samples": 300,
+            "p50_ms": 10.756256103515625,
+            "p95_ms": 10.999980592727661,
+            "p99_ms": 11.091085309982299
+          },
+          "d2h_ms": {
+            "samples": 300,
+            "p50_ms": 0.11972800269722939,
+            "p95_ms": 0.16874719560146334,
+            "p99_ms": 0.20909631714224808
+          }
+        }
+      },
+      "memory": {
+        "benchmark:rss_kib": {
+          "whole": {
+            "samples": 320,
+            "peak": 544008
+          },
+          "startup": {
+            "samples": 126,
+            "peak": 467284
+          },
+          "first": {
+            "samples": 2,
+            "peak": 484852
+          },
+          "warmup": {
+            "samples": 12,
+            "peak": 493880
+          },
+          "steady": {
+            "samples": 178,
+            "peak": 493880
+          },
+          "teardown": {
+            "samples": 2,
+            "peak": 544008
+          }
+        },
+        "gpu_device_0_total:used_mib": {
+          "whole": {
+            "samples": 32,
+            "peak": 1127.0
+          },
+          "startup": {
+            "samples": 13,
+            "peak": 993.0
+          },
+          "first": {
+            "samples": 0,
+            "peak": null
+          },
+          "warmup": {
+            "samples": 1,
+            "peak": 1127.0
+          },
+          "steady": {
+            "samples": 18,
+            "peak": 1127.0
+          },
+          "teardown": {
+            "samples": 0,
+            "peak": null
+          }
+        }
+      },
+      "errors": [],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\"event\":\"ready\",\"startup_ms\":2486.2091850000002,\"connect_ms\":0,\"main_to_ready_ms\":2486.2257079999999}\n{\"event\":\"phase\",\"phase\":\"first\",\"main_ms\":2486.2455749999999}\n{\"event\":\"phase\",\"phase\":\"warmup\",\"main_ms\":2542.8067339999998}\n{\"event\":\"phase\",\"phase\":\"steady\",\"main_ms\":2776.5785089999999}\n{\"event\":\"summary\",\"startup_ms\":2486.2091850000002,\"connect_ms\":0,\"first_ms\":56.550344000000003,\"warmup\":20,\"iterations\":300,\"counts\":{\"busy\":0,\"closed\":0,\"failure\":0,\"succeeded\":321,\"timeout\":0},\"steady_counts\":{\"busy\":0,\"closed\":0,\"failure\":0,\"succeeded\":300,\"timeout\":0},\"elapsed_steady_ms\":3612.0874349999999}\n"
+    }
+  ],
+  "valid_runs": 3,
+  "all_runs_valid": true
+}

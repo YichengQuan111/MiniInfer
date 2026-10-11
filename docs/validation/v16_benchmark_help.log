@@ -1,0 +1,3 @@
+depth_benchmark --mode raw|sdk|tcp --backend ort|trt --image PPM --iterations N --warmup N --output NEW.csv
+raw: --model ONNX_OR_ENGINE; sdk: --package DIR; tcp: --host IPv4 --port PORT [--timeout-ms 30000]
+CPU threads=4; SDK queue=4, admission bytes=128MiB; one synchronous caller and one GPU slot.

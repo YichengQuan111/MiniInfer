@@ -1,0 +1,193 @@
+{
+  "command": [
+    "/home/qyc/builds/MiniInfer/v16-clean/bin/depth_benchmark",
+    "--mode",
+    "tcp",
+    "--backend",
+    "trt",
+    "--image",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+    "--iterations",
+    "300",
+    "--warmup",
+    "20",
+    "--output",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/v16_baseline/trt-fp16_tcp/measurements/repeat_01/raw.csv",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "32907",
+    "--timeout-ms",
+    "30000"
+  ],
+  "pid": 5467,
+  "server_pid": 5379,
+  "process_to_ready_ms": 87.49157199986257,
+  "process_summary": {
+    "event": "summary",
+    "startup_ms": 60.46529,
+    "connect_ms": 0.099877,
+    "first_ms": 70.593539,
+    "warmup": 20,
+    "iterations": 300,
+    "counts": {
+      "busy": 0,
+      "closed": 0,
+      "failure": 0,
+      "succeeded": 321,
+      "timeout": 0
+    },
+    "steady_counts": {
+      "busy": 0,
+      "closed": 0,
+      "failure": 0,
+      "succeeded": 300,
+      "timeout": 0
+    },
+    "elapsed_steady_ms": 5159.420825
+  },
+  "statistics": {
+    "attempt_counts": {
+      "succeeded": 321,
+      "busy": 0,
+      "closed": 0,
+      "failure": 0,
+      "timeout": 0
+    },
+    "phase_counts": {
+      "first": {
+        "succeeded": 1,
+        "busy": 0,
+        "closed": 0,
+        "failure": 0,
+        "timeout": 0
+      },
+      "warmup": {
+        "succeeded": 20,
+        "busy": 0,
+        "closed": 0,
+        "failure": 0,
+        "timeout": 0
+      },
+      "steady": {
+        "succeeded": 300,
+        "busy": 0,
+        "closed": 0,
+        "failure": 0,
+        "timeout": 0
+      }
+    },
+    "successful_steady_latency": {
+      "samples": 300,
+      "p50_ms": 16.865986,
+      "p95_ms": 18.43796945,
+      "p99_ms": 18.95456654
+    },
+    "successful_throughput_per_second": 58.14606138470978,
+    "elapsed_steady_ms": 5159.420825,
+    "device_successful_steady": {
+      "h2d_ms": {
+        "samples": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null
+      },
+      "compute_ms": {
+        "samples": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null
+      },
+      "d2h_ms": {
+        "samples": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null
+      }
+    }
+  },
+  "memory": {
+    "client:rss_kib": {
+      "whole": {
+        "samples": 280,
+        "peak": 183172
+      },
+      "startup": {
+        "samples": 5,
+        "peak": 180232
+      },
+      "first": {
+        "samples": 3,
+        "peak": 180444
+      },
+      "warmup": {
+        "samples": 17,
+        "peak": 183172
+      },
+      "steady": {
+        "samples": 255,
+        "peak": 183172
+      },
+      "teardown": {
+        "samples": 0,
+        "peak": null
+      }
+    },
+    "gpu_device_0_total:used_mib": {
+      "whole": {
+        "samples": 29,
+        "peak": 1127.0
+      },
+      "startup": {
+        "samples": 1,
+        "peak": 1127.0
+      },
+      "first": {
+        "samples": 0,
+        "peak": null
+      },
+      "warmup": {
+        "samples": 1,
+        "peak": 1127.0
+      },
+      "steady": {
+        "samples": 26,
+        "peak": 1127.0
+      },
+      "teardown": {
+        "samples": 1,
+        "peak": 1127.0
+      }
+    },
+    "server:rss_kib": {
+      "whole": {
+        "samples": 281,
+        "peak": 503512
+      },
+      "startup": {
+        "samples": 5,
+        "peak": 379660
+      },
+      "first": {
+        "samples": 3,
+        "peak": 486432
+      },
+      "warmup": {
+        "samples": 17,
+        "peak": 500272
+      },
+      "steady": {
+        "samples": 255,
+        "peak": 503512
+      },
+      "teardown": {
+        "samples": 1,
+        "peak": 503512
+      }
+    }
+  },
+  "errors": [],
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "{\"event\":\"ready\",\"startup_ms\":60.465290000000003,\"connect_ms\":0.099876999999999994,\"main_to_ready_ms\":60.589485000000003}\n{\"event\":\"phase\",\"phase\":\"first\",\"main_ms\":60.619692999999998}\n{\"event\":\"phase\",\"phase\":\"warmup\",\"main_ms\":131.269486}\n{\"event\":\"phase\",\"phase\":\"steady\",\"main_ms\":473.07443599999999}\n{\"event\":\"summary\",\"startup_ms\":60.465290000000003,\"connect_ms\":0.099876999999999994,\"first_ms\":70.593539000000007,\"warmup\":20,\"iterations\":300,\"counts\":{\"busy\":0,\"closed\":0,\"failure\":0,\"succeeded\":321,\"timeout\":0},\"steady_counts\":{\"busy\":0,\"closed\":0,\"failure\":0,\"succeeded\":300,\"timeout\":0},\"elapsed_steady_ms\":5159.4208250000001}\n"
+}

@@ -148,3 +148,28 @@ python tools/verify_depth_sdk.py --cli /tmp/miniinfer-sdk-example/depth_sdk_exam
 ## V1.5：TCP 深度入口
 
 `depth_server --package DIR` 在模型初始化后接纳连接，`depth_client --image PPM --output F32` 完成一次 RGB8 → FP32 深度请求。MINI v2 的完整格式、数量/字节限流、慢读者和关闭语义见 [TCP 契约](depth_tcp.md)。旧 Echo/MLP 使用独立的 MINI v1 路径并持续回归。
+
+## V1.6：重新构建、安装和测量
+
+在已按前文准备好固定依赖、ONNX 和参考工件的 WSL 环境中：
+
+```bash
+source tools/depth_env.sh
+bash tools/configure_depth.sh "$HOME/builds/MiniInfer/new-depth-release"
+cmake --build "$HOME/builds/MiniInfer/new-depth-release" -j4
+ctest --test-dir "$HOME/builds/MiniInfer/new-depth-release" --output-on-failure
+cmake --install "$HOME/builds/MiniInfer/new-depth-release" --prefix "$HOME/miniinfer-install"
+bash tools/rebuild_depth_engines.sh /tmp/depth-rebuilt "$HOME/builds/MiniInfer/new-depth-release"
+```
+
+重建脚本依次生成 FP32 和混合 FP16 引擎，使用已冻结的最终集和阈值复验，再打包并执行 SDK golden 回归；任一步失败立即非零退出，保留日志。它不会覆盖旧输出，也不会改阈值。引擎二进制与构建耗时不要求重复构建完全相同，兼容清单与精度验收必须通过。
+
+安装目录提供 `include/`、`lib/`、`bin/`、`lib/cmake/MiniInfer/` 和 `share/MiniInfer/`，最后一项包含契约、部署说明及外部示例源码。安装 SDK 与已验收模型包共同构成部署交付；C++ 在线路径不启动 Python 服务。共享库由记录的兼容环境提供，不复制宿主 NVIDIA 驱动。可从安装目录的 `share/MiniInfer/examples/depth_sdk` 独立构建示例，参数见其 README。
+
+```bash
+python tools/run_depth_suite.py \
+  --bin-dir "$HOME/builds/MiniInfer/new-depth-release/bin" \
+  --packages data/generated/depth/packages --output /tmp/depth-baseline-new
+```
+
+基准脚本串行执行三个后端配置的 raw/SDK/TCP 九个案例，每例三个独立调用进程。ORT 每次 100 个稳态请求、5 次预热；TRT 每次 300 个、20 次预热，首请求在预热前独立记录。完整时间边界、失败记账、RSS/设备显存口径见 [基线方法](depth_benchmark_method.md)，实际结果见 [性能报告](depth_performance.md)，真实问题与定位证据见 [排查记录](depth_troubleshooting.md)。
