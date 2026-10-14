@@ -1,0 +1,27 @@
+{
+  "started_utc": "2026-10-14T08:15:03.326018+00:00",
+  "source": "/home/qyc/src/onnxruntime-tsan-1.21.0",
+  "build": "/home/qyc/builds/onnxruntime-tsan-1.21.0",
+  "install": "/home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0",
+  "commands": [
+    {
+      "name": "clone",
+      "command": [
+        "git",
+        "clone",
+        "--depth",
+        "1",
+        "--branch",
+        "v1.21.0",
+        "--recursive",
+        "--shallow-submodules",
+        "https://github.com/microsoft/onnxruntime.git",
+        "/home/qyc/src/onnxruntime-tsan-1.21.0"
+      ],
+      "returncode": -15,
+      "seconds": 388.77562135899996,
+      "log": "clone.log"
+    }
+  ],
+  "passed": false
+}

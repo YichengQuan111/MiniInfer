@@ -1,0 +1,64 @@
+{
+  "mode": "release",
+  "started_utc": "2026-10-14T08:04:50.342134+00:00",
+  "source_commit": "b13dddb8d097bf3a18aeb786d4f1192bbda5eb9a",
+  "build": "/home/qyc/builds/MiniInfer/sdk-validation-20261014-release",
+  "commands": [
+    {
+      "name": "configure_dependencies",
+      "command": [
+        "bash",
+        "tools/configure_depth.sh",
+        "/home/qyc/builds/MiniInfer/sdk-validation-20261014-release",
+        "Release"
+      ],
+      "returncode": 0,
+      "seconds": 13.695858134000002,
+      "log": "configure_dependencies.log"
+    },
+    {
+      "name": "configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer",
+        "-B",
+        "/home/qyc/builds/MiniInfer/sdk-validation-20261014-release",
+        "-DMINIINFER_ENABLE_ASAN_UBSAN=OFF",
+        "-DMINIINFER_ENABLE_TSAN=OFF"
+      ],
+      "returncode": 0,
+      "seconds": 2.742046546000001,
+      "log": "configure.log"
+    },
+    {
+      "name": "build",
+      "command": [
+        "cmake",
+        "--build",
+        "/home/qyc/builds/MiniInfer/sdk-validation-20261014-release",
+        "-j4"
+      ],
+      "returncode": 0,
+      "seconds": 28.537980945999998,
+      "log": "build.log"
+    },
+    {
+      "name": "ctest",
+      "command": [
+        "ctest",
+        "--test-dir",
+        "/home/qyc/builds/MiniInfer/sdk-validation-20261014-release",
+        "--output-on-failure",
+        "--no-tests=error",
+        "-j1"
+      ],
+      "returncode": 0,
+      "seconds": 17.402497254000004,
+      "log": "ctest.log"
+    }
+  ],
+  "passed": true,
+  "sanitizer_environment": {},
+  "finished_utc": "2026-10-14T08:05:53.083010+00:00"
+}

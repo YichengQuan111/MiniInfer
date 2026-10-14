@@ -3,8 +3,10 @@
 #include <cmath>
 #include <future>
 #include <iostream>
+#include <limits>
 #include <optional>
 #include <stdexcept>
+#include <string>
 #include <unistd.h>
 using namespace miniinfer::depth;
 namespace {
@@ -13,14 +15,40 @@ template<class F> void rejects(F action) {
     bool rejected=false;try{action();}catch(const std::exception&){rejected=true;}
     expect(rejected,"expected a rejected artifact");
 }
+template<class F> void rejects_with(F action,const std::string& reason) {
+    try { action(); }
+    catch(const std::exception& error) {
+        expect(std::string(error.what()).find(reason)!=std::string::npos,
+               "artifact validation must precede CUDA device initialization");
+        return;
+    }
+    throw std::runtime_error("expected an artifact validation failure");
+}
+void offline_rejection(const std::filesystem::path& dir) {
+    const int unavailable_device=std::numeric_limits<int>::max();
+    rejects_with([&]{TrtRunner missing(dir/"missing",unavailable_device);},"missing.manifest");
+    write_text_exclusive(dir/"bad-schema.manifest","schema=wrong\n");
+    rejects_with([&]{TrtRunner bad(dir/"bad-schema",unavailable_device);},"schema");
+    Manifest metadata{{"schema","miniinfer-engine-1"},{"contract","depth-v1"},
+        {"input","1x3x518x518-fp32"},{"output","1x518x518-fp32"},
+        {"tf32","off"},{"precision","fp32"},{"precision_policy","fp32-v1"}};
+    metadata["cache_key"]=sha256(manifest_text(metadata));
+    metadata["engine_sha256"]=std::string(64,'0');
+    write_text_exclusive(dir/"bad-hash","invalid engine bytes");
+    write_text_exclusive(dir/"bad-hash.manifest",manifest_text(metadata));
+    rejects_with([&]{TrtRunner bad(dir/"bad-hash",unavailable_device);},"engine_sha256");
+}
 }
 int main(int argc,char** argv) {
     const auto dir=std::filesystem::temp_directory_path()/("miniinfer-trt-"+std::to_string(getpid()));
     try {
-        rejects([]{TrtRunner missing("/miniinfer-missing/depth.engine");});
-        if(argc==1) { std::cout<<"TRT missing-artifact contract passed (GPU test not configured)\n";return 0; }
-        if(argc!=3) throw std::invalid_argument("usage: test_depth_trt [ENGINE IMAGE.ppm]");
         std::filesystem::create_directory(dir);
+        offline_rejection(dir);
+        if(argc==1) {
+            std::filesystem::remove_all(dir);
+            std::cout<<"TRT offline-artifact contract passed (GPU test not configured)\n";return 0;
+        }
+        if(argc!=3) throw std::invalid_argument("usage: test_depth_trt [ENGINE IMAGE.ppm]");
         const auto image=read_ppm(argv[2]);
         const auto input=preprocess(image);
         std::optional<RawDepth> saved;

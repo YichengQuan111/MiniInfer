@@ -2,6 +2,7 @@
 
 #include <onnxruntime_cxx_api.h>
 #include <array>
+#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -45,6 +46,7 @@ public:
     Ort::Env environment;
     Ort::SessionOptions configuration;
     Ort::Session session;
+    std::mutex run_mutex;
     int thread_count;
 };
 
@@ -74,7 +76,12 @@ RawDepth OrtRunner::run_raw(const PreparedImage& input) const {
     const char* inputs[] = {"image"};
     const char* outputs[] = {"depth"};
     try {
-        auto results = impl_->session.Run(Ort::RunOptions{nullptr}, inputs, &tensor, 1, outputs, 1);
+        auto results = [&] {
+            // ORT 1.21 updates non-atomic per-session telemetry in Run().
+            // Serialize this shared session while leaving input/output work parallel.
+            std::lock_guard<std::mutex> lock(impl_->run_mutex);
+            return impl_->session.Run(Ort::RunOptions{nullptr}, inputs, &tensor, 1, outputs, 1);
+        }();
         if (results.size() != 1 || !results[0].IsTensor()) throw std::runtime_error("ORT returned invalid output");
         const auto info = results[0].GetTensorTypeAndShapeInfo();
         if (info.GetElementType() != ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT

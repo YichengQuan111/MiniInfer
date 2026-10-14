@@ -1,0 +1,136 @@
+Command: setarch x86_64 -R bash build.sh --config RelWithDebInfo --build_shared_lib --build_dir /home/qyc/builds/onnxruntime-tsan-1.21.0 --parallel 4 --skip_tests --skip_submodule_sync --use_preinstalled_eigen --eigen_path /home/qyc/src/eigen-1d8b82b0740839c0de7f1242a3585e3390ff5f33 --compile_no_warning_as_error --cmake_generator Ninja --cmake_extra_defines CMAKE_C_COMPILER=/usr/bin/gcc CMAKE_CXX_COMPILER=/usr/bin/g++ 'CMAKE_C_FLAGS=-fsanitize=thread -fno-omit-frame-pointer' 'CMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer' CMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread CMAKE_EXE_LINKER_FLAGS=-fsanitize=thread CMAKE_EXPORT_COMPILE_COMMANDS=ON onnxruntime_BUILD_UNIT_TESTS=OFF
+2026-10-14 16:36:32,941 tools_python_utils [INFO] - flatbuffers module is not installed. parse_config will not be available
+2026-10-14 16:36:32,947 build [DEBUG] - Command line arguments:
+  --build_dir /home/qyc/src/onnxruntime-1.21.0/build/Linux --config RelWithDebInfo --build_shared_lib --build_dir /home/qyc/builds/onnxruntime-tsan-1.21.0 --parallel 4 --skip_tests --skip_submodule_sync --use_preinstalled_eigen --eigen_path /home/qyc/src/eigen-1d8b82b0740839c0de7f1242a3585e3390ff5f33 --compile_no_warning_as_error --cmake_generator Ninja --cmake_extra_defines CMAKE_C_COMPILER=/usr/bin/gcc CMAKE_CXX_COMPILER=/usr/bin/g++ 'CMAKE_C_FLAGS=-fsanitize=thread -fno-omit-frame-pointer' 'CMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer' CMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread CMAKE_EXE_LINKER_FLAGS=-fsanitize=thread CMAKE_EXPORT_COMPILE_COMMANDS=ON onnxruntime_BUILD_UNIT_TESTS=OFF
+2026-10-14 16:36:32,952 build [DEBUG] - Defaulting to running update, build [and test for native builds].
+2026-10-14 16:36:32,955 build [INFO] - Build started
+2026-10-14 16:36:32,958 build [INFO] - Generating CMake build tree
+2026-10-14 16:36:32,960 build [INFO] - /usr/bin/cmake /home/qyc/src/onnxruntime-1.21.0/cmake --compile-no-warning-as-error -Donnxruntime_RUN_ONNX_TESTS=OFF -Donnxruntime_GENERATE_TEST_REPORTS=ON -DPython_EXECUTABLE=/usr/bin/python3 -Donnxruntime_USE_VCPKG=OFF -Donnxruntime_USE_MIMALLOC=OFF -Donnxruntime_ENABLE_PYTHON=OFF -Donnxruntime_BUILD_CSHARP=OFF -Donnxruntime_BUILD_JAVA=OFF -Donnxruntime_BUILD_NODEJS=OFF -Donnxruntime_BUILD_OBJC=OFF -Donnxruntime_BUILD_SHARED_LIB=ON -Donnxruntime_BUILD_APPLE_FRAMEWORK=OFF -Donnxruntime_USE_DNNL=OFF -Donnxruntime_USE_NNAPI_BUILTIN=OFF -Donnxruntime_USE_VSINPU=OFF -Donnxruntime_USE_RKNPU=OFF -Donnxruntime_ENABLE_MICROSOFT_INTERNAL=OFF -Donnxruntime_USE_VITISAI=OFF -Donnxruntime_USE_TENSORRT=OFF -Donnxruntime_USE_TENSORRT_BUILTIN_PARSER=ON -Donnxruntime_USE_TENSORRT_INTERFACE=OFF -Donnxruntime_USE_CUDA_INTERFACE=OFF -Donnxruntime_USE_OPENVINO_INTERFACE=OFF -Donnxruntime_USE_VITISAI_INTERFACE=OFF -Donnxruntime_USE_QNN_INTERFACE=OFF -Donnxruntime_USE_MIGRAPHX=OFF -Donnxruntime_DISABLE_CONTRIB_OPS=OFF -Donnxruntime_DISABLE_ML_OPS=OFF -Donnxruntime_DISABLE_RTTI=OFF -Donnxruntime_DISABLE_EXCEPTIONS=OFF -Donnxruntime_MINIMAL_BUILD=OFF -Donnxruntime_EXTENDED_MINIMAL_BUILD=OFF -Donnxruntime_MINIMAL_BUILD_CUSTOM_OPS=OFF -Donnxruntime_REDUCED_OPS_BUILD=OFF -Donnxruntime_USE_DML=OFF -Donnxruntime_USE_WINML=OFF -Donnxruntime_BUILD_MS_EXPERIMENTAL_OPS=OFF -Donnxruntime_USE_TELEMETRY=OFF -Donnxruntime_ENABLE_LTO=OFF -Donnxruntime_USE_ACL=OFF -Donnxruntime_USE_ARMNN=OFF -Donnxruntime_ARMNN_RELU_USE_CPU=ON -Donnxruntime_ARMNN_BN_USE_CPU=ON -Donnxruntime_USE_JSEP=OFF -Donnxruntime_USE_WEBGPU=OFF -Donnxruntime_ENABLE_PIX_FOR_WEBGPU_EP=OFF -Donnxruntime_USE_EXTERNAL_DAWN=OFF -Donnxruntime_ENABLE_NVTX_PROFILE=OFF -Donnxruntime_ENABLE_TRAINING=OFF -Donnxruntime_ENABLE_TRAINING_OPS=OFF -Donnxruntime_ENABLE_TRAINING_APIS=OFF -Donnxruntime_ENABLE_CPU_FP16_OPS=OFF -Donnxruntime_USE_NCCL=OFF -Donnxruntime_BUILD_BENCHMARKS=OFF -Donnxruntime_USE_ROCM=OFF -Donnxruntime_GCOV_COVERAGE=OFF -Donnxruntime_USE_MPI=OFF -Donnxruntime_ENABLE_MEMORY_PROFILE=OFF -Donnxruntime_ENABLE_CUDA_LINE_NUMBER_INFO=OFF -Donnxruntime_USE_CUDA_NHWC_OPS=OFF -Donnxruntime_BUILD_WEBASSEMBLY_STATIC_LIB=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_EXCEPTION_CATCHING=ON -Donnxruntime_ENABLE_WEBASSEMBLY_API_EXCEPTION_CATCHING=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_EXCEPTION_THROWING=ON -Donnxruntime_WEBASSEMBLY_RUN_TESTS_IN_BROWSER=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_THREADS=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_MEMORY64=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_DEBUG_INFO=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_PROFILING=OFF -Donnxruntime_ENABLE_LAZY_TENSOR=OFF -Donnxruntime_ENABLE_EXTERNAL_CUSTOM_OP_SCHEMAS=OFF -Donnxruntime_ENABLE_CUDA_PROFILING=OFF -Donnxruntime_ENABLE_ROCM_PROFILING=OFF -Donnxruntime_USE_XNNPACK=OFF -Donnxruntime_USE_WEBNN=OFF -Donnxruntime_USE_CANN=OFF -Donnxruntime_USE_TRITON_KERNEL=OFF -Donnxruntime_DISABLE_FLOAT8_TYPES=OFF -Donnxruntime_DISABLE_SPARSE_TENSORS=OFF -Donnxruntime_DISABLE_OPTIONAL_TYPE=OFF -Donnxruntime_CUDA_MINIMAL=OFF -Donnxruntime_USE_PREINSTALLED_EIGEN=ON -Deigen_SOURCE_PATH=/home/qyc/src/eigen-1d8b82b0740839c0de7f1242a3585e3390ff5f33 -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_C_FLAGS=-fsanitize=thread -fno-omit-frame-pointer -DCMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer -DCMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread -DCMAKE_EXE_LINKER_FLAGS=-fsanitize=thread -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -Donnxruntime_BUILD_UNIT_TESTS=OFF -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo
+CMake Deprecation Warning at CMakeLists.txt:9 (cmake_policy):
+  The OLD behavior for policy CMP0104 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+
+Ignoring COMPILE_WARNING_AS_ERROR target property and CMAKE_COMPILE_WARNING_AS_ERROR variable.
+
+Building ONNX Runtime for x86_64 CPU ARCH
+Patch found: /usr/bin/patch
+-- Loading Dependencies URLs ...
+-- Loading Dependencies ...
+-- Performing Test ABSL_INTERNAL_AT_LEAST_CXX17
+-- Performing Test ABSL_INTERNAL_AT_LEAST_CXX17 - Success
+-- Performing Test ABSL_INTERNAL_AT_LEAST_CXX20
+-- Performing Test ABSL_INTERNAL_AT_LEAST_CXX20 - Failed
+-- Abseil source dir:/home/qyc/builds/onnxruntime-tsan-1.21.0/RelWithDebInfo/_deps/abseil_cpp-src
+CMake Error at /mnt/d/anaconda/Library/lib/cmake/absl/abslTargets.cmake:42 (message):
+  Some (but not all) targets in this export set were already defined.
+
+  Targets Defined: absl::atomic_hook, absl::errno_saver, absl::log_severity,
+  absl::no_destructor, absl::nullability, absl::raw_logging_internal,
+  absl::spinlock_wait, absl::config, absl::dynamic_annotations,
+  absl::core_headers, absl::malloc_internal, absl::base_internal, absl::base,
+  absl::throw_delegate, absl::pretty_function, absl::endian,
+  absl::scoped_set_env, absl::strerror, absl::fast_type_id, absl::prefetch,
+  absl::poison, absl::algorithm, absl::algorithm_container,
+  absl::cleanup_internal, absl::cleanup, absl::btree, absl::compressed_tuple,
+  absl::fixed_array, absl::inlined_vector_internal, absl::inlined_vector,
+  absl::flat_hash_map, absl::flat_hash_set, absl::node_hash_map,
+  absl::node_hash_set, absl::hash_container_defaults, absl::container_memory,
+  absl::hash_function_defaults, absl::hash_policy_traits,
+  absl::common_policy_traits, absl::hashtablez_sampler,
+  absl::hashtable_debug, absl::hashtable_debug_hooks, absl::node_slot_policy,
+  absl::raw_hash_map, absl::container_common, absl::raw_hash_set,
+  absl::layout, absl::crc_cpu_detect, absl::crc_internal, absl::crc32c,
+  absl::non_temporal_arm_intrinsics, absl::non_temporal_memcpy,
+  absl::crc_cord_state, absl::stacktrace, absl::symbolize,
+  absl::examine_stack, absl::failure_signal_handler,
+  absl::debugging_internal, absl::demangle_internal,
+  absl::bounded_utf8_length_sequence, absl::decode_rust_punycode,
+  absl::demangle_rust, absl::utf8_for_code_point, absl::leak_check,
+  absl::debugging, absl::flags_path_util, absl::flags_program_name,
+  absl::flags_config, absl::flags_marshalling,
+  absl::flags_commandlineflag_internal, absl::flags_commandlineflag,
+  absl::flags_private_handle_accessor, absl::flags_reflection,
+  absl::flags_internal, absl::flags, absl::flags_usage_internal,
+  absl::flags_usage, absl::flags_parse, absl::any_invocable,
+  absl::bind_front, absl::function_ref, absl::overload, absl::hash,
+  absl::city, absl::low_level_hash, absl::log_internal_check_impl,
+  absl::log_internal_check_op, absl::log_internal_conditions,
+  absl::log_internal_config, absl::log_internal_flags,
+  absl::log_internal_format, absl::log_internal_globals,
+  absl::log_internal_log_impl, absl::log_internal_proto,
+  absl::log_internal_message, absl::log_internal_log_sink_set,
+  absl::log_internal_nullguard, absl::log_internal_nullstream,
+  absl::log_internal_strip, absl::log_internal_voidify,
+  absl::log_internal_append_truncated, absl::absl_check, absl::absl_log,
+  absl::check, absl::die_if_null, absl::log_flags, absl::log_globals,
+  absl::log_initialize, absl::log, absl::log_entry, absl::log_sink,
+  absl::log_sink_registry, absl::log_streamer, absl::log_internal_structured,
+  absl::log_structured, absl::vlog_config_internal, absl::absl_vlog_is_on,
+  absl::vlog_is_on, absl::log_internal_fnmatch, absl::memory,
+  absl::type_traits, absl::meta, absl::bits, absl::int128, absl::numeric,
+  absl::numeric_representation, absl::sample_recorder,
+  absl::exponential_biased, absl::periodic_sampler, absl::random_random,
+  absl::random_bit_gen_ref, absl::random_internal_mock_helpers,
+  absl::random_distributions, absl::random_seed_gen_exception,
+  absl::random_seed_sequences, absl::random_internal_traits,
+  absl::random_internal_distribution_caller,
+  absl::random_internal_fast_uniform_bits,
+  absl::random_internal_seed_material, absl::random_internal_pool_urbg,
+  absl::random_internal_salted_seed_seq,
+  absl::random_internal_iostream_state_saver,
+  absl::random_internal_generate_real, absl::random_internal_wide_multiply,
+  absl::random_internal_fastmath, absl::random_internal_nonsecure_base,
+  absl::random_internal_pcg_engine, absl::random_internal_randen_engine,
+  absl::random_internal_platform, absl::random_internal_randen,
+  absl::random_internal_randen_slow, absl::random_internal_randen_hwaes,
+  absl::random_internal_randen_hwaes_impl,
+  absl::random_internal_distribution_test_util,
+  absl::random_internal_uniform_helper, absl::status, absl::statusor,
+  absl::string_view, absl::strings, absl::charset,
+  absl::has_ostream_operator, absl::strings_internal, absl::str_format,
+  absl::str_format_internal, absl::cord_internal, absl::cordz_update_tracker,
+  absl::cordz_functions, absl::cordz_statistics, absl::cordz_handle,
+  absl::cordz_info, absl::cordz_sample_token, absl::cordz_update_scope,
+  absl::cord, absl::graphcycles_internal, absl::kernel_timeout_internal,
+  absl::synchronization, absl::time, absl::civil_time, absl::time_zone,
+  absl::any, absl::bad_any_cast, absl::bad_any_cast_impl, absl::span,
+  absl::optional, absl::bad_optional_access, absl::bad_variant_access,
+  absl::variant, absl::compare, absl::utility, absl::if_constexpr
+
+  Targets not yet defined: absl::tracing_internal,
+  absl::log_internal_structured_proto, absl::abseil_dll
+
+Call Stack (most recent call first):
+  /mnt/d/anaconda/Library/lib/cmake/absl/abslConfig.cmake:32 (include)
+  /usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  /mnt/d/anaconda/Library/lib/cmake/re2/re2Config.cmake:38 (find_dependency)
+  /usr/share/cmake-3.28/Modules/FetchContent.cmake:2014 (find_package)
+  external/helper_functions.cmake:22 (FetchContent_MakeAvailable)
+  external/onnxruntime_external_deps.cmake:45 (onnxruntime_fetchcontent_makeavailable)
+  CMakeLists.txt:694 (include)
+
+
+-- Configuring incomplete, errors occurred!
+Namespace(build_dir='/home/qyc/builds/onnxruntime-tsan-1.21.0', config=['RelWithDebInfo'], update=False, build=False, clean=False, parallel=4, nvcc_threads=-1, test=False, skip_tests=True, compile_no_warning_as_error=True, enable_nvtx_profile=False, enable_memory_profile=False, enable_training=False, enable_training_apis=False, enable_training_ops=False, enable_nccl=False, mpi_home=None, nccl_home=None, use_mpi=False, enable_onnx_tests=False, path_to_protoc_exe=None, fuzz_testing=False, enable_symbolic_shape_infer_tests=False, gen_doc=None, gen_api_doc=False, use_cuda=False, cuda_version=None, cuda_home=None, cudnn_home=None, enable_cuda_line_info=False, enable_cuda_nhwc_ops=False, disable_cuda_nhwc_ops=False, enable_cuda_minimal_build=False, enable_pybind=False, build_wheel=False, wheel_name_suffix=None, skip_keras_test=False, build_csharp=False, build_nuget=False, msbuild_extra_options=None, build_java=False, build_nodejs=False, build_objc=False, build_shared_lib=True, build_apple_framework=False, cmake_extra_defines=[['CMAKE_C_COMPILER=/usr/bin/gcc', 'CMAKE_CXX_COMPILER=/usr/bin/g++', 'CMAKE_C_FLAGS=-fsanitize=thread -fno-omit-frame-pointer', 'CMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer', 'CMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread', 'CMAKE_EXE_LINKER_FLAGS=-fsanitize=thread', 'CMAKE_EXPORT_COMPILE_COMMANDS=ON', 'onnxruntime_BUILD_UNIT_TESTS=OFF']], target=None, x86=False, rv64=False, arm=False, arm64=False, arm64ec=False, buildasx=False, riscv_toolchain_root='', riscv_qemu_path='', msvc_toolset=None, windows_sdk_version=None, android=False, android_abi='arm64-v8a', android_api=27, android_sdk_path='', android_ndk_path='', android_cpp_shared=False, android_run_emulator=False, use_gdk=False, gdk_edition='.', gdk_platform='Scarlett', enable_wasm_memory64=False, ios=False, visionos=False, macos=None, apple_sysroot='', ios_toolchain_file='', visionos_toolchain_file='', xcode_code_signing_team_id='', xcode_code_signing_identity='', cmake_generator='Ninja', osx_arch='x86_64', apple_deploy_target=None, enable_address_sanitizer=False, use_binskim_compliant_compile_flags=False, disable_memleak_checker=False, use_vcpkg=False, use_vcpkg_ms_internal_asset_cache=False, build_wasm=False, build_wasm_static_lib=False, emsdk_version='4.0.3', enable_wasm_simd=False, enable_wasm_threads=False, disable_wasm_exception_catching=False, enable_wasm_api_exception_catching=False, enable_wasm_exception_throwing_override=True, wasm_run_tests_in_browser=False, enable_wasm_profiling=False, enable_wasm_debug_info=False, wasm_malloc=None, emscripten_settings=None, use_extensions=False, extensions_overridden_path=None, cmake_path='cmake', ctest_path='ctest', skip_submodule_sync=True, use_mimalloc=False, use_dnnl=False, dnnl_gpu_runtime='', dnnl_opencl_root='', use_openvino=None, dnnl_aarch64_runtime='', dnnl_acl_root='', use_coreml=False, use_webnn=False, use_snpe=False, snpe_root=None, use_nnapi=False, use_vsinpu=False, nnapi_min_api=None, use_jsep=False, use_webgpu=False, use_external_dawn=False, use_qnn=None, qnn_home=None, use_rknpu=False, use_preinstalled_eigen=True, eigen_path='/home/qyc/src/eigen-1d8b82b0740839c0de7f1242a3585e3390ff5f33', enable_msinternal=False, use_vitisai=False, use_tensorrt=False, use_tensorrt_builtin_parser=True, use_tensorrt_oss_parser=False, tensorrt_home=None, test_all_timeout='10800', use_migraphx=False, migraphx_home=None, use_full_protobuf=False, enable_pix_capture=False, skip_onnx_tests=False, skip_winml_tests=False, skip_nodejs_tests=False, enable_msvc_static_runtime=False, use_dml=False, dml_path='', use_winml=False, winml_root_namespace_override=None, dml_external_project=False, use_telemetry=False, enable_wcos=False, enable_lto=False, enable_transformers_tool_test=False, use_acl=False, acl_home=None, acl_libs=None, use_armnn=False, armnn_relu=False, armnn_bn=False, armnn_home=None, armnn_libs=None, build_micro_benchmarks=False, minimal_build=None, include_ops_by_config=None, enable_reduced_operator_type_support=False, disable_contrib_ops=False, disable_ml_ops=False, disable_rtti=False, disable_types=[], disable_exceptions=False, rocm_version=None, use_rocm=False, rocm_home=None, code_coverage=False, enable_lazy_tensor=False, ms_experimental=False, enable_external_custom_op_schemas=False, external_graph_transformer_path=None, enable_cuda_profiling=False, use_cann=False, cann_home=None, enable_rocm_profiling=False, use_xnnpack=False, use_avx512=False, use_azure=False, use_cache=False, use_triton_kernel=False, use_lock_free_queue=False, enable_generic_interface=False, allow_running_as_root=False)
+Traceback (most recent call last):
+  File "/home/qyc/src/onnxruntime-1.21.0/tools/ci_build/build.py", line 3312, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/qyc/src/onnxruntime-1.21.0/tools/ci_build/build.py", line 3172, in main
+    generate_build_tree(
+  File "/home/qyc/src/onnxruntime-1.21.0/tools/ci_build/build.py", line 1948, in generate_build_tree
+    run_subprocess(
+  File "/home/qyc/src/onnxruntime-1.21.0/tools/ci_build/build.py", line 906, in run_subprocess
+    return run(*args, cwd=cwd, capture_stdout=capture_stdout, shell=shell, env=my_env)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/qyc/src/onnxruntime-1.21.0/tools/python/util/run.py", line 50, in run
+    completed_process = subprocess.run(
+                        ^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/usr/bin/cmake', '/home/qyc/src/onnxruntime-1.21.0/cmake', '--compile-no-warning-as-error', '-Donnxruntime_RUN_ONNX_TESTS=OFF', '-Donnxruntime_GENERATE_TEST_REPORTS=ON', '-DPython_EXECUTABLE=/usr/bin/python3', '-Donnxruntime_USE_VCPKG=OFF', '-Donnxruntime_USE_MIMALLOC=OFF', '-Donnxruntime_ENABLE_PYTHON=OFF', '-Donnxruntime_BUILD_CSHARP=OFF', '-Donnxruntime_BUILD_JAVA=OFF', '-Donnxruntime_BUILD_NODEJS=OFF', '-Donnxruntime_BUILD_OBJC=OFF', '-Donnxruntime_BUILD_SHARED_LIB=ON', '-Donnxruntime_BUILD_APPLE_FRAMEWORK=OFF', '-Donnxruntime_USE_DNNL=OFF', '-Donnxruntime_USE_NNAPI_BUILTIN=OFF', '-Donnxruntime_USE_VSINPU=OFF', '-Donnxruntime_USE_RKNPU=OFF', '-Donnxruntime_ENABLE_MICROSOFT_INTERNAL=OFF', '-Donnxruntime_USE_VITISAI=OFF', '-Donnxruntime_USE_TENSORRT=OFF', '-Donnxruntime_USE_TENSORRT_BUILTIN_PARSER=ON', '-Donnxruntime_USE_TENSORRT_INTERFACE=OFF', '-Donnxruntime_USE_CUDA_INTERFACE=OFF', '-Donnxruntime_USE_OPENVINO_INTERFACE=OFF', '-Donnxruntime_USE_VITISAI_INTERFACE=OFF', '-Donnxruntime_USE_QNN_INTERFACE=OFF', '-Donnxruntime_USE_MIGRAPHX=OFF', '-Donnxruntime_DISABLE_CONTRIB_OPS=OFF', '-Donnxruntime_DISABLE_ML_OPS=OFF', '-Donnxruntime_DISABLE_RTTI=OFF', '-Donnxruntime_DISABLE_EXCEPTIONS=OFF', '-Donnxruntime_MINIMAL_BUILD=OFF', '-Donnxruntime_EXTENDED_MINIMAL_BUILD=OFF', '-Donnxruntime_MINIMAL_BUILD_CUSTOM_OPS=OFF', '-Donnxruntime_REDUCED_OPS_BUILD=OFF', '-Donnxruntime_USE_DML=OFF', '-Donnxruntime_USE_WINML=OFF', '-Donnxruntime_BUILD_MS_EXPERIMENTAL_OPS=OFF', '-Donnxruntime_USE_TELEMETRY=OFF', '-Donnxruntime_ENABLE_LTO=OFF', '-Donnxruntime_USE_ACL=OFF', '-Donnxruntime_USE_ARMNN=OFF', '-Donnxruntime_ARMNN_RELU_USE_CPU=ON', '-Donnxruntime_ARMNN_BN_USE_CPU=ON', '-Donnxruntime_USE_JSEP=OFF', '-Donnxruntime_USE_WEBGPU=OFF', '-Donnxruntime_ENABLE_PIX_FOR_WEBGPU_EP=OFF', '-Donnxruntime_USE_EXTERNAL_DAWN=OFF', '-Donnxruntime_ENABLE_NVTX_PROFILE=OFF', '-Donnxruntime_ENABLE_TRAINING=OFF', '-Donnxruntime_ENABLE_TRAINING_OPS=OFF', '-Donnxruntime_ENABLE_TRAINING_APIS=OFF', '-Donnxruntime_ENABLE_CPU_FP16_OPS=OFF', '-Donnxruntime_USE_NCCL=OFF', '-Donnxruntime_BUILD_BENCHMARKS=OFF', '-Donnxruntime_USE_ROCM=OFF', '-Donnxruntime_GCOV_COVERAGE=OFF', '-Donnxruntime_USE_MPI=OFF', '-Donnxruntime_ENABLE_MEMORY_PROFILE=OFF', '-Donnxruntime_ENABLE_CUDA_LINE_NUMBER_INFO=OFF', '-Donnxruntime_USE_CUDA_NHWC_OPS=OFF', '-Donnxruntime_BUILD_WEBASSEMBLY_STATIC_LIB=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_EXCEPTION_CATCHING=ON', '-Donnxruntime_ENABLE_WEBASSEMBLY_API_EXCEPTION_CATCHING=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_EXCEPTION_THROWING=ON', '-Donnxruntime_WEBASSEMBLY_RUN_TESTS_IN_BROWSER=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_THREADS=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_MEMORY64=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_DEBUG_INFO=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_PROFILING=OFF', '-Donnxruntime_ENABLE_LAZY_TENSOR=OFF', '-Donnxruntime_ENABLE_EXTERNAL_CUSTOM_OP_SCHEMAS=OFF', '-Donnxruntime_ENABLE_CUDA_PROFILING=OFF', '-Donnxruntime_ENABLE_ROCM_PROFILING=OFF', '-Donnxruntime_USE_XNNPACK=OFF', '-Donnxruntime_USE_WEBNN=OFF', '-Donnxruntime_USE_CANN=OFF', '-Donnxruntime_USE_TRITON_KERNEL=OFF', '-Donnxruntime_DISABLE_FLOAT8_TYPES=OFF', '-Donnxruntime_DISABLE_SPARSE_TENSORS=OFF', '-Donnxruntime_DISABLE_OPTIONAL_TYPE=OFF', '-Donnxruntime_CUDA_MINIMAL=OFF', '-Donnxruntime_USE_PREINSTALLED_EIGEN=ON', '-Deigen_SOURCE_PATH=/home/qyc/src/eigen-1d8b82b0740839c0de7f1242a3585e3390ff5f33', '-DCMAKE_C_COMPILER=/usr/bin/gcc', '-DCMAKE_CXX_COMPILER=/usr/bin/g++', '-DCMAKE_C_FLAGS=-fsanitize=thread -fno-omit-frame-pointer', '-DCMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer', '-DCMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread', '-DCMAKE_EXE_LINKER_FLAGS=-fsanitize=thread', '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON', '-Donnxruntime_BUILD_UNIT_TESTS=OFF', '-G', 'Ninja', '-DCMAKE_BUILD_TYPE=RelWithDebInfo']' returned non-zero exit status 1.

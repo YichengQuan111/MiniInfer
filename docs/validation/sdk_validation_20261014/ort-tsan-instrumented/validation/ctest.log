@@ -1,0 +1,197 @@
+Command: setarch x86_64 -R ctest --test-dir /home/qyc/builds/MiniInfer/sdk-validation-20261014-tsan --output-on-failure --no-tests=error -j1
+Internal ctest changing into directory: /home/qyc/builds/MiniInfer/sdk-validation-20261014-tsan
+Test project /home/qyc/builds/MiniInfer/sdk-validation-20261014-tsan
+      Start  1: depth_image_contract
+ 1/35 Test  #1: depth_image_contract .....................   Passed    0.50 sec
+      Start  2: depth_ort_contract
+ 2/35 Test  #2: depth_ort_contract .......................***Failed    0.94 sec
+==================
+WARNING: ThreadSanitizer: data race (pid=416)
+  Read of size 4 at 0x727800001568 by thread T11:
+    #0 onnxruntime::InferenceSession::Run(OrtRunOptions const&, gsl::span<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, 18446744073709551615ul>, gsl::span<OrtValue const, 18446744073709551615ul>, gsl::span<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, 18446744073709551615ul>, std::vector<OrtValue, std::allocator<OrtValue> >*, std::vector<OrtDevice, std::allocator<OrtDevice> > const*) /home/qyc/src/onnxruntime-1.21.0/onnxruntime/core/session/inference_session.cc:2747 (libonnxruntime.so.1+0x1788ae) (BuildId: 76f3d8e749553c5602410d73132dafbe9b05f63f)
+    #1 onnxruntime::InferenceSession::Run(OrtRunOptions const&, gsl::span<char const* const, 18446744073709551615ul>, gsl::span<OrtValue const* const, 18446744073709551615ul>, gsl::span<char const* const, 18446744073709551615ul>, gsl::span<OrtValue*, 18446744073709551615ul>) /home/qyc/src/onnxruntime-1.21.0/onnxruntime/core/session/inference_session.cc:2841 (libonnxruntime.so.1+0x17b063) (BuildId: 76f3d8e749553c5602410d73132dafbe9b05f63f)
+    #2 OrtApis::Run(OrtSession*, OrtRunOptions const*, char const* const*, OrtValue const* const*, unsigned long, char const* const*, unsigned long, OrtValue**) <null> (libonnxruntime.so.1+0xb8998) (BuildId: 76f3d8e749553c5602410d73132dafbe9b05f63f)
+    #3 Ort::detail::SessionImpl<OrtSession>::Run(Ort::RunOptions const&, char const* const*, Ort::Value const*, unsigned long, char const* const*, Ort::Value*, unsigned long) /home/qyc/.cache/miniinfer-depth/onnxruntime-linux-x64-1.21.0/include/onnxruntime_cxx_inline.h:1071 (test_depth_ort+0x27ae8) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #4 Ort::detail::SessionImpl<OrtSession>::Run(Ort::RunOptions const&, char const* const*, Ort::Value const*, unsigned long, char const* const*, unsigned long) /home/qyc/.cache/miniinfer-depth/onnxruntime-linux-x64-1.21.0/include/onnxruntime_cxx_inline.h:1061 (test_depth_ort+0x25e91) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #5 miniinfer::depth::OrtRunner::run_raw(miniinfer::depth::PreparedImage const&) const /mnt/c/Users/ASUS/Documents/MiniInfer/src/depth/ort_runner.cpp:77 (test_depth_ort+0x20f0c) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #6 operator() /mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_depth_ort.cpp:103 (test_depth_ort+0x8549) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #7 __invoke_impl<miniinfer::depth::RawDepth, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/invoke.h:61 (test_depth_ort+0xe421) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #8 __invoke<(anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/invoke.h:97 (test_depth_ort+0xe34f) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #9 _M_invoke<0> /usr/include/c++/13/bits/std_thread.h:292 (test_depth_ort+0xe267) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #10 operator() /usr/include/c++/13/bits/std_thread.h:299 (test_depth_ort+0xe16e) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #11 operator() /usr/include/c++/13/future:1409 (test_depth_ort+0xde9a) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #12 __invoke_impl<std::unique_ptr<std::__future_base::_Result<miniinfer::depth::RawDepth>, std::__future_base::_Result_base::_Deleter>, std::__future_base::_Task_setter<std::unique_ptr<std::__future_base::_Result<miniinfer::depth::RawDepth>, std::__future_base::_Result_base::_Deleter>, std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>&> /usr/include/c++/13/bits/invoke.h:61 (test_depth_ort+0xdcea) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #13 __invoke_r<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter>, std::__future_base::_Task_setter<std::unique_ptr<std::__future_base::_Result<miniinfer::depth::RawDepth>, std::__future_base::_Result_base::_Deleter>, std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>&> /usr/include/c++/13/bits/invoke.h:116 (test_depth_ort+0xda65) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #14 _M_invoke /usr/include/c++/13/bits/std_function.h:291 (test_depth_ort+0xd708) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #15 std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>::operator()() const <null> (test_depth_ort+0x12d46) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #16 std::__future_base::_State_baseV2::_M_do_set(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*) <null> (test_depth_ort+0x10fa2) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #17 void std::__invoke_impl<void, void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(std::__invoke_memfun_deref, void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&) <null> (test_depth_ort+0x18d89) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #18 std::__invoke_result<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>::type std::__invoke<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&) <null> (test_depth_ort+0x15f95) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #19 std::call_once<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(std::once_flag&, void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&)::{lambda()#1}::operator()() const <null> (test_depth_ort+0x12979) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #20 std::once_flag::_Prepare_execution::_Prepare_execution<std::call_once<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(std::once_flag&, void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&)::{lambda()#1}>(void (std::__future_base::_State_baseV2::*&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*))::{lambda()#1}::operator()() const <null> (test_depth_ort+0x1600a) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #21 std::once_flag::_Prepare_execution::_Prepare_execution<std::call_once<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(std::once_flag&, void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&)::{lambda()#1}>(void (std::__future_base::_State_baseV2::*&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*))::{lambda()#1}::_FUN() <null> (test_depth_ort+0x16051) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #22 pthread_once ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1587 (libtsan.so.2+0x57ff5) (BuildId: 2a13a7710e361d06f7babbea53065ca2be93f738)
+    #23 __gthread_once /usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h:700 (test_depth_ort+0x62e2) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #24 void std::call_once<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(std::once_flag&, void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&) <null> (test_depth_ort+0x12a63) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #25 std::__future_base::_State_baseV2::_M_set_result(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>, bool) <null> (test_depth_ort+0x10c80) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #26 _M_run /usr/include/c++/13/future:1774 (test_depth_ort+0xd155) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #27 __invoke_impl<void, void (std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>::*)(), std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>*> /usr/include/c++/13/bits/invoke.h:74 (test_depth_ort+0xefb7) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #28 __invoke<void (std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>::*)(), std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>*> /usr/include/c++/13/bits/invoke.h:96 (test_depth_ort+0xee90) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #29 _M_invoke<0, 1> /usr/include/c++/13/bits/std_thread.h:292 (test_depth_ort+0xed44) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #30 operator() /usr/include/c++/13/bits/std_thread.h:299 (test_depth_ort+0xec60) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #31 _M_run /usr/include/c++/13/bits/std_thread.h:244 (test_depth_ort+0xe628) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #32 <null> <null> (libstdc++.so.6+0xecdb3) (BuildId: 753c6c8608b61d4e67be8f0c890e03e0aa046b8b)
+
+  Previous write of size 4 at 0x727800001568 by thread T10:
+    #0 onnxruntime::InferenceSession::Run(OrtRunOptions const&, gsl::span<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, 18446744073709551615ul>, gsl::span<OrtValue const, 18446744073709551615ul>, gsl::span<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, 18446744073709551615ul>, std::vector<OrtValue, std::allocator<OrtValue> >*, std::vector<OrtDevice, std::allocator<OrtDevice> > const*) /home/qyc/src/onnxruntime-1.21.0/onnxruntime/core/session/inference_session.cc:2747 (libonnxruntime.so.1+0x1788c0) (BuildId: 76f3d8e749553c5602410d73132dafbe9b05f63f)
+    #1 onnxruntime::InferenceSession::Run(OrtRunOptions const&, gsl::span<char const* const, 18446744073709551615ul>, gsl::span<OrtValue const* const, 18446744073709551615ul>, gsl::span<char const* const, 18446744073709551615ul>, gsl::span<OrtValue*, 18446744073709551615ul>) /home/qyc/src/onnxruntime-1.21.0/onnxruntime/core/session/inference_session.cc:2841 (libonnxruntime.so.1+0x17b063) (BuildId: 76f3d8e749553c5602410d73132dafbe9b05f63f)
+    #2 OrtApis::Run(OrtSession*, OrtRunOptions const*, char const* const*, OrtValue const* const*, unsigned long, char const* const*, unsigned long, OrtValue**) <null> (libonnxruntime.so.1+0xb8998) (BuildId: 76f3d8e749553c5602410d73132dafbe9b05f63f)
+    #3 Ort::detail::SessionImpl<OrtSession>::Run(Ort::RunOptions const&, char const* const*, Ort::Value const*, unsigned long, char const* const*, Ort::Value*, unsigned long) /home/qyc/.cache/miniinfer-depth/onnxruntime-linux-x64-1.21.0/include/onnxruntime_cxx_inline.h:1071 (test_depth_ort+0x27ae8) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #4 Ort::detail::SessionImpl<OrtSession>::Run(Ort::RunOptions const&, char const* const*, Ort::Value const*, unsigned long, char const* const*, unsigned long) /home/qyc/.cache/miniinfer-depth/onnxruntime-linux-x64-1.21.0/include/onnxruntime_cxx_inline.h:1061 (test_depth_ort+0x25e91) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #5 miniinfer::depth::OrtRunner::run_raw(miniinfer::depth::PreparedImage const&) const /mnt/c/Users/ASUS/Documents/MiniInfer/src/depth/ort_runner.cpp:77 (test_depth_ort+0x20f0c) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #6 operator() /mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_depth_ort.cpp:103 (test_depth_ort+0x8549) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #7 __invoke_impl<miniinfer::depth::RawDepth, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/invoke.h:61 (test_depth_ort+0xe421) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #8 __invoke<(anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/invoke.h:97 (test_depth_ort+0xe34f) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #9 _M_invoke<0> /usr/include/c++/13/bits/std_thread.h:292 (test_depth_ort+0xe267) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #10 operator() /usr/include/c++/13/bits/std_thread.h:299 (test_depth_ort+0xe16e) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #11 operator() /usr/include/c++/13/future:1409 (test_depth_ort+0xde9a) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #12 __invoke_impl<std::unique_ptr<std::__future_base::_Result<miniinfer::depth::RawDepth>, std::__future_base::_Result_base::_Deleter>, std::__future_base::_Task_setter<std::unique_ptr<std::__future_base::_Result<miniinfer::depth::RawDepth>, std::__future_base::_Result_base::_Deleter>, std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>&> /usr/include/c++/13/bits/invoke.h:61 (test_depth_ort+0xdcea) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #13 __invoke_r<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter>, std::__future_base::_Task_setter<std::unique_ptr<std::__future_base::_Result<miniinfer::depth::RawDepth>, std::__future_base::_Result_base::_Deleter>, std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>&> /usr/include/c++/13/bits/invoke.h:116 (test_depth_ort+0xda65) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #14 _M_invoke /usr/include/c++/13/bits/std_function.h:291 (test_depth_ort+0xd708) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #15 std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>::operator()() const <null> (test_depth_ort+0x12d46) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #16 std::__future_base::_State_baseV2::_M_do_set(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*) <null> (test_depth_ort+0x10fa2) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #17 void std::__invoke_impl<void, void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(std::__invoke_memfun_deref, void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&) <null> (test_depth_ort+0x18d89) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #18 std::__invoke_result<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>::type std::__invoke<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&) <null> (test_depth_ort+0x15f95) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #19 std::call_once<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(std::once_flag&, void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&)::{lambda()#1}::operator()() const <null> (test_depth_ort+0x12979) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #20 std::once_flag::_Prepare_execution::_Prepare_execution<std::call_once<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(std::once_flag&, void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&)::{lambda()#1}>(void (std::__future_base::_State_baseV2::*&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*))::{lambda()#1}::operator()() const <null> (test_depth_ort+0x1600a) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #21 std::once_flag::_Prepare_execution::_Prepare_execution<std::call_once<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(std::once_flag&, void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&)::{lambda()#1}>(void (std::__future_base::_State_baseV2::*&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*))::{lambda()#1}::_FUN() <null> (test_depth_ort+0x16051) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #22 pthread_once ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1587 (libtsan.so.2+0x57ff5) (BuildId: 2a13a7710e361d06f7babbea53065ca2be93f738)
+    #23 __gthread_once /usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h:700 (test_depth_ort+0x62e2) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #24 void std::call_once<void (std::__future_base::_State_baseV2::*)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*>(std::once_flag&, void (std::__future_base::_State_baseV2::*&&)(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*), std::__future_base::_State_baseV2*&&, std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*&&, bool*&&) <null> (test_depth_ort+0x12a63) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #25 std::__future_base::_State_baseV2::_M_set_result(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>, bool) <null> (test_depth_ort+0x10c80) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #26 _M_run /usr/include/c++/13/future:1774 (test_depth_ort+0xd155) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #27 __invoke_impl<void, void (std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>::*)(), std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>*> /usr/include/c++/13/bits/invoke.h:74 (test_depth_ort+0xefb7) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #28 __invoke<void (std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>::*)(), std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>*> /usr/include/c++/13/bits/invoke.h:96 (test_depth_ort+0xee90) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #29 _M_invoke<0, 1> /usr/include/c++/13/bits/std_thread.h:292 (test_depth_ort+0xed44) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #30 operator() /usr/include/c++/13/bits/std_thread.h:299 (test_depth_ort+0xec60) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #31 _M_run /usr/include/c++/13/bits/std_thread.h:244 (test_depth_ort+0xe628) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #32 <null> <null> (libstdc++.so.6+0xecdb3) (BuildId: 753c6c8608b61d4e67be8f0c890e03e0aa046b8b)
+
+  Location is heap block of size 2736 at 0x727800000c00 allocated by main thread:
+    #0 operator new(unsigned long) ../../../../src/libsanitizer/tsan/tsan_new_delete.cpp:64 (libtsan.so.2+0xa6fae) (BuildId: 2a13a7710e361d06f7babbea53065ca2be93f738)
+    #1 (anonymous namespace)::CreateSessionAndLoadModel(OrtSessionOptions const*, OrtEnv const*, char const*, void const*, unsigned long, std::unique_ptr<onnxruntime::InferenceSession, std::default_delete<onnxruntime::InferenceSession> >&) <null> (libonnxruntime.so.1+0xb656c) (BuildId: 76f3d8e749553c5602410d73132dafbe9b05f63f)
+    #2 OrtApis::CreateSession(OrtEnv const*, char const*, OrtSessionOptions const*, OrtSession**) <null> (libonnxruntime.so.1+0xb69ea) (BuildId: 76f3d8e749553c5602410d73132dafbe9b05f63f)
+    #3 Ort::Session::Session(Ort::Env const&, char const*, Ort::SessionOptions const&) /home/qyc/.cache/miniinfer-depth/onnxruntime-linux-x64-1.21.0/include/onnxruntime_cxx_inline.h:1129 (test_depth_ort+0x22fa4) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #4 miniinfer::depth::OrtRunner::Impl::Impl(std::filesystem::__cxx11::path const&, int) /mnt/c/Users/ASUS/Documents/MiniInfer/src/depth/ort_runner.cpp:34 (test_depth_ort+0x233e4) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #5 std::__detail::_MakeUniq<miniinfer::depth::OrtRunner::Impl>::__single_object std::make_unique<miniinfer::depth::OrtRunner::Impl, std::filesystem::__cxx11::path const&, int&>(std::filesystem::__cxx11::path const&, int&) <null> (test_depth_ort+0x25918) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #6 miniinfer::depth::OrtRunner::OrtRunner(std::filesystem::__cxx11::path const&, int) /mnt/c/Users/ASUS/Documents/MiniInfer/src/depth/ort_runner.cpp:55 (test_depth_ort+0x20908) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #7 backend_contract /mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_depth_ort.cpp:85 (test_depth_ort+0x8b2e) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #8 main /mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_depth_ort.cpp:163 (test_depth_ort+0xa4fc) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+
+  Thread T11 (tid=428, running) created by main thread at:
+    #0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1022 (libtsan.so.2+0x5ac1a) (BuildId: 2a13a7710e361d06f7babbea53065ca2be93f738)
+    #1 std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) <null> (libstdc++.so.6+0xeceb0) (BuildId: 753c6c8608b61d4e67be8f0c890e03e0aa046b8b)
+    #2 _Async_state_impl<(anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/future:1756 (test_depth_ort+0xceef) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #3 _Construct<std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/stl_construct.h:119 (test_depth_ort+0xcb6a) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #4 construct<std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/alloc_traits.h:661 (test_depth_ort+0xc4b4) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #5 _Sp_counted_ptr_inplace<(anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/shared_ptr_base.h:604 (test_depth_ort+0xc4b4)
+    #6 __shared_count<std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>, std::allocator<void>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/shared_ptr_base.h:971 (test_depth_ort+0xc007) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #7 __shared_ptr<std::allocator<void>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/shared_ptr_base.h:1712 (test_depth_ort+0xbbeb) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #8 shared_ptr<std::allocator<void>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/shared_ptr.h:464 (test_depth_ort+0xb3fc) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #9 make_shared<std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/shared_ptr.h:1010 (test_depth_ort+0xb088) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #10 async<(anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/future:1805 (test_depth_ort+0xadb1) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #11 backend_contract /mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_depth_ort.cpp:97 (test_depth_ort+0x9084) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #12 main /mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_depth_ort.cpp:163 (test_depth_ort+0xa4fc) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+
+  Thread T10 (tid=427, running) created by main thread at:
+    #0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1022 (libtsan.so.2+0x5ac1a) (BuildId: 2a13a7710e361d06f7babbea53065ca2be93f738)
+    #1 std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) <null> (libstdc++.so.6+0xeceb0) (BuildId: 753c6c8608b61d4e67be8f0c890e03e0aa046b8b)
+    #2 _Async_state_impl<(anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/future:1756 (test_depth_ort+0xceef) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #3 _Construct<std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/stl_construct.h:119 (test_depth_ort+0xcb6a) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #4 construct<std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/alloc_traits.h:661 (test_depth_ort+0xc4b4) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #5 _Sp_counted_ptr_inplace<(anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/shared_ptr_base.h:604 (test_depth_ort+0xc4b4)
+    #6 __shared_count<std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>, std::allocator<void>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/shared_ptr_base.h:971 (test_depth_ort+0xc007) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #7 __shared_ptr<std::allocator<void>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/shared_ptr_base.h:1712 (test_depth_ort+0xbbeb) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #8 shared_ptr<std::allocator<void>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/shared_ptr.h:464 (test_depth_ort+0xb3fc) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #9 make_shared<std::__future_base::_Async_state_impl<std::thread::_Invoker<std::tuple<(anonymous namespace)::backend_contract()::<lambda()> > >, miniinfer::depth::RawDepth>, (anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/bits/shared_ptr.h:1010 (test_depth_ort+0xb088) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #10 async<(anonymous namespace)::backend_contract()::<lambda()> > /usr/include/c++/13/future:1805 (test_depth_ort+0xadb1) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #11 backend_contract /mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_depth_ort.cpp:97 (test_depth_ort+0x9084) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+    #12 main /mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_depth_ort.cpp:163 (test_depth_ort+0xa4fc) (BuildId: 09ac49692be6a665b15e16a66c8158bff27f9bd2)
+
+SUMMARY: ThreadSanitizer: data race /home/qyc/src/onnxruntime-1.21.0/onnxruntime/core/session/inference_session.cc:2747 in onnxruntime::InferenceSession::Run(OrtRunOptions const&, gsl::span<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, 18446744073709551615ul>, gsl::span<OrtValue const, 18446744073709551615ul>, gsl::span<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, 18446744073709551615ul>, std::vector<OrtValue, std::allocator<OrtValue> >*, std::vector<OrtDevice, std::allocator<OrtDevice> > const*)
+==================
+
+      Start  3: depth_artifact_contract
+ 3/35 Test  #3: depth_artifact_contract ..................   Passed    0.09 sec
+      Start  4: depth_trt_artifact_contract
+ 4/35 Test  #4: depth_trt_artifact_contract ..............   Passed    0.56 sec
+      Start  5: depth_sdk_contract
+ 5/35 Test  #5: depth_sdk_contract .......................   Passed    0.26 sec
+      Start  6: depth_net_contract
+ 6/35 Test  #6: depth_net_contract .......................   Passed    1.06 sec
+      Start  7: depth_reference_contract
+ 7/35 Test  #7: depth_reference_contract .................   Passed    1.51 sec
+      Start  8: depth_metrics_contract
+ 8/35 Test  #8: depth_metrics_contract ...................   Passed    0.63 sec
+      Start  9: depth_validation_contract
+ 9/35 Test  #9: depth_validation_contract ................   Passed    9.13 sec
+      Start 10: depth_benchmark_statistics
+10/35 Test #10: depth_benchmark_statistics ...............   Passed    0.50 sec
+      Start 11: depth_concurrency_benchmark_statistics
+11/35 Test #11: depth_concurrency_benchmark_statistics ...   Passed    0.61 sec
+      Start 12: net_echo_contract
+12/35 Test #12: net_echo_contract ........................   Passed    0.01 sec
+      Start 13: net_concurrency_contract
+13/35 Test #13: net_concurrency_contract .................   Passed    1.04 sec
+      Start 14: net_shutdown_contract
+14/35 Test #14: net_shutdown_contract ....................   Passed    1.32 sec
+      Start 15: net_io_contract
+15/35 Test #15: net_io_contract ..........................   Passed    0.02 sec
+      Start 16: net_protocol_contract
+16/35 Test #16: net_protocol_contract ....................   Passed    0.02 sec
+      Start 17: project_contract
+17/35 Test #17: project_contract .........................   Passed    0.01 sec
+      Start 18: cli_contract
+18/35 Test #18: cli_contract .............................   Passed    0.76 sec
+      Start 19: buffer_contract
+19/35 Test #19: buffer_contract ..........................   Passed    0.02 sec
+      Start 20: tensor_view_contract
+20/35 Test #20: tensor_view_contract .....................   Passed    0.01 sec
+      Start 21: model_contract
+21/35 Test #21: model_contract ...........................   Passed    0.95 sec
+      Start 22: cpu_ops_contract
+22/35 Test #22: cpu_ops_contract .........................   Passed    0.01 sec
+      Start 23: inference_contract
+23/35 Test #23: inference_contract .......................   Passed    0.31 sec
+      Start 24: runtime_contract
+24/35 Test #24: runtime_contract .........................   Passed    1.09 sec
+      Start 25: thread_pool_contract
+25/35 Test #25: thread_pool_contract .....................   Passed    0.03 sec
+      Start 26: concurrency_contract
+26/35 Test #26: concurrency_contract .....................   Passed   14.95 sec
+      Start 27: shutdown_contract
+27/35 Test #27: shutdown_contract ........................   Passed    0.13 sec
+      Start 28: timing_contract
+28/35 Test #28: timing_contract ..........................   Passed    0.01 sec
+      Start 29: runtime_demo_contract
+29/35 Test #29: runtime_demo_contract ....................   Passed    0.18 sec
+      Start 30: net_baseline_driver_contract
+30/35 Test #30: net_baseline_driver_contract .............   Passed    4.17 sec
+      Start 31: net_client_contract
+31/35 Test #31: net_client_contract ......................   Passed    0.60 sec
+      Start 32: net_inference_contract
+32/35 Test #32: net_inference_contract ...................   Passed    1.52 sec
+      Start 33: net_cli_contract
+33/35 Test #33: net_cli_contract .........................   Passed    0.33 sec
+      Start 34: runtime_baseline_driver_contract
+34/35 Test #34: runtime_baseline_driver_contract .........   Passed    0.89 sec
+      Start 35: benchmark_cli_contract
+35/35 Test #35: benchmark_cli_contract ...................   Passed    2.32 sec
+
+97% tests passed, 1 tests failed out of 35
+
+Total Test time (real) =  46.82 sec
+
+The following tests FAILED:
+	  2 - depth_ort_contract (Failed)
+Errors while running CTest

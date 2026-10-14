@@ -1,0 +1,4 @@
+Command: /home/qyc/builds/MiniInfer/sdk-validation-20261014-release/bin/test_depth_trt /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16/model.engine /mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm
+CUDA timing h2d_ms=0.306528 compute_ms=67.7895 d2h_ms=0.113344 host_ms=70.6253
+TensorRT: [runtime.cpp::parsePlan::603] Error Code 2: Internal Error (Assertion blobSize > numericCast<int64_t>(sizeof(rt::PlanHeader)) failed. )
+TRT ownership, serialization, compatibility and recovery passed

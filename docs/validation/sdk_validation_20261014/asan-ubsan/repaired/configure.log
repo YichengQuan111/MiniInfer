@@ -1,0 +1,4 @@
+Command: cmake -S /mnt/c/Users/ASUS/Documents/MiniInfer -B /home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan -DMINIINFER_ENABLE_ASAN_UBSAN=ON -DMINIINFER_ENABLE_TSAN=OFF
+-- Configuring done (2.9s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan

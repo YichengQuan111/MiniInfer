@@ -1,0 +1,23 @@
+Command: cmake --install /home/qyc/builds/onnxruntime-tsan-1.21.0/RelWithDebInfo --prefix /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0
+-- Install configuration: "RelWithDebInfo"
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/provider_options.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/cpu_provider_factory.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/core/providers/resource.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/core/providers/custom_op_context.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/lib/libonnxruntime_providers_shared.so
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/lib/libonnxruntime.so.1.21.0
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/lib/libonnxruntime.so.1
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/lib/libonnxruntime.so
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/onnxruntime_c_api.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/onnxruntime_cxx_api.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/onnxruntime_cxx_inline.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/onnxruntime_float16.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/onnxruntime_run_options_config_keys.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/onnxruntime_session_options_config_keys.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/onnxruntime_lite_custom_op.h
+-- Up-to-date: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/include/onnxruntime/cpu_provider_factory.h
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/lib/pkgconfig/libonnxruntime.pc
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/lib/cmake/onnxruntime/onnxruntimeTargets.cmake
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/lib/cmake/onnxruntime/onnxruntimeTargets-relwithdebinfo.cmake
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/lib/cmake/onnxruntime/onnxruntimeConfig.cmake
+-- Installing: /home/qyc/.cache/miniinfer-depth/onnxruntime-tsan-1.21.0/lib/cmake/onnxruntime/onnxruntimeConfigVersion.cmake

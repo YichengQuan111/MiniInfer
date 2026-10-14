@@ -1,0 +1,244 @@
+Command: setarch x86_64 -R bash build.sh --config RelWithDebInfo --build_shared_lib --build_dir /home/qyc/builds/onnxruntime-tsan-1.21.0 --parallel 4 --skip_tests --skip_submodule_sync --compile_no_warning_as_error --cmake_generator Ninja --cmake_extra_defines CMAKE_C_COMPILER=/usr/bin/gcc CMAKE_CXX_COMPILER=/usr/bin/g++ 'CMAKE_C_FLAGS=-fsanitize=thread -fno-omit-frame-pointer' 'CMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer' CMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread CMAKE_EXE_LINKER_FLAGS=-fsanitize=thread CMAKE_EXPORT_COMPILE_COMMANDS=ON onnxruntime_BUILD_UNIT_TESTS=OFF
+2026-10-14 16:28:53,997 tools_python_utils [INFO] - flatbuffers module is not installed. parse_config will not be available
+2026-10-14 16:28:54,003 build [DEBUG] - Command line arguments:
+  --build_dir /home/qyc/src/onnxruntime-1.21.0/build/Linux --config RelWithDebInfo --build_shared_lib --build_dir /home/qyc/builds/onnxruntime-tsan-1.21.0 --parallel 4 --skip_tests --skip_submodule_sync --compile_no_warning_as_error --cmake_generator Ninja --cmake_extra_defines CMAKE_C_COMPILER=/usr/bin/gcc CMAKE_CXX_COMPILER=/usr/bin/g++ 'CMAKE_C_FLAGS=-fsanitize=thread -fno-omit-frame-pointer' 'CMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer' CMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread CMAKE_EXE_LINKER_FLAGS=-fsanitize=thread CMAKE_EXPORT_COMPILE_COMMANDS=ON onnxruntime_BUILD_UNIT_TESTS=OFF
+2026-10-14 16:28:54,018 build [DEBUG] - Defaulting to running update, build [and test for native builds].
+2026-10-14 16:28:54,020 build [INFO] - Build started
+2026-10-14 16:28:54,024 build [INFO] - Generating CMake build tree
+2026-10-14 16:28:54,028 build [INFO] - /usr/bin/cmake /home/qyc/src/onnxruntime-1.21.0/cmake --compile-no-warning-as-error -Donnxruntime_RUN_ONNX_TESTS=OFF -Donnxruntime_GENERATE_TEST_REPORTS=ON -DPython_EXECUTABLE=/usr/bin/python3 -Donnxruntime_USE_VCPKG=OFF -Donnxruntime_USE_MIMALLOC=OFF -Donnxruntime_ENABLE_PYTHON=OFF -Donnxruntime_BUILD_CSHARP=OFF -Donnxruntime_BUILD_JAVA=OFF -Donnxruntime_BUILD_NODEJS=OFF -Donnxruntime_BUILD_OBJC=OFF -Donnxruntime_BUILD_SHARED_LIB=ON -Donnxruntime_BUILD_APPLE_FRAMEWORK=OFF -Donnxruntime_USE_DNNL=OFF -Donnxruntime_USE_NNAPI_BUILTIN=OFF -Donnxruntime_USE_VSINPU=OFF -Donnxruntime_USE_RKNPU=OFF -Donnxruntime_ENABLE_MICROSOFT_INTERNAL=OFF -Donnxruntime_USE_VITISAI=OFF -Donnxruntime_USE_TENSORRT=OFF -Donnxruntime_USE_TENSORRT_BUILTIN_PARSER=ON -Donnxruntime_USE_TENSORRT_INTERFACE=OFF -Donnxruntime_USE_CUDA_INTERFACE=OFF -Donnxruntime_USE_OPENVINO_INTERFACE=OFF -Donnxruntime_USE_VITISAI_INTERFACE=OFF -Donnxruntime_USE_QNN_INTERFACE=OFF -Donnxruntime_USE_MIGRAPHX=OFF -Donnxruntime_DISABLE_CONTRIB_OPS=OFF -Donnxruntime_DISABLE_ML_OPS=OFF -Donnxruntime_DISABLE_RTTI=OFF -Donnxruntime_DISABLE_EXCEPTIONS=OFF -Donnxruntime_MINIMAL_BUILD=OFF -Donnxruntime_EXTENDED_MINIMAL_BUILD=OFF -Donnxruntime_MINIMAL_BUILD_CUSTOM_OPS=OFF -Donnxruntime_REDUCED_OPS_BUILD=OFF -Donnxruntime_USE_DML=OFF -Donnxruntime_USE_WINML=OFF -Donnxruntime_BUILD_MS_EXPERIMENTAL_OPS=OFF -Donnxruntime_USE_TELEMETRY=OFF -Donnxruntime_ENABLE_LTO=OFF -Donnxruntime_USE_ACL=OFF -Donnxruntime_USE_ARMNN=OFF -Donnxruntime_ARMNN_RELU_USE_CPU=ON -Donnxruntime_ARMNN_BN_USE_CPU=ON -Donnxruntime_USE_JSEP=OFF -Donnxruntime_USE_WEBGPU=OFF -Donnxruntime_ENABLE_PIX_FOR_WEBGPU_EP=OFF -Donnxruntime_USE_EXTERNAL_DAWN=OFF -Donnxruntime_ENABLE_NVTX_PROFILE=OFF -Donnxruntime_ENABLE_TRAINING=OFF -Donnxruntime_ENABLE_TRAINING_OPS=OFF -Donnxruntime_ENABLE_TRAINING_APIS=OFF -Donnxruntime_ENABLE_CPU_FP16_OPS=OFF -Donnxruntime_USE_NCCL=OFF -Donnxruntime_BUILD_BENCHMARKS=OFF -Donnxruntime_USE_ROCM=OFF -Donnxruntime_GCOV_COVERAGE=OFF -Donnxruntime_USE_MPI=OFF -Donnxruntime_ENABLE_MEMORY_PROFILE=OFF -Donnxruntime_ENABLE_CUDA_LINE_NUMBER_INFO=OFF -Donnxruntime_USE_CUDA_NHWC_OPS=OFF -Donnxruntime_BUILD_WEBASSEMBLY_STATIC_LIB=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_EXCEPTION_CATCHING=ON -Donnxruntime_ENABLE_WEBASSEMBLY_API_EXCEPTION_CATCHING=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_EXCEPTION_THROWING=ON -Donnxruntime_WEBASSEMBLY_RUN_TESTS_IN_BROWSER=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_THREADS=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_MEMORY64=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_DEBUG_INFO=OFF -Donnxruntime_ENABLE_WEBASSEMBLY_PROFILING=OFF -Donnxruntime_ENABLE_LAZY_TENSOR=OFF -Donnxruntime_ENABLE_EXTERNAL_CUSTOM_OP_SCHEMAS=OFF -Donnxruntime_ENABLE_CUDA_PROFILING=OFF -Donnxruntime_ENABLE_ROCM_PROFILING=OFF -Donnxruntime_USE_XNNPACK=OFF -Donnxruntime_USE_WEBNN=OFF -Donnxruntime_USE_CANN=OFF -Donnxruntime_USE_TRITON_KERNEL=OFF -Donnxruntime_DISABLE_FLOAT8_TYPES=OFF -Donnxruntime_DISABLE_SPARSE_TENSORS=OFF -Donnxruntime_DISABLE_OPTIONAL_TYPE=OFF -Donnxruntime_CUDA_MINIMAL=OFF -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_C_FLAGS=-fsanitize=thread -fno-omit-frame-pointer -DCMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer -DCMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread -DCMAKE_EXE_LINKER_FLAGS=-fsanitize=thread -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -Donnxruntime_BUILD_UNIT_TESTS=OFF -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo
+CMake Deprecation Warning at CMakeLists.txt:9 (cmake_policy):
+  The OLD behavior for policy CMP0104 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+
+Ignoring COMPILE_WARNING_AS_ERROR target property and CMAKE_COMPILE_WARNING_AS_ERROR variable.
+
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /usr/bin/gcc
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test COMPILER_SUPPORT_MF16C
+-- Performing Test COMPILER_SUPPORT_MF16C - Success
+-- Performing Test COMPILER_SUPPORT_FMA
+-- Performing Test COMPILER_SUPPORT_FMA - Success
+-- Performing Test COMPILER_SUPPORT_AVX
+-- Performing Test COMPILER_SUPPORT_AVX - Success
+Building ONNX Runtime for x86_64 CPU ARCH
+-- Performing Test onnxruntime_HAVE_BUILTIN_ATOMICS
+-- Performing Test onnxruntime_HAVE_BUILTIN_ATOMICS - Success
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Performing Test Iconv_IS_BUILT_IN
+-- Performing Test Iconv_IS_BUILT_IN - Success
+-- Found Iconv: built in to C library  
+-- Found Patch: /usr/bin/patch  
+Patch found: /usr/bin/patch
+-- Found Python: /usr/bin/python3 (found suitable version "3.12.3", minimum required is "3.10") found components: Interpreter 
+-- Loading Dependencies URLs ...
+-- Loading Dependencies ...
+[1/9] Creating directories for 'abseil_cpp-populate'
+[1/9] Performing download step (download, verify and extract) for 'abseil_cpp-populate'
+-- Downloading...
+   dst='/home/qyc/builds/onnxruntime-tsan-1.21.0/RelWithDebInfo/_deps/abseil_cpp-subbuild/abseil_cpp-populate-prefix/src/20240722.0.zip'
+   timeout='none'
+   inactivity timeout='none'
+-- Using src='https://github.com/abseil/abseil-cpp/archive/refs/tags/20240722.0.zip'
+CMake Error at abseil_cpp-subbuild/abseil_cpp-populate-prefix/src/abseil_cpp-populate-stamp/download-abseil_cpp-populate.cmake:170 (message):
+  Each download failed!
+
+    error: downloading 'https://github.com/abseil/abseil-cpp/archive/refs/tags/20240722.0.zip' failed
+          status_code: 56
+          status_string: "Failure when receiving data from the peer"
+          log:
+          --- LOG BEGIN ---
+          Host github.com:443 was resolved.
+
+  IPv6: (none)
+
+  IPv4: 20.205.243.166
+
+    Trying 20.205.243.166:443...
+
+  Connected to github.com (20.205.243.166) port 443
+
+  ALPN: curl offers h2,http/1.1
+
+  [5 bytes data]
+
+  TLSv1.3 (OUT), TLS handshake, Client hello (1):
+
+  [512 bytes data]
+
+  [5 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, Server hello (2):
+
+  [122 bytes data]
+
+  [5 bytes data]
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+
+  [19 bytes data]
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, Certificate (11):
+
+  [2741 bytes data]
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, CERT verify (15):
+
+  [79 bytes data]
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, Finished (20):
+
+  [36 bytes data]
+
+  [5 bytes data]
+
+  TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+
+  [1 bytes data]
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (OUT), TLS handshake, Finished (20):
+
+  [36 bytes data]
+
+  SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256 / X25519 /
+  id-ecPublicKey
+
+  ALPN: server accepted h2
+
+  Server certificate:
+
+   subject: CN=github.com
+   start date: Sep  1 00:00:00 2026 GMT
+   expire date: Nov 29 23:59:59 2026 GMT
+   subjectAltName: host "github.com" matched cert's "github.com"
+   issuer: C=GB; O=Sectigo Limited; CN=Sectigo Public Server Authentication CA DV E36
+   SSL certificate verify result: unable to get local issuer certificate (20), continuing anyway.
+    Certificate level 0: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA256
+    Certificate level 1: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA384
+    Certificate level 2: Public key type EC/secp384r1 (384/192 Bits/secBits), signed using ecdsa-with-SHA384
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  using HTTP/2
+
+  [HTTP/2] [1] OPENED stream for
+  https://github.com/abseil/abseil-cpp/archive/refs/tags/20240722.0.zip
+
+  [HTTP/2] [1] [:method: GET]
+
+  [HTTP/2] [1] [:scheme: https]
+
+  [HTTP/2] [1] [:authority: github.com]
+
+  [HTTP/2] [1] [:path: /abseil/abseil-cpp/archive/refs/tags/20240722.0.zip]
+
+  [HTTP/2] [1] [user-agent: curl/8.5.0]
+
+  [HTTP/2] [1] [accept: */*]
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  GET /abseil/abseil-cpp/archive/refs/tags/20240722.0.zip HTTP/2
+
+  Host: github.com
+
+  User-Agent: curl/8.5.0
+
+  Accept: */*
+
+  
+
+  Closing connection
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (OUT), TLS alert, close notify (256):
+
+  [2 bytes data]
+
+
+
+          --- LOG END ---
+          
+    
+
+
+FAILED: abseil_cpp-populate-prefix/src/abseil_cpp-populate-stamp/abseil_cpp-populate-download /home/qyc/builds/onnxruntime-tsan-1.21.0/RelWithDebInfo/_deps/abseil_cpp-subbuild/abseil_cpp-populate-prefix/src/abseil_cpp-populate-stamp/abseil_cpp-populate-download 
+cd /home/qyc/builds/onnxruntime-tsan-1.21.0/RelWithDebInfo/_deps && /usr/bin/cmake -P /home/qyc/builds/onnxruntime-tsan-1.21.0/RelWithDebInfo/_deps/abseil_cpp-subbuild/abseil_cpp-populate-prefix/src/abseil_cpp-populate-stamp/download-abseil_cpp-populate.cmake && /usr/bin/cmake -P /home/qyc/builds/onnxruntime-tsan-1.21.0/RelWithDebInfo/_deps/abseil_cpp-subbuild/abseil_cpp-populate-prefix/src/abseil_cpp-populate-stamp/verify-abseil_cpp-populate.cmake && /usr/bin/cmake -P /home/qyc/builds/onnxruntime-tsan-1.21.0/RelWithDebInfo/_deps/abseil_cpp-subbuild/abseil_cpp-populate-prefix/src/abseil_cpp-populate-stamp/extract-abseil_cpp-populate.cmake && /usr/bin/cmake -E touch /home/qyc/builds/onnxruntime-tsan-1.21.0/RelWithDebInfo/_deps/abseil_cpp-subbuild/abseil_cpp-populate-prefix/src/abseil_cpp-populate-stamp/abseil_cpp-populate-download
+ninja: build stopped: subcommand failed.
+
+CMake Error at /usr/share/cmake-3.28/Modules/FetchContent.cmake:1679 (message):
+  Build step for abseil_cpp failed: 1
+Call Stack (most recent call first):
+  /usr/share/cmake-3.28/Modules/FetchContent.cmake:1819:EVAL:2 (__FetchContent_directPopulate)
+  /usr/share/cmake-3.28/Modules/FetchContent.cmake:1819 (cmake_language)
+  /usr/share/cmake-3.28/Modules/FetchContent.cmake:2033 (FetchContent_Populate)
+  external/helper_functions.cmake:22 (FetchContent_MakeAvailable)
+  external/abseil-cpp.cmake:34 (onnxruntime_fetchcontent_makeavailable)
+  external/onnxruntime_external_deps.cmake:34 (include)
+  CMakeLists.txt:694 (include)
+
+
+-- Configuring incomplete, errors occurred!
+Namespace(build_dir='/home/qyc/builds/onnxruntime-tsan-1.21.0', config=['RelWithDebInfo'], update=False, build=False, clean=False, parallel=4, nvcc_threads=-1, test=False, skip_tests=True, compile_no_warning_as_error=True, enable_nvtx_profile=False, enable_memory_profile=False, enable_training=False, enable_training_apis=False, enable_training_ops=False, enable_nccl=False, mpi_home=None, nccl_home=None, use_mpi=False, enable_onnx_tests=False, path_to_protoc_exe=None, fuzz_testing=False, enable_symbolic_shape_infer_tests=False, gen_doc=None, gen_api_doc=False, use_cuda=False, cuda_version=None, cuda_home=None, cudnn_home=None, enable_cuda_line_info=False, enable_cuda_nhwc_ops=False, disable_cuda_nhwc_ops=False, enable_cuda_minimal_build=False, enable_pybind=False, build_wheel=False, wheel_name_suffix=None, skip_keras_test=False, build_csharp=False, build_nuget=False, msbuild_extra_options=None, build_java=False, build_nodejs=False, build_objc=False, build_shared_lib=True, build_apple_framework=False, cmake_extra_defines=[['CMAKE_C_COMPILER=/usr/bin/gcc', 'CMAKE_CXX_COMPILER=/usr/bin/g++', 'CMAKE_C_FLAGS=-fsanitize=thread -fno-omit-frame-pointer', 'CMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer', 'CMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread', 'CMAKE_EXE_LINKER_FLAGS=-fsanitize=thread', 'CMAKE_EXPORT_COMPILE_COMMANDS=ON', 'onnxruntime_BUILD_UNIT_TESTS=OFF']], target=None, x86=False, rv64=False, arm=False, arm64=False, arm64ec=False, buildasx=False, riscv_toolchain_root='', riscv_qemu_path='', msvc_toolset=None, windows_sdk_version=None, android=False, android_abi='arm64-v8a', android_api=27, android_sdk_path='', android_ndk_path='', android_cpp_shared=False, android_run_emulator=False, use_gdk=False, gdk_edition='.', gdk_platform='Scarlett', enable_wasm_memory64=False, ios=False, visionos=False, macos=None, apple_sysroot='', ios_toolchain_file='', visionos_toolchain_file='', xcode_code_signing_team_id='', xcode_code_signing_identity='', cmake_generator='Ninja', osx_arch='x86_64', apple_deploy_target=None, enable_address_sanitizer=False, use_binskim_compliant_compile_flags=False, disable_memleak_checker=False, use_vcpkg=False, use_vcpkg_ms_internal_asset_cache=False, build_wasm=False, build_wasm_static_lib=False, emsdk_version='4.0.3', enable_wasm_simd=False, enable_wasm_threads=False, disable_wasm_exception_catching=False, enable_wasm_api_exception_catching=False, enable_wasm_exception_throwing_override=True, wasm_run_tests_in_browser=False, enable_wasm_profiling=False, enable_wasm_debug_info=False, wasm_malloc=None, emscripten_settings=None, use_extensions=False, extensions_overridden_path=None, cmake_path='cmake', ctest_path='ctest', skip_submodule_sync=True, use_mimalloc=False, use_dnnl=False, dnnl_gpu_runtime='', dnnl_opencl_root='', use_openvino=None, dnnl_aarch64_runtime='', dnnl_acl_root='', use_coreml=False, use_webnn=False, use_snpe=False, snpe_root=None, use_nnapi=False, use_vsinpu=False, nnapi_min_api=None, use_jsep=False, use_webgpu=False, use_external_dawn=False, use_qnn=None, qnn_home=None, use_rknpu=False, use_preinstalled_eigen=False, eigen_path=None, enable_msinternal=False, use_vitisai=False, use_tensorrt=False, use_tensorrt_builtin_parser=True, use_tensorrt_oss_parser=False, tensorrt_home=None, test_all_timeout='10800', use_migraphx=False, migraphx_home=None, use_full_protobuf=False, enable_pix_capture=False, skip_onnx_tests=False, skip_winml_tests=False, skip_nodejs_tests=False, enable_msvc_static_runtime=False, use_dml=False, dml_path='', use_winml=False, winml_root_namespace_override=None, dml_external_project=False, use_telemetry=False, enable_wcos=False, enable_lto=False, enable_transformers_tool_test=False, use_acl=False, acl_home=None, acl_libs=None, use_armnn=False, armnn_relu=False, armnn_bn=False, armnn_home=None, armnn_libs=None, build_micro_benchmarks=False, minimal_build=None, include_ops_by_config=None, enable_reduced_operator_type_support=False, disable_contrib_ops=False, disable_ml_ops=False, disable_rtti=False, disable_types=[], disable_exceptions=False, rocm_version=None, use_rocm=False, rocm_home=None, code_coverage=False, enable_lazy_tensor=False, ms_experimental=False, enable_external_custom_op_schemas=False, external_graph_transformer_path=None, enable_cuda_profiling=False, use_cann=False, cann_home=None, enable_rocm_profiling=False, use_xnnpack=False, use_avx512=False, use_azure=False, use_cache=False, use_triton_kernel=False, use_lock_free_queue=False, enable_generic_interface=False, allow_running_as_root=False)
+Traceback (most recent call last):
+  File "/home/qyc/src/onnxruntime-1.21.0/tools/ci_build/build.py", line 3312, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/qyc/src/onnxruntime-1.21.0/tools/ci_build/build.py", line 3172, in main
+    generate_build_tree(
+  File "/home/qyc/src/onnxruntime-1.21.0/tools/ci_build/build.py", line 1948, in generate_build_tree
+    run_subprocess(
+  File "/home/qyc/src/onnxruntime-1.21.0/tools/ci_build/build.py", line 906, in run_subprocess
+    return run(*args, cwd=cwd, capture_stdout=capture_stdout, shell=shell, env=my_env)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/qyc/src/onnxruntime-1.21.0/tools/python/util/run.py", line 50, in run
+    completed_process = subprocess.run(
+                        ^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/usr/bin/cmake', '/home/qyc/src/onnxruntime-1.21.0/cmake', '--compile-no-warning-as-error', '-Donnxruntime_RUN_ONNX_TESTS=OFF', '-Donnxruntime_GENERATE_TEST_REPORTS=ON', '-DPython_EXECUTABLE=/usr/bin/python3', '-Donnxruntime_USE_VCPKG=OFF', '-Donnxruntime_USE_MIMALLOC=OFF', '-Donnxruntime_ENABLE_PYTHON=OFF', '-Donnxruntime_BUILD_CSHARP=OFF', '-Donnxruntime_BUILD_JAVA=OFF', '-Donnxruntime_BUILD_NODEJS=OFF', '-Donnxruntime_BUILD_OBJC=OFF', '-Donnxruntime_BUILD_SHARED_LIB=ON', '-Donnxruntime_BUILD_APPLE_FRAMEWORK=OFF', '-Donnxruntime_USE_DNNL=OFF', '-Donnxruntime_USE_NNAPI_BUILTIN=OFF', '-Donnxruntime_USE_VSINPU=OFF', '-Donnxruntime_USE_RKNPU=OFF', '-Donnxruntime_ENABLE_MICROSOFT_INTERNAL=OFF', '-Donnxruntime_USE_VITISAI=OFF', '-Donnxruntime_USE_TENSORRT=OFF', '-Donnxruntime_USE_TENSORRT_BUILTIN_PARSER=ON', '-Donnxruntime_USE_TENSORRT_INTERFACE=OFF', '-Donnxruntime_USE_CUDA_INTERFACE=OFF', '-Donnxruntime_USE_OPENVINO_INTERFACE=OFF', '-Donnxruntime_USE_VITISAI_INTERFACE=OFF', '-Donnxruntime_USE_QNN_INTERFACE=OFF', '-Donnxruntime_USE_MIGRAPHX=OFF', '-Donnxruntime_DISABLE_CONTRIB_OPS=OFF', '-Donnxruntime_DISABLE_ML_OPS=OFF', '-Donnxruntime_DISABLE_RTTI=OFF', '-Donnxruntime_DISABLE_EXCEPTIONS=OFF', '-Donnxruntime_MINIMAL_BUILD=OFF', '-Donnxruntime_EXTENDED_MINIMAL_BUILD=OFF', '-Donnxruntime_MINIMAL_BUILD_CUSTOM_OPS=OFF', '-Donnxruntime_REDUCED_OPS_BUILD=OFF', '-Donnxruntime_USE_DML=OFF', '-Donnxruntime_USE_WINML=OFF', '-Donnxruntime_BUILD_MS_EXPERIMENTAL_OPS=OFF', '-Donnxruntime_USE_TELEMETRY=OFF', '-Donnxruntime_ENABLE_LTO=OFF', '-Donnxruntime_USE_ACL=OFF', '-Donnxruntime_USE_ARMNN=OFF', '-Donnxruntime_ARMNN_RELU_USE_CPU=ON', '-Donnxruntime_ARMNN_BN_USE_CPU=ON', '-Donnxruntime_USE_JSEP=OFF', '-Donnxruntime_USE_WEBGPU=OFF', '-Donnxruntime_ENABLE_PIX_FOR_WEBGPU_EP=OFF', '-Donnxruntime_USE_EXTERNAL_DAWN=OFF', '-Donnxruntime_ENABLE_NVTX_PROFILE=OFF', '-Donnxruntime_ENABLE_TRAINING=OFF', '-Donnxruntime_ENABLE_TRAINING_OPS=OFF', '-Donnxruntime_ENABLE_TRAINING_APIS=OFF', '-Donnxruntime_ENABLE_CPU_FP16_OPS=OFF', '-Donnxruntime_USE_NCCL=OFF', '-Donnxruntime_BUILD_BENCHMARKS=OFF', '-Donnxruntime_USE_ROCM=OFF', '-Donnxruntime_GCOV_COVERAGE=OFF', '-Donnxruntime_USE_MPI=OFF', '-Donnxruntime_ENABLE_MEMORY_PROFILE=OFF', '-Donnxruntime_ENABLE_CUDA_LINE_NUMBER_INFO=OFF', '-Donnxruntime_USE_CUDA_NHWC_OPS=OFF', '-Donnxruntime_BUILD_WEBASSEMBLY_STATIC_LIB=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_EXCEPTION_CATCHING=ON', '-Donnxruntime_ENABLE_WEBASSEMBLY_API_EXCEPTION_CATCHING=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_EXCEPTION_THROWING=ON', '-Donnxruntime_WEBASSEMBLY_RUN_TESTS_IN_BROWSER=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_THREADS=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_MEMORY64=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_DEBUG_INFO=OFF', '-Donnxruntime_ENABLE_WEBASSEMBLY_PROFILING=OFF', '-Donnxruntime_ENABLE_LAZY_TENSOR=OFF', '-Donnxruntime_ENABLE_EXTERNAL_CUSTOM_OP_SCHEMAS=OFF', '-Donnxruntime_ENABLE_CUDA_PROFILING=OFF', '-Donnxruntime_ENABLE_ROCM_PROFILING=OFF', '-Donnxruntime_USE_XNNPACK=OFF', '-Donnxruntime_USE_WEBNN=OFF', '-Donnxruntime_USE_CANN=OFF', '-Donnxruntime_USE_TRITON_KERNEL=OFF', '-Donnxruntime_DISABLE_FLOAT8_TYPES=OFF', '-Donnxruntime_DISABLE_SPARSE_TENSORS=OFF', '-Donnxruntime_DISABLE_OPTIONAL_TYPE=OFF', '-Donnxruntime_CUDA_MINIMAL=OFF', '-DCMAKE_C_COMPILER=/usr/bin/gcc', '-DCMAKE_CXX_COMPILER=/usr/bin/g++', '-DCMAKE_C_FLAGS=-fsanitize=thread -fno-omit-frame-pointer', '-DCMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer', '-DCMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread', '-DCMAKE_EXE_LINKER_FLAGS=-fsanitize=thread', '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON', '-Donnxruntime_BUILD_UNIT_TESTS=OFF', '-G', 'Ninja', '-DCMAKE_BUILD_TYPE=RelWithDebInfo']' returned non-zero exit status 1.

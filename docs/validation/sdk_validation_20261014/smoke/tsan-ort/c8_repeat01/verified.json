@@ -1,0 +1,37 @@
+{
+  "command": [
+    "/home/qyc/builds/MiniInfer/sdk-validation-20261014-tsan/bin/depth_concurrency_benchmark",
+    "--backend",
+    "ort",
+    "--package",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32",
+    "--image",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+    "--csv",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_validation_20261014/smoke/tsan-ort/c8_repeat01/raw.csv",
+    "--summary",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_validation_20261014/smoke/tsan-ort/c8_repeat01/summary.json",
+    "--concurrency",
+    "8",
+    "--iterations",
+    "16",
+    "--warmup",
+    "1",
+    "--worker-count",
+    "4",
+    "--ort-threads",
+    "4",
+    "--queue-capacity",
+    "8",
+    "--byte-budget",
+    "536870912"
+  ],
+  "returncode": 66,
+  "errors": [
+    "benchmark process exited 66",
+    "[Errno 2] No such file or directory: '/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_validation_20261014/smoke/tsan-ort/c8_repeat01/summary.json'"
+  ],
+  "summary": null,
+  "statistics": null,
+  "directory": "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_validation_20261014/smoke/tsan-ort/c8_repeat01"
+}

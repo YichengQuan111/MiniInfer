@@ -1,0 +1,3 @@
+Command: cmake --build /home/qyc/builds/MiniInfer/sdk-validation-20261014-tsan -j4
+[1/2] Building CXX object CMakeFiles/depth_concurrency_benchmark.dir/apps/depth_concurrency_benchmark.cpp.o
+[2/2] Linking CXX executable bin/depth_concurrency_benchmark

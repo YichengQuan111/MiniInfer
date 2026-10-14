@@ -1,0 +1,11 @@
+Command: cmake --build /home/qyc/builds/MiniInfer/sdk-validation-20261014-tsan -j4
+[1/10] Building CXX object CMakeFiles/miniinfer_depth_trt.dir/src/depth/trt_runner.cpp.o
+[2/10] Building CXX object CMakeFiles/test_depth_trt.dir/tests/test_depth_trt.cpp.o
+[3/10] Linking CXX static library libminiinfer_depth_trt.a
+[4/10] Linking CXX executable bin/depth_engine_builder
+[5/10] Linking CXX executable bin/depth_trt_cli
+[6/10] Linking CXX executable bin/test_depth_trt
+[7/10] Linking CXX executable bin/test_depth_sdk
+[8/10] Linking CXX executable bin/depth_sdk_cli
+[9/10] Linking CXX executable bin/depth_benchmark
+[10/10] Linking CXX executable bin/depth_server

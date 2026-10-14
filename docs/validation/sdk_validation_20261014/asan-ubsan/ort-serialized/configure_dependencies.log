@@ -1,0 +1,4 @@
+Command: bash tools/configure_depth.sh /home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan Debug
+-- Configuring done (6.0s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan

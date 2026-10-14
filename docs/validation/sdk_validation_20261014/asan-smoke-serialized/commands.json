@@ -1,0 +1,46 @@
+{
+  "phase": "asan-smoke",
+  "started_utc": "2026-10-14T10:03:24.978846+00:00",
+  "commands": [
+    {
+      "name": "asan-ubsan-ort",
+      "command": [
+        "python3",
+        "tools/run_depth_concurrency.py",
+        "--executable",
+        "/home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan/bin/depth_concurrency_benchmark",
+        "--backend",
+        "ort",
+        "--package",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_validation_20261014/asan-smoke-serialized/asan-ubsan-ort",
+        "--concurrencies",
+        "1",
+        "4",
+        "8",
+        "--iterations",
+        "16",
+        "--warmup",
+        "1",
+        "--repeats",
+        "1",
+        "--worker-count",
+        "4",
+        "--ort-threads",
+        "4",
+        "--queue-capacity",
+        "8",
+        "--byte-budget",
+        "536870912"
+      ],
+      "returncode": 0,
+      "seconds": 53.67677823300005,
+      "log": "asan-ubsan-ort.log"
+    }
+  ],
+  "passed": true,
+  "finished_utc": "2026-10-14T10:04:18.686265+00:00"
+}

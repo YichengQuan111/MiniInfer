@@ -8,6 +8,7 @@
 #include <iostream>
 #include <mutex>
 #include <stdexcept>
+#include <utility>
 
 namespace miniinfer::depth {
 namespace {
@@ -76,7 +77,7 @@ void verify_engine(const nvinfer1::ICudaEngine& engine) {
        ||engine.getTensorFormat("depth")!=nvinfer1::TensorFormat::kLINEAR)
         throw std::invalid_argument("engine violates static FP32 IO depth-v1 contract");
 }
-void verify_environment(const Manifest& manifest,int device) {
+void verify_manifest(const Manifest& manifest) {
     require_equal(manifest,"schema","miniinfer-engine-1");
     require_equal(manifest,"contract","depth-v1");
     require_equal(manifest,"input","1x3x518x518-fp32");
@@ -88,6 +89,8 @@ void verify_environment(const Manifest& manifest,int device) {
     auto identity=manifest;
     identity.erase("cache_key");identity.erase("build_seconds");identity.erase("engine_sha256");
     require_equal(manifest,"cache_key",sha256(manifest_text(identity)));
+}
+void verify_environment(const Manifest& manifest,int device) {
     for(const auto& pair:trt_environment(device)) require_equal(manifest,pair.first,pair.second);
 }
 }
@@ -191,11 +194,10 @@ public:
     std::unique_ptr<Stream> stream; // destroyed first: wait before buffers/context
     std::mutex mutex;
     bool failed=false;
-    Impl(const std::filesystem::path& path,int target):device(target),metadata(read_manifest(path.string()+".manifest")) {
+    Impl(std::vector<std::uint8_t> plan,Manifest validated,int target)
+        :device(target),metadata(std::move(validated)) {
         Device guard(device);
         verify_environment(metadata,device);
-        const auto plan=read_artifact(path);
-        require_equal(metadata,"engine_sha256",sha256({reinterpret_cast<const char*>(plan.data()),plan.size()}));
         runtime=require(nvinfer1::createInferRuntime(logger),"create runtime failed");
         engine=require(runtime->deserializeCudaEngine(plan.data(),plan.size()),"load engine failed");
         verify_engine(*engine);
@@ -223,9 +225,15 @@ public:
     }
 };
 TrtRunner::TrtRunner(const std::filesystem::path& path,int device) {
+    if(device<0) throw std::invalid_argument("CUDA device must be nonnegative");
+    // Reject missing, malformed or corrupt files before initializing CUDA.
+    auto metadata=read_manifest(path.string()+".manifest");
+    verify_manifest(metadata);
+    auto plan=read_artifact(path);
+    require_equal(metadata,"engine_sha256",sha256({reinterpret_cast<const char*>(plan.data()),plan.size()}));
     // Keep the selected device active while partially built Impl members unwind.
     Device guard(device);
-    impl_=std::make_unique<Impl>(path,device);
+    impl_=std::make_unique<Impl>(std::move(plan),std::move(metadata),device);
 }
 TrtRunner::~TrtRunner()=default;
 const Manifest& TrtRunner::manifest() const noexcept { return impl_->metadata; }
