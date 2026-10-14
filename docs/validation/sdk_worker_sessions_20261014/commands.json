@@ -1,0 +1,159 @@
+{
+  "started_utc": "2026-10-14T12:21:04.305023+00:00",
+  "base_commit": "42e2a5988c17f8f3359285267016b2d434bd632c",
+  "passed": true,
+  "commands": [
+    {
+      "name": "release",
+      "command": [
+        "python3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/tmp/sdk-validation-20261014/run_checks.py",
+        "release",
+        "final",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014"
+      ],
+      "returncode": 0,
+      "seconds": 45.552563327
+    },
+    {
+      "name": "asan-ubsan",
+      "command": [
+        "python3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/tmp/sdk-validation-20261014/run_checks.py",
+        "asan-ubsan",
+        "final",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014"
+      ],
+      "returncode": 0,
+      "seconds": 51.23058755499999
+    },
+    {
+      "name": "tsan",
+      "command": [
+        "python3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/tmp/sdk-validation-20261014/run_checks.py",
+        "tsan",
+        "final",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014"
+      ],
+      "returncode": 0,
+      "seconds": 65.42864792700001
+    },
+    {
+      "name": "instrumented-ort",
+      "command": [
+        "python3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/tmp/sdk-validation-20261014/validate_instrumented_ort.py",
+        "final",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014"
+      ],
+      "returncode": 0,
+      "seconds": 235.542607263
+    },
+    {
+      "name": "asan-ort",
+      "command": [
+        "python3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/tmp/sdk-validation-20261014/run_experiments.py",
+        "asan-smoke",
+        "asan-model",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014"
+      ],
+      "returncode": 0,
+      "seconds": 71.01876611200004
+    },
+    {
+      "name": "memory-shared_serialized",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"maximum_rss_kib\":%M,\"elapsed_seconds\":%e,\"exit_code\":%x}",
+        "-o",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014/memory/shared_serialized/resources.json",
+        "/home/qyc/builds/MiniInfer/worker-sessions-20261014/serialized_benchmark",
+        "--backend",
+        "ort",
+        "--package",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+        "--csv",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014/memory/shared_serialized/raw.csv",
+        "--summary",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014/memory/shared_serialized/summary.json",
+        "--concurrency",
+        "4",
+        "--iterations",
+        "64",
+        "--warmup",
+        "20",
+        "--worker-count",
+        "4",
+        "--ort-threads",
+        "4",
+        "--queue-capacity",
+        "8",
+        "--byte-budget",
+        "536870912"
+      ],
+      "returncode": 0,
+      "seconds": 32.47593901000005
+    },
+    {
+      "name": "memory-per_worker",
+      "command": [
+        "/usr/bin/time",
+        "-f",
+        "{\"maximum_rss_kib\":%M,\"elapsed_seconds\":%e,\"exit_code\":%x}",
+        "-o",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014/memory/per_worker/resources.json",
+        "/home/qyc/builds/MiniInfer/sdk-validation-20261014-release/bin/depth_concurrency_benchmark",
+        "--backend",
+        "ort",
+        "--package",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32",
+        "--image",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/ort-fp32/golden/original.ppm",
+        "--csv",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014/memory/per_worker/raw.csv",
+        "--summary",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014/memory/per_worker/summary.json",
+        "--concurrency",
+        "4",
+        "--iterations",
+        "64",
+        "--warmup",
+        "20",
+        "--worker-count",
+        "4",
+        "--ort-threads",
+        "4",
+        "--queue-capacity",
+        "8",
+        "--byte-budget",
+        "536870912"
+      ],
+      "returncode": 0,
+      "seconds": 32.31061643700002
+    },
+    {
+      "name": "performance",
+      "command": [
+        "python3",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/tmp/sdk-validation-20261014/run_experiments.py",
+        "performance",
+        "performance",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/sdk_worker_sessions_20261014"
+      ],
+      "returncode": 0,
+      "seconds": 1016.9099797619999
+    }
+  ],
+  "baseline_executable": "/home/qyc/builds/MiniInfer/worker-sessions-20261014/serialized_benchmark",
+  "baseline_executable_sha256": "fa429e95037ff5e507aa20f6ecd4c0da7b54d9a278360a3eddf27b671f0405d4",
+  "release_environment": {
+    "LC_ALL": "C",
+    "LD_LIBRARY_PATH": "/home/qyc/.venvs/miniinfer-depth/lib/python3.12/site-packages/tensorrt_libs:/home/qyc/.venvs/miniinfer-depth/lib/python3.12/site-packages/nvidia/cuda_runtime/lib:/home/qyc/.cache/miniinfer-depth/onnxruntime-linux-x64-1.21.0/lib"
+  },
+  "finished_utc": "2026-10-14T12:47:26.659495+00:00"
+}

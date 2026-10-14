@@ -1,0 +1,19 @@
+Command: cmake --build /home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan -j4
+[1/18] Building CXX object CMakeFiles/depth_cli.dir/apps/depth_cli.cpp.o
+[2/18] Building CXX object CMakeFiles/miniinfer_depth_ort.dir/src/depth/ort_runner.cpp.o
+[3/18] Linking CXX static library libminiinfer_depth_ort.a
+[4/18] Building CXX object CMakeFiles/test_depth_ort.dir/tests/test_depth_ort.cpp.o
+[5/18] Linking CXX executable bin/depth_cli
+[6/18] Building CXX object CMakeFiles/miniinfer_depth_sdk.dir/src/depth/sdk.cpp.o
+[7/18] Linking CXX static library libminiinfer_depth_sdk.a
+[8/18] Linking CXX executable bin/test_depth_ort
+[9/18] Building CXX object CMakeFiles/depth_sdk_cli.dir/examples/depth_sdk/main.cpp.o
+[10/18] Linking CXX executable bin/depth_sdk_cli
+[11/18] Building CXX object CMakeFiles/depth_server.dir/apps/depth_server.cpp.o
+[12/18] Building CXX object CMakeFiles/depth_concurrency_benchmark.dir/apps/depth_concurrency_benchmark.cpp.o
+[13/18] Linking CXX executable bin/depth_server
+[14/18] Linking CXX executable bin/depth_concurrency_benchmark
+[15/18] Building CXX object CMakeFiles/test_depth_sdk.dir/tests/test_depth_sdk.cpp.o
+[16/18] Building CXX object CMakeFiles/depth_benchmark.dir/apps/depth_benchmark.cpp.o
+[17/18] Linking CXX executable bin/test_depth_sdk
+[18/18] Linking CXX executable bin/depth_benchmark

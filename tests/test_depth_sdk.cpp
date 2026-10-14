@@ -52,6 +52,120 @@ RgbImage image(std::uint8_t value = 7, std::size_t width = 1, std::size_t height
 DepthMap output(const RgbImage& input) {
     return DepthMap(input.width(), input.height(), std::vector<float>(input.width() * input.height(), input.pixels()[0]));
 }
+struct BackendLifetime {
+    explicit BackendLifetime(std::atomic<std::size_t>& count) : destroyed(count) {}
+    ~BackendLifetime() { ++destroyed; }
+    std::atomic<std::size_t>& destroyed;
+};
+void worker_backend_ownership() {
+    constexpr std::size_t worker_count = 4;
+    Gate first_wave, second_wave, delivery;
+    std::atomic<std::size_t> destroyed{0}, deliveries{0};
+    std::vector<std::weak_ptr<BackendLifetime>> lifetimes;
+    std::vector<std::thread::id> owners(worker_count);
+    std::vector<std::size_t> calls(worker_count, 0), active(worker_count, 0);
+    std::mutex observations;
+    bool fixed_owner = true, exclusive = true;
+    std::size_t factory_calls = 0;
+    SdkConfig config;
+    config.worker_count = worker_count;
+    auto sdk = SdkTestAccess::create_factory(config, [&](std::size_t index) {
+        expect(index == factory_calls++, "backend factories must follow stable worker indices");
+        auto lifetime = std::make_shared<BackendLifetime>(destroyed);
+        lifetimes.push_back(lifetime);
+        return [&, index, lifetime](const RgbImage& input) {
+            std::size_t call;
+            {
+                std::lock_guard<std::mutex> lock(observations);
+                const auto thread = std::this_thread::get_id();
+                call = ++calls[index];
+                if (call == 1) owners[index] = thread;
+                else fixed_owner = fixed_owner && owners[index] == thread;
+                exclusive = exclusive && ++active[index] == 1;
+            }
+            if (call == 1) first_wave.block();
+            else second_wave.block();
+            {
+                std::lock_guard<std::mutex> lock(observations);
+                --active[index];
+            }
+            return output(input);
+        };
+    }, true, [&] { if (++deliveries > worker_count) delivery.block(); });
+    expect(factory_calls == worker_count && lifetimes.size() == worker_count,
+           "worker-local SDK must create exactly one backend per configured worker before use");
+    std::vector<std::future<DepthMap>> running;
+    for (std::size_t index = 0; index < worker_count; ++index) {
+        running.push_back(std::async(std::launch::async, [&, index] {
+            return sdk->run(image(static_cast<std::uint8_t>(index + 1)));
+        }));
+        first_wave.wait(index + 1);
+    }
+    {
+        std::lock_guard<std::mutex> lock(observations);
+        expect(std::all_of(active.begin(), active.end(), [](std::size_t count) { return count == 1; }),
+               "independent worker backends must overlap while each backend is occupied once");
+        expect(std::set<std::thread::id>(owners.begin(), owners.end()).size() == worker_count,
+               "each backend must belong to a distinct SDK worker");
+    }
+    first_wave.release();
+    std::vector<DepthMap> results;
+    for (auto& future : running) results.push_back(future.get());
+    running.clear();
+    for (std::size_t index = 0; index < worker_count; ++index) {
+        running.push_back(std::async(std::launch::async, [&, index] {
+            return sdk->run(image(static_cast<std::uint8_t>(index + 10)));
+        }));
+        second_wave.wait(index + 1);
+    }
+    {
+        std::lock_guard<std::mutex> lock(observations);
+        expect(fixed_owner && exclusive
+               && std::all_of(calls.begin(), calls.end(), [](std::size_t count) { return count == 2; }),
+               "backend must stay exclusive to the same worker across repeated requests");
+    }
+    auto shutdown = std::async(std::launch::async, [&] { sdk->shutdown(); });
+    SdkTestAccess::wait(*sdk, [](const SdkSnapshot& state) { return !state.accepting; });
+    expect(destroyed == 0, "shutdown released a worker backend while execution was blocked");
+    second_wave.release();
+    delivery.wait(worker_count);
+    expect(!sdk->snapshot().shutdown_complete && destroyed == 0
+           && std::all_of(lifetimes.begin(), lifetimes.end(), [](const auto& lifetime) { return !lifetime.expired(); }),
+           "all worker backends must remain alive until accepted results are delivered");
+    delivery.release();
+    for (auto& future : running) results.push_back(future.get());
+    shutdown.get();
+    expect(destroyed == worker_count
+           && std::all_of(lifetimes.begin(), lifetimes.end(), [](const auto& lifetime) { return lifetime.expired(); }),
+           "shutdown must release every worker backend after execution and delivery");
+    sdk.reset();
+    for (std::size_t index = 0; index < worker_count; ++index) {
+        expect(results[index].values()[0] == index + 1 && results[index + worker_count].values()[0] == index + 10,
+               "results must remain independently owned after worker backends and SDK are destroyed");
+    }
+}
+void partial_backend_initialization() {
+    std::atomic<std::size_t> destroyed{0}, executions{0};
+    std::vector<std::weak_ptr<BackendLifetime>> lifetimes;
+    std::size_t factory_calls = 0;
+    error(SdkErrorCode::BackendFailure, [&] {
+        SdkTestAccess::create_factory({}, [&](std::size_t index) -> std::function<DepthMap(const RgbImage&)> {
+            expect(index == factory_calls++, "backend construction order changed");
+            if (index == 2) throw std::runtime_error("intentional third backend construction failure");
+            auto lifetime = std::make_shared<BackendLifetime>(destroyed);
+            lifetimes.push_back(lifetime);
+            return [&, lifetime](const RgbImage& input) { ++executions; return output(input); };
+        });
+    }, "partial backend initialization must report BackendFailure");
+    expect(factory_calls == 3 && destroyed == 2 && executions == 0
+           && std::all_of(lifetimes.begin(), lifetimes.end(), [](const auto& lifetime) { return lifetime.expired(); }),
+           "failed construction must release all earlier backends before starting SDK work");
+    error(SdkErrorCode::InvalidInput, [&] { SdkTestAccess::create_factory({}, {}); },
+          "empty injected backend factory accepted");
+    error(SdkErrorCode::InvalidInput, [&] {
+        SdkTestAccess::create_factory({}, [](std::size_t) { return std::function<DepthMap(const RgbImage&)>{}; });
+    }, "empty worker backend accepted");
+}
 void ownership() {
     Gate gate;
     std::atomic<int> calls{0};
@@ -324,6 +438,8 @@ void initialization() {
 int main() {
     try {
         ownership();
+        worker_backend_ownership();
+        partial_backend_initialization();
         count_and_parallelism();
         count_and_parallelism(1);
         byte_admission();

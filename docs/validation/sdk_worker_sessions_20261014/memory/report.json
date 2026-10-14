@@ -1,0 +1,66 @@
+{
+  "method": "GNU time maximum resident set size of one benchmark process; KiB; includes model/arena/requests, not a model-only or admission-budget metric",
+  "configuration": {
+    "concurrency": 4,
+    "iterations": 64,
+    "warmup": 20,
+    "worker_count": 4,
+    "ort_threads": 4
+  },
+  "runs": [
+    {
+      "design": "shared_serialized",
+      "executable_sha256": "fa429e95037ff5e507aa20f6ecd4c0da7b54d9a278360a3eddf27b671f0405d4",
+      "resources": {
+        "maximum_rss_kib": 622092,
+        "elapsed_seconds": 33.13,
+        "exit_code": 0
+      },
+      "statistics": {
+        "counts": {
+          "succeeded": 64,
+          "busy": 0,
+          "closed": 0,
+          "failure": 0
+        },
+        "p50_ms": 1280.050498,
+        "p99_ms": 1315.43006664,
+        "successful_qps": 3.11189697366759,
+        "elapsed_steady_ms": 20566.233568,
+        "caller_attempt_counts": [
+          16,
+          16,
+          16,
+          16
+        ]
+      }
+    },
+    {
+      "design": "per_worker",
+      "executable_sha256": "3171e4f87ad95de08e1b34b685805efb67c626b1dd89279e3d438bced24878a3",
+      "resources": {
+        "maximum_rss_kib": 1585360,
+        "elapsed_seconds": 32.93,
+        "exit_code": 0
+      },
+      "statistics": {
+        "counts": {
+          "succeeded": 64,
+          "busy": 0,
+          "closed": 0,
+          "failure": 0
+        },
+        "p50_ms": 748.4205895,
+        "p99_ms": 799.32146615,
+        "successful_qps": 5.249926269399739,
+        "elapsed_steady_ms": 12190.647395,
+        "caller_attempt_counts": [
+          16,
+          16,
+          16,
+          16
+        ]
+      }
+    }
+  ]
+}

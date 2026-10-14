@@ -23,7 +23,7 @@ struct SdkConfig {
     std::filesystem::path package_dir;
     std::size_t queue_capacity = 4;  // Waiting tasks; reservations <=capacity+worker_count.
     std::size_t byte_budget = 128ULL * 1024 * 1024;
-    int ort_threads = 4;
+    int ort_threads = 4;  // Intra-op threads per worker's independent ORT Session.
     int device = 0;
     std::size_t worker_count = 4;
 };
@@ -65,6 +65,9 @@ private:
     friend struct detail::SdkTestAccess;
     DepthSdk(SdkConfig config, std::function<DepthMap(const RgbImage&)> backend,
              std::function<void()> before_delivery);
+    DepthSdk(SdkConfig config,
+             std::function<std::function<DepthMap(const RgbImage&)>(std::size_t)> factory,
+             bool worker_local, std::function<void()> before_delivery);
     void wait_for_test(const std::function<bool(const SdkSnapshot&)>& condition,
                        std::chrono::milliseconds timeout);
     class Impl;

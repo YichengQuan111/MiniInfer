@@ -1,0 +1,67 @@
+{
+  "mode": "asan-ubsan",
+  "started_utc": "2026-10-14T12:21:51.643784+00:00",
+  "source_commit": "42e2a5988c17f8f3359285267016b2d434bd632c",
+  "build": "/home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan",
+  "commands": [
+    {
+      "name": "configure_dependencies",
+      "command": [
+        "bash",
+        "tools/configure_depth.sh",
+        "/home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan",
+        "Debug"
+      ],
+      "returncode": 0,
+      "seconds": 5.512370876000006,
+      "log": "configure_dependencies.log"
+    },
+    {
+      "name": "configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer",
+        "-B",
+        "/home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan",
+        "-DMINIINFER_ENABLE_ASAN_UBSAN=ON",
+        "-DMINIINFER_ENABLE_TSAN=OFF"
+      ],
+      "returncode": 0,
+      "seconds": 6.4175550109999975,
+      "log": "configure.log"
+    },
+    {
+      "name": "build",
+      "command": [
+        "cmake",
+        "--build",
+        "/home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan",
+        "-j4"
+      ],
+      "returncode": 0,
+      "seconds": 8.204811893000006,
+      "log": "build.log"
+    },
+    {
+      "name": "ctest",
+      "command": [
+        "ctest",
+        "--test-dir",
+        "/home/qyc/builds/MiniInfer/sdk-validation-20261014-asan-ubsan",
+        "--output-on-failure",
+        "--no-tests=error",
+        "-j1"
+      ],
+      "returncode": 0,
+      "seconds": 30.39341103999999,
+      "log": "ctest.log"
+    }
+  ],
+  "passed": true,
+  "sanitizer_environment": {
+    "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1",
+    "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+  },
+  "finished_utc": "2026-10-14T12:22:43.126674+00:00"
+}

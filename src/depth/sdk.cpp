@@ -14,10 +14,23 @@
 #include <mutex>
 #include <set>
 #include <utility>
+#include <vector>
 
 namespace miniinfer::depth {
 namespace {
 using Backend = std::function<DepthMap(const RgbImage&)>;
+using BackendFactory = std::function<Backend(std::size_t)>;
+std::vector<Backend> create_backends(std::size_t count, const BackendFactory& factory) {
+    if (!factory) throw SdkError(SdkErrorCode::InvalidInput, "test backend factory cannot be empty");
+    std::vector<Backend> backends;
+    backends.reserve(count);
+    for (std::size_t index = 0; index < count; ++index) {
+        auto backend = factory(index);
+        if (!backend) throw SdkError(SdkErrorCode::InvalidInput, "backend factory returned an empty backend");
+        backends.push_back(std::move(backend));
+    }
+    return backends;  // Partial construction releases every previously built backend on failure.
+}
 void validate_config(const SdkConfig& config) {
     if (config.worker_count == 0 || config.queue_capacity == 0
         || config.queue_capacity > std::numeric_limits<std::size_t>::max() - config.worker_count)
@@ -25,7 +38,7 @@ void validate_config(const SdkConfig& config) {
     if (config.byte_budget == 0 || config.ort_threads < 1 || config.device < 0)
         throw SdkError(SdkErrorCode::InvalidInput, "byte_budget/ort_threads must be positive and device nonnegative");
 }
-struct Loaded { Backend backend; std::string name, precision; };
+struct Loaded { std::vector<Backend> backends; std::string name, precision; };
 Loaded load_backend(const SdkConfig& config) {
     validate_config(config);
     std::filesystem::path model;
@@ -63,15 +76,21 @@ Loaded load_backend(const SdkConfig& config) {
     try {
         if (backend == "ort") {
 #if defined(MINIINFER_SDK_HAS_ORT)
-            auto runner = std::make_shared<OrtRunner>(model, config.ort_threads);
-            return {[runner](const RgbImage& image) { return runner->run(image); }, backend, precision};
+            auto backends = create_backends(config.worker_count, [&](std::size_t) -> Backend {
+                auto runner = std::make_shared<OrtRunner>(model, config.ort_threads);
+                return [runner](const RgbImage& image) { return runner->run(image); };
+            });
+            return {std::move(backends), backend, precision};
 #else
             throw SdkError(SdkErrorCode::ModelIncompatible, "ORT backend was not built");
 #endif
         }
 #if defined(MINIINFER_SDK_HAS_TRT)
-        auto runner = std::make_shared<TrtRunner>(model, config.device);
-        return {[runner](const RgbImage& image) { return runner->run(image); }, backend, precision};
+        auto backends = create_backends(1, [&](std::size_t) -> Backend {
+            auto runner = std::make_shared<TrtRunner>(model, config.device);
+            return [runner](const RgbImage& image) { return runner->run(image); };
+        });
+        return {std::move(backends), backend, precision};
 #else
         throw SdkError(SdkErrorCode::ModelIncompatible, "TensorRT backend was not built");
 #endif
@@ -88,12 +107,12 @@ Loaded load_backend(const SdkConfig& config) {
 class DepthSdk::Impl final {
 public:
     Impl(SdkConfig config, Loaded loaded, std::function<void()> delivery = {})
-        : configuration(std::move(config)), backend(std::move(loaded.backend)),
+        : configuration(std::move(config)), backends(std::move(loaded.backends)),
           before_delivery(std::move(delivery)), pool(configuration.worker_count, configuration.queue_capacity) {
         state.backend = std::move(loaded.name);
         state.precision = std::move(loaded.precision);
     }
-    DepthMap execute(const RgbImage& image) {
+    DepthMap execute(const RgbImage& image, std::size_t worker_id) {
         {
             std::lock_guard<std::mutex> lock(mutex);
             --state.queued;
@@ -101,7 +120,8 @@ public:
             changed.notify_all();
         }
         try {
-            auto result = backend(image);
+            // ORT owns one session per stable pool worker; TRT keeps one shared runner.
+            auto result = backends.at(backends.size() == 1 ? 0 : worker_id)(image);
             if (result.width() != image.width() || result.height() != image.height()
                 || result.values().size() != image.width() * image.height())
                 throw std::runtime_error("backend returned incorrect restored dimensions/storage");
@@ -167,11 +187,11 @@ public:
                 auto owned = std::make_shared<RgbImage>(image);
                 ++state.queued;
                 queued = true;
-                result = pool.submit([this, owned = std::move(owned)](std::size_t) mutable {
+                result = pool.submit([this, owned = std::move(owned)](std::size_t worker_id) mutable {
                     // Release copied RGB before packaged_task publishes its
                     // future terminal, on success and on exception alike.
                     auto local = std::move(owned);
-                    return execute(*local);
+                    return execute(*local, worker_id);
                 });
                 ++state.accepted;
                 changed.notify_all();
@@ -214,18 +234,18 @@ public:
         pool.shutdown();
         std::unique_lock<std::mutex> lock(mutex);
         changed.wait(lock, [this] { return state.inflight == 0; });
-        backend = {};  // Device/context/model release after execution and delivery finish.
+        backends.clear();  // Device/context/model release after execution and delivery finish.
         state.shutdown_complete = true;
         changed.notify_all();
     }
     SdkConfig configuration;
-    Backend backend;
+    std::vector<Backend> backends;
     std::function<void()> before_delivery;
     mutable std::mutex mutex;
     std::condition_variable changed;
     std::mutex shutdown_mutex;
     SdkSnapshot state;
-    ThreadPool pool;  // Destroyed before backend and state.
+    ThreadPool pool;  // Starts after backend construction; destroyed before backends and state.
 };
 
 DepthSdk::DepthSdk(SdkConfig config) {
@@ -236,7 +256,20 @@ DepthSdk::DepthSdk(SdkConfig config) {
 DepthSdk::DepthSdk(SdkConfig config, Backend backend, std::function<void()> before_delivery) {
     validate_config(config);
     if (!backend) throw SdkError(SdkErrorCode::InvalidInput, "test backend cannot be empty");
-    impl_ = std::make_unique<Impl>(std::move(config), Loaded{std::move(backend), "fake", "fp32"}, std::move(before_delivery));
+    auto backends = create_backends(1, [&](std::size_t) { return std::move(backend); });
+    impl_ = std::make_unique<Impl>(std::move(config), Loaded{std::move(backends), "fake", "fp32"}, std::move(before_delivery));
+}
+DepthSdk::DepthSdk(SdkConfig config, BackendFactory factory, bool worker_local,
+                   std::function<void()> before_delivery) {
+    validate_config(config);
+    try {
+        auto backends = create_backends(worker_local ? config.worker_count : 1, factory);
+        impl_ = std::make_unique<Impl>(std::move(config), Loaded{std::move(backends), "fake", "fp32"}, std::move(before_delivery));
+    } catch (const SdkError&) {
+        throw;
+    } catch (const std::exception& error) {
+        throw SdkError(SdkErrorCode::BackendFailure, std::string("backend initialization failed: ") + error.what());
+    }
 }
 DepthSdk::~DepthSdk() noexcept {
     try { if (impl_) impl_->shutdown(); } catch (...) { std::terminate(); }

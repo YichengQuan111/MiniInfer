@@ -7,9 +7,10 @@
 namespace miniinfer::depth {
 
 // Static image[1,3,518,518] -> depth[1,518,518], CPU FP32 only.
-// run/run_raw may overlap on a live runner: Session is shared; every call owns
-// input/output/temporary storage. Caller must keep the runner alive. No queue
-// or global memory admission limit is provided at this backend layer.
+// run/run_raw may overlap on a live runner: Session.Run is serialized per runner
+// for ORT telemetry safety; every call owns input/output/temporary storage.
+// The SDK creates a separate runner/Session per worker. Caller must keep the
+// runner alive. No queue or global memory admission limit is provided here.
 class OrtRunner final {
 public:
     explicit OrtRunner(const std::filesystem::path& model_path, int threads = 4);

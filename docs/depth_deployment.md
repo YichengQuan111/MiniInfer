@@ -122,7 +122,11 @@ FP32 与 FP16 均关闭 TF32，workspace 上限为 1 GiB。FP16 的最终策略�
 
 ## V1.4：同步 SDK 与模型包
 
-`miniinfer::depth_sdk` 提供 `DepthSdk(SdkConfig)` 初始化、`run(RgbImage)` 同步返回 owning `DepthMap`、`config()`、`snapshot()` 和 `shutdown()`。对外头文件不暴露 ORT/TRT 类型。一个实例固定一个后端，默认使用 4 个 Worker，可通过 `SdkConfig::worker_count` 配置；多个请求的预处理、后处理可并行。ORT 1.21 的共享 Session 在 `Run()` 内更新非原子统计字段，因此 SDK 对该调用加锁；ORT 单次推理仍可使用内部计算线程。GPU 后端串行访问单个执行槽位。在途请求数量上限为 `queue_capacity + worker_count`，同时受字节预算限制。调用者可并发调用 `run`，输出在下次调用或 SDK 关闭后仍有效。完整接口、错误分类和外部集成示例见 [examples/depth_sdk](../examples/depth_sdk/README.md)。
+`miniinfer::depth_sdk` 提供 `DepthSdk(SdkConfig)` 初始化、`run(RgbImage)` 同步返回 owning `DepthMap`、`config()`、`snapshot()` 和 `shutdown()`。对外头文件不暴露 ORT/TRT 类型。一个实例固定一个后端，默认使用 4 个 Worker，可通过 `SdkConfig::worker_count` 配置；每个 ORT Worker 使用独立 Session，通过线程池提供的固定 Worker 编号选择，能够并行推理不同图片。所有 Session 在线程池启动前创建，排空执行和结果交付后释放；创建中途失败时已创建资源自动释放。
+
+`ort_threads` 是每个 Session 的计算线程数，默认 4 个 Worker × 每 Session 4 个线程，需要结合 CPU 核心数调整。各 Session 有独立的模型状态和内存分配区，这些固定开销不受请求字节预算限制。单独使用 `OrtRunner` 时，同一实例仍通过自身的锁保护 ORT 1.21 的统计字段；不同 Worker 不会争用同一把锁。GPU 后端仍串行访问单个执行槽位。
+
+在途请求数量上限为 `queue_capacity + worker_count`，同时受字节预算限制。调用者可并发调用 `run`，输出在下次调用或 SDK 关闭后仍有效。完整接口、错误分类和外部集成示例见 [examples/depth_sdk](../examples/depth_sdk/README.md)，实测见[每 Worker Session 验收](sdk_worker_sessions_20261014.md)。
 
 默认使用 4 个 Worker 和 4 个等待队列槽位，未交付请求的计数上限为 8，字节预算可能进一步限制可接纳数量；每个请求在复制图像前预留 `19 × 像素数 + 16 MiB`，128 MiB 总预算不足时立即返回 `Busy`。计数和字节预算同时覆盖等待、执行及等待交付的结果，结果交付后释放。固定模型权重、后端 arena、CUDA context 和调用者持有的已交付结果不属于此预算，不能把预算当作进程 RSS 上限。`shutdown()` 先拒绝新请求，再排空已接受任务及结果交付，最后释放后端；支持重复或并发关闭。
 
