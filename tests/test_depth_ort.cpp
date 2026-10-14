@@ -1,10 +1,12 @@
 #include "miniinfer/depth/ort_runner.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
+#include <future>
 #include <iostream>
 #include <optional>
 #include <stdexcept>
@@ -88,6 +90,31 @@ void backend_contract() {
         expect(second.values()[0] == 6.0F && first->values()[0] == 3.0F, "later inference overwrote earlier raw output");
         const auto restored = runner.run(RgbImage(2, 2, std::vector<std::uint8_t>(12, 128)));
         expect(restored.width() == 2 && restored.height() == 2 && restored.values().size() == 4, "complete ORT run restoration");
+        std::promise<void> start;
+        const auto ready = start.get_future().share();
+        std::vector<std::future<RawDepth>> concurrent;
+        for (int worker = 0; worker < 4; ++worker) {
+            concurrent.push_back(std::async(std::launch::async, [&, worker, ready] {
+                expect(ready.wait_for(std::chrono::seconds(5)) == std::future_status::ready,
+                       "concurrent ORT start gate timed out");
+                std::optional<RawDepth> previous;
+                for (int iteration = 0; iteration < 8; ++iteration) {
+                    const float value = static_cast<float>(10 * worker + iteration + 1);
+                    auto result = runner.run_raw(PreparedImage(std::vector<float>(input_elements, value), geometry(2, 2)));
+                    expect(std::all_of(result.values().begin(), result.values().end(), [value](float v) { return v == value; }),
+                           "concurrent shared ORT session mixed request outputs");
+                    if (previous)
+                        expect(previous->values()[0] == value - 1, "concurrent ORT inference overwrote earlier output");
+                    previous.emplace(std::move(result));
+                }
+                return std::move(*previous);
+            }));
+        }
+        start.set_value();
+        for (int worker = 0; worker < 4; ++worker) {
+            const auto result = concurrent[worker].get();
+            expect(result.values()[0] == 10 * worker + 8, "concurrent ORT terminal output");
+        }
     }
     expect(first->values()[0] == 3.0F, "runner destruction invalidated result");
 }

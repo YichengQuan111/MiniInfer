@@ -19,8 +19,9 @@ namespace miniinfer::depth {
 namespace {
 using Backend = std::function<DepthMap(const RgbImage&)>;
 void validate_config(const SdkConfig& config) {
-    if (config.queue_capacity == 0 || config.queue_capacity == std::numeric_limits<std::size_t>::max())
-        throw SdkError(SdkErrorCode::InvalidInput, "queue_capacity must be positive with room for one executing task");
+    if (config.worker_count == 0 || config.queue_capacity == 0
+        || config.queue_capacity > std::numeric_limits<std::size_t>::max() - config.worker_count)
+        throw SdkError(SdkErrorCode::InvalidInput, "worker_count and queue_capacity must be positive with a representable sum");
     if (config.byte_budget == 0 || config.ort_threads < 1 || config.device < 0)
         throw SdkError(SdkErrorCode::InvalidInput, "byte_budget/ort_threads must be positive and device nonnegative");
 }
@@ -88,7 +89,7 @@ class DepthSdk::Impl final {
 public:
     Impl(SdkConfig config, Loaded loaded, std::function<void()> delivery = {})
         : configuration(std::move(config)), backend(std::move(loaded.backend)),
-          before_delivery(std::move(delivery)), pool(1, configuration.queue_capacity) {
+          before_delivery(std::move(delivery)), pool(configuration.worker_count, configuration.queue_capacity) {
         state.backend = std::move(loaded.name);
         state.precision = std::move(loaded.precision);
     }
@@ -152,7 +153,8 @@ public:
                 ++state.rejected_closed;
                 throw SdkError(SdkErrorCode::Closed, "depth SDK is closed");
             }
-            if (state.inflight >= configuration.queue_capacity + 1 || pool.pending() >= configuration.queue_capacity
+            if (state.inflight >= configuration.queue_capacity + configuration.worker_count
+                || pool.pending() >= configuration.queue_capacity
                 || bytes > configuration.byte_budget || state.reserved_bytes > configuration.byte_budget - bytes) {
                 ++state.rejected_busy;
                 throw SdkError(SdkErrorCode::Busy, "depth SDK count or byte admission budget is full");

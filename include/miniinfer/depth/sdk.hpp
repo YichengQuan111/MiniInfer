@@ -21,10 +21,11 @@ private:
 
 struct SdkConfig {
     std::filesystem::path package_dir;
-    std::size_t queue_capacity = 4;  // Waiting tasks; total reservations <=capacity+1.
+    std::size_t queue_capacity = 4;  // Waiting tasks; reservations <=capacity+worker_count.
     std::size_t byte_budget = 128ULL * 1024 * 1024;
     int ort_threads = 4;
     int device = 0;
+    std::size_t worker_count = 4;
 };
 
 struct SdkSnapshot {
@@ -38,7 +39,7 @@ struct SdkSnapshot {
     std::string backend, precision;
 };
 
-// Synchronous bounded admission, one backend worker. Concurrent run/shutdown
+// Synchronous bounded admission, four backend workers by default. Concurrent run/shutdown
 // are supported while the caller keeps this object and each input alive.
 // Once admission succeeds, run owns an independent RGB copy. shutdown rejects
 // new requests, drains accepted work and waits for their run calls to deliver.

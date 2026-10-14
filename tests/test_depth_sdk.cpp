@@ -8,9 +8,12 @@
 #include <filesystem>
 #include <future>
 #include <iostream>
+#include <limits>
 #include <mutex>
+#include <set>
 #include <stdexcept>
 #include <string>
+#include <thread>
 #include <vector>
 
 namespace {
@@ -27,17 +30,18 @@ template<class Callable> void error(SdkErrorCode code, Callable callable, const 
 struct Gate {
     std::mutex mutex;
     std::condition_variable changed;
-    bool entered = false, open = false;
+    std::size_t entered = 0;
+    bool open = false;
     void block() {
         std::unique_lock<std::mutex> lock(mutex);
-        entered = true;
+        ++entered;
         changed.notify_all();
         if (!changed.wait_for(lock, std::chrono::seconds(5), [this] { return open; }))
             throw std::runtime_error("backend/delivery test gate timed out");
     }
-    void wait() {
+    void wait(std::size_t count = 1) {
         std::unique_lock<std::mutex> lock(mutex);
-        if (!changed.wait_for(lock, std::chrono::seconds(5), [this] { return entered; }))
+        if (!changed.wait_for(lock, std::chrono::seconds(5), [this, count] { return entered >= count; }))
             throw std::runtime_error("test gate entry timed out");
     }
     void release() { std::lock_guard<std::mutex> lock(mutex); open = true; changed.notify_all(); }
@@ -68,45 +72,68 @@ void ownership() {
     sdk.reset();
     expect(result.values()[0] == 7, "SDK destruction invalidated result");
 }
-void count_and_serialization() {
+void count_and_parallelism(std::size_t worker_count = 4) {
     Gate gate;
-    std::atomic<int> calls{0}, active{0}, maximum{0};
+    std::atomic<int> calls{0};
+    std::mutex workers_mutex;
+    std::set<std::thread::id> workers;
     SdkConfig config;
     config.queue_capacity = 1;
+    if (worker_count != 4) config.worker_count = worker_count;
     auto sdk = SdkTestAccess::create(config, [&](const RgbImage& input) {
-        const int current = ++active;
-        maximum.store(std::max(maximum.load(), current));
-        if (++calls == 1) gate.block();
-        auto depth = output(input);
-        --active;
-        return depth;
+        {
+            std::lock_guard<std::mutex> lock(workers_mutex);
+            workers.insert(std::this_thread::get_id());
+        }
+        if (static_cast<std::size_t>(++calls) <= worker_count) gate.block();
+        return output(input);
     });
     const auto input = image();
-    auto first = std::async(std::launch::async, [&] { return sdk->run(input); });
-    gate.wait();
-    auto second = std::async(std::launch::async, [&] { return sdk->run(input); });
+    std::vector<std::future<DepthMap>> running;
+    for (std::uint8_t value = 1; value <= worker_count; ++value) {
+        running.push_back(std::async(std::launch::async, [&, value] { return sdk->run(image(value)); }));
+        gate.wait(value);  // Occupy each worker before submitting into the one-slot queue.
+    }
+    auto queued = std::async(std::launch::async, [&] { return sdk->run(input); });
     SdkTestAccess::wait(*sdk, [](const SdkSnapshot& state) { return state.queued == 1; });
-    expect(sdk->snapshot().inflight == 2, "count includes one execution and one waiting request");
+    const auto full = sdk->snapshot();
+    expect(sdk->config().worker_count == worker_count && full.inflight == worker_count + 1
+           && full.executing == worker_count && full.queued == 1,
+           "count must include configured executions and one waiting request");
+    expect(static_cast<std::size_t>(calls.load()) == worker_count,
+           "waiting request entered backend while all workers were occupied");
+    {
+        std::lock_guard<std::mutex> lock(workers_mutex);
+        expect(workers.size() == worker_count, "pool must execute on the configured distinct worker threads");
+    }
     error(SdkErrorCode::Busy, [&] { sdk->run(input); }, "count exhaustion must be Busy");
     gate.release();
-    expect(first.get().width() == 1 && second.get().width() == 1, "accepted work completes");
-    expect(maximum == 1, "more than one backend call overlapped");
+    for (std::size_t index = 0; index < running.size(); ++index) {
+        const auto result = running[index].get();
+        expect(result.values()[0] == index + 1, "parallel result was mixed with another request");
+    }
+    const auto queued_result = queued.get();
+    expect(queued_result.values()[0] == 7, "waiting request did not complete");
     const auto state = sdk->snapshot();
-    expect(state.accepted == 2 && state.succeeded == 2 && state.delivered == 2 && state.inflight == 0
+    expect(state.accepted == worker_count + 1 && state.succeeded == worker_count + 1
+           && state.delivered == worker_count + 1 && state.inflight == 0
            && state.reserved_bytes == 0 && state.rejected_busy == 1, "count terminal accounting");
 }
 void byte_admission() {
     Gate gate;
     SdkConfig config;
-    config.byte_budget = DepthSdk::reservation_bytes(1, 1);
+    config.byte_budget = 4 * DepthSdk::reservation_bytes(1, 1);
     auto sdk = SdkTestAccess::create(config, [&](const RgbImage& input) { gate.block(); return output(input); });
     const auto input = image();
-    auto first = std::async(std::launch::async, [&] { return sdk->run(input); });
-    gate.wait();
+    std::vector<std::future<DepthMap>> running;
+    for (int index = 0; index < 4; ++index) {
+        running.push_back(std::async(std::launch::async, [&] { return sdk->run(input); }));
+        gate.wait(static_cast<std::size_t>(index + 1));
+    }
     expect(sdk->snapshot().reserved_bytes == config.byte_budget, "exact byte budget reservation");
     error(SdkErrorCode::Busy, [&] { sdk->run(input); }, "byte exhaustion must be Busy");
     gate.release();
-    first.get();
+    for (auto& result : running) result.get();
     expect(sdk->snapshot().reserved_bytes == 0, "delivery did not release byte reservation");
     config.byte_budget = DepthSdk::reservation_bytes(1, 1) - 1;
     auto too_small = SdkTestAccess::create(config, output);
@@ -147,29 +174,40 @@ void drain_waiting_on_shutdown() {
     SdkConfig config;
     config.queue_capacity = 1;
     auto sdk = SdkTestAccess::create(config, [&](const RgbImage& input) {
-        if (++calls == 1) gate.block();
+        if (++calls <= 4) gate.block();
         return output(input);
     });
     const auto input = image();
-    auto first = std::async(std::launch::async, [&] { return sdk->run(input); });
-    gate.wait();
-    auto second = std::async(std::launch::async, [&] { return sdk->run(input); });
+    std::vector<std::future<DepthMap>> running;
+    for (int index = 0; index < 4; ++index) {
+        running.push_back(std::async(std::launch::async, [&] { return sdk->run(input); }));
+        gate.wait(static_cast<std::size_t>(index + 1));
+    }
+    auto fifth = std::async(std::launch::async, [&] { return sdk->run(input); });
     SdkTestAccess::wait(*sdk, [](const SdkSnapshot& state) { return state.queued == 1; });
     auto shutdown = std::async(std::launch::async, [&] { sdk->shutdown(); });
     SdkTestAccess::wait(*sdk, [](const SdkSnapshot& state) { return !state.accepting; });
     error(SdkErrorCode::Closed, [&] { sdk->run(input); }, "shutdown admitted new work");
+    expect(!sdk->snapshot().shutdown_complete, "shutdown finished while four backends were blocked");
     gate.release();
-    const auto first_result = first.get();
-    const auto second_result = second.get();
-    expect(first_result.values().size() == 1, "executing work lost on shutdown");
-    expect(second_result.values().size() == 1, "waiting work lost on shutdown");
+    for (auto& future : running) {
+        const auto result = future.get();
+        expect(result.values().size() == 1, "executing work lost on shutdown");
+    }
+    const auto queued_result = fifth.get();
+    expect(queued_result.values().size() == 1, "waiting work lost on shutdown");
     shutdown.get();
-    expect(calls == 2 && sdk->snapshot().delivered == 2, "drain did not complete both requests");
+    const auto state = sdk->snapshot();
+    expect(calls == 5 && state.delivered == 5 && state.shutdown_complete && state.inflight == 0
+           && state.reserved_bytes == 0, "drain did not complete all five requests");
 }
 void errors_and_reuse() {
-    std::atomic<int> calls{0};
+    Gate initial, recovered;
     auto sdk = SdkTestAccess::create({}, [&](const RgbImage& input) {
-        switch (++calls) {
+        const auto value = input.pixels()[0];
+        if (value <= 4) initial.block();
+        else recovered.block();
+        switch (value) {
             case 1: throw std::runtime_error("intentional fake backend failure");
             case 2: throw 42;
             case 3: return DepthMap(2, 2, std::vector<float>(4));
@@ -180,12 +218,32 @@ void errors_and_reuse() {
     const auto valid = std::move(moved_from);
     error(SdkErrorCode::InvalidInput, [&] { sdk->run(moved_from); }, "moved-from input must be InvalidInput");
     expect(sdk->snapshot().reserved_bytes == 0 && sdk->snapshot().accepted == 0, "invalid input reserved resources");
-    for (int index = 0; index < 3; ++index) {
-        error(SdkErrorCode::BackendFailure, [&] { sdk->run(valid); }, "backend failure class incorrect");
-        expect(sdk->snapshot().inflight == 0 && sdk->snapshot().reserved_bytes == 0, "failed request leaked reservation");
+    std::vector<std::future<DepthMap>> running;
+    for (std::uint8_t value = 1; value <= 4; ++value)
+        running.push_back(std::async(std::launch::async, [&, value] { return sdk->run(image(value)); }));
+    initial.wait(4);
+    initial.release();
+    for (int index = 0; index < 3; ++index)
+        error(SdkErrorCode::BackendFailure, [&] { running[index].get(); }, "backend failure class incorrect");
+    const auto result = running[3].get();
+    const auto failed = sdk->snapshot();
+    expect(result.values()[0] == 4 && failed.failed == 3 && failed.succeeded == 1 && failed.delivered == 4
+           && failed.inflight == 0 && failed.reserved_bytes == 0, "parallel failure leaked reservation or damaged successful peer");
+    running.clear();
+    for (std::uint8_t value = 10; value < 14; ++value)
+        running.push_back(std::async(std::launch::async, [&, value] { return sdk->run(image(value)); }));
+    recovered.wait(4);  // Every worker remains available after mixed backend failures.
+    recovered.release();
+    for (std::size_t index = 0; index < running.size(); ++index) {
+        const auto recovered_result = running[index].get();
+        expect(recovered_result.values()[0] == index + 10, "worker not reusable after failure");
     }
-    const auto result = sdk->run(valid);
-    expect(result.values()[0] == 7 && sdk->snapshot().failed == 3 && sdk->snapshot().succeeded == 1, "backend not reusable after failure");
+    const auto state = sdk->snapshot();
+    expect(state.accepted == 8 && state.failed == 3 && state.succeeded == 5 && state.delivered == 8
+           && state.inflight == 0 && state.reserved_bytes == 0, "recovery terminal accounting");
+    sdk->shutdown();
+    sdk.reset();
+    expect(result.values()[0] == 4, "parallel result did not outlive recovered pool");
 }
 struct Temporary {
     std::filesystem::path path;
@@ -207,6 +265,12 @@ void initialization() {
     config.byte_budget = 0;
     error(SdkErrorCode::InvalidInput, [&] { DepthSdk sdk(config); }, "zero byte budget initialization");
     error(SdkErrorCode::InvalidInput, [&] { SdkTestAccess::create({}, {}); }, "empty injected backend accepted");
+    config = {};
+    config.worker_count = 0;
+    error(SdkErrorCode::InvalidInput, [&] { SdkTestAccess::create(config, output); }, "zero worker count initialization");
+    config.worker_count = std::numeric_limits<std::size_t>::max();
+    config.queue_capacity = 1;
+    error(SdkErrorCode::InvalidInput, [&] { SdkTestAccess::create(config, output); }, "worker plus queue capacity overflow accepted");
     Temporary temporary;
     const auto package = temporary.path / "package";
     std::filesystem::create_directory(package);
@@ -260,7 +324,8 @@ void initialization() {
 int main() {
     try {
         ownership();
-        count_and_serialization();
+        count_and_parallelism();
+        count_and_parallelism(1);
         byte_admission();
         ready_result_shutdown();
         drain_waiting_on_shutdown();

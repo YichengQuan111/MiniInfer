@@ -323,7 +323,7 @@ def main():
              "image": {"path": str(args.image), "sha256": sha256(args.image)}, "packages": identities,
              "method": {"order": "ort-fp32 then trt-fp32 then trt-fp16; raw then sdk then tcp for each",
                         "parallel_cases": False, "repeats": REPEATS, "cpu_threads": 4, "gpu_slots": 1,
-                        "queue_capacity": 4, "admission_bytes": 134217728,
+                        "sdk_workers": 4, "queue_capacity": 4, "admission_bytes": 134217728,
                         "tcp": "fresh server per case; three serial new client processes; no probe requests",
                         "server_initialization_memory": "separate server_startup_memory.csv/json, not client startup RSS",
                         "gpu_memory": "device 0 total used MiB includes background; not per-process attribution",

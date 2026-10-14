@@ -122,9 +122,9 @@ FP32 与 FP16 均关闭 TF32，workspace 上限为 1 GiB。FP16 的最终策略�
 
 ## V1.4：同步 SDK 与模型包
 
-`miniinfer::depth_sdk` 提供 `DepthSdk(SdkConfig)` 初始化、`run(RgbImage)` 同步返回 owning `DepthMap`、`config()`、`snapshot()` 和 `shutdown()`。对外头文件不暴露 ORT/TRT 类型。一个实例固定一个后端、一个执行线程和一个 GPU 槽位；调用者可并发调用 `run`，输出在下次调用或 SDK 关闭后仍有效。完整接口、错误分类和外部集成示例见 [examples/depth_sdk](../examples/depth_sdk/README.md)。
+`miniinfer::depth_sdk` 提供 `DepthSdk(SdkConfig)` 初始化、`run(RgbImage)` 同步返回 owning `DepthMap`、`config()`、`snapshot()` 和 `shutdown()`。对外头文件不暴露 ORT/TRT 类型。一个实例固定一个后端，默认使用 4 个 Worker，可通过 `SdkConfig::worker_count` 配置；CPU ORT 后端可并发执行多个请求，GPU 后端仍在内部串行访问单个执行槽位。在途请求数量上限为 `queue_capacity + worker_count`，同时受字节预算限制。调用者可并发调用 `run`，输出在下次调用或 SDK 关闭后仍有效。完整接口、错误分类和外部集成示例见 [examples/depth_sdk](../examples/depth_sdk/README.md)。
 
-默认等待队列为 4，SDK 接纳最多 5 个未交付请求；每个请求在复制图像前预留 `19 × 像素数 + 16 MiB`，128 MiB 总预算不足时立即返回 `Busy`。计数和字节预算同时覆盖等待、执行及等待交付的结果，结果交付后释放。固定模型权重、后端 arena、CUDA context 和调用者持有的已交付结果不属于此预算，不能把预算当作进程 RSS 上限。`shutdown()` 先拒绝新请求，再排空已接受任务及结果交付，最后释放后端；支持重复或并发关闭。
+默认使用 4 个 Worker 和 4 个等待队列槽位，未交付请求的计数上限为 8，字节预算可能进一步限制可接纳数量；每个请求在复制图像前预留 `19 × 像素数 + 16 MiB`，128 MiB 总预算不足时立即返回 `Busy`。计数和字节预算同时覆盖等待、执行及等待交付的结果，结果交付后释放。固定模型权重、后端 arena、CUDA context 和调用者持有的已交付结果不属于此预算，不能把预算当作进程 RSS 上限。`shutdown()` 先拒绝新请求，再排空已接受任务及结果交付，最后释放后端；支持重复或并发关闭。
 
 模型包生成要求匹配且通过的最终集报告，不会在打包时放宽阈值。包内包含 ONNX、可选 TensorRT engine/环境清单/层格式、契约、阈值、最终验收报告、参考清单、样本来源和一张 golden 图及中间/最终张量。`package.json` 对所有附带文件记录大小和 SHA-256；SDK 初始化校验最小 `manifest.txt`、模型哈希和 TRT 环境，离线完整检查使用 `verify`。包不是数字签名。
 
