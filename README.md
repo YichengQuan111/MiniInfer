@@ -1,14 +1,58 @@
 # MiniInfer
 
-**当前版本：V1.6，深度模型部署与同步 C++ SDK 已完成。** Depth Anything V2 Small 固定 B=1、518 输入，支持 ORT CPU FP32、TensorRT FP32 与通过精度验收的混合 FP16；提供 owning 输入/输出、单 GPU 槽位、数量/字节限流、本地 CLI、RGB8/FP32 TCP 与可重建模型包。
+MiniInfer 是一个基于 **C++17 / Linux（支持 WSL2）** 的深度估计推理运行时，将训练好的 **Depth Anything V2 Small** 封装成可供其他 C++ 程序调用的同步 SDK。输入一张 RGB 图片，返回与原图尺寸一致的 FP32 相对深度图；数值越大表示越近，单位不是米。
 
-全新 Release **34/34**、CPU-only Debug **28/28**；安装后的独立 SDK 示例与重建 engine 回归通过。九组性能基线各重复三次，共 **6,732 次请求、零错误**；版本按 V1.1—V1.6 分别提交。V2 的异步、多槽位、CUDA 优化和长稳仍待实施。
+模型计算由 ONNX Runtime 或 TensorRT 执行，项目重点是 **C++ 资源管理、并发请求调度、异常安全和部署验证**。
 
-- [构建、模型契约与部署](docs/depth_deployment.md)
-- [分版本验收与证据](docs/depth_validation.md)
-- [数值精度与混合 FP16 取舍](docs/depth_accuracy.md)
-- [性能实测及原始数据](docs/depth_performance.md)
-- [TCP 协议](docs/depth_tcp.md)、[外部 SDK 示例](examples/depth_sdk/README.md)、[部署排查](docs/depth_troubleshooting.md)
+```text
+接收图片 → 校验与资源预留 → 深拷贝并入队 → Worker 执行
+        → 预处理 → ORT / TensorRT → 后处理 → 返回独立拥有数据的结果
+```
+
+## 核心能力
+
+- **CPU / GPU 推理**：支持 ORT CPU FP32、TensorRT FP32 与通过精度验收的混合 FP16。模型输入固定为 `[1, 3, 518, 518]`，SDK 完成等比缩放、补边、归一化及输出尺寸还原。
+- **同步接口与并发接入**：`DepthSdk::run()` 等待结果后返回；内部通过线程池和 `std::future` 调度任务、传递结果与异常。默认 4 个 Worker，可配置为 1；CPU 请求可并行，TensorRT 后端串行使用单个 GPU 执行槽位。
+- **独立所有权**：输入深拷贝隔离调用方存储，输出对象拥有自己的数组；后续推理及 SDK 销毁不会使已经返回的结果失效。内存、模型会话和线程等资源通过 RAII 管理。
+- **有界资源与安全关闭**：预分配环形队列，结合请求数量和字节预算限制接纳，超限返回 `Busy`；关闭时停止接收、排空已接收任务、等待结果交付和线程退出，再释放后端。
+- **部署入口**：提供本地 CLI、RGB8 / FP32 TCP 请求、可安装的 CMake SDK 和带校验清单的模型包；TensorRT engine 可在目标环境重建并复验。
+
+## SDK 使用示例
+
+准备好依赖和模型包后，通过 `find_package(MiniInfer CONFIG REQUIRED)` 链接 `miniinfer::depth_sdk`。下面使用 ORT FP32 模型包；包内清单决定后端。
+
+```cpp
+#include <miniinfer/depth/sdk.hpp>
+
+int main() {
+    using namespace miniinfer::depth;
+
+    SdkConfig config;
+    config.package_dir = "/path/to/ort-fp32-package";
+    config.worker_count = 4;
+    DepthSdk sdk(config);
+
+    const auto image = read_ppm("input.ppm");
+    const auto depth = sdk.run(image);  // 同步等待完整结果
+    sdk.shutdown();
+    write_f32("output.f32", depth.values());  // SDK 关闭后结果仍然有效
+}
+```
+
+完整构建、模型准备和外部工程接入方式见 [部署指南](docs/depth_deployment.md)与 [SDK 示例](examples/depth_sdk/README.md)。
+
+## 测试与项目范围
+
+测试覆盖 Python 参考结果对齐、输入边界、数量 / 字节限流、故障注入、并发关闭、任务排空及输入 / 输出生命周期。通过可控阻塞稳定构造竞争场景，检查异常后资源释放和后续请求恢复；已有 SDK ASan+UBSan 验收记录。
+
+仓库同时保留早期手写 CPU MLP 算子、支持 `submit()` / `run()` 的 Runtime 及 TCP 基础实现。深度 SDK 当前对外提供同步接口；公开异步接口、GPU 多槽位并行、自定义 CUDA 优化和长时间稳定性测试属于后续工作。历史性能与测试结论对应各自记录的版本和配置。
+
+- [分版本验收与证据](docs/depth_validation.md)、[精度对齐](docs/depth_accuracy.md)
+- [性能基线与测量范围](docs/depth_performance.md)
+- [TCP 协议](docs/depth_tcp.md)、[部署排查](docs/depth_troubleshooting.md)
+
+<details>
+<summary>展开 V0.1 / D16 历史开发与验收记录</summary>
 
 ## V0.1 / D16 历史记录
 
@@ -22,15 +66,16 @@ MiniInfer v0.1 是一个面向 Linux / WSL2 的 C++17 CPU 推理项目：固定 
 
 ## 后续计划
 
-2026-10-11 按网络编程学习路线完成 D16 实现，逐阶段验收记录见文末。V1 / V2 仍为待实施计划。
+2026-10-11 已完成 D16，逐阶段验收记录见文末。V1 / V2 仍为待实施计划，按 I【洞察】→ S【策略】→ O【行动】聚焦 **MiniInfer：C++ 视觉模型部署与推理性能优化**，以 Depth Anything V2 Small 为实际负载。主线对应 C++ AI 软件、模型部署与推理性能优化，车企 / 机器人 / 边缘计算作为重点应用方向。
 
 | 阶段 | 目标与进入下一阶段的条件 |
 |---|---|
 | [D16 原生 TCP 网络编程与推理服务](docs/D16_TCP_网络编程学习扩展.md) | Echo → 消息协议 → 远程 MLP → 有限并发 → 安全退出；正确收发、过载、断连和关闭有测试 |
-| [V1 真实模型的 C++ 网络推理服务](docs/MiniInfer_V1_V2_求职改进策略.md) | 先完成 ORT / TensorRT 本地精度对齐，再通过 D16 的 TCP 服务传输视觉请求；本地与远程结果及基线完整 |
-| [V2 事件驱动网络与 GPU 性能工程](docs/MiniInfer_V1_V2_求职改进策略.md) | 非阻塞 epoll、完成通知、有限 GPU 并发与资源复用；通过故障回归、Profile、CUDA 实践和同条件优化实验 |
+| [V1 P0：正确部署与 C++ SDK](docs/MiniInfer_V1_V2_求职改进策略.md) | Python → ONNX → ORT → TensorRT FP32 / FP16 精度对齐；固定形状、Batch=1、单槽位；C++ SDK、本地 / TCP、可重建模型包与启动 / 稳态基线 |
+| [V2 P0：可靠异步与性能优化](docs/MiniInfer_V1_V2_求职改进策略.md) | 两种静态尺寸 / 精度取舍；可靠异步 SDK、有界 FIFO、GPU 缓冲复用与 1 / 2 槽位；实际链路 CUDA 优化、Profiler、P99 / 吞吐 / 内存、过载与长稳 |
+| P1：选做分支 | INT8 PTQ、实时帧策略、epoll / eventfd、独立 LayerNorm / GEMM、TensorRT Plugin、ROS2 等，按岗位或瓶颈每次先选一个 |
 
-D16 提供原生 TCP 服务端和客户端；V1 / V2 的依赖在对应阶段核验。当前没有 GPU 后端。
+D16 已提供 TCP 服务；当前没有 GPU 后端。现有电脑和 NVIDIA GPU 用于完成 V1 / V2 本机验证，真实端侧适配另列 E1，未验证板端时延或功耗。P0 全部验收后才能标记对应版本完成；P1 / E1 不阻塞主线。INT8 若选做，仍须证明真实量化执行并完成精度 / 性能对照，最终可保留 FP16。详细验收以主计划为准。
 
 ## 已实现
 
@@ -325,3 +370,5 @@ wsl -d Ubuntu-24.04 --cd $linuxProject -- setarch x86_64 -R env TSAN_OPTIONS=hal
 ```
 
 Release 的进程内 Runtime 与 TCP 各完成 15,000 个正式请求，业务/协议/连接错误及超时均为 0；配置、时延口径及原始记录见 [D16 基准](docs/benchmark.md)。Windows→WSL、局域网、epoll、TLS、GPU 与 V1/V2 仍未实施。
+
+</details>
