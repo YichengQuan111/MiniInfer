@@ -9,7 +9,8 @@ struct Geometry {
     std::size_t resized_width, resized_height;
     std::size_t pad_left, pad_top, pad_right, pad_bottom;
 };
-Geometry geometry(std::size_t width, std::size_t height);
+Geometry geometry(std::size_t width, std::size_t height, std::size_t size = model_size);
+std::size_t geometry_size(const Geometry& transform);
 void validate_geometry(const Geometry& transform);
 
 class PreparedImage final {
@@ -28,7 +29,7 @@ private:
 std::vector<float> bilinear_half_pixel(const std::vector<float>& source,
     std::size_t source_width, std::size_t source_height, std::size_t channels,
     std::size_t target_width, std::size_t target_height);
-PreparedImage preprocess(const RgbImage& image);
+PreparedImage preprocess(const RgbImage& image, std::size_t size = model_size);
 DepthMap postprocess(const RawDepth& raw, const Geometry& transform);
 
 }  // namespace miniinfer::depth

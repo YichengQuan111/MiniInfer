@@ -1,4 +1,4 @@
-"""Frozen depth-v1 RGB8 geometry and FP32 transforms (NumPy only)."""
+"""Frozen 518/392 RGB8 geometry and FP32 transforms (NumPy only)."""
 
 from __future__ import annotations
 
@@ -16,6 +16,16 @@ STD = np.array([0.229, 0.224, 0.225], dtype=np.float32)
 
 class DepthError(ValueError):
     """Invalid depth input, artifact or contract."""
+
+
+def validate_model_size(model_size: int) -> int:
+    if type(model_size) is not int or model_size not in (518, 392):
+        raise DepthError("model_size must be integer 518 or 392")
+    return model_size
+
+
+def contract_version(model_size: int) -> str:
+    return "depth-v1" if validate_model_size(model_size) == 518 else "depth-v2-392"
 
 
 def validate_dimensions(width: int, height: int) -> None:
@@ -42,14 +52,25 @@ class Geometry:
         return asdict(self)
 
 
-def geometry(width: int, height: int) -> Geometry:
+def geometry(width: int, height: int, model_size: int = MODEL_SIZE) -> Geometry:
+    model_size = validate_model_size(model_size)
     validate_dimensions(width, height)
     longest = max(width, height)
-    rw = max(1, (width * MODEL_SIZE + longest // 2) // longest)
-    rh = max(1, (height * MODEL_SIZE + longest // 2) // longest)
-    left, top = (MODEL_SIZE - rw) // 2, (MODEL_SIZE - rh) // 2
+    rw = max(1, (width * model_size + longest // 2) // longest)
+    rh = max(1, (height * model_size + longest // 2) // longest)
+    left, top = (model_size - rw) // 2, (model_size - rh) // 2
     return Geometry(width, height, rw, rh, left, top,
-                    MODEL_SIZE - rw - left, MODEL_SIZE - rh - top)
+                    model_size - rw - left, model_size - rh - top)
+
+
+def geometry_model_size(transform: Geometry) -> int:
+    if not isinstance(transform, Geometry) or any(type(v) is not int for v in transform.to_dict().values()):
+        raise DepthError("geometry must contain eight integer fields")
+    size = validate_model_size(transform.resized_width + transform.pad_left + transform.pad_right)
+    if (transform.resized_height + transform.pad_top + transform.pad_bottom != size
+            or transform != geometry(transform.original_width, transform.original_height, size)):
+        raise DepthError("geometry does not match the frozen transform")
+    return size
 
 
 def _axis(source: int, target: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -85,13 +106,14 @@ def bilinear_half_pixel(image: np.ndarray, height: int, width: int) -> np.ndarra
     return np.ascontiguousarray(result, dtype=np.float32)
 
 
-def preprocess(rgb: np.ndarray) -> tuple[np.ndarray, Geometry]:
+def preprocess(rgb: np.ndarray, model_size: int = MODEL_SIZE) -> tuple[np.ndarray, Geometry]:
+    model_size = validate_model_size(model_size)
     if not isinstance(rgb, np.ndarray) or rgb.dtype != np.uint8 or rgb.ndim != 3 or rgb.shape[2] != 3:
         raise DepthError("image must be uint8 RGB in HWC layout with three channels")
-    transform = geometry(rgb.shape[1], rgb.shape[0])
+    transform = geometry(rgb.shape[1], rgb.shape[0], model_size)
     pixels = rgb.astype(np.float32) / np.float32(255)
     resized = bilinear_half_pixel(pixels, transform.resized_height, transform.resized_width)
-    padded = np.zeros((MODEL_SIZE, MODEL_SIZE, 3), dtype=np.float32)
+    padded = np.zeros((model_size, model_size, 3), dtype=np.float32)
     padded[transform.pad_top:transform.pad_top + transform.resized_height,
            transform.pad_left:transform.pad_left + transform.resized_width] = resized
     normalized = (padded - MEAN) / STD
@@ -99,10 +121,9 @@ def preprocess(rgb: np.ndarray) -> tuple[np.ndarray, Geometry]:
 
 
 def postprocess(raw: np.ndarray, transform: Geometry) -> np.ndarray:
-    if not isinstance(raw, np.ndarray) or raw.dtype != np.float32 or raw.shape != (1, MODEL_SIZE, MODEL_SIZE):
-        raise DepthError("raw output must be float32 [1,518,518]")
-    if not isinstance(transform, Geometry) or transform != geometry(transform.original_width, transform.original_height):
-        raise DepthError("geometry does not match the frozen transform")
+    model_size = geometry_model_size(transform)
+    if not isinstance(raw, np.ndarray) or raw.dtype != np.float32 or raw.shape != (1, model_size, model_size):
+        raise DepthError(f"raw output must be float32 [1,{model_size},{model_size}]")
     if not np.isfinite(raw).all():
         raise DepthError("raw output contains NaN or infinity")
     cropped = raw[0, transform.pad_top:transform.pad_top + transform.resized_height,

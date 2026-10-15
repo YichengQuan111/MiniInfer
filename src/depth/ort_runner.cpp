@@ -40,14 +40,20 @@ public:
         const auto output_name = session.GetOutputNameAllocated(0, allocator);
         if (std::string(input_name.get()) != "image" || std::string(output_name.get()) != "depth")
             throw std::invalid_argument("depth model names must be image and depth");
-        verify_tensor(session.GetInputTypeInfo(0), {1, 3, 518, 518}, "input image");
-        verify_tensor(session.GetOutputTypeInfo(0), {1, 518, 518}, "output depth");
+        const auto input_type = session.GetInputTypeInfo(0);
+        const auto dims = input_type.GetTensorTypeAndShapeInfo().GetShape();
+        if (dims.size() != 4 || dims[0] != 1 || dims[1] != 3 || dims[2] != dims[3])
+            throw std::invalid_argument("input must be static 1x3xSxS");
+        size = validate_model_size(static_cast<std::size_t>(dims[2]));
+        verify_tensor(input_type, {1, 3, size, size}, "input image");
+        verify_tensor(session.GetOutputTypeInfo(0), {1, size, size}, "output depth");
     }
     Ort::Env environment;
     Ort::SessionOptions configuration;
     Ort::Session session;
     std::mutex run_mutex;
     int thread_count;
+    std::int64_t size = 0;
 };
 
 OrtRunner::OrtRunner(const std::filesystem::path& model_path, int threads) {
@@ -66,11 +72,14 @@ OrtRunner& OrtRunner::operator=(OrtRunner&&) noexcept = default;
 RawDepth OrtRunner::run_raw(const PreparedImage& input) const {
     if (!impl_) throw std::logic_error("ORT runner was moved from");
     validate_geometry(input.transform());
-    if (input.values().size() != input_elements) throw std::invalid_argument("prepared input storage length mismatch");
+    const auto size = impl_->size;
+    const auto raw_elements = static_cast<std::size_t>(size * size);
+    if (input.values().size() != 3 * raw_elements || geometry_size(input.transform()) != input_size())
+        throw std::invalid_argument("prepared input storage length mismatch");
     validate_finite(input.values());
     // Private copy avoids mutable ORT tensor API exposing caller storage.
     std::vector<float> storage = input.values();
-    const std::array<std::int64_t, 4> shape{1, 3, 518, 518};
+    const std::array<std::int64_t, 4> shape{1, 3, size, size};
     const auto memory = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
     auto tensor = Ort::Value::CreateTensor<float>(memory, storage.data(), storage.size(), shape.data(), shape.size());
     const char* inputs[] = {"image"};
@@ -85,7 +94,7 @@ RawDepth OrtRunner::run_raw(const PreparedImage& input) const {
         if (results.size() != 1 || !results[0].IsTensor()) throw std::runtime_error("ORT returned invalid output");
         const auto info = results[0].GetTensorTypeAndShapeInfo();
         if (info.GetElementType() != ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT
-            || info.GetShape() != std::vector<std::int64_t>{1, 518, 518}
+            || info.GetShape() != std::vector<std::int64_t>{1, size, size}
             || info.GetElementCount() != raw_elements) throw std::runtime_error("ORT output violates depth-v1 contract");
         const float* values = results[0].GetTensorData<float>();
         return RawDepth(std::vector<float>(values, values + raw_elements));
@@ -94,11 +103,15 @@ RawDepth OrtRunner::run_raw(const PreparedImage& input) const {
     }
 }
 DepthMap OrtRunner::run(const RgbImage& image) const {
-    const auto prepared = preprocess(image);
+    const auto prepared = preprocess(image, input_size());
     return postprocess(run_raw(prepared), prepared.transform());
 }
 int OrtRunner::threads() const {
     if (!impl_) throw std::logic_error("ORT runner was moved from");
     return impl_->thread_count;
+}
+std::size_t OrtRunner::input_size() const {
+    if (!impl_) throw std::logic_error("ORT runner was moved from");
+    return static_cast<std::size_t>(impl_->size);
 }
 }  // namespace miniinfer::depth

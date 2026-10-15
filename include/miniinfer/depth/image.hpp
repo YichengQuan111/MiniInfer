@@ -17,6 +17,9 @@ inline constexpr std::size_t input_elements = 3 * raw_elements;
 // Throws invalid_argument for invalid dimensions/length/non-finite values.
 std::size_t validate_dimensions(std::size_t width, std::size_t height);
 void validate_finite(const std::vector<float>& values);
+std::size_t validate_model_size(std::size_t size);
+std::string_view model_contract(std::size_t size);
+std::size_t contract_model_size(std::string_view contract);
 
 class RgbImage final {
 public:
@@ -46,6 +49,7 @@ private:
 class RawDepth final {
 public:
     explicit RawDepth(std::vector<float> values);
+    std::size_t size() const noexcept { return values_.size() == 392 * 392 ? 392 : (values_.size() == raw_elements ? 518 : 0); }
     const std::vector<float>& values() const & noexcept { return values_; }
     const std::vector<float>& values() const && = delete;
 private:

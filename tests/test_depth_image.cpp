@@ -102,6 +102,26 @@ void nonfinite() {
         invalid([&] { bilinear_half_pixel({value}, 1, 1, 1, 2, 2); }, "nonfinite bilinear accepted");
     }
 }
+void static_sizes() {
+    for (std::size_t size : {392, 518}) {
+        const auto transform = geometry(7, 3, size);
+        expect(geometry_size(transform) == size, "geometry size roundtrip");
+        const auto prepared = preprocess(RgbImage(7, 3, std::vector<std::uint8_t>(63, 255)), size);
+        expect(prepared.values().size() == 3 * size * size, "static preprocessing length");
+        const RawDepth raw(std::vector<float>(size * size, 7.25F));
+        expect(raw.size() == size, "raw static size");
+        const auto restored = postprocess(raw, transform);
+        expect(restored.values() == std::vector<float>(21, 7.25F), "static restored constant");
+        expect(contract_model_size(model_contract(size)) == size, "contract static size roundtrip");
+    }
+    invalid([] { geometry(7, 3, 400); }, "unsupported model size accepted");
+    invalid([] { contract_model_size("depth-v2"); }, "unknown contract accepted");
+    invalid([] { PreparedImage(std::vector<float>(input_elements), geometry(7, 3, 392)); }, "mixed input sizes accepted");
+    invalid([] { postprocess(RawDepth(std::vector<float>(392 * 392)), geometry(7, 3)); }, "mixed raw sizes accepted");
+    auto overflow = geometry(7, 3);
+    overflow.pad_right = std::numeric_limits<std::size_t>::max();
+    invalid([&] { validate_geometry(overflow); }, "geometry arithmetic overflow accepted");
+}
 void artifacts() {
     Temporary temporary;
     const auto ppm = temporary.path / "image.ppm";
@@ -145,6 +165,7 @@ int main() {
         interpolation_and_extremes();
         restoration_and_ownership();
         nonfinite();
+        static_sizes();
         artifacts();
         std::cout << "Depth image contract passed\n";
         return 0;

@@ -82,6 +82,19 @@ void validate_finite(const std::vector<float>& values) {
     for (float value : values) if (!std::isfinite(value)) throw std::invalid_argument("tensor contains NaN or infinity");
 }
 
+std::size_t validate_model_size(std::size_t size) {
+    if (size != 518 && size != 392) throw std::invalid_argument("static model size must be 518 or 392");
+    return size;
+}
+std::string_view model_contract(std::size_t size) {
+    return validate_model_size(size) == 518 ? "depth-v1" : "depth-v2-392";
+}
+std::size_t contract_model_size(std::string_view contract) {
+    if (contract == "depth-v1") return 518;
+    if (contract == "depth-v2-392") return 392;
+    throw std::invalid_argument("unknown depth model contract");
+}
+
 RgbImage::RgbImage(std::size_t width, std::size_t height, std::vector<std::uint8_t> pixels)
     : width_(width), height_(height), pixels_(std::move(pixels)) {
     if (pixels_.size() != 3 * validate_dimensions(width, height))
@@ -93,7 +106,8 @@ DepthMap::DepthMap(std::size_t width, std::size_t height, std::vector<float> val
     validate_finite(values_);
 }
 RawDepth::RawDepth(std::vector<float> values) : values_(std::move(values)) {
-    if (values_.size() != raw_elements) throw std::invalid_argument("raw depth must contain 1*518*518 float32 values");
+    if (values_.size() != raw_elements && values_.size() != 392 * 392)
+        throw std::invalid_argument("raw depth must contain S*S float32 values for S=518 or 392");
     validate_finite(values_);
 }
 

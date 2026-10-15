@@ -31,7 +31,7 @@ double elapsed(Clock::time_point start) {
 template<class Runner> DepthMap measured_run(Runner& runner, const RgbImage& image, DepthTiming* timing, bool gpu = false) {
     if (!timing) return runner.run(image);
     auto begin = Clock::now();
-    const auto prepared = preprocess(image);
+    const auto prepared = preprocess(image, runner.input_size());
     if (timing) timing->preprocess_ms = elapsed(begin);
     begin = Clock::now();
     auto raw = runner.run_raw(prepared);
@@ -77,6 +77,7 @@ Loaded load_backend(const SdkConfig& config) {
     validate_config(config);
     std::filesystem::path model;
     std::string backend, precision;
+    [[maybe_unused]] std::size_t expected_size = model_size;
     try {
         if (config.package_dir.empty()) throw std::invalid_argument("package_dir is required");
         const auto root = std::filesystem::canonical(config.package_dir);
@@ -86,7 +87,7 @@ Loaded load_backend(const SdkConfig& config) {
         for (const auto& pair : manifest)
             if (expected.count(pair.first) == 0) throw std::invalid_argument("unknown package field: " + pair.first);
         require_equal(manifest, "schema", "miniinfer-model-1");
-        require_equal(manifest, "contract", "depth-v1");
+        expected_size = contract_model_size(require_field(manifest, "contract"));
         backend = require_field(manifest, "backend");
         precision = require_field(manifest, "precision");
         if ((backend != "ort" && backend != "trt") || (precision != "fp32" && precision != "fp16"))
@@ -112,6 +113,7 @@ Loaded load_backend(const SdkConfig& config) {
 #if defined(MINIINFER_SDK_HAS_ORT)
             auto backends = create_backends(config.worker_count, [&](std::size_t) -> Backend {
                 auto runner = std::make_shared<OrtRunner>(model, config.ort_threads);
+                if (runner->input_size() != expected_size) throw std::invalid_argument("package/model size mismatch");
                 return [runner](const RgbImage& image, DepthTiming* timing) { return measured_run(*runner, image, timing); };
             });
             return {std::move(backends), backend, precision};
@@ -122,6 +124,7 @@ Loaded load_backend(const SdkConfig& config) {
 #if defined(MINIINFER_SDK_HAS_TRT)
         auto backends = create_backends(1, [&](std::size_t) -> Backend {
             auto runner = std::make_shared<TrtRunner>(model, config.device);
+            if (runner->input_size() != expected_size) throw std::invalid_argument("package/model size mismatch");
             return [runner](const RgbImage& image, DepthTiming* timing) { return measured_run(*runner, image, timing, true); };
         });
         return {std::move(backends), backend, precision};

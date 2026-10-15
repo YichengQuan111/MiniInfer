@@ -27,6 +27,7 @@ public:
     RawDepth run_raw(const PreparedImage& input, TrtTiming* timing = nullptr);
     DepthMap run(const RgbImage& image);
     const Manifest& manifest() const noexcept;
+    std::size_t input_size() const noexcept;
 private:
     class Impl;
     std::unique_ptr<Impl> impl_;

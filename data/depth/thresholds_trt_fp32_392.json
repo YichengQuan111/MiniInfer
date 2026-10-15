@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "backend": "tensorrt-fp32",
+  "atol": 0.001,
+  "rtol": 0.0001,
+  "max_violation_fraction": 0.0,
+  "preprocess_atol": 0.0,
+  "postprocess_atol": 0.0,
+  "max_ordering_drop": 0.0,
+  "max_p99_abs": 0.001,
+  "max_mae": 0.0005,
+  "model_size": 392
+}

@@ -53,15 +53,15 @@ std::string value_info(const std::string& name, const std::vector<std::uint64_t>
     const auto tensor = integer(1, 1) + bytes(2, shape);  // TensorProto.FLOAT
     return bytes(1, name) + bytes(2, bytes(1, tensor));
 }
-std::string fixture(bool valid_shape, bool valid_name = true) {
+std::string fixture(bool valid_shape, bool valid_name = true, std::uint64_t size = 518) {
     const std::string input_name = valid_name ? "image" : "wrong_image";
     std::string node = bytes(1, input_name) + bytes(2, "depth") + bytes(4, valid_shape ? "ReduceMean" : "Identity");
     if (valid_shape) {
         node += bytes(5, bytes(1, "axes") + integer(8, 1) + integer(20, 7));  // INTS
         node += bytes(5, bytes(1, "keepdims") + integer(3, 0) + integer(20, 2));  // INT
     }
-    const auto input = value_info(input_name, valid_shape ? std::vector<std::uint64_t>{1, 3, 518, 518} : std::vector<std::uint64_t>{1, 3, 2, 2});
-    const auto output = value_info("depth", valid_shape ? std::vector<std::uint64_t>{1, 518, 518} : std::vector<std::uint64_t>{1, 3, 2, 2});
+    const auto input = value_info(input_name, valid_shape ? std::vector<std::uint64_t>{1, 3, size, size} : std::vector<std::uint64_t>{1, 3, 2, 2});
+    const auto output = value_info("depth", valid_shape ? std::vector<std::uint64_t>{1, size, size} : std::vector<std::uint64_t>{1, 3, 2, 2});
     const auto graph = bytes(1, node) + bytes(2, "miniinfer_depth_test") + bytes(11, input) + bytes(12, output);
     return integer(1, 9) + bytes(2, "miniinfer_test") + bytes(7, graph) + bytes(8, integer(2, 17));
 }
@@ -117,6 +117,14 @@ void backend_contract() {
         }
     }
     expect(first->values()[0] == 3.0F, "runner destruction invalidated result");
+    const auto small = temporary.path / "small.onnx";
+    write_text_exclusive(small, fixture(true, true, 392));
+    OrtRunner small_runner(small, 1);
+    expect(small_runner.input_size() == 392, "392 model shape not inferred");
+    const auto small_result = small_runner.run_raw(PreparedImage(std::vector<float>(3 * 392 * 392, 4.0F), geometry(2, 2, 392)));
+    expect(small_result.values()[0] == 4.0F,
+           "392 execution failed");
+    fails([&] { small_runner.run_raw(PreparedImage(std::vector<float>(input_elements), geometry(2, 2))); }, "cross-size input accepted");
 }
 double numeric(const char* text) {
     std::size_t consumed = 0;

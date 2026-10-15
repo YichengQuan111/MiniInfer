@@ -20,13 +20,13 @@ namespace {
 using namespace miniinfer::depth;
 struct Arguments {
     std::filesystem::path model, image, tensor, output;
-    std::optional<std::size_t> width, height;
+    std::optional<std::size_t> width, height, model_size;
     int threads = 4;
 };
 void help() {
     std::cout << "Usage: depth_cli --model MODEL --image IMAGE.ppm --output PREFIX [--threads 4]\n"
                  "       depth_cli --model MODEL --tensor INPUT.f32 --width W --height H --output PREFIX [--threads 4]\n"
-                 "Static image[1,3,518,518] -> depth[1,518,518]; depth_trt_cli accepts an engine as MODEL.\n"
+                 "Static S=518 or 392, inferred from model; optional --model-size S checks the artifact.\n"
                  "Tensor mode expects normalized NCHW little-endian FP32; W/H are original image dimensions.\n"
                  "Writes PREFIX.preprocessed.f32, PREFIX.raw.f32, PREFIX.depth.f32, PREFIX.json.\n"
                  "All four output paths must be absent; parent directory must exist.\n"
@@ -55,6 +55,7 @@ Arguments parse(int argc, char** argv) {
         else if (name == "--output") args.output = value;
         else if (name == "--width") args.width = positive(value, name);
         else if (name == "--height") args.height = positive(value, name);
+        else if (name == "--model-size") args.model_size = validate_model_size(positive(value, name));
         else if (name == "--threads") {
 #ifdef MINIINFER_CLI_TRT
             throw std::invalid_argument("--threads applies only to ORT depth_cli");
@@ -105,10 +106,6 @@ int main(int argc, char** argv) {
         const auto parent = args.output.parent_path().empty() ? std::filesystem::path{"."} : args.output.parent_path();
         if (!std::filesystem::is_directory(parent)) throw std::runtime_error("output parent directory does not exist: " + parent.string());
         const auto total_start = std::chrono::steady_clock::now();
-        const auto prepared = [&] {
-            if (!args.image.empty()) return preprocess(read_ppm(args.image));
-            return PreparedImage(read_f32(args.tensor, input_elements), geometry(*args.width, *args.height));
-        }();
 #ifdef MINIINFER_CLI_TRT
         TrtRunner runner(args.model);
         const std::string backend="tensorrt_"+runner.manifest().at("precision");
@@ -118,6 +115,12 @@ int main(int argc, char** argv) {
         const std::string backend="ort_cpu_fp32";
         const int host_threads=runner.threads();
 #endif
+        const auto size = runner.input_size();
+        if (args.model_size && *args.model_size != size) throw std::invalid_argument("--model-size disagrees with artifact");
+        const auto prepared = [&] {
+            if (!args.image.empty()) return preprocess(read_ppm(args.image), size);
+            return PreparedImage(read_f32(args.tensor, 3 * size * size), geometry(*args.width, *args.height, size));
+        }();
         const auto model_start = std::chrono::steady_clock::now();
         const auto raw = runner.run_raw(prepared);
         const double model_seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - model_start).count();
@@ -129,7 +132,8 @@ int main(int argc, char** argv) {
         const auto transform = prepared.transform();
         std::ostringstream metadata;
         metadata << std::setprecision(17)
-                 << "{\n  \"contract_version\": \"depth-v1\",\n  \"backend\": " << quoted(backend) << ",\n"
+                 << "{\n  \"contract_version\": " << quoted(std::string(model_contract(size))) << ",\n  \"model_size\": " << size
+                 << ",\n  \"backend\": " << quoted(backend) << ",\n"
                  << "  \"model_path\": " << quoted(std::filesystem::absolute(args.model).string()) << ",\n"
                  << "  \"source_path\": " << quoted(std::filesystem::absolute(args.image.empty() ? args.tensor : args.image).string()) << ",\n"
                  << "  \"threads\": " << host_threads << ",\n  \"geometry\": {"
@@ -137,7 +141,7 @@ int main(int argc, char** argv) {
                  << ", \"resized_width\": " << transform.resized_width << ", \"resized_height\": " << transform.resized_height
                  << ", \"pad_left\": " << transform.pad_left << ", \"pad_top\": " << transform.pad_top
                  << ", \"pad_right\": " << transform.pad_right << ", \"pad_bottom\": " << transform.pad_bottom << "},\n"
-                 << "  \"input_shape\": [1,3,518,518],\n  \"raw_shape\": [1,518,518],\n  \"depth_shape\": ["
+                 << "  \"input_shape\": [1,3," << size << ',' << size << "],\n  \"raw_shape\": [1," << size << ',' << size << "],\n  \"depth_shape\": ["
                  << restored.height() << ',' << restored.width() << "],\n"
                  << "  \"dtype\": \"float32\",\n  \"byte_order\": \"little-endian\",\n"
                  << "  \"semantic_direction\": \"bigger-is-nearer\",\n  \"tf32\": false,\n"
@@ -145,7 +149,7 @@ int main(int argc, char** argv) {
                  << "  \"seconds\": {\"model\": " << model_seconds << ", \"total\": " << total_seconds << "},\n"
                  << "  \"total_scope\": \"input read+preprocess+model initialization+inference+postprocess; output writes excluded\"\n}\n";
         write_text_exclusive(suffixed(args.output, ".json"), metadata.str());
-        std::cout << "Saved depth-v1 artifacts to " << args.output.string() << ".*\n";
+        std::cout << "Saved " << model_contract(size) << " artifacts to " << args.output.string() << ".*\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "error: " << error.what() << '\n';

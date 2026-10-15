@@ -6,7 +6,7 @@
 
 namespace miniinfer::depth {
 
-// Static image[1,3,518,518] -> depth[1,518,518], CPU FP32 only.
+// Static image[1,3,S,S] -> depth[1,S,S], S=518 or 392, CPU FP32 only.
 // run/run_raw may overlap on a live runner: Session.Run is serialized per runner
 // for ORT telemetry safety; every call owns input/output/temporary storage.
 // The SDK creates a separate runner/Session per worker. Caller must keep the
@@ -22,6 +22,7 @@ public:
     RawDepth run_raw(const PreparedImage& input) const;
     DepthMap run(const RgbImage& image) const;
     int threads() const;
+    std::size_t input_size() const;
 private:
     class Impl;
     std::unique_ptr<Impl> impl_;

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "contract_version": "depth-v2-392",
+  "model": {
+    "name": "Depth Anything V2 Small",
+    "encoder": "vits",
+    "features": 64,
+    "out_channels": [
+      48,
+      96,
+      192,
+      384
+    ],
+    "repository": "https://github.com/DepthAnything/Depth-Anything-V2",
+    "repository_commit": "a561b849ebae10a6f5ef49e26c83cbbcd36c71bf",
+    "weights_sha256": "715fade13be8f229f8a70cc02066f656f2423a59effd0579197bbf57860e1378",
+    "weights_repository": "https://huggingface.co/depth-anything/Depth-Anything-V2-Small",
+    "weights_repository_revision": "03876f8651c73a60fe4c2c48294e09fcb6838fcf",
+    "source_modifications": "none; project geometry wrapper is external"
+  },
+  "source_image": {
+    "dtype": "uint8",
+    "layout": "HWC",
+    "channels": "RGB",
+    "channels_count": 3,
+    "min_side": 1,
+    "max_side": 4096,
+    "max_pixels": 2097152,
+    "payload_bytes": "exactly width*height*3",
+    "decoder": "PPM P6 maxval255 or optional Pillow convert(RGB)",
+    "exif_rotation": false,
+    "icc_conversion": false,
+    "alpha_blending": false
+  },
+  "input": {
+    "name": "image",
+    "shape": [
+      1,
+      3,
+      392,
+      392
+    ],
+    "dtype": "float32",
+    "layout": "NCHW",
+    "contiguous": true
+  },
+  "preprocess": {
+    "version": 1,
+    "target_width": 392,
+    "target_height": 392,
+    "geometry": "aspect-preserving fit then centered padding",
+    "scale": "392/max(original_width,original_height)",
+    "resized_axis": "max(1,floor(original_axis*392/max_original_axis+0.5))",
+    "integer_equivalent": "max(1,(original_axis*392+floor(max_original_axis/2))//max_original_axis)",
+    "rounding": "round-half-up, minimum one pixel",
+    "pad_left": "floor((392-resized_width)/2)",
+    "pad_top": "floor((392-resized_height)/2)",
+    "odd_padding_extra": "right and bottom",
+    "pad_rgb8": [
+      0,
+      0,
+      0
+    ],
+    "order": [
+      "uint8 cast to float32",
+      "divide by float32(255)",
+      "bilinear resize",
+      "pad with float32 zero",
+      "subtract mean",
+      "divide by std",
+      "HWC to contiguous NCHW with batch1"
+    ],
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "constants_dtype": "float32",
+    "interpolation": "bilinear_half_pixel_clamp"
+  },
+  "bilinear_half_pixel_clamp": {
+    "version": 1,
+    "coordinates_dtype": "float32",
+    "coordinate_operation_order": "(float32(dst_index)+float32(0.5))*float32(src_size/dst_size)-float32(0.5)",
+    "clamp": "clamp source coordinate to [0,src_size-1] before floor",
+    "lower_index": "floor(clamped_coordinate)",
+    "upper_index": "min(lower_index+1,src_size-1)",
+    "weight": "clamped_coordinate-float32(lower_index)",
+    "arithmetic": "horizontal upper=a+(b-a)*wx; horizontal lower=c+(d-c)*wx; result=upper+(lower-upper)*wy",
+    "arithmetic_dtype": "float32",
+    "fused_multiply_add": false,
+    "antialias": false,
+    "invalid_values": "reject NaN and infinity"
+  },
+  "raw_output": {
+    "name": "depth",
+    "shape": [
+      1,
+      392,
+      392
+    ],
+    "dtype": "float32",
+    "layout": "NHW",
+    "invalid_values": "reject NaN and infinity"
+  },
+  "postprocess": {
+    "version": 1,
+    "order": [
+      "validate raw shape and all finite values",
+      "crop [pad_top:pad_top+resized_height,pad_left:pad_left+resized_width]",
+      "bilinear_half_pixel_clamp resize to original width and height"
+    ],
+    "output_shape": [
+      "original_height",
+      "original_width"
+    ],
+    "output_dtype": "float32",
+    "output_layout": "HW row-major contiguous owned storage",
+    "semantic": "relative inverse depth; larger values indicate nearer objects",
+    "semantic_direction": "bigger-is-nearer",
+    "units": "relative, not meters",
+    "per_image_minmax": false,
+    "affine_alignment_for_numerical_checks": false
+  },
+  "artifact_encoding": {
+    "float_tensors": "little-endian IEEE754 float32, C order, no header, exact shape byte count",
+    "original_rgb": "RGB8 HWC, no header",
+    "original_ppm": "P6 maxval255",
+    "hash": "SHA256",
+    "metadata": "UTF-8 JSON, allow_nan=false"
+  },
+  "python_reference": {
+    "device": "CPU",
+    "precision": "FP32",
+    "eval": true,
+    "no_grad": true,
+    "tf32": false,
+    "deterministic_algorithms": true,
+    "torch_load_weights_only": true,
+    "strict_state_dict": true
+  },
+  "onnx": {
+    "opset": 17,
+    "static_shapes": true,
+    "dynamo": false,
+    "export_stage": "V1.1 feasibility; backend validation in V1.2"
+  },
+  "annotation_policy": {
+    "coordinate_system": "original decoded RGB pixels; integer zero-based [x,y]",
+    "valid_pair": "human/source evidence establishes near versus far",
+    "uncertain_pair": "retained but excluded from ordering score",
+    "ordering_correct": "restored[near_y,near_x] > restored[far_y,far_x]; ties fail",
+    "unannotated": "deployment consistency only; no task accuracy claim",
+    "splits": [
+      "development",
+      "final"
+    ],
+    "final_split": "not used to repeatedly adjust numerical acceptance thresholds"
+  },
+  "model_size": 392
+}

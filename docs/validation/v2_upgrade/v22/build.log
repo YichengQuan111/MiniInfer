@@ -1,0 +1,80 @@
+-- Configuring done (8.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/qyc/builds/MiniInfer/v2-upgrade
+[1/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/version.cpp.o
+[2/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/checked_size.cpp.o
+[3/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/buffer.cpp.o
+[4/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_ops.cpp.o
+[5/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_result.cpp.o
+[6/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_model.cpp.o
+[7/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_input.cpp.o
+[8/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/workspace.cpp.o
+[9/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/data_io.cpp.o
+[10/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_executor.cpp.o
+[11/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/thread_pool.cpp.o
+[12/77] Building CXX object CMakeFiles/miniinfer_depth_image.dir/src/depth/preprocess.cpp.o
+[13/77] Building CXX object CMakeFiles/miniinfer_depth_image.dir/src/depth/image.cpp.o
+[14/77] Building CXX object CMakeFiles/depth_cli.dir/apps/depth_cli.cpp.o
+[15/77] Linking CXX static library libminiinfer_depth_image.a
+[16/77] Building CXX object CMakeFiles/miniinfer_core.dir/src/runtime.cpp.o
+[17/77] Building CXX object CMakeFiles/test_depth_image.dir/tests/test_depth_image.cpp.o
+[18/77] Linking CXX static library libminiinfer_core.a
+[19/77] Building CXX object CMakeFiles/miniinfer_depth_ort.dir/src/depth/ort_runner.cpp.o
+[20/77] Building CXX object CMakeFiles/test_depth_artifact.dir/tests/test_depth_artifact.cpp.o
+[21/77] Linking CXX executable bin/tcp_echo_server
+[22/77] Linking CXX executable bin/test_depth_image
+[23/77] Building CXX object CMakeFiles/depth_engine_builder.dir/apps/depth_engine_builder.cpp.o
+[24/77] Building CXX object CMakeFiles/test_depth_ort.dir/tests/test_depth_ort.cpp.o
+[25/77] Linking CXX executable bin/tcp_echo_client
+[26/77] Linking CXX executable bin/infer_server
+[27/77] Linking CXX static library libminiinfer_depth_ort.a
+[28/77] Linking CXX executable bin/infer_cli
+[29/77] Linking CXX executable bin/infer_client
+[30/77] Building CXX object CMakeFiles/depth_trt_cli.dir/apps/depth_cli.cpp.o
+[31/77] Linking CXX executable bin/test_depth_artifact
+[32/77] Linking CXX executable bin/runtime_demo
+[33/77] Linking CXX executable bin/depth_cli
+[34/77] Linking CXX executable bin/benchmark_cli
+[35/77] Building CXX object CMakeFiles/miniinfer_depth_trt.dir/src/depth/trt_runner.cpp.o
+[36/77] Linking CXX static library libminiinfer_depth_trt.a
+[37/77] Linking CXX executable bin/test_depth_ort
+[38/77] Building CXX object CMakeFiles/depth_sdk_cli.dir/examples/depth_sdk/main.cpp.o
+[39/77] Linking CXX executable bin/depth_engine_builder
+[40/77] Linking CXX executable bin/depth_trt_cli
+[41/77] Building CXX object CMakeFiles/miniinfer_depth_net.dir/src/depth/net.cpp.o
+[42/77] Linking CXX static library libminiinfer_depth_net.a
+[43/77] Building CXX object CMakeFiles/test_depth_trt.dir/tests/test_depth_trt.cpp.o
+[44/77] Building CXX object CMakeFiles/depth_server.dir/apps/depth_server.cpp.o
+[45/77] Building CXX object CMakeFiles/depth_client.dir/apps/depth_client.cpp.o
+[46/77] Linking CXX executable bin/test_depth_trt
+[47/77] Building CXX object CMakeFiles/miniinfer_depth_sdk.dir/src/depth/sdk.cpp.o
+[48/77] Linking CXX static library libminiinfer_depth_sdk.a
+[49/77] Building CXX object CMakeFiles/test_depth_net.dir/tests/test_depth_net.cpp.o
+[50/77] Linking CXX executable bin/depth_client
+[51/77] Building CXX object CMakeFiles/depth_concurrency_benchmark.dir/apps/depth_concurrency_benchmark.cpp.o
+[52/77] Linking CXX executable bin/test_net_echo
+[53/77] Building CXX object CMakeFiles/depth_benchmark.dir/apps/depth_benchmark.cpp.o
+[54/77] Linking CXX executable bin/depth_sdk_cli
+[55/77] Linking CXX executable bin/test_depth_net
+[56/77] Linking CXX executable bin/depth_concurrency_benchmark
+[57/77] Linking CXX executable bin/depth_server
+[58/77] Linking CXX executable bin/depth_benchmark
+[59/77] Linking CXX executable bin/test_net_server
+[60/77] Linking CXX executable bin/test_net_io
+[61/77] Linking CXX executable bin/test_net_shutdown
+[62/77] Linking CXX executable bin/test_project
+[63/77] Linking CXX executable bin/test_net_protocol
+[64/77] Building CXX object CMakeFiles/depth_replay.dir/apps/depth_replay.cpp.o
+[65/77] Linking CXX executable bin/test_buffer
+[66/77] Linking CXX executable bin/test_tensor_view
+[67/77] Linking CXX executable bin/test_cpu_ops
+[68/77] Linking CXX executable bin/test_model
+[69/77] Building CXX object CMakeFiles/test_depth_sdk.dir/tests/test_depth_sdk.cpp.o
+[70/77] Linking CXX executable bin/test_runtime
+[71/77] Linking CXX executable bin/test_inference
+[72/77] Linking CXX executable bin/test_concurrency
+[73/77] Linking CXX executable bin/test_thread_pool
+[74/77] Linking CXX executable bin/depth_replay
+[75/77] Linking CXX executable bin/test_timing
+[76/77] Linking CXX executable bin/test_shutdown
+[77/77] Linking CXX executable bin/test_depth_sdk

@@ -25,12 +25,16 @@ import time
 import numpy as np
 
 if __package__:
-    from .preprocess import DepthError, MODEL_SIZE, postprocess, ppm_bytes, preprocess, read_image
+    from .preprocess import DepthError, MODEL_SIZE, contract_version, validate_model_size, postprocess, ppm_bytes, preprocess, read_image
 else:
-    from preprocess import DepthError, MODEL_SIZE, postprocess, ppm_bytes, preprocess, read_image
+    from preprocess import DepthError, MODEL_SIZE, contract_version, validate_model_size, postprocess, ppm_bytes, preprocess, read_image
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = PROJECT_ROOT / "data" / "depth" / "contract.json"
+
+
+def contract_path(model_size: int = MODEL_SIZE) -> Path:
+    return CONTRACT if validate_model_size(model_size) == 518 else CONTRACT.with_name("contract_392.json")
 
 
 def sha256(path: Path) -> str:
@@ -153,6 +157,7 @@ def load_model(repo: Path, weights: Path, threads: int):
 
 
 def generate(args: argparse.Namespace) -> dict:
+    model_size = validate_model_size(getattr(args, "model_size", MODEL_SIZE))
     output = Path(args.output).resolve()
     if output.exists():
         raise DepthError(f"output path already exists; refusing to overwrite: {output}")
@@ -162,16 +167,19 @@ def generate(args: argparse.Namespace) -> dict:
     samples = load_samples(samples_path)
     provenance = source_provenance(repo, args.repo_commit)
     weight_hash = sha256(weights)
-    contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
+    contract = json.loads(contract_path(model_size).read_text(encoding="utf-8"))
     if provenance["commit"] != contract["model"]["repository_commit"]:
-        raise DepthError("source revision differs from frozen depth-v1 contract")
+        raise DepthError("source revision differs from frozen contract")
     if weight_hash != contract["model"]["weights_sha256"]:
-        raise DepthError("weight SHA256 differs from frozen depth-v1 contract")
+        raise DepthError("weight SHA256 differs from frozen contract")
     reference_bundle = None
     if args.reference_dir is not None:
         reference_path = Path(args.reference_dir).resolve(strict=True)
         reference_manifest_path = reference_path / "manifest.json"
         previous = json.loads(reference_manifest_path.read_text(encoding="utf-8"))
+        if (validate_model_size(previous.get("model_size", MODEL_SIZE)) != model_size
+                or previous.get("contract_version") != contract_version(model_size)):
+            raise DepthError("reference bundle model_size/contract differs from requested export")
         if previous.get("model", {}).get("weights_sha256") != weight_hash:
             raise DepthError("reference bundle weights differ from --weights")
         if previous.get("model", {}).get("source_sha256") != provenance["source_sha256"]:
@@ -180,10 +188,16 @@ def generate(args: argparse.Namespace) -> dict:
             raise DepthError("reference bundle samples differ from --samples")
         if sha256(reference_path / "contract.json") != previous.get("contract_sha256"):
             raise DepthError("reference bundle contract hash mismatch")
-        if json.loads((reference_path / "contract.json").read_text(encoding="utf-8")) != json.loads(CONTRACT.read_text(encoding="utf-8")):
+        if json.loads((reference_path / "contract.json").read_text(encoding="utf-8")) != contract:
             raise DepthError("reference bundle preprocessing contract differs from current contract")
         if not previous.get("samples"):
             raise DepthError("reference bundle contains no saved samples")
+        # Reuse the same complete hash, shape, geometry and sample checks as validation.
+        if __package__:
+            from .validate_backend import verify_reference
+        else:
+            from validate_backend import verify_reference
+        verify_reference(reference_path, samples_path, {}, model_size)
         for saved in previous["samples"]:
             metadata_path = reference_path / saved["metadata"]
             if sha256(metadata_path) != saved["metadata_sha256"]:
@@ -206,7 +220,7 @@ def generate(args: argparse.Namespace) -> dict:
             entry, rgb = sample["entry"], sample["rgb"]
             directory = stage / "samples" / entry["id"]
             directory.mkdir()
-            tensor, transform = preprocess(rgb)
+            tensor, transform = preprocess(rgb, model_size)
             start = time.perf_counter()
             with torch.no_grad():
                 raw = model(torch.from_numpy(tensor)).detach().cpu().numpy()
@@ -241,9 +255,9 @@ def generate(args: argparse.Namespace) -> dict:
         export = None
         if args.command == "export":
             import onnx
-            onnx_path = stage / "depth_anything_v2_vits_518.onnx"
+            onnx_path = stage / f"depth_anything_v2_vits_{model_size}.onnx"
             with torch.no_grad():
-                torch.onnx.export(model, torch.zeros((1, 3, MODEL_SIZE, MODEL_SIZE), dtype=torch.float32),
+                torch.onnx.export(model, torch.zeros((1, 3, model_size, model_size), dtype=torch.float32),
                                   str(onnx_path), input_names=["image"], output_names=["depth"],
                                   opset_version=17, dynamic_axes=None, dynamo=False,
                                   do_constant_folding=True)
@@ -251,9 +265,9 @@ def generate(args: argparse.Namespace) -> dict:
             onnx.checker.check_model(graph)
             inputs, outputs = graph.graph.input, graph.graph.output
             shape = lambda value: [dim.dim_value for dim in value.type.tensor_type.shape.dim]
-            if len(inputs) != 1 or inputs[0].name != "image" or shape(inputs[0]) != [1, 3, 518, 518]:
+            if len(inputs) != 1 or inputs[0].name != "image" or shape(inputs[0]) != [1, 3, model_size, model_size]:
                 raise DepthError("exported ONNX input violates the static contract")
-            if len(outputs) != 1 or outputs[0].name != "depth" or shape(outputs[0]) != [1, 518, 518]:
+            if len(outputs) != 1 or outputs[0].name != "depth" or shape(outputs[0]) != [1, model_size, model_size]:
                 raise DepthError("exported ONNX output violates the static contract")
             if any(v.type.tensor_type.elem_type != onnx.TensorProto.FLOAT for v in [inputs[0], outputs[0]]):
                 raise DepthError("exported ONNX must expose float32 input/output")
@@ -261,7 +275,7 @@ def generate(args: argparse.Namespace) -> dict:
                       "bytes": onnx_path.stat().st_size, "opset": 17, "dynamo": False,
                       "status": "feasibility_only", "checker": "passed",
                       "backend_numerical_validation": "pending_V1.2"}
-        manifest = {"format_version": 1, "contract_version": contract["contract_version"],
+        manifest = {"format_version": 1, "contract_version": contract["contract_version"], "model_size": model_size,
                     "created_utc": datetime.now(timezone.utc).isoformat(),
                     "mode": args.command, "model": {"name": "Depth Anything V2 Small", "encoder": "vits",
                     "features": 64, "out_channels": [48, 96, 192, 384],
@@ -292,6 +306,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--weights", required=True, help="official vits state_dict weights")
     parser.add_argument("--samples", required=True, help="versioned image/pair manifest")
     parser.add_argument("--output", required=True, help="destination directory; must not exist")
+    parser.add_argument("--model-size", type=int, choices=(518, 392), default=MODEL_SIZE)
     parser.add_argument("--repo-commit", help="pinned official revision (required for source ZIP without .git)")
     parser.add_argument("--reference-dir", help="export only: reuse a verified existing reference bundle")
     parser.add_argument("--torch-threads", "--threads", type=int, default=4, help="CPU model threads (default: 4)")

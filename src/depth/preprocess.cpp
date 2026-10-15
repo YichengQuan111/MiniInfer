@@ -25,7 +25,8 @@ std::vector<Coordinate> axis(std::size_t source, std::size_t target) {
 }
 }  // namespace
 
-Geometry geometry(std::size_t width, std::size_t height) {
+Geometry geometry(std::size_t width, std::size_t height, std::size_t model_size) {
+    validate_model_size(model_size);
     validate_dimensions(width, height);
     const auto longest = std::max(width, height);
     const auto resized_width = std::max(std::size_t{1}, (width * model_size + longest / 2) / longest);
@@ -36,18 +37,29 @@ Geometry geometry(std::size_t width, std::size_t height) {
             model_size - resized_width - left, model_size - resized_height - top};
 }
 
+std::size_t geometry_size(const Geometry& transform) {
+    // Bound each operand before adding caller-controlled size_t fields.
+    for (auto value : {transform.resized_width, transform.resized_height,
+                      transform.pad_left, transform.pad_top, transform.pad_right, transform.pad_bottom})
+        if (value > 518) throw std::invalid_argument("geometry component exceeds static size");
+    const auto size = validate_model_size(transform.resized_width + transform.pad_left + transform.pad_right);
+    if (size != transform.resized_height + transform.pad_top + transform.pad_bottom)
+        throw std::invalid_argument("geometry axes disagree on model size");
+    return size;
+}
 void validate_geometry(const Geometry& transform) {
-    const auto expected = geometry(transform.original_width, transform.original_height);
+    const auto expected = geometry(transform.original_width, transform.original_height, geometry_size(transform));
     if (transform.resized_width != expected.resized_width || transform.resized_height != expected.resized_height
         || transform.pad_left != expected.pad_left || transform.pad_top != expected.pad_top
         || transform.pad_right != expected.pad_right || transform.pad_bottom != expected.pad_bottom)
-        throw std::invalid_argument("geometry does not match frozen depth-v1 transform");
+        throw std::invalid_argument("geometry does not match frozen static depth transform");
 }
 
 PreparedImage::PreparedImage(std::vector<float> nchw, Geometry transform)
     : values_(std::move(nchw)), transform_(transform) {
     validate_geometry(transform_);
-    if (values_.size() != input_elements) throw std::invalid_argument("input must contain 1*3*518*518 float32 values");
+    const auto size = geometry_size(transform_);
+    if (values_.size() != 3 * size * size) throw std::invalid_argument("prepared input size disagrees with geometry");
     validate_finite(values_);
 }
 
@@ -85,9 +97,11 @@ std::vector<float> bilinear_half_pixel(const std::vector<float>& source,
     return result;
 }
 
-PreparedImage preprocess(const RgbImage& image) {
+PreparedImage preprocess(const RgbImage& image, std::size_t model_size) {
     ProfileRange profile("depth.preprocess.cpu");
-    const auto transform = geometry(image.width(), image.height());
+    const auto transform = geometry(image.width(), image.height(), model_size);
+    const auto raw_elements = model_size * model_size;
+    const auto input_elements = 3 * raw_elements;
     if (image.pixels().size() != image.width() * image.height() * 3)
         throw std::invalid_argument("RGB8 input storage length mismatch");
     std::vector<float> pixels(image.pixels().size());
@@ -125,7 +139,8 @@ PreparedImage preprocess(const RgbImage& image) {
 DepthMap postprocess(const RawDepth& raw, const Geometry& transform) {
     ProfileRange profile("depth.postprocess.cpu");
     validate_geometry(transform);
-    if (raw.values().size() != raw_elements) throw std::invalid_argument("raw depth storage length mismatch");
+    const auto model_size = geometry_size(transform);
+    if (raw.size() != model_size) throw std::invalid_argument("raw depth storage length mismatch");
     validate_finite(raw.values());
     std::vector<float> cropped(transform.resized_width * transform.resized_height);
     for (std::size_t y = 0; y < transform.resized_height; ++y)

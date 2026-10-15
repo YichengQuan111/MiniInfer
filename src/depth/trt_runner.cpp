@@ -63,11 +63,11 @@ public:
     }
     ~Pinned() { if(pointer) (void)cudaFreeHost(pointer); }
 };
-void verify_engine(const nvinfer1::ICudaEngine& engine) {
+std::size_t verify_engine(const nvinfer1::ICudaEngine& engine) {
     if(engine.getNbIOTensors()!=2) throw std::invalid_argument("engine must expose exactly two tensors");
     const auto in=engine.getTensorShape("image"),out=engine.getTensorShape("depth");
-    if(in.nbDims!=4||in.d[0]!=1||in.d[1]!=3||in.d[2]!=518||in.d[3]!=518
-       ||out.nbDims!=3||out.d[0]!=1||out.d[1]!=518||out.d[2]!=518
+    if(in.nbDims!=4||in.d[0]!=1||in.d[1]!=3||(in.d[2]!=518&&in.d[2]!=392)||in.d[3]!=in.d[2]
+       ||out.nbDims!=3||out.d[0]!=1||out.d[1]!=in.d[2]||out.d[2]!=in.d[2]
        ||engine.getTensorDataType("image")!=nvinfer1::DataType::kFLOAT
        ||engine.getTensorDataType("depth")!=nvinfer1::DataType::kFLOAT
        ||engine.getTensorIOMode("image")!=nvinfer1::TensorIOMode::kINPUT
@@ -77,12 +77,13 @@ void verify_engine(const nvinfer1::ICudaEngine& engine) {
        ||engine.getTensorFormat("image")!=nvinfer1::TensorFormat::kLINEAR
        ||engine.getTensorFormat("depth")!=nvinfer1::TensorFormat::kLINEAR)
         throw std::invalid_argument("engine violates static FP32 IO depth-v1 contract");
+    return static_cast<std::size_t>(in.d[2]);
 }
 void verify_manifest(const Manifest& manifest) {
     require_equal(manifest,"schema","miniinfer-engine-1");
-    require_equal(manifest,"contract","depth-v1");
-    require_equal(manifest,"input","1x3x518x518-fp32");
-    require_equal(manifest,"output","1x518x518-fp32");
+    const auto side=std::to_string(contract_model_size(require_field(manifest,"contract")));
+    require_equal(manifest,"input","1x3x"+side+"x"+side+"-fp32");
+    require_equal(manifest,"output","1x"+side+"x"+side+"-fp32");
     require_equal(manifest,"tf32","off");
     const auto precision=require_field(manifest,"precision");
     if(precision!="fp32"&&precision!="fp16") throw std::invalid_argument("unknown engine precision");
@@ -128,6 +129,12 @@ Manifest build_trt_engine(const std::filesystem::path& onnx,const std::filesyste
     auto parser=require(nvonnxparser::createParser(*network,logger),"create ONNX parser failed");
     if(!parser->parseFromFile(onnx.c_str(),static_cast<int>(nvinfer1::ILogger::Severity::kWARNING)))
         throw std::runtime_error("ONNX parse failed; see TensorRT diagnostics");
+    if(network->getNbInputs()!=1 || network->getNbOutputs()!=1)
+        throw std::invalid_argument("ONNX must expose one input and output");
+    const auto in=network->getInput(0)->getDimensions(), out=network->getOutput(0)->getDimensions();
+    if(in.nbDims!=4 || in.d[0]!=1 || in.d[1]!=3 || (in.d[2]!=518&&in.d[2]!=392) || in.d[3]!=in.d[2]
+       || out.nbDims!=3 || out.d[0]!=1 || out.d[1]!=in.d[2] || out.d[2]!=in.d[2])
+        throw std::invalid_argument("ONNX must use a supported static square shape");
     config->clearFlag(nvinfer1::BuilderFlag::kTF32);
     config->setMemoryPoolLimit(nvinfer1::MemoryPoolType::kWORKSPACE,options.workspace_bytes);
     config->setProfilingVerbosity(nvinfer1::ProfilingVerbosity::kDETAILED);
@@ -159,13 +166,14 @@ Manifest build_trt_engine(const std::filesystem::path& onnx,const std::filesyste
     const double seconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-started).count();
     auto runtime=require(nvinfer1::createInferRuntime(logger),"create runtime failed");
     auto engine=require(runtime->deserializeCudaEngine(plan->data(),plan->size()),"verify built engine failed");
-    verify_engine(*engine);
+    const auto size=verify_engine(*engine);
+    const auto side=std::to_string(size);
     auto inspector=require(engine->createEngineInspector(),"create inspector failed");
     const char* layers=inspector->getEngineInformation(nvinfer1::LayerInformationFormat::kJSON);
     if(!layers) throw std::runtime_error("engine layer inspection failed");
     Manifest metadata=trt_environment(options.device);
-    metadata.insert({{"schema","miniinfer-engine-1"},{"contract","depth-v1"},
-        {"input","1x3x518x518-fp32"},{"output","1x518x518-fp32"},
+    metadata.insert({{"schema","miniinfer-engine-1"},{"contract",std::string(model_contract(size))},
+        {"input","1x3x"+side+"x"+side+"-fp32"},{"output","1x"+side+"x"+side+"-fp32"},
         {"precision",options.fp16?"fp16":"fp32"},{"tf32","off"},
         {"workspace_bytes",std::to_string(options.workspace_bytes)},
         {"fp32_constrained_layers",std::to_string(constrained)},
@@ -195,13 +203,16 @@ public:
     std::unique_ptr<Stream> stream; // destroyed first: wait before buffers/context
     std::mutex mutex;
     bool failed=false;
+    std::size_t size=0;
     Impl(std::vector<std::uint8_t> plan,Manifest validated,int target)
         :device(target),metadata(std::move(validated)) {
         Device guard(device);
         verify_environment(metadata,device);
         runtime=require(nvinfer1::createInferRuntime(logger),"create runtime failed");
         engine=require(runtime->deserializeCudaEngine(plan.data(),plan.size()),"load engine failed");
-        verify_engine(*engine);
+        size=verify_engine(*engine);
+        require_equal(metadata,"contract",std::string(model_contract(size)));
+        const auto raw_elements=size*size, input_elements=3*raw_elements;
         context=require(engine->createExecutionContext(),"create context failed");
         input=std::make_unique<Allocation>(input_elements*sizeof(float));
         output=std::make_unique<Allocation>(raw_elements*sizeof(float));
@@ -238,11 +249,14 @@ TrtRunner::TrtRunner(const std::filesystem::path& path,int device) {
 }
 TrtRunner::~TrtRunner()=default;
 const Manifest& TrtRunner::manifest() const noexcept { return impl_->metadata; }
+std::size_t TrtRunner::input_size() const noexcept { return impl_->size; }
 RawDepth TrtRunner::run_raw(const PreparedImage& prepared,TrtTiming* timing) {
     ProfileRange profile("depth.trt.h2d_execute_d2h");
     const auto host_start=std::chrono::steady_clock::now();
+    const auto raw_elements=impl_->size*impl_->size, input_elements=3*raw_elements;
     validate_geometry(prepared.transform());
-    if(prepared.values().size()!=input_elements) throw std::invalid_argument("prepared input size mismatch");
+    if(prepared.values().size()!=input_elements || geometry_size(prepared.transform())!=impl_->size)
+        throw std::invalid_argument("prepared input size mismatch");
     validate_finite(prepared.values());
     std::lock_guard<std::mutex> lock(impl_->mutex);
     if(impl_->failed) throw std::runtime_error("TensorRT slot failed previously; reinitialize the runner");
@@ -276,7 +290,7 @@ RawDepth TrtRunner::run_raw(const PreparedImage& prepared,TrtTiming* timing) {
     return result;
 }
 DepthMap TrtRunner::run(const RgbImage& image) {
-    const auto prepared=preprocess(image);
+    const auto prepared=preprocess(image,input_size());
     return postprocess(run_raw(prepared),prepared.transform());
 }
 } // namespace miniinfer::depth

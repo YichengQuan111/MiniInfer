@@ -107,11 +107,14 @@ int main(int argc, char** argv) {
 #endif
         miniinfer::net::UniqueFd socket;
         if(a.mode=="raw") {
-            prepared.emplace(preprocess(image));
-            if(a.backend=="ort") ort=std::make_unique<OrtRunner>(a.model,4);
+            if(a.backend=="ort") {
+                ort=std::make_unique<OrtRunner>(a.model,4);
+                prepared.emplace(preprocess(image,ort->input_size()));
+            }
             else {
 #ifdef MINIINFER_BENCHMARK_TRT
                 trt=std::make_unique<TrtRunner>(a.model);
+                prepared.emplace(preprocess(image,trt->input_size()));
 #else
                 throw std::invalid_argument("TRT support not compiled");
 #endif

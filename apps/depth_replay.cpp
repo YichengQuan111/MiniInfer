@@ -1,4 +1,5 @@
 #include "miniinfer/depth/sdk.hpp"
+#include "miniinfer/depth/artifact.hpp"
 #include "miniinfer/depth/preprocess.hpp"
 
 #include <charconv>
@@ -272,10 +273,11 @@ int main(int argc,char** argv) {
         SdkConfig config; config.package_dir=args.package; config.queue_capacity=args.queue; config.byte_budget=args.budget; config.worker_count=args.sdk_workers;
         DepthSdk sdk(config);
         if(!args.backend.empty() && sdk.snapshot().backend!=args.backend) throw std::invalid_argument("package backend mismatch");
+        const auto input_size=contract_model_size(require_field(read_manifest(args.package/"manifest.txt"),"contract"));
         SyncAdapter adapter{sdk}; std::size_t next_id=0;
         std::cout<<std::setprecision(17)<<"{\"event\":\"ready\",\"startup_ms\":"<<since(main_start)
             <<",\"decoded_image_bytes\":"<<image_bytes<<",\"image_count\":"<<images.size()<<",\"sdk_worker_count\":"<<config.worker_count
-            <<",\"fp32_model_input_bytes\":"<<(input_elements*sizeof(float))<<",\"rgb8_input_bytes\":[";
+            <<",\"fp32_model_input_bytes\":"<<(3*input_size*input_size*sizeof(float))<<",\"rgb8_input_bytes\":[";
         for(std::size_t i=0;i<images.size();++i) { if(i) std::cout<<","; std::cout<<images[i].pixels().size(); }
         std::cout<<"]}"<<std::endl;
         std::cout<<"{\"event\":\"phase\",\"phase\":\"warmup\"}"<<std::endl;

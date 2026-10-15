@@ -50,10 +50,12 @@ int main(int argc,char** argv) {
         }
         if(argc!=3) throw std::invalid_argument("usage: test_depth_trt [ENGINE IMAGE.ppm]");
         const auto image=read_ppm(argv[2]);
-        const auto input=preprocess(image);
+        std::optional<PreparedImage> input_storage;
         std::optional<RawDepth> saved;
         {
             TrtRunner runner(argv[1]);
+            input_storage.emplace(preprocess(image,runner.input_size()));
+            const auto& input=*input_storage;
             TrtTiming timing;
             saved=runner.run_raw(input,&timing);
             std::cout<<"CUDA timing h2d_ms="<<timing.h2d_ms<<" compute_ms="<<timing.compute_ms
@@ -68,6 +70,7 @@ int main(int argc,char** argv) {
             expect(result_a.values()==saved->values(),"concurrent output changed");
             expect(result_b.values()==saved->values(),"concurrent output changed");
         }
+        const auto& input=*input_storage;
         const auto after_shutdown=postprocess(*saved,input.transform());
         expect(after_shutdown.width()==image.width(),"owned output lost after destruction");
         auto manifest=read_manifest(std::string(argv[1])+".manifest");

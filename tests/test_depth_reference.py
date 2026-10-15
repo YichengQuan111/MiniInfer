@@ -14,13 +14,36 @@ import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "tools"))
-from depth.preprocess import (DepthError, MEAN, STD, bilinear_half_pixel, geometry,
+from depth.preprocess import (DepthError, MEAN, STD, Geometry, bilinear_half_pixel, geometry, geometry_model_size, validate_model_size,
                               postprocess, ppm_bytes, preprocess, read_ppm,
                               rgb_from_bytes, validate_dimensions)
 from depth.reference import load_samples, write_array
 
 
 class DepthTransformTests(unittest.TestCase):
+    def test_392_geometry_and_roundtrip(self):
+        transform = geometry(4, 3, 392)
+        self.assertEqual((transform.resized_width, transform.resized_height), (392, 294))
+        self.assertEqual((transform.pad_top, transform.pad_bottom), (49, 49))
+        self.assertEqual(len(transform.to_dict()), 8)
+        self.assertEqual(geometry_model_size(Geometry(**transform.to_dict())), 392)
+        tensor, transform = preprocess(np.full((3, 4, 3), 128, dtype=np.uint8), 392)
+        self.assertEqual(tensor.shape, (1, 3, 392, 392))
+        np.testing.assert_array_equal(postprocess(np.full((1, 392, 392), 7, np.float32), transform),
+                                      np.full((3, 4), 7, np.float32))
+
+    def test_size_and_geometry_reject_bool_noninteger_and_cross_size(self):
+        for value in (True, False, 392.0, 518.0, "392", 224, 0, np.int64(392)):
+            with self.subTest(value=value), self.assertRaises(DepthError):
+                validate_model_size(value)
+        transform = geometry(4, 3, 392)
+        for invalid in (replace(transform, pad_top=48), replace(transform, pad_left=True),
+                        replace(transform, pad_left=1, pad_right=-1), replace(transform, original_width=5)):
+            with self.subTest(invalid=invalid), self.assertRaises(DepthError):
+                geometry_model_size(invalid)
+        with self.assertRaises(DepthError):
+            postprocess(np.zeros((1, 518, 518), np.float32), transform)
+
     def test_round_half_up_and_odd_padding(self):
         landscape = geometry(4, 3)  # 3*518/4=388.5 ->389;129 pad ->64,65
         self.assertEqual((landscape.resized_width, landscape.resized_height), (518, 389))

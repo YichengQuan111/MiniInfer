@@ -12,8 +12,8 @@ import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "tools"))
-from depth.preprocess import postprocess, ppm_bytes, preprocess
-from depth.reference import CONTRACT, sha256, write_array, write_json
+from depth.preprocess import contract_version, postprocess, ppm_bytes, preprocess
+from depth.reference import CONTRACT, contract_path, sha256, write_array, write_json
 from depth.validate_backend import main, parse_args, validate
 
 
@@ -25,19 +25,20 @@ import numpy as np
 sys.path.insert(0, TOOLS_PATH)
 from depth.preprocess import geometry, postprocess, preprocess, read_ppm
 p = argparse.ArgumentParser()
-for name in ("model", "image", "tensor", "width", "height", "output", "tag"):
+for name in ("model", "image", "tensor", "width", "height", "output", "tag", "model-size", "backend-id"):
     p.add_argument("--" + name)
 a = p.parse_args()
+size = int(a.model_size or 518)
 mode = Path(a.model).read_text()
 if mode == "fail":
     print("synthetic CLI failure", file=sys.stderr)
     sys.exit(7)
 if a.image:
-    tensor, g = preprocess(read_ppm(Path(a.image)))
+    tensor, g = preprocess(read_ppm(Path(a.image)), size)
 else:
-    tensor = np.fromfile(a.tensor, dtype="<f4").reshape(1,3,518,518)
-    g = geometry(int(a.width), int(a.height))
-raw = np.fromfile(Path(a.model).parent / "seed.f32", dtype="<f4").reshape(1,518,518)
+    tensor = np.fromfile(a.tensor, dtype="<f4").reshape(1,3,size,size)
+    g = geometry(int(a.width), int(a.height), size)
+raw = np.fromfile(Path(a.model).parent / "seed.f32", dtype="<f4").reshape(1,size,size)
 if mode == "wrong":
     raw += np.float32(0.5)
 if mode == "reverse":
@@ -58,20 +59,22 @@ if mode == "truncated":
 geo = g.to_dict()
 if mode == "geometry":
     geo["pad_left"] += 1
-Path(prefix + ".json").write_text(json.dumps({"backend": "wrong" if mode == "backend" else "synthetic", "geometry": geo, "seconds": {"inference": 0.01}}))
+Path(prefix + ".json").write_text(json.dumps({"backend": "wrong" if mode == "backend" else (a.backend_id or "synthetic"), "geometry": geo, "seconds": {"inference": 0.01}}))
 '''
 
 
 class BackendValidationTests(unittest.TestCase):
+    model_size = 518
+
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
         self.bundle = self.root / "reference"
         self.bundle.mkdir()
-        shutil.copyfile(CONTRACT, self.bundle / "contract.json")
-        self.raw = np.broadcast_to(np.linspace(2, 1, 518, dtype=np.float32)[None, None, :],
-                                   (1, 518, 518)).copy()
+        shutil.copyfile(contract_path(self.model_size), self.bundle / "contract.json")
+        self.raw = np.broadcast_to(np.linspace(2, 1, self.model_size, dtype=np.float32)[None, None, :],
+                                   (1, self.model_size, self.model_size)).copy()
         self.raw.astype("<f4").tofile(self.root / "seed.f32")
         samples, saved = [], []
         for identifier, split in (("dev", "development"), ("holdout", "final")):
@@ -80,7 +83,7 @@ class BackendValidationTests(unittest.TestCase):
             rgb = np.array([[[1, 2, 3], [4, 5, 6]]], dtype=np.uint8)
             original = self.root / (identifier + ".ppm")
             original.write_bytes(ppm_bytes(rgb))
-            tensor, transform = preprocess(rgb)
+            tensor, transform = preprocess(rgb, self.model_size)
             restored = postprocess(self.raw, transform)
             files = {"preprocessed.f32": write_array(directory / "preprocessed.f32", tensor, "<f4"),
                      "raw.f32": write_array(directory / "raw.f32", self.raw, "<f4"),
@@ -100,11 +103,11 @@ class BackendValidationTests(unittest.TestCase):
         self.samples = self.root / "samples.json"
         write_json(self.samples, {"schema_version": 1, "samples": samples})
         shutil.copyfile(self.samples, self.bundle / "samples.json")
-        write_json(self.bundle / "manifest.json", {"format_version": 1, "contract_version": "depth-v1",
+        write_json(self.bundle / "manifest.json", {"format_version": 1, "contract_version": contract_version(self.model_size), "model_size": self.model_size,
             "samples_manifest_sha256": sha256(self.samples), "samples_manifest_file": "samples.json",
             "contract_sha256": sha256(self.bundle / "contract.json"), "samples": saved})
         self.thresholds = self.root / "thresholds.json"
-        write_json(self.thresholds, {"schema_version": 1, "backend": "synthetic",
+        write_json(self.thresholds, {"schema_version": 1, "backend": "synthetic", "model_size": self.model_size,
             "atol": 0, "rtol": 0, "max_violation_fraction": 0, "preprocess_atol": 0,
             "postprocess_atol": 0, "max_ordering_drop": 0, "max_mae": 0, "max_p99_abs": 0})
         self.cli = self.root / "fake.py"
@@ -113,7 +116,7 @@ class BackendValidationTests(unittest.TestCase):
         self.model.write_text("good")
         self.args = argparse.Namespace(cli=str(self.cli), model=str(self.model), reference=str(self.bundle),
                                        samples=str(self.samples), split="development",
-                                       thresholds=str(self.thresholds), output=str(self.root / "output"), extra_arg=[])
+                                       thresholds=str(self.thresholds), model_size=self.model_size, output=str(self.root / "output"), extra_arg=[])
 
     def run_driver(self, mode="good"):
         self.model.write_text(mode)
@@ -165,8 +168,8 @@ class BackendValidationTests(unittest.TestCase):
     def test_cli_failure_record_and_nonzero_main(self):
         self.model.write_text("fail")
         argv = []
-        for name in ("cli", "model", "reference", "samples", "split", "thresholds", "output"):
-            argv.extend(["--" + name, getattr(self.args, name)])
+        for name in ("cli", "model", "reference", "samples", "split", "thresholds", "output", "model_size"):
+            argv.extend(["--" + name.replace("_", "-"), str(getattr(self.args, name))])
         self.assertEqual(main(argv), 1)
         report = json.loads((self.root / "output/report.json").read_text())
         self.assertFalse(report["passed"])
@@ -222,10 +225,14 @@ class BackendValidationTests(unittest.TestCase):
 
     def test_parser_extra_arg_equals_form(self):
         argv = []
-        for name in ("cli", "model", "reference", "samples", "split", "thresholds", "output"):
-            argv.extend(["--" + name, getattr(self.args, name)])
+        for name in ("cli", "model", "reference", "samples", "split", "thresholds", "output", "model_size"):
+            argv.extend(["--" + name.replace("_", "-"), str(getattr(self.args, name))])
         argv.extend(["--extra-arg=--tag", "--extra-arg=example"])
         self.assertEqual(parse_args(argv).extra_arg, ["--tag", "example"])
+
+
+class BackendValidation392Tests(BackendValidationTests):
+    model_size = 392
 
 
 if __name__ == "__main__":

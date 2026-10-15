@@ -1,0 +1,9 @@
+quality 518-fp32
+quality 518-fp16
+quality 392-fp32
+quality 392-fp16
+measured 518-fp32
+measured 518-fp16
+measured 392-fp32
+measured 392-fp16
+{"selected": "518-fp32", "package": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected"}

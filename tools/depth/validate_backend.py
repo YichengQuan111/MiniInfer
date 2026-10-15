@@ -19,13 +19,13 @@ import numpy as np
 
 if __package__:
     from .metrics import numerical_metrics, ordering_metrics
-    from .preprocess import DepthError, geometry, postprocess, read_ppm
-    from .reference import CONTRACT, load_samples, sha256, write_json
+    from .preprocess import DepthError, Geometry, MODEL_SIZE, contract_version, validate_model_size, geometry, geometry_model_size, postprocess, read_ppm
+    from .reference import contract_path, load_samples, sha256, write_json
 else:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from depth.metrics import numerical_metrics, ordering_metrics
-    from depth.preprocess import DepthError, geometry, postprocess, read_ppm
-    from depth.reference import CONTRACT, load_samples, sha256, write_json
+    from depth.preprocess import DepthError, Geometry, MODEL_SIZE, contract_version, validate_model_size, geometry, geometry_model_size, postprocess, read_ppm
+    from depth.reference import contract_path, load_samples, sha256, write_json
 
 
 def _json(path: Path) -> dict:
@@ -44,18 +44,21 @@ def _json(path: Path) -> dict:
     return value
 
 
-def load_thresholds(path: Path) -> dict:
+def load_thresholds(path: Path, model_size: int = MODEL_SIZE) -> dict:
+    model_size = validate_model_size(model_size)
     value = _json(path)
     required = {"schema_version", "backend", "atol", "rtol", "max_violation_fraction",
                 "preprocess_atol", "postprocess_atol", "max_ordering_drop"}
-    allowed = required | {"max_p99_abs", "max_mae"}
+    allowed = required | {"max_p99_abs", "max_mae", "model_size"}
     if set(value) - allowed or required - set(value):
         raise DepthError(f"threshold keys must be {sorted(required)}; optional max_p99_abs/max_mae")
     if type(value["schema_version"]) is not int or value["schema_version"] != 1:
         raise DepthError("threshold schema_version must be 1")
     if not isinstance(value["backend"], str) or not value["backend"].strip():
         raise DepthError("threshold backend must be a nonempty string")
-    for name in allowed - {"schema_version", "backend"}:
+    if validate_model_size(value.get("model_size", MODEL_SIZE)) != model_size:
+        raise DepthError("threshold model_size differs from requested model_size")
+    for name in allowed - {"schema_version", "backend", "model_size"}:
         if name in value:
             number = value[name]
             if type(number) not in (int, float) or not np.isfinite(number) or number < 0:
@@ -82,21 +85,24 @@ def _check_hash(path: Path, expected, hashes: dict) -> None:
         raise DepthError(f"SHA256 mismatch: {path}")
 
 
-def verify_reference(root: Path, samples_path: Path, hashes: dict) -> list[dict]:
+def verify_reference(root: Path, samples_path: Path, hashes: dict, model_size: int = MODEL_SIZE) -> list[dict]:
     """Verify all artifact hashes, including the split not executed by this run."""
+    model_size = validate_model_size(model_size)
     manifest_path = root / "manifest.json"
     hashes[str(manifest_path)] = sha256(manifest_path)
     manifest = _json(manifest_path)
     if (type(manifest.get("format_version")) is not int or manifest["format_version"] != 1
-            or manifest.get("contract_version") != "depth-v1"):
-        raise DepthError("reference must be format_version=1, contract_version=depth-v1")
+            or manifest.get("contract_version") != contract_version(model_size)
+            or validate_model_size(manifest.get("model_size", MODEL_SIZE)) != model_size):
+        raise DepthError("reference format/model_size/contract differs from requested contract")
     _check_hash(samples_path, manifest.get("samples_manifest_sha256"), hashes)
     _check_hash(_inside(root, manifest.get("samples_manifest_file", "samples.json")),
                 manifest.get("samples_manifest_sha256"), hashes)
-    contract_path = _inside(root, "contract.json")
-    _check_hash(contract_path, manifest.get("contract_sha256"), hashes)
-    hashes[str(CONTRACT)] = sha256(CONTRACT)
-    if _json(contract_path) != _json(CONTRACT):
+    saved_contract = _inside(root, "contract.json")
+    _check_hash(saved_contract, manifest.get("contract_sha256"), hashes)
+    frozen = contract_path(model_size)
+    hashes[str(frozen)] = sha256(frozen)
+    if _json(saved_contract) != _json(frozen):
         raise DepthError("reference contract differs from current frozen contract")
     samples = load_samples(samples_path)
     current = {s["entry"]["id"]: s for s in samples}
@@ -115,7 +121,9 @@ def verify_reference(root: Path, samples_path: Path, hashes: dict) -> list[dict]
         _check_hash(metadata_path, item.get("metadata_sha256"), hashes)
         metadata = _json(metadata_path)
         entry, rgb = sample["entry"], sample["rgb"]
-        transform = geometry(rgb.shape[1], rgb.shape[0])
+        transform = geometry(rgb.shape[1], rgb.shape[0], model_size)
+        if geometry_model_size(Geometry(**metadata.get("geometry", {}))) != model_size:
+            raise DepthError(f"reference geometry model_size differs: {identifier}")
         if (metadata.get("id") != identifier or metadata.get("split") != entry["split"]
                 or metadata.get("source_sha256") != sample["sha256"]
                 or metadata.get("near_far_pairs") != entry.get("near_far_pairs", [])
@@ -138,8 +146,8 @@ def verify_reference(root: Path, samples_path: Path, hashes: dict) -> list[dict]
         original = read_ppm(metadata_path.parent / "original.ppm")
         if not np.array_equal(original, rgb):
             raise DepthError(f"reference original pixels differ: {identifier}")
-        for name, shape in (("preprocessed.f32", (1, 3, 518, 518)),
-                            ("raw.f32", (1, 518, 518)),
+        for name, shape in (("preprocessed.f32", (1, 3, model_size, model_size)),
+                            ("raw.f32", (1, model_size, model_size)),
                             ("restored.f32", (rgb.shape[0], rgb.shape[1]))):
             info = files[name]
             if info.get("dtype") != "<f4" or info.get("shape") != list(shape) or info.get("layout") != "C":
@@ -163,6 +171,7 @@ def _array(path: Path, shape: tuple) -> np.ndarray:
 
 
 def _run(command: list[str], prefix: Path, transform, report: dict) -> dict:
+    model_size = geometry_model_size(transform)
     record = {"command": command, "returncode": None}
     report["commands"].append(record)
     completed = subprocess.run(command, capture_output=True, text=True, errors="replace", check=False)
@@ -178,6 +187,11 @@ def _run(command: list[str], prefix: Path, transform, report: dict) -> dict:
         raise DepthError(f"CLI backend differs from threshold identity: {prefix}")
     if metadata.get("geometry") != transform.to_dict():
         raise DepthError(f"CLI geometry differs: {prefix}")
+    if geometry_model_size(Geometry(**metadata["geometry"])) != model_size:
+        raise DepthError(f"CLI geometry model_size differs: {prefix}")
+    if (metadata.get("contract", contract_version(model_size)) != contract_version(model_size)
+            or validate_model_size(metadata.get("model_size", model_size)) != model_size):
+        raise DepthError(f"CLI model_size/contract differs: {prefix}")
     seconds = metadata.get("seconds")
     if not isinstance(seconds, dict) or not seconds:
         raise DepthError(f"CLI seconds must be a nonempty object: {prefix}")
@@ -185,8 +199,8 @@ def _run(command: list[str], prefix: Path, transform, report: dict) -> dict:
         raise DepthError(f"CLI timing must be finite and non-negative: {prefix}")
     record["output_sha256"] = {str(p): sha256(p) for p in paths.values()}
     record["seconds"] = seconds
-    return {"preprocessed": _array(paths["preprocessed"], (1, 3, 518, 518)),
-            "raw": _array(paths["raw"], (1, 518, 518)),
+    return {"preprocessed": _array(paths["preprocessed"], (1, 3, model_size, model_size)),
+            "raw": _array(paths["raw"], (1, model_size, model_size)),
             "restored": _array(paths["restored"], (transform.original_height, transform.original_width))}
 
 
@@ -223,6 +237,8 @@ def validate(args: argparse.Namespace) -> dict:
               "split": args.split, "input_sha256": {}, "commands": [], "samples": [],
               "aggregate": {}, "errors": [], "passed": False}
     try:
+        model_size = validate_model_size(getattr(args, "model_size", MODEL_SIZE))
+        report.update(model_size=model_size, contract=contract_version(model_size))
         paths = {name: Path(getattr(args, name)).resolve(strict=True)
                  for name in ("cli", "model", "reference", "samples", "thresholds")}
         report["inputs"] = {name: str(path) for name, path in paths.items()}
@@ -232,14 +248,15 @@ def validate(args: argparse.Namespace) -> dict:
                                       Path(__file__).with_name("metrics.py"),
                                       Path(__file__).with_name("preprocess.py"),
                                       Path(__file__).with_name("reference.py"))}
-        thresholds = load_thresholds(paths["thresholds"])
+        thresholds = load_thresholds(paths["thresholds"], model_size)
         report["thresholds"] = thresholds
-        samples = verify_reference(paths["reference"], paths["samples"], report["input_sha256"])
+        samples = verify_reference(paths["reference"], paths["samples"], report["input_sha256"], model_size)
+        report["reference_manifest_sha256"] = sha256(paths["reference"] / "manifest.json")
         selected = [s for s in samples if s["entry"]["split"] == args.split]
         if not selected:
             raise DepthError(f"no samples in split {args.split}")
         extra = list(args.extra_arg or [])
-        reserved = {"--model", "--image", "--tensor", "--width", "--height", "--output"}
+        reserved = {"--model", "--model-size", "--image", "--tensor", "--width", "--height", "--output"}
         if any(v.split("=", 1)[0] in reserved for v in extra):
             raise DepthError("extra arguments must not override validation model/input/output")
         cli = [str(paths["cli"])]
@@ -252,15 +269,15 @@ def validate(args: argparse.Namespace) -> dict:
             report["samples"].append(row)
             destination = output / identifier
             destination.mkdir()
-            base = cli + ["--model", str(paths["model"])] + extra
+            base = cli + ["--model", str(paths["model"]), "--model-size", str(model_size)] + extra
             image_prefix, tensor_prefix = destination / "image", destination / "tensor"
             image = _run(base + ["--image", str(directory / "original.ppm"), "--output", str(image_prefix)],
                          image_prefix, transform, report)
             tensor = _run(base + ["--tensor", str(directory / "preprocessed.f32"),
                                   "--width", str(transform.original_width), "--height", str(transform.original_height),
                                   "--output", str(tensor_prefix)], tensor_prefix, transform, report)
-            reference = {"preprocessed": _array(directory / "preprocessed.f32", (1, 3, 518, 518)),
-                         "raw": _array(directory / "raw.f32", (1, 518, 518)),
+            reference = {"preprocessed": _array(directory / "preprocessed.f32", (1, 3, model_size, model_size)),
+                         "raw": _array(directory / "raw.f32", (1, model_size, model_size)),
                          "restored": _array(directory / "restored.f32", (transform.original_height, transform.original_width))}
             if not np.array_equal(tensor["preprocessed"], reference["preprocessed"]):
                 raise DepthError(f"same-input CLI changed supplied tensor: {identifier}")
@@ -333,6 +350,7 @@ def parse_args(argv=None):
     for name in ("cli", "model", "reference", "samples", "thresholds", "output"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--split", required=True, choices=("development", "final"))
+    parser.add_argument("--model-size", type=int, choices=(518, 392), default=MODEL_SIZE)
     parser.add_argument("--extra-arg", action="append", default=[], help="repeat; use --extra-arg=--flag for flags")
     return parser.parse_args(argv)
 

@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import numpy as np
 from depth.metrics import numerical_metrics, ordering_metrics
+from depth.preprocess import Geometry, contract_version, geometry_model_size, validate_model_size
 from depth.reference import sha256, write_json
 from depth.validate_backend import load_thresholds
 from package_depth import verify
@@ -15,16 +16,24 @@ def main():
     parser.add_argument("--cli", required=True)
     parser.add_argument("--package", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--model-size", type=int, choices=(518, 392), help="assert package model size")
     args = parser.parse_args()
     root = Path(args.package).resolve(strict=True)
     output = Path(args.output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     report = {"passed": False, "errors": []}
     try:
-        verify(root)
-        thresholds = load_thresholds(root / "thresholds.json")
+        package = verify(root)
+        model_size = validate_model_size(package.get("model_size", 518))
+        if args.model_size is not None and args.model_size != model_size:
+            raise ValueError("requested model_size differs from SDK package")
+        report.update(model_size=model_size, contract=contract_version(model_size),
+                      reference_manifest_sha256=sha256(root / "reference-manifest.json"))
+        thresholds = load_thresholds(root / "thresholds.json", model_size)
         metadata = json.loads((root / "golden/metadata.json").read_text(encoding="utf-8"))
         transform = metadata["geometry"]
+        if geometry_model_size(Geometry(**transform)) != model_size:
+            raise ValueError("golden geometry differs from SDK package model_size")
         shape = (transform["original_height"], transform["original_width"])
         target = output / "sdk.f32"
         command = [str(Path(args.cli).resolve(strict=True)), str(root), str(root / "golden/original.ppm"), str(target)]

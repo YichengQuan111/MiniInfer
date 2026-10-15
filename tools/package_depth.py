@@ -6,47 +6,62 @@ from pathlib import Path
 import shutil
 import tempfile
 
-from depth.reference import CONTRACT, sha256, write_json
-from depth.validate_backend import load_thresholds, verify_reference
+from depth.preprocess import MODEL_SIZE, Geometry, contract_version, geometry_model_size, validate_model_size
+from depth.reference import contract_path, sha256, write_json
+from depth.validate_backend import _json, load_thresholds, verify_reference
+
+MODEL_MANIFEST_FIELDS = {"schema", "contract", "backend", "precision", "model", "model_sha256"}
 
 
 def read_manifest(path):
     entries = {}
     for line in path.read_text(encoding="utf-8").splitlines():
         key, value = line.split("=", 1)
-        if key in entries or not value:
+        if key in entries or not key or not value or key.strip() != key or value.strip() != value:
             raise ValueError("invalid/duplicate engine manifest entry")
         entries[key] = value
     return entries
 
 
 def create(args):
+    model_size = validate_model_size(getattr(args, "model_size", MODEL_SIZE))
+    contract = contract_version(model_size)
     output = Path(args.output).resolve()
     if output.exists():
         raise ValueError("package output already exists")
     model, onnx = Path(args.model).resolve(strict=True), Path(args.onnx).resolve(strict=True)
     reference, samples = Path(args.reference).resolve(strict=True), Path(args.samples).resolve(strict=True)
     thresholds_path, report_path = Path(args.thresholds).resolve(strict=True), Path(args.report).resolve(strict=True)
-    thresholds = load_thresholds(thresholds_path)
-    report = json.loads(report_path.read_text(encoding="utf-8"))
+    thresholds = load_thresholds(thresholds_path, model_size)
+    report = _json(report_path)
     expected_backend = "ort-cpu-fp32" if args.backend == "ort" else "tensorrt-" + args.precision
     if args.backend == "ort" and args.precision != "fp32":
         raise ValueError("ORT package supports CPU FP32 only")
     if report.get("passed") is not True or report.get("split") != "final" or report.get("thresholds") != thresholds:
         raise ValueError("package requires the matching passed final-split report")
+    if validate_model_size(report.get("model_size")) != model_size or report.get("contract") != contract:
+        raise ValueError("validated model_size/contract mismatch")
     if thresholds["backend"] != expected_backend:
         raise ValueError("threshold backend/precision mismatch")
     saved_hashes = report["input_sha256"]
     for key, path in (("model", model), ("samples", samples), ("thresholds", thresholds_path)):
         if saved_hashes.get(report["inputs"][key]) != sha256(path):
             raise ValueError("validated " + key + " changed")
-    verified = verify_reference(reference, samples, {})
+    verified = verify_reference(reference, samples, {}, model_size)
+    reference_hash = sha256(reference / "manifest.json")
+    saved_reference_manifest = str(Path(report["inputs"]["reference"]) / "manifest.json")
+    if (report.get("reference_manifest_sha256") != reference_hash
+            or saved_hashes.get(saved_reference_manifest) != reference_hash):
+        raise ValueError("validated reference manifest changed")
     if {s["id"] for s in verified if s["entry"]["split"] == "final"} != {s["id"] for s in report["samples"]}:
         raise ValueError("final report sample set mismatch")
     engine_metadata = None
     if args.backend == "trt":
         engine_metadata = read_manifest(Path(str(model) + ".manifest"))
-        if (engine_metadata.get("precision") != args.precision or engine_metadata.get("contract") != "depth-v1"
+        if (engine_metadata.get("schema") != "miniinfer-engine-1"
+                or engine_metadata.get("input") != f"1x3x{model_size}x{model_size}-fp32"
+                or engine_metadata.get("output") != f"1x{model_size}x{model_size}-fp32"
+                or engine_metadata.get("precision") != args.precision or engine_metadata.get("contract") != contract
                 or engine_metadata.get("engine_sha256") != sha256(model)
                 or engine_metadata.get("onnx_sha256") != sha256(onnx)):
             raise ValueError("engine metadata/hash mismatch")
@@ -62,7 +77,7 @@ def create(args):
             shutil.copyfile(onnx, stage / "model.onnx")
             shutil.copyfile(str(model) + ".manifest", stage / "model.engine.manifest")
             shutil.copyfile(str(model) + ".layers.json", stage / "model.engine.layers.json")
-        shutil.copyfile(CONTRACT, stage / "contract.json")
+        shutil.copyfile(contract_path(model_size), stage / "contract.json")
         shutil.copyfile(thresholds_path, stage / "thresholds.json")
         shutil.copyfile(report_path, stage / "validation.json")
         shutil.copyfile(reference / "manifest.json", stage / "reference-manifest.json")
@@ -71,13 +86,13 @@ def create(args):
         (stage / "golden").mkdir()
         for filename in ("original.ppm", "preprocessed.f32", "raw.f32", "restored.f32", "metadata.json"):
             shutil.copyfile(golden["directory"] / filename, stage / "golden" / filename)
-        manifest = {"schema": "miniinfer-model-1", "contract": "depth-v1", "backend": args.backend,
+        manifest = {"schema": "miniinfer-model-1", "contract": contract, "backend": args.backend,
                     "precision": args.precision, "model": model_name, "model_sha256": sha256(stage / model_name)}
         (stage / "manifest.txt").write_text("".join(f"{k}={v}\n" for k, v in sorted(manifest.items())), encoding="utf-8")
         (stage / "README.txt").write_text(
-            "MiniInfer depth-v1 model package\n"
+            f"MiniInfer {contract} model package\n"
             "Input: owning RGB8 HWC; max side4096, max pixels2097152. Output: FP32 HW relative inverse depth.\n"
-            "Larger means nearer; not meters. Validation uses fixed 518 model input.\n"
+            f"Larger means nearer; not meters. Validation uses fixed {model_size} model input.\n"
             "SDK: DepthSdk(SdkConfig{package_dir=THIS_DIRECTORY}); run(image); shutdown().\n"
             "TensorRT engines are environment-specific; manifest checks happen before loading.\n"
             "Rebuild: depth_engine_builder --onnx model.onnx --output rebuilt.engine --precision " + args.precision + "\n"
@@ -87,7 +102,7 @@ def create(args):
             "Hashes detect corruption; this is not a signed trust boundary. Only load trusted model packages.\n", encoding="utf-8")
         inventory = {str(p.relative_to(stage)): {"bytes": p.stat().st_size, "sha256": sha256(p)}
                      for p in sorted(stage.rglob("*")) if p.is_file()}
-        write_json(stage / "package.json", {"schema_version": 1, "contract": "depth-v1",
+        write_json(stage / "package.json", {"schema_version": 2, "contract": contract, "model_size": model_size,
                    "backend": args.backend, "precision": args.precision, "golden": args.golden,
                    "onnx_sha256": sha256(onnx), "engine_environment": engine_metadata,
                    "files": inventory})
@@ -99,14 +114,63 @@ def create(args):
 
 def verify(path):
     root = Path(path).resolve(strict=True)
-    metadata = json.loads((root / "package.json").read_text(encoding="utf-8"))
+    metadata = _json(root / "package.json")
     for name, expected in metadata["files"].items():
         file = (root / name).resolve(strict=True)
         if not file.is_relative_to(root) or not file.is_file():
             raise ValueError("package inventory path escapes root")
         if file.stat().st_size != expected["bytes"] or sha256(file) != expected["sha256"]:
             raise ValueError("package content mismatch: " + name)
-    print(json.dumps({"package": str(root), "verified_files": len(metadata["files"])}))
+    model_size = validate_model_size(metadata.get("model_size", MODEL_SIZE))
+    contract = contract_version(model_size)
+    schema = metadata.get("schema_version")
+    if type(schema) is not int or schema not in (1, 2) or (schema == 1 and model_size != 518):
+        raise ValueError("unsupported package schema/model_size")
+    if schema == 2:
+        validate_model_size(metadata.get("model_size"))
+    manifest = read_manifest(root / "manifest.txt")
+    if (set(manifest) != MODEL_MANIFEST_FIELDS or manifest["schema"] != "miniinfer-model-1"
+            or manifest["contract"] != contract or metadata.get("contract") != contract
+            or manifest["backend"] != metadata.get("backend") or manifest["precision"] != metadata.get("precision")):
+        raise ValueError("package manifest identity mismatch")
+    expected_model = "model.onnx" if manifest["backend"] == "ort" else "model.engine"
+    if (manifest["backend"] not in ("ort", "trt") or manifest["precision"] not in ("fp32", "fp16")
+            or (manifest["backend"] == "ort" and manifest["precision"] != "fp32")
+            or manifest["model"] != expected_model
+            or manifest["model_sha256"] != sha256(root / expected_model)):
+        raise ValueError("package model identity/hash mismatch")
+    if _json(root / "contract.json") != _json(contract_path(model_size)):
+        raise ValueError("package frozen contract mismatch")
+    load_thresholds(root / "thresholds.json", model_size)
+    golden = _json(root / "golden/metadata.json")
+    if geometry_model_size(Geometry(**golden["geometry"])) != model_size:
+        raise ValueError("package golden geometry size mismatch")
+    if schema == 1:
+        print(json.dumps({"package": str(root), "verified_files": len(metadata["files"]),
+                          "model_size": 518, "validation_identity": "legacy_depth_v1_inventory"}))
+        return metadata
+    reference = _json(root / "reference-manifest.json")
+    validation = _json(root / "validation.json")
+    if manifest["backend"] == "trt":
+        engine = read_manifest(root / "model.engine.manifest")
+        if (engine.get("schema") != "miniinfer-engine-1" or engine.get("contract") != contract
+                or engine.get("precision") != manifest["precision"]
+                or engine.get("input") != f"1x3x{model_size}x{model_size}-fp32"
+                or engine.get("output") != f"1x{model_size}x{model_size}-fp32"
+                or engine.get("engine_sha256") != sha256(root / "model.engine")
+                or engine.get("onnx_sha256") != sha256(root / "model.onnx")):
+            raise ValueError("package engine identity/hash mismatch")
+    if (reference.get("contract_version") != contract
+            or validate_model_size(reference.get("model_size", MODEL_SIZE)) != model_size
+            or validation.get("passed") is not True or validation.get("split") != "final"
+            or validation.get("contract") != contract
+            or validation.get("thresholds") != _json(root / "thresholds.json")
+            or validate_model_size(validation.get("model_size")) != model_size
+            or validation.get("reference_manifest_sha256") != sha256(root / "reference-manifest.json")):
+        raise ValueError("package validation/reference identity mismatch")
+    print(json.dumps({"package": str(root), "verified_files": len(metadata["files"]),
+                      "model_size": model_size, "validation_identity": "reference_manifest_sha256"}))
+    return metadata
 
 
 def main():
@@ -118,6 +182,7 @@ def main():
     build.add_argument("--backend", choices=("ort", "trt"), required=True)
     build.add_argument("--precision", choices=("fp32", "fp16"), required=True)
     build.add_argument("--golden", default="indoor_1")
+    build.add_argument("--model-size", type=int, choices=(518, 392), default=MODEL_SIZE)
     check = sub.add_parser("verify")
     check.add_argument("path")
     args = parser.parse_args()

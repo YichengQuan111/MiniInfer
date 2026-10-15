@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(MiniInfer VERSION 2.1.0 LANGUAGES CXX)
+project(MiniInfer VERSION 2.2.0 LANGUAGES CXX)
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
     message(FATAL_ERROR "MiniInfer targets Linux. On Windows, configure and build through WSL.")
@@ -127,6 +127,10 @@ if(BUILD_TESTING AND MINIINFER_DEPTH_PYTHON)
         COMMAND "${MINIINFER_DEPTH_PYTHON}" -m unittest discover
             -s "${PROJECT_SOURCE_DIR}/tests" -p test_depth_validation.py -v)
     set_tests_properties(depth_validation_contract PROPERTIES TIMEOUT 60)
+    add_test(NAME depth_package_contract
+        COMMAND "${MINIINFER_DEPTH_PYTHON}" -m unittest discover
+            -s "${PROJECT_SOURCE_DIR}/tests" -p test_depth_package.py -v)
+    set_tests_properties(depth_package_contract PROPERTIES TIMEOUT 60)
     add_test(NAME depth_benchmark_statistics
         COMMAND "${MINIINFER_DEPTH_PYTHON}" -m unittest discover
             -s "${PROJECT_SOURCE_DIR}/tests" -p test_depth_benchmark.py -v)
