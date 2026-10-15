@@ -1,0 +1,32 @@
+[
+  {
+    "path": "data/generated/depth/assets/depth_anything_v2_vits.pth",
+    "bytes": 99218434,
+    "sha256": "715fade13be8f229f8a70cc02066f656f2423a59effd0579197bbf57860e1378"
+  },
+  {
+    "path": "data/generated/depth/export-v1/depth_anything_v2_vits_518.onnx",
+    "bytes": 98941039,
+    "sha256": "a7d66386939681431d3b7c407b897d00cf205c44c607a33189eb4238bb7c9f80"
+  },
+  {
+    "path": "data/generated/depth/v22-export-392/depth_anything_v2_vits_392.onnx",
+    "bytes": 98940279,
+    "sha256": "cebb46efdf0e54d65cc04fb5fc17c1ecd74ac5a00aaad6dfd730424007fe31a5"
+  },
+  {
+    "path": "data/generated/depth/v22-reference-518/manifest.json",
+    "bytes": 6523,
+    "sha256": "8760db0953149f777a0f7bd8ac67274f76a8112e6db882eefa67cefffd361b65"
+  },
+  {
+    "path": "data/generated/depth/v22-export-392/manifest.json",
+    "bytes": 6847,
+    "sha256": "93ad35270e242b5ca177634feafcb4ce6fca9a8ffc706c0b2c3699aef52687c2"
+  },
+  {
+    "path": "data/generated/depth/packages/v22-518-fp32/package.json",
+    "bytes": 3308,
+    "sha256": "006b4541bf9c39a48b60bde9d2df1a3b919bfc025d243f9fc1015353bb30c84f"
+  }
+]

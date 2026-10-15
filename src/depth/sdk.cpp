@@ -1,5 +1,6 @@
 #include "miniinfer/depth/sdk.hpp"
 #include "miniinfer/depth/artifact.hpp"
+#include "miniinfer/depth/profile.hpp"
 #include "miniinfer/thread_pool.hpp"
 #if defined(MINIINFER_SDK_HAS_ORT)
 #include "miniinfer/depth/ort_runner.hpp"
@@ -18,8 +19,41 @@
 
 namespace miniinfer::depth {
 namespace {
-using Backend = std::function<DepthMap(const RgbImage&)>;
+using BasicBackend = std::function<DepthMap(const RgbImage&)>;
+using BasicBackendFactory = std::function<BasicBackend(std::size_t)>;
+using Backend = std::function<DepthMap(const RgbImage&, DepthTiming*)>;
 using BackendFactory = std::function<Backend(std::size_t)>;
+using Clock = std::chrono::steady_clock;
+double elapsed(Clock::time_point start) {
+    return std::chrono::duration<double, std::milli>(Clock::now() - start).count();
+}
+#if defined(MINIINFER_SDK_HAS_ORT) || defined(MINIINFER_SDK_HAS_TRT)
+template<class Runner> DepthMap measured_run(Runner& runner, const RgbImage& image, DepthTiming* timing, bool gpu = false) {
+    if (!timing) return runner.run(image);
+    auto begin = Clock::now();
+    const auto prepared = preprocess(image);
+    if (timing) timing->preprocess_ms = elapsed(begin);
+    begin = Clock::now();
+    auto raw = runner.run_raw(prepared);
+    if (timing) {
+        timing->backend_ms = elapsed(begin);
+        timing->h2d_bytes = gpu ? prepared.values().size() * sizeof(float) : 0;
+    }
+    begin = Clock::now();
+    auto output = postprocess(raw, prepared.transform());
+    if (timing) timing->postprocess_ms = elapsed(begin);
+    return output;
+}
+#endif
+Backend instrument_backend(BasicBackend backend) {
+    if (!backend) return {};
+    return [backend = std::move(backend)](const RgbImage& image, DepthTiming* timing) {
+        const auto begin = Clock::now();
+        auto result = backend(image);
+        if (timing) timing->backend_ms = elapsed(begin);
+        return result;
+    };
+}
 std::vector<Backend> create_backends(std::size_t count, const BackendFactory& factory) {
     if (!factory) throw SdkError(SdkErrorCode::InvalidInput, "test backend factory cannot be empty");
     std::vector<Backend> backends;
@@ -78,7 +112,7 @@ Loaded load_backend(const SdkConfig& config) {
 #if defined(MINIINFER_SDK_HAS_ORT)
             auto backends = create_backends(config.worker_count, [&](std::size_t) -> Backend {
                 auto runner = std::make_shared<OrtRunner>(model, config.ort_threads);
-                return [runner](const RgbImage& image) { return runner->run(image); };
+                return [runner](const RgbImage& image, DepthTiming* timing) { return measured_run(*runner, image, timing); };
             });
             return {std::move(backends), backend, precision};
 #else
@@ -88,7 +122,7 @@ Loaded load_backend(const SdkConfig& config) {
 #if defined(MINIINFER_SDK_HAS_TRT)
         auto backends = create_backends(1, [&](std::size_t) -> Backend {
             auto runner = std::make_shared<TrtRunner>(model, config.device);
-            return [runner](const RgbImage& image) { return runner->run(image); };
+            return [runner](const RgbImage& image, DepthTiming* timing) { return measured_run(*runner, image, timing, true); };
         });
         return {std::move(backends), backend, precision};
 #else
@@ -112,7 +146,8 @@ public:
         state.backend = std::move(loaded.name);
         state.precision = std::move(loaded.precision);
     }
-    DepthMap execute(const RgbImage& image, std::size_t worker_id) {
+    DepthMap execute(const RgbImage& image, std::size_t worker_id, DepthTiming* timing) {
+        ProfileRange profile("depth.execute");
         {
             std::lock_guard<std::mutex> lock(mutex);
             --state.queued;
@@ -121,7 +156,7 @@ public:
         }
         try {
             // ORT owns one session per stable pool worker; TRT keeps one shared runner.
-            auto result = backends.at(backends.size() == 1 ? 0 : worker_id)(image);
+            auto result = backends.at(backends.size() == 1 ? 0 : worker_id)(image, timing);
             if (result.width() != image.width() || result.height() != image.height()
                 || result.values().size() != image.width() * image.height())
                 throw std::runtime_error("backend returned incorrect restored dimensions/storage");
@@ -155,7 +190,10 @@ public:
         ++state.delivered;
         changed.notify_all();
     }
-    DepthMap run(const RgbImage& image) {
+    DepthMap run(const RgbImage& image, DepthTiming* timing) {
+        ProfileRange profile("depth.run");
+        const auto admission_begin = Clock::now();
+        if (timing) *timing = {};
         std::size_t bytes = 0;
         try {
             bytes = DepthSdk::reservation_bytes(image.width(), image.height());
@@ -187,13 +225,16 @@ public:
                 auto owned = std::make_shared<RgbImage>(image);
                 ++state.queued;
                 queued = true;
-                result = pool.submit([this, owned = std::move(owned)](std::size_t worker_id) mutable {
+                const auto enqueued = Clock::now();
+                result = pool.submit([this, owned = std::move(owned), timing, enqueued](std::size_t worker_id) mutable {
                     // Release copied RGB before packaged_task publishes its
                     // future terminal, on success and on exception alike.
                     auto local = std::move(owned);
-                    return execute(*local, worker_id);
+                    if (timing) timing->queue_ms = elapsed(enqueued);
+                    return execute(*local, worker_id, timing);
                 });
                 ++state.accepted;
+                if (timing) { timing->accepted = true; timing->admission_ms = elapsed(admission_begin); }
                 changed.notify_all();
             } catch (...) {
                 if (queued) --state.queued;
@@ -253,17 +294,20 @@ DepthSdk::DepthSdk(SdkConfig config) {
     try { impl_ = std::make_unique<Impl>(std::move(config), std::move(loaded)); }
     catch (const std::exception& error) { throw SdkError(SdkErrorCode::BackendFailure, std::string("SDK worker initialization failed: ") + error.what()); }
 }
-DepthSdk::DepthSdk(SdkConfig config, Backend backend, std::function<void()> before_delivery) {
+DepthSdk::DepthSdk(SdkConfig config, BasicBackend backend, std::function<void()> before_delivery) {
     validate_config(config);
     if (!backend) throw SdkError(SdkErrorCode::InvalidInput, "test backend cannot be empty");
-    auto backends = create_backends(1, [&](std::size_t) { return std::move(backend); });
+    auto backends = create_backends(1, [&](std::size_t) { return instrument_backend(std::move(backend)); });
     impl_ = std::make_unique<Impl>(std::move(config), Loaded{std::move(backends), "fake", "fp32"}, std::move(before_delivery));
 }
-DepthSdk::DepthSdk(SdkConfig config, BackendFactory factory, bool worker_local,
+DepthSdk::DepthSdk(SdkConfig config, BasicBackendFactory factory, bool worker_local,
                    std::function<void()> before_delivery) {
     validate_config(config);
     try {
-        auto backends = create_backends(worker_local ? config.worker_count : 1, factory);
+        if (!factory) throw SdkError(SdkErrorCode::InvalidInput, "test backend factory cannot be empty");
+        auto backends = create_backends(worker_local ? config.worker_count : 1, [&](std::size_t index) {
+            return instrument_backend(factory(index));
+        });
         impl_ = std::make_unique<Impl>(std::move(config), Loaded{std::move(backends), "fake", "fp32"}, std::move(before_delivery));
     } catch (const SdkError&) {
         throw;
@@ -274,7 +318,7 @@ DepthSdk::DepthSdk(SdkConfig config, BackendFactory factory, bool worker_local,
 DepthSdk::~DepthSdk() noexcept {
     try { if (impl_) impl_->shutdown(); } catch (...) { std::terminate(); }
 }
-DepthMap DepthSdk::run(const RgbImage& image) { return impl_->run(image); }
+DepthMap DepthSdk::run(const RgbImage& image, DepthTiming* timing) { return impl_->run(image, timing); }
 const SdkConfig& DepthSdk::config() const & noexcept { return impl_->configuration; }
 SdkSnapshot DepthSdk::snapshot() const { std::lock_guard<std::mutex> lock(impl_->mutex); return impl_->state; }
 void DepthSdk::shutdown() { impl_->shutdown(); }

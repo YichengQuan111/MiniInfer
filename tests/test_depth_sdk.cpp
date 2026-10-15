@@ -180,9 +180,15 @@ void ownership() {
     gate.release();
     const auto result = first.get();
     expect(result.values() == std::vector<float>(4, 7), "SDK copied caller input before execution");
-    const auto later = sdk->run(original);
+    DepthTiming timing;
+    const auto later = sdk->run(original, &timing);
+    expect(timing.accepted && timing.admission_ms >= 0 && timing.queue_ms >= 0 && timing.backend_ms >= 0,
+           "accepted request timing is available after return");
+    expect(timing.h2d_bytes == 0, "fake CPU backend must not report GPU transfer bytes");
     expect(later.values()[0] == 99 && result.values()[0] == 7, "later run changed previous result");
     sdk->shutdown();
+    error(SdkErrorCode::Closed, [&] { sdk->run(original, &timing); }, "closed timing rejection");
+    expect(!timing.accepted, "rejected request must not be counted as accepted");
     sdk.reset();
     expect(result.values()[0] == 7, "SDK destruction invalidated result");
 }

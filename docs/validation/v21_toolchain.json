@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-10-11T12:21:14.462100+00:00",
+  "cuda_release": "12.4.1",
+  "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "source_manifest": "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.4.1.json",
+  "source_manifest_sha256": "9cd815f3b71c2e3686ef2219b7794b81044f9dcefaa8e21dacfcb5bc4d931892",
+  "root": "/home/qyc/.cache/miniinfer-depth/v2-tools",
+  "components": {
+    "cuda_nvcc": {
+      "version": "12.4.131",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvcc/linux-x86_64/cuda_nvcc-linux-x86_64-12.4.131-archive.tar.xz",
+      "sha256": "7ffba1ada0e4b8c17e451ac7a60d386aa2642ecd08d71202a0b100c98bd74681",
+      "archive_bytes": 51184484,
+      "installed": "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda_nvcc/cuda_nvcc-linux-x86_64-12.4.131-archive"
+    },
+    "cuda_cudart": {
+      "version": "12.4.127",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/cuda_cudart/linux-x86_64/cuda_cudart-linux-x86_64-12.4.127-archive.tar.xz",
+      "sha256": "0483bff9a36e7a44465db3cd42874f6f70f019297dcf803fbefcbf58d7448c8f",
+      "archive_bytes": 1099680,
+      "installed": "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda_cudart/cuda_cudart-linux-x86_64-12.4.127-archive"
+    },
+    "cuda_cccl": {
+      "version": "12.4.127",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/cuda_cccl/linux-x86_64/cuda_cccl-linux-x86_64-12.4.127-archive.tar.xz",
+      "sha256": "e1636f27a142d24e73dfd831c54bbf5575b498fd5900648d7372fae46f824fdf",
+      "archive_bytes": 1157180,
+      "installed": "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda_cccl/cuda_cccl-linux-x86_64-12.4.127-archive"
+    },
+    "cuda_sanitizer_api": {
+      "version": "12.4.127",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/cuda_sanitizer_api/linux-x86_64/cuda_sanitizer_api-linux-x86_64-12.4.127-archive.tar.xz",
+      "sha256": "b719c6b2a8cd330ab0e4361e41dda5493946fb7fa0c4b04c8dbd776fadc3b11b",
+      "archive_bytes": 8236716,
+      "installed": "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda_sanitizer_api/cuda_sanitizer_api-linux-x86_64-12.4.127-archive"
+    },
+    "nsight_compute": {
+      "version": "2024.1.1.4",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/nsight_compute/linux-x86_64/nsight_compute-linux-x86_64-2024.1.1.4-archive.tar.xz",
+      "sha256": "b6aee577e61db6823a2fe44fcce4902962c7ea90fbb29800ffcceb3df7ea8d47",
+      "archive_bytes": 599288172,
+      "installed": "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_compute/nsight_compute-linux-x86_64-2024.1.1.4-archive"
+    },
+    "nsight_systems": {
+      "version": "2023.4.4.54",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/nsight_systems/linux-x86_64/nsight_systems-linux-x86_64-2023.4.4.54-archive.tar.xz",
+      "sha256": "25ecbd3e670eb976abafdbdec688008b7eec90ddc230b74d7c276d9f8fdcf076",
+      "archive_bytes": 220434032,
+      "installed": "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems/nsight_systems-linux-x86_64-2023.4.4.54-archive"
+    }
+  },
+  "tools": {
+    "nvcc": {
+      "path": "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda-12.4.1/bin/nvcc",
+      "command": [
+        "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda-12.4.1/bin/nvcc",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2024 NVIDIA Corporation\nBuilt on Thu_Mar_28_02:18:24_PDT_2024\nCuda compilation tools, release 12.4, V12.4.131\nBuild cuda_12.4.r12.4/compiler.34097967_0",
+      "stderr": ""
+    },
+    "compute-sanitizer": {
+      "path": "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda_sanitizer_api/cuda_sanitizer_api-linux-x86_64-12.4.127-archive/compute-sanitizer/compute-sanitizer",
+      "command": [
+        "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda_sanitizer_api/cuda_sanitizer_api-linux-x86_64-12.4.127-archive/compute-sanitizer/compute-sanitizer",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "NVIDIA (R) Compute Sanitizer\nCopyright (c) 2020-2024 NVIDIA Corporation\nVersion 2024.1.1.0 (build 34043715) (public-release)",
+      "stderr": ""
+    },
+    "ncu": {
+      "path": "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_compute/nsight_compute-linux-x86_64-2024.1.1.4-archive/nsight-compute/2024.1.1/target/linux-desktop-glibc_2_11_3-x64/ncu",
+      "command": [
+        "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_compute/nsight_compute-linux-x86_64-2024.1.1.4-archive/nsight-compute/2024.1.1/target/linux-desktop-glibc_2_11_3-x64/ncu",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "NVIDIA (R) Nsight Compute Command Line Profiler\nCopyright (c) 2018-2024 NVIDIA Corporation\nVersion 2024.1.1.0 (build 33998838) (public-release)",
+      "stderr": ""
+    },
+    "nsys": {
+      "path": "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems/nsight_systems-linux-x86_64-2023.4.4.54-archive/nsight-systems/2023.4.4/target-linux-x64/nsys",
+      "command": [
+        "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems/nsight_systems-linux-x86_64-2023.4.4.54-archive/nsight-systems/2023.4.4/target-linux-x64/nsys",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "NVIDIA Nsight Systems version 2023.4.4.54-234433681190v0",
+      "stderr": ""
+    }
+  },
+  "initial_path_tools": {
+    "nvcc": null,
+    "nsys": null,
+    "ncu": null,
+    "compute-sanitizer": null
+  },
+  "sources": [
+    "https://docs.nvidia.com/cuda/archive/12.4.1/cuda-installation-guide-linux/index.html",
+    "https://docs.nvidia.com/cuda/wsl-user-guide/index.html",
+    "https://docs.nvidia.com/nsight-compute/2024.1/ReleaseNotes/index.html"
+  ],
+  "limitations": [
+    "Compile-only smoke test; GPU execution, profiler capture and sanitizer checks pending.",
+    "Nsight Compute counter permissions must be verified by actual capture.",
+    "No driver, existing runtime, TensorRT or PyTorch package was replaced.",
+    "Nsight Systems system-wide CPU sampling depends on host perf permissions; see nsys_environment."
+  ],
+  "nsys_environment": {
+    "command": [
+      "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems/nsight_systems-linux-x86_64-2023.4.4.54-archive/nsight-systems/2023.4.4/target-linux-x64/nsys",
+      "status",
+      "--environment"
+    ],
+    "returncode": 0,
+    "stdout": "Timestamp counter supported: Yes\n\nCPU Profiling Environment Check\nRoot privilege: disabled\nLinux Kernel Paranoid Level = 2\nLinux Distribution = Ubuntu\nLinux Kernel Version = 6.18.40.1-microsoft-standard-WSL2: OK\nLinux perf_event_open syscall available: OK\nSampling trigger event available: OK\nIntel(c) Last Branch Record support: Not Available\nCPU Profiling Environment (process-tree): OK\nCPU Profiling Environment (system-wide): Fail\n\nSee the product documentation at https://docs.nvidia.com/nsight-systems for more information,\nincluding information on how to set the Linux Kernel Paranoid Level.",
+    "stderr": ""
+  },
+  "existing_runtime_packages": {
+    "command": [
+      "/home/qyc/.venvs/miniinfer-depth/bin/python",
+      "-c",
+      "import importlib.metadata as m, json; print(json.dumps({n:m.version(n) for n in ['torch','torchvision','nvidia-cuda-runtime-cu12','nvidia-cuda-nvcc-cu12','tensorrt_cu12']}))"
+    ],
+    "returncode": 0,
+    "stdout": "{\"torch\": \"2.6.0+cu124\", \"torchvision\": \"0.21.0+cu124\", \"nvidia-cuda-runtime-cu12\": \"12.4.127\", \"nvidia-cuda-nvcc-cu12\": \"12.4.131\", \"tensorrt_cu12\": \"10.8.0.43\"}",
+    "stderr": ""
+  },
+  "environment_script": "/home/qyc/.cache/miniinfer-depth/v2-tools/env.sh",
+  "gpu": {
+    "command": [
+      "nvidia-smi",
+      "--query-gpu=name,driver_version",
+      "--format=csv,noheader"
+    ],
+    "returncode": 0,
+    "stdout": "NVIDIA GeForce RTX 4080 Laptop GPU, 617.14",
+    "stderr": ""
+  },
+  "host_compiler": {
+    "command": [
+      "g++",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "stderr": ""
+  },
+  "compile_smoke": {
+    "command": [
+      "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda-12.4.1/bin/nvcc",
+      "-std=c++17",
+      "-arch=sm_89",
+      "--fmad=false",
+      "-c",
+      "/home/qyc/.cache/miniinfer-depth/v2-tools/smoke/compile.cu",
+      "-o",
+      "/home/qyc/.cache/miniinfer-depth/v2-tools/smoke/compile.o"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "link_smoke": {
+    "command": [
+      "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda-12.4.1/bin/nvcc",
+      "-std=c++17",
+      "-arch=sm_89",
+      "--fmad=false",
+      "/home/qyc/.cache/miniinfer-depth/v2-tools/smoke/compile.cu",
+      "-o",
+      "/home/qyc/.cache/miniinfer-depth/v2-tools/smoke/compile-linked"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+}

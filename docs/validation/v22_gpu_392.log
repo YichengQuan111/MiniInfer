@@ -1,0 +1,2 @@
+CUDA timing h2d_ms=0.46496 compute_ms=50.0111 d2h_ms=0.308576 host_ms=51.5836
+TRT ownership, serialization, compatibility and recovery passed

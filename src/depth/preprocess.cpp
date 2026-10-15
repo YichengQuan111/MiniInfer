@@ -1,4 +1,5 @@
 #include "miniinfer/depth/preprocess.hpp"
+#include "miniinfer/depth/profile.hpp"
 
 #include <algorithm>
 #include <array>
@@ -85,26 +86,36 @@ std::vector<float> bilinear_half_pixel(const std::vector<float>& source,
 }
 
 PreparedImage preprocess(const RgbImage& image) {
+    ProfileRange profile("depth.preprocess.cpu");
     const auto transform = geometry(image.width(), image.height());
     if (image.pixels().size() != image.width() * image.height() * 3)
         throw std::invalid_argument("RGB8 input storage length mismatch");
     std::vector<float> pixels(image.pixels().size());
-    for (std::size_t index = 0; index < pixels.size(); ++index)
-        pixels[index] = static_cast<float>(image.pixels()[index]) / 255.0F;
-    const auto resized = bilinear_half_pixel(pixels, image.width(), image.height(), 3,
-                                            transform.resized_width, transform.resized_height);
+    {
+        ProfileRange convert("depth.preprocess.cpu.convert");
+        for (std::size_t index = 0; index < pixels.size(); ++index)
+            pixels[index] = static_cast<float>(image.pixels()[index]) / 255.0F;
+    }
+    const auto resized = [&] {
+        ProfileRange resize("depth.preprocess.cpu.resize");
+        return bilinear_half_pixel(pixels, image.width(), image.height(), 3,
+                                   transform.resized_width, transform.resized_height);
+    }();
     constexpr std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
     constexpr std::array<float, 3> deviation{0.229F, 0.224F, 0.225F};
     std::vector<float> nchw(input_elements);
-    for (std::size_t c = 0; c < 3; ++c) {
-        for (std::size_t y = 0; y < model_size; ++y) {
-            for (std::size_t x = 0; x < model_size; ++x) {
-                float value = 0.0F;
-                if (x >= transform.pad_left && x < transform.pad_left + transform.resized_width
-                    && y >= transform.pad_top && y < transform.pad_top + transform.resized_height)
-                    value = resized[((y - transform.pad_top) * transform.resized_width + x - transform.pad_left) * 3 + c];
-                const float centered = value - mean[c];
-                nchw[c * raw_elements + y * model_size + x] = centered / deviation[c];
+    {
+        ProfileRange normalize("depth.preprocess.cpu.pad_normalize_hwc_to_nchw");
+        for (std::size_t c = 0; c < 3; ++c) {
+            for (std::size_t y = 0; y < model_size; ++y) {
+                for (std::size_t x = 0; x < model_size; ++x) {
+                    float value = 0.0F;
+                    if (x >= transform.pad_left && x < transform.pad_left + transform.resized_width
+                        && y >= transform.pad_top && y < transform.pad_top + transform.resized_height)
+                        value = resized[((y - transform.pad_top) * transform.resized_width + x - transform.pad_left) * 3 + c];
+                    const float centered = value - mean[c];
+                    nchw[c * raw_elements + y * model_size + x] = centered / deviation[c];
+                }
             }
         }
     }
@@ -112,6 +123,7 @@ PreparedImage preprocess(const RgbImage& image) {
 }
 
 DepthMap postprocess(const RawDepth& raw, const Geometry& transform) {
+    ProfileRange profile("depth.postprocess.cpu");
     validate_geometry(transform);
     if (raw.values().size() != raw_elements) throw std::invalid_argument("raw depth storage length mismatch");
     validate_finite(raw.values());

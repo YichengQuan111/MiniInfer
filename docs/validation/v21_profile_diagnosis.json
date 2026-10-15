@@ -1,0 +1,661 @@
+{
+  "schema_version": 1,
+  "result": "fixed",
+  "cause": "Nsight Systems/CUPTI version incompatible with host CUDA driver API 13.4; not an inherent WSL restriction",
+  "evidence_boundary": "Same CUDA 12.4 compiler, source and flags; separately compiled smoke executables. No TensorRT workload in this diagnosis.",
+  "original_trace": {
+    "path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v21_profile/timeline.sqlite",
+    "sha256": "54d55d6ff9fc8040f796df324b6613c623171ae98e114aa2a9ec112f6ee30c82",
+    "activity_counts": {
+      "CUPTI_ACTIVITY_KIND_RUNTIME": 14750,
+      "CUPTI_ACTIVITY_KIND_SYNCHRONIZATION": 66,
+      "NVTX_EVENTS": 13508
+    },
+    "diagnostics": {
+      "ANALYSIS_DETAILS": [
+        [
+          281474976710656,
+          8856745589,
+          831941061,
+          9688686650
+        ]
+      ]
+    },
+    "has_kernel": false,
+    "has_memcpy": false
+  },
+  "attempts": [
+    {
+      "recorded_utc": "2026-10-11T12:33:12.922858+00:00",
+      "nsys_version": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems/nsight_systems-linux-x86_64-2023.4.4.54-archive/nsight-systems/2023.4.4/target-linux-x64/nsys",
+          "--version"
+        ],
+        "returncode": 0,
+        "stdout": "NVIDIA Nsight Systems version 2023.4.4.54-234433681190v0",
+        "stderr": ""
+      },
+      "scope": "one 256-thread kernel and two 1024-byte transfers; no TRT workload",
+      "compile": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda-12.4.1/bin/nvcc",
+          "-std=c++17",
+          "-arch=sm_89",
+          "--fmad=false",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-old/profile.cu",
+          "-o",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-old/profile-smoke"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "profile": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems/nsight_systems-linux-x86_64-2023.4.4.54-archive/nsight-systems/2023.4.4/target-linux-x64/nsys",
+          "profile",
+          "--trace=cuda,nvtx",
+          "--sample=none",
+          "--cpuctxsw=none",
+          "--force-overwrite=false",
+          "--output",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-old/timeline",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-old/profile-smoke"
+        ],
+        "returncode": 0,
+        "stdout": "CUDA smoke PASS: one kernel, 1024-byte H2D and D2H\nGenerating '/tmp/nsys-report-603d.qdstrm'\n\n[1/1] [0%                          ] timeline.nsys-rep\n[1/1] [0%                          ] timeline.nsys-rep\n[1/1] [====28%                     ] timeline.nsys-rep\n[1/1] [============56%             ] timeline.nsys-rep\n[1/1] [=============58%            ] timeline.nsys-rep\n[1/1] [=============60%            ] timeline.nsys-rep\n[1/1] [===================80%      ] timeline.nsys-rep\n[1/1] [===================81%      ] timeline.nsys-rep\n[1/1] [========================100%] timeline.nsys-rep\n[1/1] [========================100%] timeline.nsys-rep\nGenerated:\n    /home/qyc/.cache/miniinfer-depth/v2-tools/profile-old/timeline.nsys-rep",
+        "stderr": ""
+      },
+      "export": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems/nsight_systems-linux-x86_64-2023.4.4.54-archive/nsight-systems/2023.4.4/target-linux-x64/nsys",
+          "export",
+          "--type=sqlite",
+          "--output",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-old/timeline.sqlite",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-old/timeline.nsys-rep"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "Processing 90 events: [1%                                                      ]\nProcessing 90 events: [2%                                                      ]\nProcessing 90 events: [3%                                                      ]\nProcessing 90 events: [4%                                                      ]\nProcessing 90 events: [5%                                                      ]\nProcessing 90 events: [=6%                                                     ]\nProcessing 90 events: [=7%                                                     ]\nProcessing 90 events: [==8%                                                    ]\nProcessing 90 events: [==10%                                                   ]\nProcessing 90 events: [===11%                                                  ]\nProcessing 90 events: [===12%                                                  ]\nProcessing 90 events: [====13%                                                 ]\nProcessing 90 events: [====14%                                                 ]\nProcessing 90 events: [=====15%                                                ]\nProcessing 90 events: [=====16%                                                ]\nProcessing 90 events: [======17%                                               ]\nProcessing 90 events: [=======18%                                              ]\nProcessing 90 events: [========20%                                             ]\nProcessing 90 events: [========21%                                             ]\nProcessing 90 events: [=========22%                                            ]\nProcessing 90 events: [=========23%                                            ]\nProcessing 90 events: [==========24%                                           ]\nProcessing 90 events: [===========25%                                          ]\nProcessing 90 events: [===========26%                                          ]\nProcessing 90 events: [============27%                                         ]\nProcessing 90 events: [============28%                                         ]\nProcessing 90 events: [=============30%                                        ]\nProcessing 90 events: [==============31%                                       ]\nProcessing 90 events: [==============32%                                       ]\nProcessing 90 events: [===============33%                                      ]\nProcessing 90 events: [================34%                                     ]\nProcessing 90 events: [================35%                                     ]\nProcessing 90 events: [=================36%                                    ]\nProcessing 90 events: [=================37%                                    ]\nProcessing 90 events: [==================38%                                   ]\nProcessing 90 events: [===================40%                                  ]\nProcessing 90 events: [===================41%                                  ]\nProcessing 90 events: [====================42%                                 ]\nProcessing 90 events: [=====================43%                                ]\nProcessing 90 events: [=====================44%                                ]\nProcessing 90 events: [======================45%                               ]\nProcessing 90 events: [======================46%                               ]\nProcessing 90 events: [=======================47%                              ]\nProcessing 90 events: [=======================48%                              ]\nProcessing 90 events: [=========================50%                            ]\nProcessing 90 events: [=========================51%                            ]\nProcessing 90 events: [==========================52%                           ]\nProcessing 90 events: [==========================53%                           ]\nProcessing 90 events: [===========================54%                          ]\nProcessing 90 events: [===========================55%                          ]\nProcessing 90 events: [============================56%                         ]\nProcessing 90 events: [============================57%                         ]\nProcessing 90 events: [=============================58%                        ]\nProcessing 90 events: [==============================60%                       ]\nProcessing 90 events: [===============================61%                      ]\nProcessing 90 events: [===============================62%                      ]\nProcessing 90 events: [================================63%                     ]\nProcessing 90 events: [================================64%                     ]\nProcessing 90 events: [=================================65%                    ]\nProcessing 90 events: [=================================66%                    ]\nProcessing 90 events: [==================================67%                   ]\nProcessing 90 events: [===================================68%                  ]\nProcessing 90 events: [====================================70%                 ]\nProcessing 90 events: [====================================71%                 ]\nProcessing 90 events: [=====================================72%                ]\nProcessing 90 events: [=====================================73%                ]\nProcessing 90 events: [======================================74%               ]\nProcessing 90 events: [=======================================75%              ]\nProcessing 90 events: [=======================================76%              ]\nProcessing 90 events: [========================================77%             ]\nProcessing 90 events: [========================================78%             ]\nProcessing 90 events: [=========================================80%            ]\nProcessing 90 events: [==========================================81%           ]\nProcessing 90 events: [==========================================82%           ]\nProcessing 90 events: [===========================================83%          ]\nProcessing 90 events: [============================================84%         ]\nProcessing 90 events: [============================================85%         ]\nProcessing 90 events: [=============================================86%        ]\nProcessing 90 events: [=============================================87%        ]\nProcessing 90 events: [==============================================88%       ]\nProcessing 90 events: [===============================================90%      ]\nProcessing 90 events: [===============================================91%      ]\nProcessing 90 events: [================================================92%     ]\nProcessing 90 events: [=================================================93%    ]\nProcessing 90 events: [=================================================94%    ]\nProcessing 90 events: [==================================================95%   ]\nProcessing 90 events: [==================================================96%   ]\nProcessing 90 events: [===================================================97%  ]\nProcessing 90 events: [===================================================98%  ]\nProcessing 90 events: [====================================================100%]"
+      },
+      "trace": {
+        "path": "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-old/timeline.sqlite",
+        "sha256": "8efd5cb297db52b84e7d33ddce9bbacc0a1e46a22f3da8e9a9b4377b21e95ecd",
+        "activity_counts": {
+          "CUPTI_ACTIVITY_KIND_RUNTIME": 11,
+          "CUPTI_ACTIVITY_KIND_SYNCHRONIZATION": 2
+        },
+        "diagnostics": {
+          "ANALYSIS_DETAILS": [
+            [
+              281474976710656,
+              828482238,
+              849001442,
+              1677483680
+            ]
+          ]
+        },
+        "has_kernel": false,
+        "has_memcpy": false
+      },
+      "passed": false,
+      "smoke_source_sha256": "cefed4022659212524d2af7d2b8073f6f65bfc7a34181d1e6d6be0883b4f6f5f",
+      "smoke_binary_sha256": "027a47cc15100b73b89b25187e74bd08e353d44a701d3c563b053b2aa593337e"
+    },
+    {
+      "recorded_utc": "2026-10-11T12:34:40.161060+00:00",
+      "nsys_version": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2024.5.1.113/nsight_systems-linux-x86_64-2024.5.1.113-archive/nsight-systems/2024.5.1/target-linux-x64/nsys",
+          "--version"
+        ],
+        "returncode": 0,
+        "stdout": "NVIDIA Nsight Systems version 2024.5.1.113-245134619542v0",
+        "stderr": ""
+      },
+      "scope": "one 256-thread kernel and two 1024-byte transfers; no TRT workload",
+      "compile": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda-12.4.1/bin/nvcc",
+          "-std=c++17",
+          "-arch=sm_89",
+          "--fmad=false",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2024/profile.cu",
+          "-o",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2024/profile-smoke"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "profile": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2024.5.1.113/nsight_systems-linux-x86_64-2024.5.1.113-archive/nsight-systems/2024.5.1/target-linux-x64/nsys",
+          "profile",
+          "--trace=cuda,nvtx",
+          "--sample=none",
+          "--cpuctxsw=none",
+          "--force-overwrite=false",
+          "--output",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2024/timeline",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2024/profile-smoke"
+        ],
+        "returncode": 0,
+        "stdout": "CUDA smoke PASS: one kernel, 1024-byte H2D and D2H\nCollecting data...\nGenerating '/tmp/nsys-report-4051.qdstrm'\n\n[1/1] [0%                          ] timeline.nsys-rep\n[1/1] [0%                          ] timeline.nsys-rep\n[1/1] [==21%                       ] timeline.nsys-rep\n[1/1] [==========47%               ] timeline.nsys-rep\n[1/1] [=================73%        ] timeline.nsys-rep\n[1/1] [==================76%       ] timeline.nsys-rep\n[1/1] [==================78%       ] timeline.nsys-rep\n[1/1] [===================79%      ] timeline.nsys-rep\n[1/1] [========================100%] timeline.nsys-rep\n[1/1] [========================100%] timeline.nsys-rep\nGenerated:\n    /home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2024/timeline.nsys-rep",
+        "stderr": ""
+      },
+      "export": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2024.5.1.113/nsight_systems-linux-x86_64-2024.5.1.113-archive/nsight-systems/2024.5.1/target-linux-x64/nsys",
+          "export",
+          "--type=sqlite",
+          "--output",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2024/timeline.sqlite",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2024/timeline.nsys-rep"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "Processing 92 events: [1%                                                      ]\nProcessing 92 events: [2%                                                      ]\nProcessing 92 events: [3%                                                      ]\nProcessing 92 events: [4%                                                      ]\nProcessing 92 events: [5%                                                      ]\nProcessing 92 events: [=6%                                                     ]\nProcessing 92 events: [=7%                                                     ]\nProcessing 92 events: [==8%                                                    ]\nProcessing 92 events: [===9%                                                   ]\nProcessing 92 events: [==10%                                                   ]\nProcessing 92 events: [===11%                                                  ]\nProcessing 92 events: [====13%                                                 ]\nProcessing 92 events: [====14%                                                 ]\nProcessing 92 events: [=====15%                                                ]\nProcessing 92 events: [=====16%                                                ]\nProcessing 92 events: [======17%                                               ]\nProcessing 92 events: [=======18%                                              ]\nProcessing 92 events: [=======19%                                              ]\nProcessing 92 events: [========20%                                             ]\nProcessing 92 events: [========21%                                             ]\nProcessing 92 events: [=========22%                                            ]\nProcessing 92 events: [=========23%                                            ]\nProcessing 92 events: [===========25%                                          ]\nProcessing 92 events: [===========26%                                          ]\nProcessing 92 events: [============27%                                         ]\nProcessing 92 events: [============28%                                         ]\nProcessing 92 events: [=============29%                                        ]\nProcessing 92 events: [=============30%                                        ]\nProcessing 92 events: [==============31%                                       ]\nProcessing 92 events: [==============32%                                       ]\nProcessing 92 events: [===============33%                                      ]\nProcessing 92 events: [================34%                                     ]\nProcessing 92 events: [================35%                                     ]\nProcessing 92 events: [=================36%                                    ]\nProcessing 92 events: [==================38%                                   ]\nProcessing 92 events: [==================39%                                   ]\nProcessing 92 events: [===================40%                                  ]\nProcessing 92 events: [===================41%                                  ]\nProcessing 92 events: [====================42%                                 ]\nProcessing 92 events: [=====================43%                                ]\nProcessing 92 events: [=====================44%                                ]\nProcessing 92 events: [======================45%                               ]\nProcessing 92 events: [======================46%                               ]\nProcessing 92 events: [=======================47%                              ]\nProcessing 92 events: [=======================48%                              ]\nProcessing 92 events: [=========================50%                            ]\nProcessing 92 events: [=========================51%                            ]\nProcessing 92 events: [==========================52%                           ]\nProcessing 92 events: [==========================53%                           ]\nProcessing 92 events: [===========================54%                          ]\nProcessing 92 events: [===========================55%                          ]\nProcessing 92 events: [============================56%                         ]\nProcessing 92 events: [============================57%                         ]\nProcessing 92 events: [=============================58%                        ]\nProcessing 92 events: [==============================59%                       ]\nProcessing 92 events: [==============================60%                       ]\nProcessing 92 events: [===============================61%                      ]\nProcessing 92 events: [================================63%                     ]\nProcessing 92 events: [================================64%                     ]\nProcessing 92 events: [=================================65%                    ]\nProcessing 92 events: [=================================66%                    ]\nProcessing 92 events: [==================================67%                   ]\nProcessing 92 events: [===================================68%                  ]\nProcessing 92 events: [===================================69%                  ]\nProcessing 92 events: [====================================70%                 ]\nProcessing 92 events: [====================================71%                 ]\nProcessing 92 events: [=====================================72%                ]\nProcessing 92 events: [=====================================73%                ]\nProcessing 92 events: [=======================================75%              ]\nProcessing 92 events: [=======================================76%              ]\nProcessing 92 events: [========================================77%             ]\nProcessing 92 events: [========================================78%             ]\nProcessing 92 events: [=========================================79%            ]\nProcessing 92 events: [=========================================80%            ]\nProcessing 92 events: [==========================================81%           ]\nProcessing 92 events: [==========================================82%           ]\nProcessing 92 events: [===========================================83%          ]\nProcessing 92 events: [============================================84%         ]\nProcessing 92 events: [============================================85%         ]\nProcessing 92 events: [=============================================86%        ]\nProcessing 92 events: [==============================================88%       ]\nProcessing 92 events: [==============================================89%       ]\nProcessing 92 events: [===============================================90%      ]\nProcessing 92 events: [===============================================91%      ]\nProcessing 92 events: [================================================92%     ]\nProcessing 92 events: [=================================================93%    ]\nProcessing 92 events: [=================================================94%    ]\nProcessing 92 events: [==================================================95%   ]\nProcessing 92 events: [==================================================96%   ]\nProcessing 92 events: [===================================================97%  ]\nProcessing 92 events: [===================================================98%  ]\nProcessing 92 events: [====================================================100%]"
+      },
+      "trace": {
+        "path": "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2024/timeline.sqlite",
+        "sha256": "67241aca9438de678ca34e498fa8dd36e0148fabee247574c00c1a10871fc364",
+        "activity_counts": {
+          "CUPTI_ACTIVITY_KIND_RUNTIME": 11,
+          "CUPTI_ACTIVITY_KIND_SYNCHRONIZATION": 2
+        },
+        "diagnostics": {
+          "ANALYSIS_DETAILS": [
+            [
+              281474976710656,
+              682060964,
+              640534407,
+              1322595371
+            ]
+          ],
+          "DIAGNOSTIC_EVENT": [
+            [
+              0,
+              1,
+              3,
+              1,
+              "Profiling has started.",
+              -144115188075855872
+            ],
+            [
+              28039,
+              1,
+              2,
+              1,
+              "Process was launched by the profiler, see /tmp/nvidia/nsight_systems/quadd_session_101606/streams/pid_1632_stdout.log and stderr.log for program output",
+              281502357127168
+            ],
+            [
+              1203585,
+              2,
+              3,
+              2,
+              "No NVTX events collected. Does the process use NVTX?",
+              281502357127168
+            ],
+            [
+              1206688,
+              2,
+              3,
+              1,
+              "Number of CUDA events collected: \t11.",
+              281502357127168
+            ],
+            [
+              14161203,
+              1,
+              1,
+              1,
+              "Common injection library initialized successfully.",
+              281502357127168
+            ],
+            [
+              21767926,
+              1,
+              1,
+              1,
+              "Buffers holding CUDA trace data will be flushed on CudaProfilerStop() call. See --flush-on-cudaprofilerstop to control this behavior.",
+              281502357127168
+            ],
+            [
+              29764221,
+              1,
+              1,
+              1,
+              "Loaded CUPTI library: /home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2024.5.1.113/nsight_systems-linux-x86_64-2024.5.1.113-archive/nsight-systems/2024.5.1/target-linux-x64/libcupti.so.12.6",
+              281502357127168
+            ],
+            [
+              29772177,
+              1,
+              1,
+              2,
+              "Installed CUDA driver version (13.4) is not supported by this build of Nsight Systems. CUDA trace will be collected using libraries for driver version 12.6",
+              281502357127168
+            ],
+            [
+              262404796,
+              1,
+              1,
+              1,
+              "Enabling trace for device graph launch",
+              281502357127168
+            ],
+            [
+              266702367,
+              1,
+              1,
+              1,
+              "CUDA injection initialized successfully.",
+              281502357127168
+            ],
+            [
+              326033349,
+              1,
+              1,
+              3,
+              "CUDA device 0: Unified Memory cannot be traced on devices that don't support peer-to-peer transfers.Please verify that SLI/NVLink is functioning properly.",
+              281502357127168
+            ],
+            [
+              554655307,
+              1,
+              1,
+              1,
+              "Number of CUPTI events produced: \t43, CUPTI buffers: 50.",
+              281502357127168
+            ],
+            [
+              682060964,
+              1,
+              3,
+              1,
+              "Profiling has stopped.",
+              -144115188075855872
+            ]
+          ],
+          "ENUM_DIAGNOSTIC_SEVERITY_LEVEL": [
+            [
+              0,
+              "UnknownLevel",
+              "Unknown"
+            ],
+            [
+              1,
+              "Info",
+              "Info"
+            ],
+            [
+              2,
+              "Warning",
+              "Warning"
+            ],
+            [
+              3,
+              "Error",
+              "Error"
+            ],
+            [
+              4,
+              "Verbose",
+              "Verbose"
+            ]
+          ],
+          "ENUM_DIAGNOSTIC_SOURCE_TYPE": [
+            [
+              0,
+              "UnknownSource",
+              "Unknown source"
+            ],
+            [
+              1,
+              "Injection",
+              "Injection"
+            ],
+            [
+              2,
+              "Daemon",
+              "Daemon"
+            ],
+            [
+              3,
+              "Analysis",
+              "Analysis"
+            ]
+          ],
+          "ENUM_DIAGNOSTIC_TIMESTAMP_SOURCE": [
+            [
+              0,
+              "UnknownTimestamp",
+              "Unknown timestamp"
+            ],
+            [
+              1,
+              "TargetTimestamp",
+              "Target timestamp"
+            ],
+            [
+              2,
+              "HostTimestamp",
+              "Host timestamp"
+            ]
+          ]
+        },
+        "has_kernel": false,
+        "has_memcpy": false
+      },
+      "passed": false,
+      "smoke_source_sha256": "cefed4022659212524d2af7d2b8073f6f65bfc7a34181d1e6d6be0883b4f6f5f",
+      "smoke_binary_sha256": "d57552376b9efde5a8ae3ba787ab6e8724433ca3d312ccb65fdd52af3cc6406f"
+    },
+    {
+      "recorded_utc": "2026-10-11T12:38:02.891126+00:00",
+      "nsys_version": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2026.5.1.161/opt/nvidia/nsight-systems-cli/2026.5.1/target-linux-x64/nsys",
+          "--version"
+        ],
+        "returncode": 0,
+        "stdout": "NVIDIA Nsight Systems version 2026.5.1.161-265138896106v0",
+        "stderr": ""
+      },
+      "scope": "one 256-thread kernel and two 1024-byte transfers; no TRT workload",
+      "compile": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/cuda-12.4.1/bin/nvcc",
+          "-std=c++17",
+          "-arch=sm_89",
+          "--fmad=false",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2026/profile.cu",
+          "-o",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2026/profile-smoke"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "profile": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2026.5.1.161/opt/nvidia/nsight-systems-cli/2026.5.1/target-linux-x64/nsys",
+          "profile",
+          "--trace=cuda,nvtx",
+          "--sample=none",
+          "--cpuctxsw=none",
+          "--force-overwrite=false",
+          "--output",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2026/timeline",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2026/profile-smoke"
+        ],
+        "returncode": 0,
+        "stdout": "CUDA smoke PASS: one kernel, 1024-byte H2D and D2H\nCollecting data...\nGenerating '/tmp/nsys-qyc/nsys-report-7c95.qdstrm'\n\n[1/1] [0%                          ] timeline.nsys-rep\n[1/1] [0%                          ] timeline.nsys-rep\n[1/1] [1%                          ] timeline.nsys-rep\n[1/1] [2%                          ] timeline.nsys-rep\n[1/1] [5%                          ] timeline.nsys-rep\n[1/1] [7%                          ] timeline.nsys-rep\n[1/1] [=16%                        ] timeline.nsys-rep\n[1/1] [==19%                       ] timeline.nsys-rep\n[1/1] [==20%                       ] timeline.nsys-rep\n[1/1] [=======37%                  ] timeline.nsys-rep\n[1/1] [==========49%               ] timeline.nsys-rep\n[1/1] [=======================96%  ] timeline.nsys-rep\n[1/1] [========================98% ] timeline.nsys-rep\n[1/1] [========================100%] timeline.nsys-rep\n[1/1] [========================100%] timeline.nsys-rep\nGenerated:\n\t/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2026/timeline.nsys-rep",
+        "stderr": ""
+      },
+      "export": {
+        "command": [
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2026.5.1.161/opt/nvidia/nsight-systems-cli/2026.5.1/target-linux-x64/nsys",
+          "export",
+          "--type=sqlite",
+          "--output",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2026/timeline.sqlite",
+          "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2026/timeline.nsys-rep"
+        ],
+        "returncode": 0,
+        "stdout": "Processing 103 events:",
+        "stderr": "[1%                                                                            ]\n[2%                                                                            ]\n[3%                                                                            ]\n[=4%                                                                           ]\n[=5%                                                                           ]\n[==6%                                                                          ]\n[===7%                                                                         ]\n[====8%                                                                        ]\n[=====9%                                                                       ]\n[====10%                                                                       ]\n[=====11%                                                                      ]\n[======12%                                                                     ]\n[=======13%                                                                    ]\n[=======14%                                                                    ]\n[========15%                                                                   ]\n[=========16%                                                                  ]\n[==========17%                                                                 ]\n[===========18%                                                                ]\n[===========19%                                                                ]\n[============20%                                                               ]\n[=============21%                                                              ]\n[==============22%                                                             ]\n[==============23%                                                             ]\n[===============24%                                                            ]\n[================25%                                                           ]\n[=================26%                                                          ]\n[==================27%                                                         ]\n[==================28%                                                         ]\n[===================29%                                                        ]\n[====================30%                                                       ]\n[=====================31%                                                      ]\n[=====================32%                                                      ]\n[======================33%                                                     ]\n[=======================34%                                                    ]\n[========================35%                                                   ]\n[=========================36%                                                  ]\n[=========================37%                                                  ]\n[==========================38%                                                 ]\n[===========================39%                                                ]\n[============================40%                                               ]\n[============================41%                                               ]\n[=============================42%                                              ]\n[==============================43%                                             ]\n[===============================44%                                            ]\n[================================45%                                           ]\n[================================46%                                           ]\n[=================================47%                                          ]\n[==================================48%                                         ]\n[===================================49%                                        ]\n[====================================50%                                       ]\n[====================================51%                                       ]\n[=====================================52%                                      ]\n[======================================53%                                     ]\n[=======================================54%                                    ]\n[=======================================55%                                    ]\n[========================================56%                                   ]\n[=========================================57%                                  ]\n[==========================================58%                                 ]\n[===========================================59%                                ]\n[===========================================60%                                ]\n[============================================61%                               ]\n[=============================================62%                              ]\n[==============================================63%                             ]\n[==============================================64%                             ]\n[===============================================65%                            ]\n[================================================66%                           ]\n[=================================================67%                          ]\n[==================================================68%                         ]\n[==================================================69%                         ]\n[===================================================70%                        ]\n[====================================================71%                       ]\n[=====================================================72%                      ]\n[=====================================================73%                      ]\n[======================================================74%                     ]\n[=======================================================75%                    ]\n[========================================================76%                   ]\n[=========================================================77%                  ]\n[=========================================================78%                  ]\n[==========================================================79%                 ]\n[===========================================================80%                ]\n[============================================================81%               ]\n[============================================================82%               ]\n[=============================================================83%              ]\n[==============================================================84%             ]\n[===============================================================85%            ]\n[================================================================86%           ]\n[================================================================87%           ]\n[=================================================================88%          ]\n[==================================================================89%         ]\n[===================================================================90%        ]\n[===================================================================91%        ]\n[====================================================================92%       ]\n[=====================================================================93%      ]\n[======================================================================94%     ]\n[=======================================================================95%    ]\n[=======================================================================96%    ]\n[========================================================================97%   ]\n[=========================================================================98%  ]\n[==========================================================================99% ]\n[==========================================================================100%]"
+      },
+      "trace": {
+        "path": "/home/qyc/.cache/miniinfer-depth/v2-tools/profile-nsys2026/timeline.sqlite",
+        "sha256": "5b79d994d2fd2c9f5951074452d3c209953571efdf7f28b493912867673fa108",
+        "activity_counts": {
+          "CUPTI_ACTIVITY_KIND_RUNTIME": 11,
+          "CUPTI_ACTIVITY_KIND_KERNEL": 1,
+          "CUPTI_ACTIVITY_KIND_MEMCPY": 2,
+          "CUPTI_ACTIVITY_KIND_SYNCHRONIZATION": 2,
+          "CUPTI_ACTIVITY_KIND_OVERHEAD": 3
+        },
+        "diagnostics": {
+          "ANALYSIS_DETAILS": [
+            [
+              281474976710656,
+              945367562,
+              295949311582,
+              296894679144
+            ]
+          ],
+          "DIAGNOSTIC_EVENT": [
+            [
+              0,
+              1,
+              3,
+              1,
+              "Profiling has started.",
+              -144115188075855872
+            ],
+            [
+              945367562,
+              1,
+              3,
+              1,
+              "Profiling has stopped.",
+              -144115188075855872
+            ],
+            [
+              78351,
+              1,
+              2,
+              1,
+              "Process was launched by the profiler, see /tmp/nvidia/nsight_systems/quadd_session_102376/streams/pid_2394_stdout.log and stderr.log for program output",
+              281515141365760
+            ],
+            [
+              7007446,
+              2,
+              3,
+              2,
+              "Not all NVTX events might have been collected.",
+              281515141365760
+            ],
+            [
+              7009073,
+              2,
+              3,
+              2,
+              "No NVTX events collected. Does the process use NVTX?",
+              281515141365760
+            ],
+            [
+              7010210,
+              2,
+              3,
+              1,
+              "Number of CUDA events collected: \t14.",
+              281515141365760
+            ],
+            [
+              18225322,
+              1,
+              1,
+              1,
+              "Common injection library initialized successfully.",
+              281515141365760
+            ],
+            [
+              173679899,
+              1,
+              1,
+              1,
+              "Buffers holding CUDA trace data will be flushed on CudaProfilerStop() call. See --flush-on-cudaprofilerstop to control this behavior.",
+              281515141365760
+            ],
+            [
+              182762944,
+              1,
+              1,
+              1,
+              "Loaded CUPTI library: /home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2026.5.1.161/opt/nvidia/nsight-systems-cli/2026.5.1/target-linux-x64/libcupti.so.13.4",
+              281515141365760
+            ],
+            [
+              482379197,
+              1,
+              1,
+              1,
+              "Enabling trace for device graph launch",
+              281515141365760
+            ],
+            [
+              486891472,
+              1,
+              1,
+              1,
+              "CUDA injection initialized successfully.",
+              281515141365760
+            ],
+            [
+              585797564,
+              1,
+              1,
+              2,
+              "CUDA device 0: Unified Memory cannot be traced on devices that don't support peer-to-peer transfers.Please verify that SLI/NVLink is functioning properly.",
+              281515141365760
+            ],
+            [
+              746521969,
+              1,
+              1,
+              1,
+              "Number of CUPTI events produced: \t44, CUPTI buffers: 50.",
+              281515141365760
+            ],
+            [
+              746527101,
+              1,
+              1,
+              1,
+              "CUDA hardware tracing is not supported on this system. A legacy (software instrumented) trace was collected instead.",
+              281515141365760
+            ]
+          ],
+          "ENUM_DIAGNOSTIC_SEVERITY_LEVEL": [
+            [
+              0,
+              "UnknownLevel",
+              "Unknown"
+            ],
+            [
+              1,
+              "Info",
+              "Info"
+            ],
+            [
+              2,
+              "Warning",
+              "Warning"
+            ],
+            [
+              3,
+              "Error",
+              "Error"
+            ],
+            [
+              4,
+              "Verbose",
+              "Verbose"
+            ]
+          ],
+          "ENUM_DIAGNOSTIC_SOURCE_TYPE": [
+            [
+              0,
+              "UnknownSource",
+              "Unknown source"
+            ],
+            [
+              1,
+              "Injection",
+              "Injection"
+            ],
+            [
+              2,
+              "Daemon",
+              "Daemon"
+            ],
+            [
+              3,
+              "Analysis",
+              "Analysis"
+            ]
+          ],
+          "ENUM_DIAGNOSTIC_TIMESTAMP_SOURCE": [
+            [
+              0,
+              "UnknownTimestamp",
+              "Unknown timestamp"
+            ],
+            [
+              1,
+              "TargetTimestamp",
+              "Target timestamp"
+            ],
+            [
+              2,
+              "HostTimestamp",
+              "Host timestamp"
+            ]
+          ]
+        },
+        "has_kernel": true,
+        "has_memcpy": true
+      },
+      "passed": true,
+      "smoke_source_sha256": "cefed4022659212524d2af7d2b8073f6f65bfc7a34181d1e6d6be0883b4f6f5f",
+      "smoke_binary_sha256": "c648920665056dedfabe4d8bd6d2ea755a663e623e434daab7d92e4b6d2f075c"
+    }
+  ],
+  "working_nsys": {
+    "path": "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2026.5.1.161/opt/nvidia/nsight-systems-cli/2026.5.1/target-linux-x64/nsys",
+    "command": [
+      "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2026.5.1.161/opt/nvidia/nsight-systems-cli/2026.5.1/target-linux-x64/nsys",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout": "NVIDIA Nsight Systems version 2026.5.1.161-265138896106v0",
+    "stderr": ""
+  },
+  "installed_component": {
+    "version": "2026.5.1.161",
+    "url": "https://developer.download.nvidia.com/devtools/repos/ubuntu2404/amd64/NsightSystems-linux-cli-public-2026.5.1.161-3889610.deb",
+    "sha256": "61829db6392e5c293ada1319df86a97c3356bc810335a1975cb551fcfe3eca08",
+    "source_manifest": "https://developer.download.nvidia.com/devtools/repos/ubuntu2404/amd64/Packages.gz",
+    "source_manifest_sha256": "35623a7aaa47b9f8c99f3a904ef4966891e5f52768447d6db1753a5e9d24087a",
+    "archive_bytes": 225594886,
+    "installed": "/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2026.5.1.161"
+  },
+  "existing_runtime_packages": {
+    "command": [
+      "/home/qyc/.venvs/miniinfer-depth/bin/python",
+      "-c",
+      "import importlib.metadata as m, json; print(json.dumps({n:m.version(n) for n in ['torch','torchvision','nvidia-cuda-runtime-cu12','nvidia-cuda-nvcc-cu12','tensorrt_cu12']}))"
+    ],
+    "returncode": 0,
+    "stdout": "{\"torch\": \"2.6.0+cu124\", \"torchvision\": \"0.21.0+cu124\", \"nvidia-cuda-runtime-cu12\": \"12.4.127\", \"nvidia-cuda-nvcc-cu12\": \"12.4.131\", \"tensorrt_cu12\": \"10.8.0.43\"}",
+    "stderr": ""
+  },
+  "environment_script": "/home/qyc/.cache/miniinfer-depth/v2-tools/env.sh",
+  "remaining": [
+    "Recapture V2.1 TensorRT workload using the new nsys; original trace still lacks GPU activities.",
+    "Nsight Compute GPU counters and Compute Sanitizer safety coverage remain separate validations.",
+    "Repository Packages.gz is mutable: retain the verified snapshot in the download cache. A changed snapshot is rejected rather than silently changing pinned versions."
+  ],
+  "sources": [
+    "https://developer.nvidia.com/nsight-systems/get-started",
+    "https://developer.download.nvidia.com/devtools/repos/ubuntu2404/amd64/Packages.gz",
+    "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.4.1.json"
+  ]
+}

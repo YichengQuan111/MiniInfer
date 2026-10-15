@@ -1,0 +1,1118 @@
+{
+  "schema_version": 1,
+  "annotation_version": 1,
+  "source": "https://huggingface.co/datasets/depth-anything/DA-2K",
+  "source_revision": "528f83c26f02a6a7a11c5a036dfc9ee19907ebd9",
+  "archive_sha256": "ff0e48e7cc53273efd1312610e51f1ec87bea0b8a22daf37125fd81246592b81",
+  "annotation_sha256": "830d51c1145198593a0f59e19b0f3c3b53cea725deaf6494e25f9b3ab35320cb",
+  "selection": "lexicographic 2 dimension-eligible images per scene after offset 2; index 0 development, 1 final; no prediction-based filtering",
+  "scope": "16-image smoke subset; not the official DA-2K benchmark score",
+  "skipped": [
+    {
+      "source": "images/adverse_style/11322222365_f77f51858c_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/11982103425_986b51e396_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/12649357463_f90a5dfc9a_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/13047168265_f568acf7e2_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/13289654863_3e2bda6a83_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/14535996793_a02c5dae26_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/15514241154_e0e20f20e4_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/15997982357_18fb4a2306_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/17310673848_5321bd438f_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/196078476_9609c2c45d_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/19813935488_2beeaf0bde_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/20831807612_4d8b4cac43_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/22562745404_f6d23ea3a9_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/22940741419_f9e63182ae_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/23081433280_c722b61eb3_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/23820577674_b484d4554c_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/23854919996_96a1cb0dd6_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/23996470080_0f099b1dc5_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/24003606494_b53d4b6f44_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/adverse_style/24260840790_35dd894a41_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/18587098828_de9c1ea361_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/19207059633_2e4f3e527d_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/19639540900_d4bd63d862_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/19801775216_333f5b6178_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/19827809995_2b0ad79a01_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/19827817285_98f6617207_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/21007963120_54d1e1374c_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/25799703320_5ab21e2bf3_o.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/26054035553_fa111cc506_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/27881231479_0016513bb3_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/28785755862_b6fc2410dd_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/30703766467_64d6718677_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/30994364876_f71344f434_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/31009245237_7462d6cbbd_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/32888477635_80b4b6c479_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/3344190285_07da47bdd9_o.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/aerial/3692052124_20e1c9d13f_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/1009402064_7c74b0b819_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/12272343524_202e65dd98_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/14207812284_c4625ff7ad_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/1578496717_2205dd1129_o.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/16525704524_b942593742_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/17250719779_221d17a4d2_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/17485436718_3f0fea8f35_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/17621921930_cc03603441_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/17646951536_f4b5ada4fd_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/17673273195_cf6998a2ad_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/17673285035_df2ff485f6_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/18163676059_79c52d7d44_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/18675911678_0c23a41189_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/18722870906_e44d2dbba6_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/19077836444_cd241b92e3_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/19080417560_3f76ac9c36_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/19243828706_e4376d50ae_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/1969173024_c72f34cb25_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/19900306583_89a9ca1b55_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/20043347183_33aef66425_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/20131434932_721d0b3d44_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/20209317216_aea195f3a4_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/20235711191_9ac60487a8_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/20308243458_aa9a9e096d_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/20466773051_49fda2b130_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/20501489763_d2d9f63561_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/20655053892_70272f791f_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/21151235911_63401934b7_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/21243058581_22428f9328_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/21355176469_756c9e3e6b_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/21414422355_9236102811_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/21418121385_735ffbd976_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/21859096620_e584730cef_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/22031032482_4d5d74ef3e_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/22276854099_396d9b01ef_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/22332537470_86a37f0e22_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/22369606814_9c772dacc3_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/22489439746_204d1e422d_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/indoor/22661615398_e74fec6c72_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/non_real/18580736808_658da662ae_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/non_real/21658166020_94580c03bd_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/object/15071925435_1728b62665_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/object/17172828240_797da9731c_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/object/17925675972_13ecdd697e_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/object/18159267412_8979668ff1_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/object/18685314036_10a69a9edd_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/object/18719180623_bf6a0dcdc6_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/object/18832147382_5e987ea8b2_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/object/19016487415_fe44a82fe5_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/17943623232_5f974cad30_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/18052423818_37d91ac33d_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/19036071240_f07e665f67_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/20304092008_ede0b1304e_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/20408645085_833061de8e_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/21089141875_3d6b9feab2_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/21641503110_11ee9051d3_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/21999090092_ae28d51166_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/22390096157_4dceea42ae_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/22884041219_3e5cdc64c4_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/22984102999_aa45c5cf50_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/23575151518_4aee8300f4_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/23607004028_f54d5c6095_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/23708780461_63e9599ed9_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/23769337648_64ab073c54_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/24622109462_d6f2086614_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/24881380011_bfe50d9caa_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/24954491757_6b65c82055_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/24995364247_88509d0d75_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/25826947794_b7aada871e_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/2611457264_9848a987ce_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/26439902152_640a2d754e_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/26771436839_1a1a49893a_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/26916817259_721757cfd9_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/outdoor/26948330309_fe2d9075ef_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/13920450929_4a9bcfabfa_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/18721897823_c29d684736_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/18763769384_6aa66eabdb_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/19580116581_c70fa735c1_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/20661238074_30958d9dab_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/21033097213_ed3711c097_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/21377545980_bc222d9fe2_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/21633193028_007032a782_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/21969060885_55f2e8b7a9_k (1).jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/21969060885_55f2e8b7a9_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/23063099270_07223a9f1e_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/24035463717_3f56b010b3_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/25471978727_a40dd2e7d9_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/transparent_reflective/25985531817_f7aaa93432_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/15317272113_a7973eea2f_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/17579244392_319fd053f6_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/19154698104_c632ec299e_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/19828956134_acb3e45005_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/20081948354_1d33303511_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/20166302802_cc06c792b7_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/20678251986_22553dc6e8_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/20694988302_36aa848648_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/23433401544_111a517ca0_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/24042500276_39a69d7923_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/24177678685_2479e13991_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/24237857294_e41545f617_k.jpg",
+      "reason": "exceeds frozen image limits"
+    },
+    {
+      "source": "images/underwater/24301124401_9926481cb4_k.jpg",
+      "reason": "exceeds frozen image limits"
+    }
+  ],
+  "samples": [
+    {
+      "id": "v2_adverse_style_0",
+      "path": "../generated/depth/images-v2/v2_adverse_style_0.ppm",
+      "split": "development",
+      "sha256": "d9a63b45a08decb95f0d03c3b9afc059b99db9edbd91b5f718f2e96268ba5943",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/adverse_style/1558677313_1f17c1328a_h.jpg",
+      "source_sha256": "7bf155c5e848d5e5c5fd315fb8afde3b773b23b57bed9ce51999433e18778edd",
+      "width": 1600,
+      "height": 1200,
+      "near_far_pairs": [
+        {
+          "near": [
+            325,
+            843
+          ],
+          "far": [
+            975,
+            993
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            1025,
+            581
+          ],
+          "far": [
+            625,
+            618
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_adverse_style_1",
+      "path": "../generated/depth/images-v2/v2_adverse_style_1.ppm",
+      "split": "final",
+      "sha256": "4fd548c1fad2baa32264edec0207815bd5ddd4152ec12d05f80cd210ce27e200",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/adverse_style/24338061290_549b220f27_h.jpg",
+      "source_sha256": "eccff38b04d92828c56e99707faa4153db71e7942d5720bbbc4614d7d849f21f",
+      "width": 1600,
+      "height": 1063,
+      "near_far_pairs": [
+        {
+          "near": [
+            475,
+            747
+          ],
+          "far": [
+            925,
+            647
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            831,
+            724
+          ],
+          "far": [
+            495,
+            714
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            615,
+            654
+          ],
+          "far": [
+            759,
+            613
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_aerial_0",
+      "path": "../generated/depth/images-v2/v2_aerial_0.ppm",
+      "split": "development",
+      "sha256": "37f844a626a7115915bd898b05ff08e31241b624b10f9181419b5ca06e5277e3",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/aerial/3586166231_4d64b0e6c7_o.jpg",
+      "source_sha256": "74b488f973fe6fcc02f91ff62d364db84c8b11d1a6d7255171f76c501ba12d03",
+      "width": 1600,
+      "height": 1063,
+      "near_far_pairs": [
+        {
+          "near": [
+            1002,
+            879
+          ],
+          "far": [
+            967,
+            881
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            799,
+            575
+          ],
+          "far": [
+            855,
+            579
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_aerial_1",
+      "path": "../generated/depth/images-v2/v2_aerial_1.ppm",
+      "split": "final",
+      "sha256": "1eddcf0ece9e6f830af499a6e1f2c92cae6bef8f24a0653be03c64f08ea59ae4",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/aerial/38197785546_d545ac59e2_k.jpg",
+      "source_sha256": "96dc97943abfa59a83995d56f760758a61c18426a26de9fb9323237f6eaa3426",
+      "width": 2048,
+      "height": 825,
+      "near_far_pairs": [
+        {
+          "near": [
+            571,
+            526
+          ],
+          "far": [
+            706,
+            608
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            1791,
+            535
+          ],
+          "far": [
+            1635,
+            464
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            1595,
+            644
+          ],
+          "far": [
+            1243,
+            632
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_indoor_0",
+      "path": "../generated/depth/images-v2/v2_indoor_0.ppm",
+      "split": "development",
+      "sha256": "2265795bd4ccbe31f11c57541c5138b4cfdb70dcf84db991a0a9e295df958523",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/indoor/21818647225_a3863d50e6_b.jpg",
+      "source_sha256": "d662e84f405fa8aba1f69374e040dc1b99e881166cef8bcedc1f39f4d6683075",
+      "width": 1024,
+      "height": 768,
+      "near_far_pairs": [
+        {
+          "near": [
+            893,
+            50
+          ],
+          "far": [
+            879,
+            249
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            446,
+            625
+          ],
+          "far": [
+            501,
+            616
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            663,
+            379
+          ],
+          "far": [
+            714,
+            374
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_indoor_1",
+      "path": "../generated/depth/images-v2/v2_indoor_1.ppm",
+      "split": "final",
+      "sha256": "0d1bae798f8ca6ee1affaa5d6495abdce199f318dfea1f025524ac6a96935758",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/indoor/22679000473_b688bc939a_k.jpg",
+      "source_sha256": "1484e9ee4a6a7390c7f01fbf3bbd49f4fa09bb9e158708a8e7e56cf0994b8299",
+      "width": 2048,
+      "height": 934,
+      "near_far_pairs": [
+        {
+          "near": [
+            992,
+            394
+          ],
+          "far": [
+            160,
+            14
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            1045,
+            344
+          ],
+          "far": [
+            932,
+            303
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            1407,
+            296
+          ],
+          "far": [
+            1595,
+            252
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_non_real_0",
+      "path": "../generated/depth/images-v2/v2_non_real_0.ppm",
+      "split": "development",
+      "sha256": "20ebac45dd47f8e50e748c1e0455a5ff48310dc533235c9a36e5bcc3f71055f4",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/non_real/23861014616_70e6d24dba_h.jpg",
+      "source_sha256": "efa7ee9ba9fe5b172dbe894d93939f31e64cd9c6eaf3da0cb69bf72abdb5d3a7",
+      "width": 1419,
+      "height": 1105,
+      "near_far_pairs": [
+        {
+          "near": [
+            666,
+            950
+          ],
+          "far": [
+            889,
+            789
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_non_real_1",
+      "path": "../generated/depth/images-v2/v2_non_real_1.ppm",
+      "split": "final",
+      "sha256": "c7e0b59c2a87af57c9fa984e527ab1686711bd56fb08399cfa6be6291c9887b0",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/non_real/24851672805_4591d8bf8b_b.jpg",
+      "source_sha256": "04e131e2886a83ed6b322f43bac27dcc642fa3b9a86f8d99df54177a49644602",
+      "width": 1024,
+      "height": 727,
+      "near_far_pairs": [
+        {
+          "near": [
+            409,
+            496
+          ],
+          "far": [
+            639,
+            480
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_object_0",
+      "path": "../generated/depth/images-v2/v2_object_0.ppm",
+      "split": "development",
+      "sha256": "41d078fe02e1868704682c234e6def6373c795d8fa361ffd1d5cea1d3c195ade",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/object/17578060870_518975f399_k.jpg",
+      "source_sha256": "5df24ffe418a92d785d80133aa25e821dcee343c4ef35643857dee1c0c4151e9",
+      "width": 1920,
+      "height": 1080,
+      "near_far_pairs": [
+        {
+          "near": [
+            1074,
+            189
+          ],
+          "far": [
+            1009,
+            187
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_object_1",
+      "path": "../generated/depth/images-v2/v2_object_1.ppm",
+      "split": "final",
+      "sha256": "22c332cebcb3454c68c4dd4f430aeb3d76d59f618f9e5261d7fb2cbde57a3363",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/object/19810710865_42df884006_h.jpg",
+      "source_sha256": "815004729199616a8f5877abf00c9a09ef98957c83b6c824ef173033a37f9628",
+      "width": 1391,
+      "height": 1060,
+      "near_far_pairs": [
+        {
+          "near": [
+            503,
+            362
+          ],
+          "far": [
+            466,
+            307
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_outdoor_0",
+      "path": "../generated/depth/images-v2/v2_outdoor_0.ppm",
+      "split": "development",
+      "sha256": "31ec8bb288e27bf88b43632799ab8c68c07be61252fc213d78dc136930850f11",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/outdoor/26888198482_193f353b4e_h.jpg",
+      "source_sha256": "0718a5366635737808921e2970596ea66b3bf723e1829d2dfa41ca615a6c2967",
+      "width": 1600,
+      "height": 1094,
+      "near_far_pairs": [
+        {
+          "near": [
+            1102,
+            614
+          ],
+          "far": [
+            957,
+            596
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            476,
+            712
+          ],
+          "far": [
+            482,
+            638
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_outdoor_1",
+      "path": "../generated/depth/images-v2/v2_outdoor_1.ppm",
+      "split": "final",
+      "sha256": "93a680aa96fc21ec6e033f46e1a3486ed55f6239d8eea78162ef99937a7c86d0",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/outdoor/27078454935_5e4c608206_h.jpg",
+      "source_sha256": "d283bb54ddda9dc923043629a8bafb1cfb958d180b35fa1740a39eb24927ee37",
+      "width": 937,
+      "height": 1400,
+      "near_far_pairs": [
+        {
+          "near": [
+            278,
+            1071
+          ],
+          "far": [
+            73,
+            940
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            424,
+            65
+          ],
+          "far": [
+            570,
+            634
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            457,
+            924
+          ],
+          "far": [
+            243,
+            932
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_transparent_reflective_0",
+      "path": "../generated/depth/images-v2/v2_transparent_reflective_0.ppm",
+      "split": "development",
+      "sha256": "49cbeb39873af20db107befda01fa1e58506b4df134946b479c547a0ef10aa78",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/transparent_reflective/25722110617_462245f97e_k.jpg",
+      "source_sha256": "328d65bf1756a9ab7a09eb5d68ccebdc9cf174306cfa5fb70b55cd5073b2c885",
+      "width": 2047,
+      "height": 943,
+      "near_far_pairs": [
+        {
+          "near": [
+            772,
+            362
+          ],
+          "far": [
+            345,
+            163
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_transparent_reflective_1",
+      "path": "../generated/depth/images-v2/v2_transparent_reflective_1.ppm",
+      "split": "final",
+      "sha256": "e37c3f52f08e0d10f9cfebbc50515da60252cbc9e05430d8f93825fd1c99abb3",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/transparent_reflective/26998333024_801ca8acbd_b.jpg",
+      "source_sha256": "132c52dd6a0617ab63e3ca74978ea7a77e6b13b32b63f8f42262c0561d6f53cb",
+      "width": 678,
+      "height": 1023,
+      "near_far_pairs": [
+        {
+          "near": [
+            154,
+            598
+          ],
+          "far": [
+            116,
+            545
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_underwater_0",
+      "path": "../generated/depth/images-v2/v2_underwater_0.ppm",
+      "split": "development",
+      "sha256": "3ca62311d38fdb1f2578755917903381b769387698d6622e62403614e588bbb3",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/underwater/24261362868_614f0a19ff_h.jpg",
+      "source_sha256": "0527c3d553a8a012a20ed4519e8537cb4bd637d388cb9253f4f862f9ca1f8070",
+      "width": 1500,
+      "height": 1000,
+      "near_far_pairs": [
+        {
+          "near": [
+            843,
+            364
+          ],
+          "far": [
+            473,
+            232
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    },
+    {
+      "id": "v2_underwater_1",
+      "path": "../generated/depth/images-v2/v2_underwater_1.ppm",
+      "split": "final",
+      "sha256": "fe542a0f95f04c8a838365c6c05f3a971d27eec81abae0b59fb00b9be5a393dd",
+      "source": "DA-2K@528f83c26f02a6a7a11c5a036dfc9ee19907ebd9/images/underwater/25969429886_812094c0dd_b.jpg",
+      "source_sha256": "10dd4f66f3eec961162eadf56fe57c900f3a189bfdd4068f0b5a8292bdd1e8a9",
+      "width": 1024,
+      "height": 681,
+      "near_far_pairs": [
+        {
+          "near": [
+            556,
+            273
+          ],
+          "far": [
+            319,
+            259
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        },
+        {
+          "near": [
+            305,
+            434
+          ],
+          "far": [
+            371,
+            405
+          ],
+          "status": "valid",
+          "evidence": "DA-2K independent closer_point label"
+        }
+      ]
+    }
+  ]
+}

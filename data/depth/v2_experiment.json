@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "frozen_date": "2026-10-11",
+  "samples": "samples_v2.json",
+  "replay": "replay_v2.txt",
+  "basis": "V2.1 pilots at 20/40/80 requests per second, before candidate optimization",
+  "input": {"batch": 1, "static_sizes": [518, 392], "decode_in_measurement": false},
+  "load": {"normal_rps": 20, "saturation_probe_rps": 40, "overload_rps": 80, "warmup_seconds": 2, "short_seconds": 50, "repeats": 3, "soak_seconds_after_warmup": 1800},
+  "admission": {"queue_capacity": 4, "byte_budget": 134217728, "client_workers": 8, "client_max_outstanding": 8, "max_generator_lag_ms": 100, "gpu_slots": [1, 2]},
+  "normal_targets": {"sdk_p99_ms": 50, "replay_p99_ms": 55, "success_fraction_of_planned": 1.0, "allowed_failures": 0, "allowed_generator_misses": 0},
+  "quality": {"numerical_thresholds": {"fp32": "thresholds_trt_fp32.json", "fp16": "thresholds_trt_fp16.json"}, "within_size_max_ordering_drop": 0, "cross_size_max_new_pair_errors": 0, "final_selection_uses_development_only": true, "final_images_disjoint_from_v1": true},
+  "memory": {"rss_sampled_peak_budget_bytes": 2147483648, "application_device_allocation_budget_bytes": 2147483648, "ready_results_remain_reserved": true, "cuda_context_and_library_memory_reported_separately": true, "device_total_is_not_process_attribution": true},
+  "stability": {"unexpected_terminal_errors": 0, "known_leaks_or_cross_written_results": 0, "execution_inflight_after_drain": 0, "reservation_bytes_after_all_handles_consumed_or_abandoned": 0, "post_warmup_rss_growth_allowance_bytes": 67108864, "trend_windows_seconds": 60},
+  "interpretation": "Local experiment objectives, not hard real-time/production guarantees. Overload rejection is expected and counted; failed quality candidates are excluded without relaxing thresholds. If an optimized candidate is not saturated at 80 rps, add a separately labelled capacity-relative overload run."
+}

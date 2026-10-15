@@ -1,0 +1,23 @@
+{
+  "trace": {
+    "path": "data/generated/depth/v21_profile/timeline-fixed.nsys-rep",
+    "bytes": 1203144,
+    "sha256": "cb65e5823b23a88eda101f9d28e35e6fa42ff97e304041ba808c363a1b288a28"
+  },
+  "tool": "Nsight Systems 2026.5.1.161",
+  "activity": {
+    "CUPTI_ACTIVITY_KIND_KERNEL": {
+      "count": 12257,
+      "summed_duration_ms": 571.064408
+    },
+    "CUPTI_ACTIVITY_KIND_MEMCPY": {
+      "count": 129,
+      "summed_duration_ms": 28.573545
+    },
+    "CUPTI_ACTIVITY_KIND_RUNTIME": {
+      "count": 14750,
+      "summed_duration_ms": 896.897615
+    }
+  },
+  "scope": "Independent profile, includes startup and warmup; summed GPU durations are not end-to-end latency."
+}

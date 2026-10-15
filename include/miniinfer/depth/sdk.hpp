@@ -39,6 +39,16 @@ struct SdkSnapshot {
     std::string backend, precision;
 };
 
+// Optional per-call host timings. Read only after run returns/throws. Rejections
+// have accepted=false; zeros for stages that never ran are not GPU durations.
+struct DepthTiming {
+    bool accepted = false;
+    double admission_ms = 0, queue_ms = 0, preprocess_ms = 0;
+    double backend_ms = 0, postprocess_ms = 0;
+    // Actual successful baseline H2D transfer; zero for CPU or a failed backend.
+    std::size_t h2d_bytes = 0;
+};
+
 // Synchronous bounded admission, four backend workers by default. Concurrent run/shutdown
 // are supported while the caller keeps this object and each input alive.
 // Once admission succeeds, run owns an independent RGB copy. shutdown rejects
@@ -55,7 +65,7 @@ public:
     DepthSdk& operator=(const DepthSdk&) = delete;
     DepthSdk(DepthSdk&&) = delete;
     DepthSdk& operator=(DepthSdk&&) = delete;
-    DepthMap run(const RgbImage& image);
+    DepthMap run(const RgbImage& image, DepthTiming* timing = nullptr);
     const SdkConfig& config() const & noexcept;
     const SdkConfig& config() const && = delete;
     SdkSnapshot snapshot() const;

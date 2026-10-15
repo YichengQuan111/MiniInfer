@@ -1,0 +1,716 @@
+Start testing: Oct 15 19:38 +08
+----------------------------------------------------------
+3/36 Testing: depth_artifact_contract
+3/36 Test: depth_artifact_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_depth_artifact"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_artifact_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+artifact hash and manifest contract passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"depth_artifact_contract" end time: Oct 15 19:38 +08
+"depth_artifact_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/36 Testing: depth_image_contract
+1/36 Test: depth_image_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_depth_image"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_image_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+Depth image contract passed
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"depth_image_contract" end time: Oct 15 19:38 +08
+"depth_image_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/36 Testing: depth_ort_contract
+2/36 Test: depth_ort_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_depth_ort"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_ort_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+Depth ORT contract passed
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"depth_ort_contract" end time: Oct 15 19:38 +08
+"depth_ort_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/36 Testing: depth_net_contract
+6/36 Test: depth_net_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_depth_net"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_net_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+depth network contract passed
+<end of output>
+Test time =   0.19 sec
+----------------------------------------------------------
+Test Passed.
+"depth_net_contract" end time: Oct 15 19:38 +08
+"depth_net_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/36 Testing: depth_trt_artifact_contract
+4/36 Test: depth_trt_artifact_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_depth_trt"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_trt_artifact_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+TRT offline-artifact contract passed (GPU test not configured)
+<end of output>
+Test time =   0.57 sec
+----------------------------------------------------------
+Test Passed.
+"depth_trt_artifact_contract" end time: Oct 15 19:38 +08
+"depth_trt_artifact_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/36 Testing: depth_sdk_contract
+5/36 Test: depth_sdk_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_depth_sdk"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_sdk_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+Depth SDK contract passed
+<end of output>
+Test time =   0.57 sec
+----------------------------------------------------------
+Test Passed.
+"depth_sdk_contract" end time: Oct 15 19:38 +08
+"depth_sdk_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/36 Testing: depth_replay_statistics
+7/36 Test: depth_replay_statistics
+Command: "/usr/bin/python3" "-m" "unittest" "discover" "-s" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests" "-p" "test_depth_replay.py" "-v"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_replay_statistics" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_accepted_failure_and_generator_late_keep_denominator (test_depth_replay.ReplayTests.test_accepted_failure_and_generator_late_keep_denominator) ... ok
+test_all_rejections_and_empty_success_distribution (test_depth_replay.ReplayTests.test_all_rejections_and_empty_success_distribution) ... ok
+test_cli_bounds_and_image_list (test_depth_replay.ReplayTests.test_cli_bounds_and_image_list) ... ok
+test_full_denominator_success_percentile_and_window_throughput (test_depth_replay.ReplayTests.test_full_denominator_success_percentile_and_window_throughput) ... ok
+test_malformed_or_inconsistent_rows (test_depth_replay.ReplayTests.test_malformed_or_inconsistent_rows) ... ok
+test_protocol_rejects_bad_duplicate_missing_and_nonfinite (test_depth_replay.ReplayTests.test_protocol_rejects_bad_duplicate_missing_and_nonfinite) ... ok
+test_summary_counts_snapshots_and_bounds (test_depth_replay.ReplayTests.test_summary_counts_snapshots_and_bounds) ... ok
+test_warmup_success_does_not_enter_steady_throughput (test_depth_replay.ReplayTests.test_warmup_success_does_not_enter_steady_throughput) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.039s
+
+OK
+<end of output>
+Test time =   0.76 sec
+----------------------------------------------------------
+Test Passed.
+"depth_replay_statistics" end time: Oct 15 19:38 +08
+"depth_replay_statistics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/36 Testing: depth_metrics_contract
+9/36 Test: depth_metrics_contract
+Command: "/home/qyc/.venvs/miniinfer-depth/bin/python" "-m" "unittest" "discover" "-s" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests" "-p" "test_depth_metrics.py" "-v"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_metrics_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_empty_and_shape_mismatch_rejected (test_depth_metrics.NumericalMetricsTests.test_empty_and_shape_mismatch_rejected) ... ok
+test_exact_tolerance_boundary_and_reference_direction (test_depth_metrics.NumericalMetricsTests.test_exact_tolerance_boundary_and_reference_direction) ... ok
+test_float64_statistics_and_zero_error (test_depth_metrics.NumericalMetricsTests.test_float64_statistics_and_zero_error) ... ok
+test_hand_computed_errors_and_linear_quantile (test_depth_metrics.NumericalMetricsTests.test_hand_computed_errors_and_linear_quantile) ... ok
+test_invalid_tolerances_rejected (test_depth_metrics.NumericalMetricsTests.test_invalid_tolerances_rejected) ... ok
+test_no_affine_alignment (test_depth_metrics.NumericalMetricsTests.test_no_affine_alignment) ... ok
+test_nonfinite_in_either_tensor_rejected (test_depth_metrics.NumericalMetricsTests.test_nonfinite_in_either_tensor_rejected) ... ok
+test_nonreal_and_overflow_rejected (test_depth_metrics.NumericalMetricsTests.test_nonreal_and_overflow_rejected) ... ok
+test_direction_coordinates_ties_and_uncertain (test_depth_metrics.OrderingMetricsTests.test_direction_coordinates_ties_and_uncertain) ... ok
+test_duplicate_points_and_duplicate_annotations (test_depth_metrics.OrderingMetricsTests.test_duplicate_points_and_duplicate_annotations) ... ok
+test_invalid_coordinates_including_uncertain_rejected (test_depth_metrics.OrderingMetricsTests.test_invalid_coordinates_including_uncertain_rejected) ... ok
+test_invalid_schema_and_depth_rejected (test_depth_metrics.OrderingMetricsTests.test_invalid_schema_and_depth_rejected) ... ok
+test_numpy_integer_coordinates (test_depth_metrics.OrderingMetricsTests.test_numpy_integer_coordinates) ... ok
+test_unannotated_and_all_uncertain_are_null (test_depth_metrics.OrderingMetricsTests.test_unannotated_and_all_uncertain_are_null) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.007s
+
+OK
+<end of output>
+Test time =   0.52 sec
+----------------------------------------------------------
+Test Passed.
+"depth_metrics_contract" end time: Oct 15 19:38 +08
+"depth_metrics_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/36 Testing: depth_benchmark_statistics
+11/36 Test: depth_benchmark_statistics
+Command: "/home/qyc/.venvs/miniinfer-depth/bin/python" "-m" "unittest" "discover" "-s" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests" "-p" "test_depth_benchmark.py" "-v"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_benchmark_statistics" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_counts_first_and_elapsed_must_match (test_depth_benchmark.DepthBenchmarkTests.test_counts_first_and_elapsed_must_match) ... ok
+test_linear_percentiles_and_empty (test_depth_benchmark.DepthBenchmarkTests.test_linear_percentiles_and_empty) ... ok
+test_malformed_csv_rejected (test_depth_benchmark.DepthBenchmarkTests.test_malformed_csv_rejected) ... ok
+test_phase_boundaries_and_memory_scopes (test_depth_benchmark.DepthBenchmarkTests.test_phase_boundaries_and_memory_scopes) ... ok
+test_success_only_and_whole_steady_throughput (test_depth_benchmark.DepthBenchmarkTests.test_success_only_and_whole_steady_throughput) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.015s
+
+OK
+<end of output>
+Test time =   0.32 sec
+----------------------------------------------------------
+Test Passed.
+"depth_benchmark_statistics" end time: Oct 15 19:38 +08
+"depth_benchmark_statistics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/36 Testing: net_echo_contract
+13/36 Test: net_echo_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_net_echo"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"net_echo_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_net_echo passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"net_echo_contract" end time: Oct 15 19:38 +08
+"net_echo_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/36 Testing: depth_reference_contract
+8/36 Test: depth_reference_contract
+Command: "/home/qyc/.venvs/miniinfer-depth/bin/python" "-m" "unittest" "discover" "-s" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests" "-p" "test_depth_reference.py" "-v"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_reference_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_cli_refuses_existing_output_before_model_load (test_depth_reference.DepthArtifactTests.test_cli_refuses_existing_output_before_model_load) ... ok
+test_exact_rgb_byte_count (test_depth_reference.DepthArtifactTests.test_exact_rgb_byte_count) ... ok
+test_fp32_file_encoding_and_no_overwrite (test_depth_reference.DepthArtifactTests.test_fp32_file_encoding_and_no_overwrite) ... ok
+test_frozen_contract_matches_implemented_shape_and_limits (test_depth_reference.DepthArtifactTests.test_frozen_contract_matches_implemented_shape_and_limits) ... ok
+test_ppm_comments_crlf_and_raster_whitespace (test_depth_reference.DepthArtifactTests.test_ppm_comments_crlf_and_raster_whitespace) ... ok
+test_sample_manifest_validation_without_torch (test_depth_reference.DepthArtifactTests.test_sample_manifest_validation_without_torch) ... ok
+test_dimension_limits (test_depth_reference.DepthTransformTests.test_dimension_limits) ... ok
+test_half_pixel_clamp_hand_computed (test_depth_reference.DepthTransformTests.test_half_pixel_clamp_hand_computed) ... ok
+test_invalid_arrays_and_transform (test_depth_reference.DepthTransformTests.test_invalid_arrays_and_transform) ... ok
+test_no_per_image_normalization (test_depth_reference.DepthTransformTests.test_no_per_image_normalization) ... ok
+test_postprocess_crops_padding_before_restore (test_depth_reference.DepthTransformTests.test_postprocess_crops_padding_before_restore) ... ok
+test_preprocess_extreme_values_and_normalized_padding (test_depth_reference.DepthTransformTests.test_preprocess_extreme_values_and_normalized_padding) ... ok
+test_round_half_up_and_odd_padding (test_depth_reference.DepthTransformTests.test_round_half_up_and_odd_padding) ... ok
+test_singleton_axes_and_rgb_channels (test_depth_reference.DepthTransformTests.test_singleton_axes_and_rgb_channels) ... ok
+test_uint8_becomes_float_before_interpolation (test_depth_reference.DepthTransformTests.test_uint8_becomes_float_before_interpolation) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.472s
+
+OK
+<end of output>
+Test time =   1.15 sec
+----------------------------------------------------------
+Test Passed.
+"depth_reference_contract" end time: Oct 15 19:38 +08
+"depth_reference_contract" time elapsed: 00:00:01
+----------------------------------------------------------
+
+14/36 Testing: net_concurrency_contract
+14/36 Test: net_concurrency_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_net_server" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"net_concurrency_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+mixed clients: 40 reference requests across 4 reused connections
+gate overload: workers=1 queue=1 gives BUSY, same connection recovers
+connection bounds: active=1 waiting=1, extra refused and queued deadline enforced
+network concurrency tests passed
+<end of output>
+Test time =   0.31 sec
+----------------------------------------------------------
+Test Passed.
+"net_concurrency_contract" end time: Oct 15 19:38 +08
+"net_concurrency_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/36 Testing: net_io_contract
+16/36 Test: net_io_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_net_io"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"net_io_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_net_io passed
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"net_io_contract" end time: Oct 15 19:38 +08
+"net_io_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/36 Testing: net_protocol_contract
+17/36 Test: net_protocol_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_net_protocol"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"net_protocol_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+protocol: wire fixtures, bounded codecs, fragmented/concatenated frames, EOF and deadlines passed
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"net_protocol_contract" end time: Oct 15 19:38 +08
+"net_protocol_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/36 Testing: project_contract
+18/36 Test: project_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_project"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"project_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"project_contract" end time: Oct 15 19:38 +08
+"project_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/36 Testing: depth_concurrency_benchmark_statistics
+12/36 Test: depth_concurrency_benchmark_statistics
+Command: "/home/qyc/.venvs/miniinfer-depth/bin/python" "-m" "unittest" "discover" "-s" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests" "-p" "test_depth_concurrency_benchmark.py" "-v"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_concurrency_benchmark_statistics" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_caller_concurrency_does_not_change_worker_configuration (test_depth_concurrency_benchmark.ConcurrencyBenchmarkTests.test_caller_concurrency_does_not_change_worker_configuration) ... ok
+test_linear_percentiles (test_depth_concurrency_benchmark.ConcurrencyBenchmarkTests.test_linear_percentiles) ... ok
+test_malformed_rows_rejected (test_depth_concurrency_benchmark.ConcurrencyBenchmarkTests.test_malformed_rows_rejected) ... ok
+test_no_success_retains_rejects_and_null_percentiles (test_depth_concurrency_benchmark.ConcurrencyBenchmarkTests.test_no_success_retains_rejects_and_null_percentiles) ... ok
+test_output_is_exclusive (test_depth_concurrency_benchmark.ConcurrencyBenchmarkTests.test_output_is_exclusive) ... ok
+test_overlap_uses_whole_wall_and_success_only (test_depth_concurrency_benchmark.ConcurrencyBenchmarkTests.test_overlap_uses_whole_wall_and_success_only) ... ok
+test_repeats_report_ranges_not_combined_percentiles (test_depth_concurrency_benchmark.ConcurrencyBenchmarkTests.test_repeats_report_ranges_not_combined_percentiles) ... ok
+test_summary_inconsistencies_rejected (test_depth_concurrency_benchmark.ConcurrencyBenchmarkTests.test_summary_inconsistencies_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.014s
+
+OK
+<end of output>
+Test time =   0.58 sec
+----------------------------------------------------------
+Test Passed.
+"depth_concurrency_benchmark_statistics" end time: Oct 15 19:38 +08
+"depth_concurrency_benchmark_statistics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/36 Testing: buffer_contract
+20/36 Test: buffer_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_buffer"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"buffer_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_buffer: 8 test groups passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"buffer_contract" end time: Oct 15 19:38 +08
+"buffer_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/36 Testing: tensor_view_contract
+21/36 Test: tensor_view_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_tensor_view"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"tensor_view_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_tensor_view: 7 test groups passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"tensor_view_contract" end time: Oct 15 19:38 +08
+"tensor_view_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/36 Testing: model_contract
+22/36 Test: model_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_model" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"model_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_model: 6 test groups passed
+<end of output>
+Test time =   0.13 sec
+----------------------------------------------------------
+Test Passed.
+"model_contract" end time: Oct 15 19:38 +08
+"model_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/36 Testing: cpu_ops_contract
+23/36 Test: cpu_ops_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_cpu_ops"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"cpu_ops_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_cpu_ops: 7 test groups passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"cpu_ops_contract" end time: Oct 15 19:38 +08
+"cpu_ops_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/36 Testing: cli_contract
+19/36 Test: cli_contract
+Command: "/usr/bin/cmake" "-DCLI=/home/qyc/builds/MiniInfer/v2-upgrade/bin/infer_cli" "-DEXPECTED_VERSION=2.1.0" "-DREFERENCE=/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference" "-P" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_cli.cmake"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"cli_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.41 sec
+----------------------------------------------------------
+Test Passed.
+"cli_contract" end time: Oct 15 19:38 +08
+"cli_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/36 Testing: inference_contract
+24/36 Test: inference_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_inference" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"inference_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_inference: 3 groups passed; reference_batches=5; compared_samples=512; compared_logits=5120; max_abs_error=7.62939453e-06; max_relative_error_nonzero_reference=1.27173634e-05
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"inference_contract" end time: Oct 15 19:38 +08
+"inference_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/36 Testing: thread_pool_contract
+26/36 Test: thread_pool_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_thread_pool"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"thread_pool_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_thread_pool: 6 test groups passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"thread_pool_contract" end time: Oct 15 19:38 +08
+"thread_pool_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/36 Testing: net_shutdown_contract
+15/36 Test: net_shutdown_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_net_shutdown" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"net_shutdown_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+stop: idle, partial header and queued request exit without submission
+concurrent shutdown: one drain, executing and queued tasks both reply exactly once
+RST during accepted inference: executes once, failed reply reclaimed
+submission race: backend closes between session stop check and Runtime::run, status 3
+closed backend: PoolClosed maps to SHUTTING_DOWN and closes connection
+slow reader: real TCP queue prefilled to EAGAIN, batch256 reply times out
+12 start/connect/stop lifetimes restore fd and thread counts
+network shutdown tests passed
+<end of output>
+Test time =   1.03 sec
+----------------------------------------------------------
+Test Passed.
+"net_shutdown_contract" end time: Oct 15 19:38 +08
+"net_shutdown_contract" time elapsed: 00:00:01
+----------------------------------------------------------
+
+28/36 Testing: shutdown_contract
+28/36 Test: shutdown_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_shutdown" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"shutdown_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_shutdown: thread creation rollback, shutdown races, and Runtime future lifetimes passed
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"shutdown_contract" end time: Oct 15 19:38 +08
+"shutdown_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+29/36 Testing: timing_contract
+29/36 Test: timing_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_timing"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"timing_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+timing: accepted/rejected hooks; success/void exception stamps; recovery passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"timing_contract" end time: Oct 15 19:38 +08
+"timing_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/36 Testing: concurrency_contract
+27/36 Test: concurrency_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_concurrency" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"concurrency_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+  workers=1: producers=4, attempted=10587, accepted=167, QueueFull_rejected=10420, successful=166, task_errors=1, retained_batches=1/8/32/64/256, future_window<=8
+  workers=2: producers=4, attempted=9916, accepted=167, QueueFull_rejected=9749, successful=166, task_errors=1, retained_batches=1/8/32/64/256, future_window<=8
+  workers=4: producers=4, attempted=322, accepted=167, QueueFull_rejected=155, successful=166, task_errors=1, retained_batches=1/8/32/64/256, future_window<=8
+test_concurrency: 1/2/4 Worker configurations passed; 4 producers; mixed batches=1/8/32/64/256
+<end of output>
+Test time =   0.47 sec
+----------------------------------------------------------
+Test Passed.
+"concurrency_contract" end time: Oct 15 19:38 +08
+"concurrency_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/36 Testing: runtime_contract
+25/36 Test: runtime_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/test_runtime" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"runtime_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_runtime: 4 groups passed; workers=2; batch sizes=1,8
+<end of output>
+Test time =   0.57 sec
+----------------------------------------------------------
+Test Passed.
+"runtime_contract" end time: Oct 15 19:38 +08
+"runtime_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+30/36 Testing: runtime_demo_contract
+30/36 Test: runtime_demo_contract
+Command: "/home/qyc/builds/MiniInfer/v2-upgrade/bin/runtime_demo" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"runtime_demo_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+{"workers":2,"accepted":5,"successes":4,"task_failures":1,"closed_rejected":true,"retained_after_destruction":true,"batches":[1,8,32,1],"labels":[[5],[5,2,8,1,7,2,6,2],[5,2,8,1,7,2,6,2,6,5,0,5,9,3,4,4,2,4,9,9,6,3,8,1,2,5,6,0,3,4,6,7],[5]]}
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"runtime_demo_contract" end time: Oct 15 19:38 +08
+"runtime_demo_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/36 Testing: net_client_contract
+32/36 Test: net_client_contract
+Command: "/usr/bin/python3" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_net_client.py" "/home/qyc/builds/MiniInfer/v2-upgrade/bin" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"net_client_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+success passed
+busy then next request succeeds passed
+inference_failed then next request succeeds passed
+bad_request stops remaining requests passed
+shutting_down stops remaining requests passed
+wrong-id passed
+wrong-type passed
+bad-length passed
+nonfinite-logit passed
+half-eof passed
+clean EOF passed
+controlled read timeout passed
+successful warmup excluded passed
+failed warmup prevents formal requests passed
+connect failure accounting passed
+test_net_client passed
+<end of output>
+Test time =   0.29 sec
+----------------------------------------------------------
+Test Passed.
+"net_client_contract" end time: Oct 15 19:38 +08
+"net_client_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/36 Testing: net_cli_contract
+34/36 Test: net_cli_contract
+Command: "/usr/bin/python3" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_net_cli.py" "/home/qyc/builds/MiniInfer/v2-upgrade/bin"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"net_cli_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+Echo CLI: readiness, repeated connections, empty body and UTF-8 passed
+Echo frames: reuse, half-close, malformed headers, oversized bodies and repeated IDs passed
+<end of output>
+Test time =   0.15 sec
+----------------------------------------------------------
+Test Passed.
+"net_cli_contract" end time: Oct 15 19:38 +08
+"net_cli_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+33/36 Testing: net_inference_contract
+33/36 Test: net_inference_contract
+Command: "/usr/bin/python3" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_net_inference.py" "/home/qyc/builds/MiniInfer/v2-upgrade/bin" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"net_inference_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+Inference TCP: batches 1/8/32/64/256 match reference; reuse, load-once, errors, recovery and half-close passed
+SIGINT/SIGTERM: active idle and partial-frame connections stop before long read deadlines
+<end of output>
+Test time =   0.50 sec
+----------------------------------------------------------
+Test Passed.
+"net_inference_contract" end time: Oct 15 19:38 +08
+"net_inference_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/36 Testing: runtime_baseline_driver_contract
+35/36 Test: runtime_baseline_driver_contract
+Command: "/usr/bin/python3" "-m" "unittest" "discover" "-s" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests" "-p" "test_runtime_baseline.py" "-v"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"runtime_baseline_driver_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_accepts_rejections_without_assuming_all_iterations_were_accepted (test_runtime_baseline.RuntimeBaselineValidationTests.test_accepts_rejections_without_assuming_all_iterations_were_accepted) ... ok
+test_checksum_comparison_allows_different_rejection_counts (test_runtime_baseline.RuntimeBaselineValidationTests.test_checksum_comparison_allows_different_rejection_counts) ... ok
+test_default_run_plan_is_36_ordered_independent_processes (test_runtime_baseline.RuntimeBaselineValidationTests.test_default_run_plan_is_36_ordered_independent_processes) ... ok
+test_preserves_an_existing_output_file (test_runtime_baseline.RuntimeBaselineValidationTests.test_preserves_an_existing_output_file) ... usage: python3 -m unittest [-h] --cli CLI --reference REFERENCE --output
+                           OUTPUT [--iterations ITERATIONS] [--warmup WARMUP]
+                           [--repeats REPEATS] [--window WINDOW]
+                           [--queue-capacity QUEUE_CAPACITY]
+python3 -m unittest: error: output exists; choose a new output path
+ok
+test_rejects_fake_counter_relationships_from_mocked_cli (test_runtime_baseline.RuntimeBaselineValidationTests.test_rejects_fake_counter_relationships_from_mocked_cli) ... ok
+test_rejects_invalid_json_from_mocked_cli (test_runtime_baseline.RuntimeBaselineValidationTests.test_rejects_invalid_json_from_mocked_cli) ... ok
+test_rejects_non_finite_json_from_mocked_cli (test_runtime_baseline.RuntimeBaselineValidationTests.test_rejects_non_finite_json_from_mocked_cli) ... ok
+test_rejects_parameter_error_before_running_any_process (test_runtime_baseline.RuntimeBaselineValidationTests.test_rejects_parameter_error_before_running_any_process) ... usage: python3 -m unittest [-h] --cli CLI --reference REFERENCE --output
+                           OUTPUT [--iterations ITERATIONS] [--warmup WARMUP]
+                           [--repeats REPEATS] [--window WINDOW]
+                           [--queue-capacity QUEUE_CAPACITY]
+python3 -m unittest: error: iterations and repeats must be positive
+ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.034s
+
+OK
+Saved 36 independent-process measurements to /tmp/tmpvesv9p3t/report.json
+<end of output>
+Test time =   0.65 sec
+----------------------------------------------------------
+Test Passed.
+"runtime_baseline_driver_contract" end time: Oct 15 19:38 +08
+"runtime_baseline_driver_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/36 Testing: benchmark_cli_contract
+36/36 Test: benchmark_cli_contract
+Command: "/usr/bin/cmake" "-DCLI=/home/qyc/builds/MiniInfer/v2-upgrade/bin/benchmark_cli" "-DREFERENCE=/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference" "-P" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_benchmark_cli.cmake"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"benchmark_cli_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.57 sec
+----------------------------------------------------------
+Test Passed.
+"benchmark_cli_contract" end time: Oct 15 19:38 +08
+"benchmark_cli_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/36 Testing: net_baseline_driver_contract
+31/36 Test: net_baseline_driver_contract
+Command: "/usr/bin/python3" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests/test_tcp_baseline.py" "/home/qyc/builds/MiniInfer/v2-upgrade/bin" "/mnt/c/Users/ASUS/Documents/MiniInfer/data/reference"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"net_baseline_driver_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+TCP baseline driver: local/remote metrics, reference validation and overwrite protection passed
+<end of output>
+Test time =   1.65 sec
+----------------------------------------------------------
+Test Passed.
+"net_baseline_driver_contract" end time: Oct 15 19:38 +08
+"net_baseline_driver_contract" time elapsed: 00:00:01
+----------------------------------------------------------
+
+10/36 Testing: depth_validation_contract
+10/36 Test: depth_validation_contract
+Command: "/home/qyc/.venvs/miniinfer-depth/bin/python" "-m" "unittest" "discover" "-s" "/mnt/c/Users/ASUS/Documents/MiniInfer/tests" "-p" "test_depth_validation.py" "-v"
+Directory: /home/qyc/builds/MiniInfer/v2-upgrade
+"depth_validation_contract" start time: Oct 15 19:38 +08
+Output:
+----------------------------------------------------------
+test_changed_samples_manifest_is_rejected (test_depth_validation.BackendValidationTests.test_changed_samples_manifest_is_rejected) ... ok
+test_cli_failure_record_and_nonzero_main (test_depth_validation.BackendValidationTests.test_cli_failure_record_and_nonzero_main) ... ok
+test_corrupt_unselected_artifact_is_rejected_before_cli (test_depth_validation.BackendValidationTests.test_corrupt_unselected_artifact_is_rejected_before_cli) ... ok
+test_existing_output_refuses_overwrite (test_depth_validation.BackendValidationTests.test_existing_output_refuses_overwrite) ... ok
+test_invalid_cli_artifacts_never_pass (test_depth_validation.BackendValidationTests.test_invalid_cli_artifacts_never_pass) ... ok
+test_invalid_thresholds_are_recorded (test_depth_validation.BackendValidationTests.test_invalid_thresholds_are_recorded) ... ok
+test_numeric_regression_is_nonpassing_without_runtime_error (test_depth_validation.BackendValidationTests.test_numeric_regression_is_nonpassing_without_runtime_error) ... ok
+test_ordering_gate_with_permissive_numeric_limits (test_depth_validation.BackendValidationTests.test_ordering_gate_with_permissive_numeric_limits) ... ok
+test_parser_extra_arg_equals_form (test_depth_validation.BackendValidationTests.test_parser_extra_arg_equals_form) ... ok
+test_passed_layers_hashes_split_and_commands (test_depth_validation.BackendValidationTests.test_passed_layers_hashes_split_and_commands) ... ok
+test_postprocess_layer_catches_restore_error (test_depth_validation.BackendValidationTests.test_postprocess_layer_catches_restore_error) ... ok
+test_reserved_extra_argument_rejected (test_depth_validation.BackendValidationTests.test_reserved_extra_argument_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 10.812s
+
+OK
+{"report": "/tmp/tmpzp2tkbuz/output/report.json", "passed": false}
+<end of output>
+Test time =  11.36 sec
+----------------------------------------------------------
+Test Passed.
+"depth_validation_contract" end time: Oct 15 19:38 +08
+"depth_validation_contract" time elapsed: 00:00:11
+----------------------------------------------------------
+
+End testing: Oct 15 19:38 +08

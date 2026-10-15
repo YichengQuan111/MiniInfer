@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "frozen_date": "2026-10-15",
+  "scope": "V2.4 A CPU / B partial CUDA / C complete RGB8 CUDA; freeze before implementing and measuring C",
+  "reference": "CPU float32 division before half-pixel bilinear; centered zero RGB padding, then normalization; FP32 NCHW I/O",
+  "static_model_sizes": [518, 392],
+  "input_limits": {"max_side": 4096, "max_pixels": 2097152, "rgb8_capacity_bytes_per_slot": 6291456},
+  "preprocess_tolerance": {"atol": 0.000002, "rtol": 0.000001, "max_violation_fraction": 0.0, "finite_required": true},
+  "model_tolerance": {"fp32": "thresholds_trt_fp32.json", "fp16": "thresholds_trt_fp16.json", "max_new_ordering_errors": 0},
+  "measurement": {"entry": "decoded owning RGB8", "warmup_kernel_iterations": 20, "kernel_iterations": 200, "normal_rps": 20, "overload_rps": 80, "steady_seconds": 50, "independent_repeats": 3, "soak_seconds": 1800},
+  "selection": "Correctness and frozen quality gates first; compare SDK/replay P99, success and rejection, allocation and memory costs. C and two slots need not be faster. Hold the model/precision constant during A/B/C comparison.",
+  "resources": "Each slot owns its stream/events, context, FP32 I/O and mode-specific scratch/pinned buffers. RGB8 capacity follows original pixel limit. No steady-state cudaMalloc/cudaHostAlloc with buffer reuse enabled. Pending and ready results retain admission reservations until get or safe abandonment.",
+  "provenance": "2026-10-11 V2 samples and quality thresholds are reused as regression data, not claimed to be newly unseen holdouts. Historical timings remain separately labelled."
+}

@@ -20,7 +20,12 @@ def main():
     parser.add_argument("--archive", type=Path, required=True)
     parser.add_argument("--images", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--offset-per-scene", type=int, default=0,
+                        help="Skip this many eligible images per scene without reading predictions")
+    parser.add_argument("--id-prefix", default="")
     args = parser.parse_args()
+    if args.offset_per_scene < 0 or not all(c.isalnum() or c in "_-" for c in args.id_prefix):
+        parser.error("offset must be nonnegative and id-prefix must contain only letters/digits/_/-")
     if args.manifest.exists():
         parser.error("manifest exists; select a new output path")
     with args.archive.open("rb") as stream:
@@ -31,6 +36,7 @@ def main():
     args.manifest.parent.mkdir(parents=True, exist_ok=True)
     samples = []
     counts = defaultdict(int)
+    eligible = defaultdict(int)
     skipped = []
     with zipfile.ZipFile(args.archive) as archive:
         annotations_bytes = archive.read("DA-2K/annotations.json")
@@ -46,7 +52,10 @@ def main():
                     skipped.append({"source": path, "reason": "exceeds frozen image limits"})
                     continue
                 rgb = image.convert("RGB")
-                image_id = f"{scene}_{counts[scene]}"
+                eligible[scene] += 1
+                if eligible[scene] <= args.offset_per_scene:
+                    continue
+                image_id = f"{args.id_prefix}{scene}_{counts[scene]}"
                 target = args.images / f"{image_id}.ppm"
                 encoded = f"P6\n{width} {height}\n255\n".encode("ascii") + rgb.tobytes()
             if target.exists() and target.read_bytes() != encoded:
@@ -78,7 +87,7 @@ def main():
               "source": "https://huggingface.co/datasets/depth-anything/DA-2K",
               "source_revision": REVISION, "archive_sha256": actual,
               "annotation_sha256": hashlib.sha256(annotations_bytes).hexdigest(),
-              "selection": "lexicographic first 2 dimension-eligible images per scene; index 0 development, 1 final; no prediction-based filtering",
+              "selection": f"lexicographic 2 dimension-eligible images per scene after offset {args.offset_per_scene}; index 0 development, 1 final; no prediction-based filtering",
               "scope": "16-image smoke subset; not the official DA-2K benchmark score",
               "skipped": skipped, "samples": samples}
     args.manifest.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")

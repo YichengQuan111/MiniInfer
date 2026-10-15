@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-11T13:04:10.434835+00:00",
+  "split": "development",
+  "input_sha256": {},
+  "commands": [],
+  "samples": [],
+  "aggregate": {},
+  "errors": [
+    {
+      "type": "FileNotFoundError",
+      "message": "[Errno 2] No such file or directory: '/home/qyc/builds/MiniInfer/v22-verify/bin/depth_ort_cli'"
+    }
+  ],
+  "passed": false,
+  "model_size": 392,
+  "contract": "depth-v2-392"
+}

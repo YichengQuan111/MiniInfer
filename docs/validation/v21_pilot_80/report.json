@@ -1,0 +1,598 @@
+{
+  "schema": "miniinfer-depth-replay-report-v1",
+  "recorded_at": "2026-10-11T12:22:13.781227+00:00",
+  "case": {
+    "backend": "trt",
+    "duration": 10.0,
+    "warmup": 2.0,
+    "rate": 80.0,
+    "workers": 8,
+    "max_outstanding": 8,
+    "queue": 4,
+    "budget": 134217728,
+    "max_lag_ms": 100.0,
+    "repeats": 1,
+    "device": 0,
+    "process_timeout_seconds": 3600.0,
+    "environment_note": "AC battery status=2 charge=100%; Release; clocks not locked; background desktop not controlled; no profiler"
+  },
+  "identity": {
+    "executable": "/home/qyc/builds/MiniInfer/v21/bin/depth_replay",
+    "executable_sha256": "c95963f298d53bc297cd6f51156cdcc59712e66b7882575914ee9cbf437ddafa",
+    "package": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16",
+    "package_files": [
+      {
+        "path": "README.txt",
+        "bytes": 827,
+        "sha256": "e3e72f46f776eb380aa0e815334cb343a8d0e9b70717b83e95216b218614e575"
+      },
+      {
+        "path": "contract.json",
+        "bytes": 4817,
+        "sha256": "c82cab509da7a04dbae9f371ca8a4ebc0328b53a4be145eeb429d4f18aeaef18"
+      },
+      {
+        "path": "golden/metadata.json",
+        "bytes": 2222,
+        "sha256": "d6e1a24fdf5804e11d9287bf12a97696422e09b34f4b845cc37d34185be5a7a3"
+      },
+      {
+        "path": "golden/original.ppm",
+        "bytes": 2098192,
+        "sha256": "bda74c36df6dfa1efae08bb13bd8db14638e5410bfbcf1d8c8e68be01b93962e"
+      },
+      {
+        "path": "golden/preprocessed.f32",
+        "bytes": 3219888,
+        "sha256": "7dc95ee819282b7a5900fa1c513a0c91fbae376c9789fc43600732f30e508c2d"
+      },
+      {
+        "path": "golden/raw.f32",
+        "bytes": 1073296,
+        "sha256": "1b10420714caf52ef22b35c0dfc00653ee4bb38e995dc4be87747ed5ca68c6f6"
+      },
+      {
+        "path": "golden/restored.f32",
+        "bytes": 2797568,
+        "sha256": "597c5080c6976ad07aa78eff02536b120f8a7c971c6bb58a2339dd31da8d7fc8"
+      },
+      {
+        "path": "manifest.txt",
+        "bytes": 167,
+        "sha256": "c0c800907c3a2ddffc7e5ac237974ebfeaab7381fe0063349fd1d9274cd25556"
+      },
+      {
+        "path": "model.engine",
+        "bytes": 98029604,
+        "sha256": "d1ad5d6ec55508a1e679d48b964f4aee597a3455a50d541c898177039e314815"
+      },
+      {
+        "path": "model.engine.layers.json",
+        "bytes": 200797,
+        "sha256": "3888402a51d5d0b09248a9f8187c13b258d08795c2fd1c424e8ecae9f856c3bd"
+      },
+      {
+        "path": "model.engine.manifest",
+        "bytes": 629,
+        "sha256": "ef0286af02c99d757bc5b163965a41723cf4db955c2b95202abeb255e4b11b14"
+      },
+      {
+        "path": "model.onnx",
+        "bytes": 98941039,
+        "sha256": "a7d66386939681431d3b7c407b897d00cf205c44c607a33189eb4238bb7c9f80"
+      },
+      {
+        "path": "package.json",
+        "bytes": 3298,
+        "sha256": "04d701e5ecee1be7463f3451a6d32d4e74ba51760433ed6b2fb91f6028359ae4"
+      },
+      {
+        "path": "reference-manifest.json",
+        "bytes": 6308,
+        "sha256": "a5b7c38c348297e8d93a5e5e96ed348703ebabdb5634de633852e96a6fc4c6af"
+      },
+      {
+        "path": "samples.json",
+        "bytes": 27203,
+        "sha256": "ee0abd625ae4dcd0bca502b8b2a87914517a46977c8b64f02dda15c56c28ef97"
+      },
+      {
+        "path": "thresholds.json",
+        "bytes": 247,
+        "sha256": "d2ae7c67dd0c77ea843ed68003cc02344911f3be5449e036a6ab734afd52a553"
+      },
+      {
+        "path": "validation.json",
+        "bytes": 90158,
+        "sha256": "fd1ad115916f9781ff530788f00d622c812b6aea6068cb8ecc95896ee31fd0d5"
+      }
+    ],
+    "images": [
+      {
+        "path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_adverse_style_0.ppm",
+        "sha256": "d9a63b45a08decb95f0d03c3b9afc059b99db9edbd91b5f718f2e96268ba5943"
+      },
+      {
+        "path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_aerial_0.ppm",
+        "sha256": "37f844a626a7115915bd898b05ff08e31241b624b10f9181419b5ca06e5277e3"
+      },
+      {
+        "path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_indoor_0.ppm",
+        "sha256": "2265795bd4ccbe31f11c57541c5138b4cfdb70dcf84db991a0a9e295df958523"
+      },
+      {
+        "path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_non_real_0.ppm",
+        "sha256": "20ebac45dd47f8e50e748c1e0455a5ff48310dc533235c9a36e5bcc3f71055f4"
+      },
+      {
+        "path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_object_0.ppm",
+        "sha256": "41d078fe02e1868704682c234e6def6373c795d8fa361ffd1d5cea1d3c195ade"
+      },
+      {
+        "path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_outdoor_0.ppm",
+        "sha256": "31ec8bb288e27bf88b43632799ab8c68c07be61252fc213d78dc136930850f11"
+      },
+      {
+        "path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_transparent_reflective_0.ppm",
+        "sha256": "49cbeb39873af20db107befda01fa1e58506b4df134946b479c547a0ef10aa78"
+      },
+      {
+        "path": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_underwater_0.ppm",
+        "sha256": "3ca62311d38fdb1f2578755917903381b769387698d6622e62403614e588bbb3"
+      }
+    ],
+    "sequence_sha256": "99dfce886ccf1300a012a7d01fe0c224d5bf10e619e5fa39f2fe6bfd75224340"
+  },
+  "environment": {
+    "platform": [
+      "Linux",
+      "LAPTOP-CP2QFE51",
+      "6.18.40.1-microsoft-standard-WSL2",
+      "#1 SMP PREEMPT_DYNAMIC Fri Jul 31 22:12:15 UTC 2026",
+      "x86_64"
+    ],
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": null,
+      "OMP_NUM_THREADS": null,
+      "LD_LIBRARY_PATH": "/home/qyc/.venvs/miniinfer-depth/lib/python3.12/site-packages/tensorrt_libs:/home/qyc/.venvs/miniinfer-depth/lib/python3.12/site-packages/nvidia/cuda_runtime/lib:/home/qyc/.cache/miniinfer-depth/onnxruntime-linux-x64-1.21.0/lib"
+    },
+    "gpu": {
+      "command": [
+        "nvidia-smi"
+      ],
+      "returncode": 0,
+      "stdout": "Sun Oct 11 20:22:14 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 615.78.02              KMD Version: 617.14        CUDA UMD Version: 13.4     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA GeForce RTX 4080 ...    On  |   00000000:01:00.0 Off |                  N/A |\n| N/A   57C    P5             12W /  160W |     793MiB /  12282MiB |      5%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|  No running processes found                                                             |\n+-----------------------------------------------------------------------------------------+\n",
+      "stderr": ""
+    },
+    "git": {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "6bb8953b1a1f713aeca38de7f96dc6f3603baa72\n",
+      "stderr": ""
+    },
+    "git_status": {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "error": "Command '['git', 'status', '--porcelain']' timed out after 5 seconds"
+    },
+    "compiler": {
+      "command": [
+        "c++",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "stderr": ""
+    },
+    "cmake": {
+      "command": [
+        "cmake",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "cmake version 3.28.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+      "stderr": ""
+    }
+  },
+  "measurement": {
+    "schedule": "phase-relative index/rate; fixed image order, decoded before ready",
+    "unsubmitted": "explicit capacity or generator-late; lateness beyond max-lag or phase end never catches up silently",
+    "latency": "successful requests planned in phase, including drain; V1 observed ready immediately at run return while output is alive; delivered after output consumption/destruction",
+    "acceptance": "DepthTiming; backend/admission failure distinguished; absolute admission/dequeue not exposed",
+    "stages": "CPU wall; backend wall is not CUDA Event device compute time",
+    "throughput": "success ready in [0,duration) / full duration; drain count and time separate",
+    "success_rate": "all planned requests denominator; eventual and in-window rates separate",
+    "rss": "process VmRSS sampled about every 50ms; excludes sampler process",
+    "gpu": "device total, includes background load; target 200ms; unavailable fields null; temperatures and clocks included",
+    "sampling_phase": "stdout reception boundary, pipe/scheduling delay possible",
+    "bounds": "<=1M requests, <=1024 images, <=256MiB decoded; stream CSV/logs/telemetry; bounded numeric samples for exact linear percentiles",
+    "repeats": "independent SDK process each time; do not average P99"
+  },
+  "runs": [
+    {
+      "command": [
+        "/home/qyc/builds/MiniInfer/v21/bin/depth_replay",
+        "--package",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/trt-fp16",
+        "--backend",
+        "trt",
+        "--images-list",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/v21_pilot_80/sequence.txt",
+        "--output",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/v21_pilot_80/repeat_01/raw.csv",
+        "--duration",
+        "10.0",
+        "--warmup",
+        "2.0",
+        "--rate",
+        "80.0",
+        "--workers",
+        "8",
+        "--max-outstanding",
+        "8",
+        "--queue",
+        "4",
+        "--budget",
+        "134217728",
+        "--max-lag-ms",
+        "100.0"
+      ],
+      "pid": 1330,
+      "returncode": 0,
+      "ready": {
+        "process_to_ready_ms": 4024.3283410000004,
+        "event": {
+          "event": "ready",
+          "startup_ms": 4004.082384,
+          "decoded_image_bytes": 39688644,
+          "image_count": 8
+        }
+      },
+      "process_summary": {
+        "event": "summary",
+        "schema": "miniinfer-depth-replay-v1",
+        "rate": 80,
+        "max_lag_ms": 100,
+        "image_count": 8,
+        "warmup": {
+          "planned": 160,
+          "submitted": 160,
+          "counts": {
+            "busy": 81,
+            "closed": 0,
+            "failure": 0,
+            "invalid_input": 0,
+            "not_submitted_capacity": 0,
+            "not_submitted_late": 0,
+            "succeeded": 79,
+            "timeout": 0
+          },
+          "completed_in_window": 159,
+          "succeeded_in_window": 78,
+          "outstanding_at_window_end": 1,
+          "drain_completed": 1,
+          "peak_outstanding": 4,
+          "duration_ms": 2000,
+          "drain_ms": 27.260545999999977
+        },
+        "steady": {
+          "planned": 800,
+          "submitted": 800,
+          "counts": {
+            "busy": 400,
+            "closed": 0,
+            "failure": 0,
+            "invalid_input": 0,
+            "not_submitted_capacity": 0,
+            "not_submitted_late": 0,
+            "succeeded": 400,
+            "timeout": 0
+          },
+          "completed_in_window": 798,
+          "succeeded_in_window": 398,
+          "outstanding_at_window_end": 2,
+          "drain_completed": 2,
+          "peak_outstanding": 4,
+          "duration_ms": 10000,
+          "drain_ms": 37.80869300000086
+        },
+        "sdk_snapshot": {
+          "accepted": 479,
+          "succeeded": 479,
+          "failed": 0,
+          "delivered": 479,
+          "rejected_busy": 481,
+          "rejected_closed": 0,
+          "rejected_invalid": 0,
+          "inflight": 0,
+          "reserved_bytes": 0
+        }
+      },
+      "statistics": {
+        "warmup": {
+          "planned": 160,
+          "terminal_counts": {
+            "succeeded": 79,
+            "busy": 81,
+            "closed": 0,
+            "invalid_input": 0,
+            "failure": 0,
+            "timeout": 0,
+            "not_submitted_capacity": 0,
+            "not_submitted_late": 0
+          },
+          "submitted": 160,
+          "accepted": 79,
+          "rejected": 81,
+          "accepted_succeeded": 79,
+          "accepted_failed": 0,
+          "success_rate_of_planned": 0.49375,
+          "window_success_rate_of_planned": 0.4875,
+          "succeeded_in_window": 78,
+          "successful_throughput_per_second": 39.0,
+          "outstanding_at_window_end": 1,
+          "drain_completed": 1,
+          "drain_ms": 27.260545999999977,
+          "sdk_successful_latency": {
+            "samples": 79,
+            "p50_ms": 51.42433600000004,
+            "p95_ms": 70.30381509999998,
+            "p99_ms": 102.59260608
+          },
+          "replay_successful_latency": {
+            "samples": 79,
+            "p50_ms": 51.547109999999975,
+            "p95_ms": 70.47221959999999,
+            "p99_ms": 102.72959263999999
+          },
+          "delivery_successful_latency": {
+            "samples": 79,
+            "p50_ms": 0.002900000000181535,
+            "p95_ms": 0.16660629999994397,
+            "p99_ms": 0.19031260000004066
+          },
+          "generator_lag": {
+            "samples": 160,
+            "p50_ms": 0.06794199999998796,
+            "p95_ms": 0.16569480000002285,
+            "p99_ms": 0.27666683999993025
+          },
+          "successful_cpu_wall_stages": {
+            "admission_ms": {
+              "samples": 79,
+              "p50_ms": 0.52568,
+              "p95_ms": 2.3099439,
+              "p99_ms": 2.791469039999999
+            },
+            "queue_ms": {
+              "samples": 79,
+              "p50_ms": 25.722544,
+              "p95_ms": 40.794024299999975,
+              "p99_ms": 73.62891019999998
+            },
+            "preprocess_ms": {
+              "samples": 79,
+              "p50_ms": 10.327605,
+              "p95_ms": 12.732384399999999,
+              "p99_ms": 14.156822459999995
+            },
+            "backend_ms": {
+              "samples": 79,
+              "p50_ms": 11.793932,
+              "p95_ms": 12.3227063,
+              "p99_ms": 23.374354439999944
+            },
+            "postprocess_ms": {
+              "samples": 79,
+              "p50_ms": 2.945745,
+              "p95_ms": 5.029504899999997,
+              "p99_ms": 6.657657659999999
+            }
+          }
+        },
+        "steady": {
+          "planned": 800,
+          "terminal_counts": {
+            "succeeded": 400,
+            "busy": 400,
+            "closed": 0,
+            "invalid_input": 0,
+            "failure": 0,
+            "timeout": 0,
+            "not_submitted_capacity": 0,
+            "not_submitted_late": 0
+          },
+          "submitted": 800,
+          "accepted": 400,
+          "rejected": 400,
+          "accepted_succeeded": 400,
+          "accepted_failed": 0,
+          "success_rate_of_planned": 0.5,
+          "window_success_rate_of_planned": 0.4975,
+          "succeeded_in_window": 398,
+          "successful_throughput_per_second": 39.8,
+          "outstanding_at_window_end": 2,
+          "drain_completed": 2,
+          "drain_ms": 37.80869300000086,
+          "sdk_successful_latency": {
+            "samples": 400,
+            "p50_ms": 52.87045500000022,
+            "p95_ms": 71.26380829999998,
+            "p99_ms": 74.34097248999998
+          },
+          "replay_successful_latency": {
+            "samples": 400,
+            "p50_ms": 53.00752199999988,
+            "p95_ms": 71.3670696500003,
+            "p99_ms": 74.45775627999998
+          },
+          "delivery_successful_latency": {
+            "samples": 400,
+            "p50_ms": 0.002034000000207925,
+            "p95_ms": 0.06073469999992089,
+            "p99_ms": 0.2175111799999603
+          },
+          "generator_lag": {
+            "samples": 800,
+            "p50_ms": 0.07013200000005781,
+            "p95_ms": 0.1664481999999822,
+            "p99_ms": 0.23681797999965964
+          },
+          "successful_cpu_wall_stages": {
+            "admission_ms": {
+              "samples": 400,
+              "p50_ms": 0.485917,
+              "p95_ms": 0.78054365,
+              "p99_ms": 1.0872587799999998
+            },
+            "queue_ms": {
+              "samples": 400,
+              "p50_ms": 27.996941,
+              "p95_ms": 42.747229250000004,
+              "p99_ms": 46.41854401
+            },
+            "preprocess_ms": {
+              "samples": 400,
+              "p50_ms": 10.403599,
+              "p95_ms": 13.01926555,
+              "p99_ms": 15.023764079999998
+            },
+            "backend_ms": {
+              "samples": 400,
+              "p50_ms": 11.6839525,
+              "p95_ms": 12.3834946,
+              "p99_ms": 12.73838827
+            },
+            "postprocess_ms": {
+              "samples": 400,
+              "p50_ms": 2.9721114999999996,
+              "p95_ms": 4.94024845,
+              "p99_ms": 5.851190869999999
+            }
+          }
+        }
+      },
+      "memory_peaks": {
+        "replay:rss_kib:whole": {
+          "samples": 321,
+          "peak": 656608
+        },
+        "replay:rss_kib:startup": {
+          "samples": 80,
+          "peak": 486268
+        },
+        "gpu_device_0_total:used_mib:whole": {
+          "samples": 81,
+          "peak": 1221.0
+        },
+        "gpu_device_0_total:used_mib:startup": {
+          "samples": 20,
+          "peak": 757.0
+        },
+        "gpu_device_0_total:temperature_c:whole": {
+          "samples": 81,
+          "peak": 71.0
+        },
+        "gpu_device_0_total:temperature_c:startup": {
+          "samples": 20,
+          "peak": 56.0
+        },
+        "gpu_device_0_total:sm_clock_mhz:whole": {
+          "samples": 81,
+          "peak": 2430.0
+        },
+        "gpu_device_0_total:sm_clock_mhz:startup": {
+          "samples": 20,
+          "peak": 1140.0
+        },
+        "gpu_device_0_total:memory_clock_mhz:whole": {
+          "samples": 81,
+          "peak": 9001.0
+        },
+        "gpu_device_0_total:memory_clock_mhz:startup": {
+          "samples": 20,
+          "peak": 9001.0
+        },
+        "replay:rss_kib:warmup": {
+          "samples": 40,
+          "peak": 642684
+        },
+        "gpu_device_0_total:used_mib:warmup": {
+          "samples": 10,
+          "peak": 1201.0
+        },
+        "gpu_device_0_total:temperature_c:warmup": {
+          "samples": 10,
+          "peak": 63.0
+        },
+        "gpu_device_0_total:sm_clock_mhz:warmup": {
+          "samples": 10,
+          "peak": 2430.0
+        },
+        "gpu_device_0_total:memory_clock_mhz:warmup": {
+          "samples": 10,
+          "peak": 9001.0
+        },
+        "replay:rss_kib:drain": {
+          "samples": 2,
+          "peak": 653664
+        },
+        "gpu_device_0_total:used_mib:drain": {
+          "samples": 2,
+          "peak": 1197.0
+        },
+        "gpu_device_0_total:temperature_c:drain": {
+          "samples": 2,
+          "peak": 71.0
+        },
+        "gpu_device_0_total:sm_clock_mhz:drain": {
+          "samples": 2,
+          "peak": 2430.0
+        },
+        "gpu_device_0_total:memory_clock_mhz:drain": {
+          "samples": 2,
+          "peak": 9001.0
+        },
+        "replay:rss_kib:steady": {
+          "samples": 199,
+          "peak": 656608
+        },
+        "gpu_device_0_total:used_mib:steady": {
+          "samples": 49,
+          "peak": 1221.0
+        },
+        "gpu_device_0_total:temperature_c:steady": {
+          "samples": 49,
+          "peak": 71.0
+        },
+        "gpu_device_0_total:sm_clock_mhz:steady": {
+          "samples": 49,
+          "peak": 2430.0
+        },
+        "gpu_device_0_total:memory_clock_mhz:steady": {
+          "samples": 49,
+          "peak": 9001.0
+        },
+        "replay:rss_kib:teardown": {
+          "samples": 0,
+          "peak": null
+        }
+      },
+      "telemetry_errors": [],
+      "errors": [],
+      "stdout": "stdout.log",
+      "stderr": "stderr.log",
+      "memory_csv": "memory.csv",
+      "request_csv": "raw.csv"
+    }
+  ],
+  "all_runs_valid": true
+}

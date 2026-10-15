@@ -1,6 +1,6 @@
 # MiniInfer v0.1 架构与契约
 
-已实现架构记录：2026-10-11，包含 D16 原生 TCP 扩展。固定 CPU FP32 MLP `64→128→10`，C++17 / Linux；当前没有 GPU 后端。测试、基准和复现入口见 [README](../README.md) 与 [benchmark](benchmark.md)。
+本文主体为 2026-10-11 的 v0.1 / D16 历史架构快照：固定 CPU FP32 MLP `64→128→10`，C++17 / Linux；该快照没有 GPU 后端。下文主体中的“当前 / 未来”以此快照为范围；末节单列后续版本计划。实际进度、测试与复现入口以 [README](../README.md)及对应验收记录为准，历史基准见 [benchmark](benchmark.md)。
 
 ## 数据流与所有权
 
@@ -81,7 +81,10 @@ benchmark_cli 另记调用前、submit 返回和 get 取得结果时间。排队
 
 ## 后续版本的计划边界
 
-- V1 新增视觉输入/结果契约，先对齐本地 ORT / TensorRT，再复用 TCP 接入；连接线程与单 GPU 执行槽位分开。
-- V2 用单 I/O 线程 epoll LT 管理连接，拥有型结果经有界完成队列和 eventfd 返回；通过连接标识/代次识别断连后的迟到结果。事件循环不阻塞等待 future 或 GPU，GPU 并发另设有限槽位。
+- V1 以 Depth Anything V2 Small 为负载，新增 RGB / FP32 相对深度契约；完成 Python / ORT / TensorRT FP32 / FP16 精度对照，交付 C++ SDK、模型包、本地 / TCP 入口。单 GPU 槽位，稠密响应纳入数量与字节预算，engine 按目标环境构建与检查。
+- V2 P0 增加两种静态尺寸 / FP32 / FP16 取舍、可靠异步 SDK 与缓冲复用；按 1 / 2 槽位隔离上下文、Stream / Event、设备输入输出及 scratch，完整 GPU 路径另有每槽独立且有界的原图 RGB8 上传缓冲与所需 Pinned Memory，按原图上限及槽位数预算，不能按模型输入尺寸估算。有界 FIFO 规定出队顺序，完成可乱序并按 request_id 关联；H2D → GPU 预处理 → TensorRT → D2H → CPU 后处理遵守依赖，同 Stream 或 Event 衔接；结果进入独立拥有的存储后交付，异步使用安全结束后才复用或释放槽位资源。
+- V2.4 P0 必须实现、集成并验收完整 GPU 预处理：上传已解码 RGB8，由 GPU 完成除以 255、双线性 resize、padding、通道归一化及 HWC→NCHW，直接写入同槽位 TRT 输入，避免重复上传。CPU 保留校验、入口需要时的解码、几何元数据、调度与结果后处理；数值与几何契约沿用 CPU 参考，现有混合 FP16 engine 仍为 FP32 I/O。保留 A（完整 CPU）、B（CPU 除以 255 / resize / padding，GPU 归一化 / 布局）、C（完整 GPU）三路径对照，以全模型正确性、微基准、端到端和 Profiler 验收，并覆盖资源上限、过载与长稳。默认部署按实测选择，不要求 C 更快；B / C 尚未实施，未实现 C 不能标记 V2.4 完成。
+- INT8 PTQ、实时帧策略、独立 LayerNorm / GEMM、TensorRT Plugin、epoll / eventfd 与 ROS2 等为 P1。量化若选做需验证真实 INT8 覆盖；实时帧若选做需明确淘汰 / 超期终态、结果年龄及发布顺序，不改变默认可靠请求语义。
+- 当前只有电脑和 NVIDIA GPU，真实端侧适配单列 E1；P1 / E1 均不阻塞 P0。若实施 P1 epoll，仍要求 I/O 不等待 GPU / future、有界完成队列、连接代次和安全关闭。
 
-协议与网络验收见 [D16 计划与记录](D16_TCP_网络编程学习扩展.md)，视觉服务与事件循环的后续任务见 [V1 / V2 策略](MiniInfer_V1_V2_求职改进策略.md)。
+协议与网络验收见 [D16 计划与记录](D16_TCP_网络编程学习扩展.md)，主题“MiniInfer：C++ 视觉模型部署与推理性能优化”的部署组件、异步资源管理和性能实验见 [V1 / V2 计划](MiniInfer_V1_V2_求职改进策略.md)。本节按该计划 2026-10-15 的 S3.3 / S3.4 / O V2.4 修订同步；计划不代表已实现成果，实际完成状态见 README。

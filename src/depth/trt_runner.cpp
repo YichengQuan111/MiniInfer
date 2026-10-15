@@ -1,4 +1,5 @@
 #include "miniinfer/depth/trt_runner.hpp"
+#include "miniinfer/depth/profile.hpp"
 #include <NvInfer.h>
 #include <NvOnnxParser.h>
 #include <cuda_runtime_api.h>
@@ -238,6 +239,7 @@ TrtRunner::TrtRunner(const std::filesystem::path& path,int device) {
 TrtRunner::~TrtRunner()=default;
 const Manifest& TrtRunner::manifest() const noexcept { return impl_->metadata; }
 RawDepth TrtRunner::run_raw(const PreparedImage& prepared,TrtTiming* timing) {
+    ProfileRange profile("depth.trt.h2d_execute_d2h");
     const auto host_start=std::chrono::steady_clock::now();
     validate_geometry(prepared.transform());
     if(prepared.values().size()!=input_elements) throw std::invalid_argument("prepared input size mismatch");

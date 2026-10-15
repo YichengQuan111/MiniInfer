@@ -1,0 +1,21 @@
+["/home/qyc/builds/MiniInfer/v22/bin/depth_engine_builder", "--onnx", "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-export-392/depth_anything_v2_vits_392.onnx", "--output", "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22/engines/392-fp32.engine", "--precision", "fp32"]
+build_seconds=15.229349
+cache_key=ccde369e502710dc07534d75179ab5477a9425cb2d5b54d9fb83e06fdbe7aff8
+compute_capability=8.9
+contract=depth-v2-392
+cuda_driver=13040
+cuda_runtime=12040
+engine_sha256=df2a83bc3afca83f33bb0352f478205218275c74752ba98928b2bf81d30146ce
+fp32_constrained_layers=0
+gpu=NVIDIA GeForce RTX 4080 Laptop GPU
+input=1x3x392x392-fp32
+onnx_sha256=cebb46efdf0e54d65cc04fb5fc17c1ecd74ac5a00aaad6dfd730424007fe31a5
+output=1x392x392-fp32
+platform=Linux-x86_64
+precision=fp32
+precision_policy=fp32-v1
+schema=miniinfer-engine-1
+tensorrt=100800
+tensorrt_headers=100800
+tf32=off
+workspace_bytes=1073741824

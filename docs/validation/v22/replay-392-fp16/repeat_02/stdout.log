@@ -1,0 +1,6 @@
+{"event":"ready","startup_ms":4147.4297509999997,"decoded_image_bytes":39688644,"image_count":8}
+{"event":"phase","phase":"warmup"}
+{"event":"phase","phase":"drain","source":"warmup"}
+{"event":"phase","phase":"steady"}
+{"event":"phase","phase":"drain","source":"steady"}
+{"event":"summary","schema":"miniinfer-depth-replay-v1","rate":20,"max_lag_ms":100,"image_count":8,"warmup":{"planned":40,"submitted":40,"counts":{"busy":0,"closed":0,"failure":0,"invalid_input":0,"not_submitted_capacity":0,"not_submitted_late":0,"succeeded":40,"timeout":0},"completed_in_window":40,"succeeded_in_window":40,"outstanding_at_window_end":0,"drain_completed":0,"peak_outstanding":2,"duration_ms":2000,"drain_ms":0.37551800000005642},"steady":{"planned":1000,"submitted":1000,"counts":{"busy":0,"closed":0,"failure":0,"invalid_input":0,"not_submitted_capacity":0,"not_submitted_late":0,"succeeded":1000,"timeout":0},"completed_in_window":1000,"succeeded_in_window":1000,"outstanding_at_window_end":0,"drain_completed":0,"peak_outstanding":1,"duration_ms":50000,"drain_ms":0.5318939999997383},"sdk_snapshot":{"accepted":1040,"succeeded":1040,"failed":0,"delivered":1040,"rejected_busy":0,"rejected_closed":0,"rejected_invalid":0,"inflight":0,"reserved_bytes":0}}

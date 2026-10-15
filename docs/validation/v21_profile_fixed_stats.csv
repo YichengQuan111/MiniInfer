@@ -1,0 +1,293 @@
+Generating SQLite file data/generated/depth/v21_profile/timeline-fixed.sqlite from data/generated/depth/v21_profile/timeline-fixed.nsys-rep
+Processing [data/generated/depth/v21_profile/timeline-fixed.sqlite] with [/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2026.5.1.161/opt/nvidia/nsight-systems-cli/2026.5.1/target-linux-x64/reports/nvtx_sum.py]... 
+Time (%),Total Time (ns),Instances,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Style,Range
+32.3,1658268430,60,27637807.2,24838274.0,16894741,115770442,15233963.0,PushPop,:depth.run
+28.8,1476034010,60,24600566.8,23063690.5,16518602,113749761,12096750.1,PushPop,:depth.execute
+15.0,770736596,60,12845609.9,11452650.5,11024902,95050339,10795468.7,PushPop,:depth.trt.h2d_execute_d2h
+9.9,506655484,60,8444258.1,8219480.0,3325855,19723605,2695478.1,PushPop,:depth.preprocess.cpu
+3.8,197149573,60,3285826.2,1645427.0,1382069,93792019,11885910.0,PushPop,TensorRT:ExecutionContext::enqueue
+3.3,168711442,60,2811857.4,2877337.5,1317255,5877984,746944.0,PushPop,:depth.postprocess.cpu
+1.4,72077785,60,1201296.4,1126549.5,884478,1942030,237381.7,PushPop,TensorRT:{ForeignNode[pretrained.blocks.0.norm1.weight + ONNXTRT_Broadcast_44.../depth_head/Transpose_3 + /depth_head/Reshape_3]}
+1.4,69830062,60,1163834.4,1085551.0,850920,1886911,232636.8,StartEnd,myelin-exec:myelinGraphExecute 
+1.2,61510262,60,1025171.0,62747.5,52586,57522058,7417345.8,PushPop,TensorRT:/patch_embed/proj/Conv
+0.4,18150939,60,302515.7,16314.5,11904,17089393,2203914.5,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to {ForeignNode[pretrained.blocks.0.norm1.weight + ONNXTRT_Broadcast_44.../depth_head/Transpose_3 + /depth_head/Reshape_3]}
+0.3,14246767,1,14246767.0,14246767.0,14246767,14246767,0.0,StartEnd,:myelinGraphDeserializeBinary
+0.2,11637702,1,11637702.0,11637702.0,11637702,11637702,0.0,StartEnd,myelin-exec:myelinGraphLoadPersistent
+0.2,9221668,60,153694.5,13732.0,10939,8380419,1080069.6,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to /depth_head/projects.0/Conv
+0.1,5920997,60,98683.3,31331.0,26881,3924229,502282.1,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to /depth_head/output_conv2/output_conv2.2/Conv + /depth_head/output_conv2/output_conv2.3/Relu + /Relu
+0.0,1516458,60,25274.3,22034.0,17184,92545,10351.6,PushPop,myelin-exec:/blocks_0/attn/qkv/MatMul_myl2_3
+0.0,1501749,60,25029.2,23675.5,18424,37442,4106.4,PushPop,TensorRT:/depth_head/layer1_rn/Conv + PWN(/depth_head/refinenet1/resConfUnit1/activation/Relu)
+0.0,1494369,60,24906.2,22358.5,16582,63327,9014.9,PushPop,myelin-exec:/blocks_0/mlp/fc2/MatMul_myl2_13
+0.0,1186540,60,19775.7,6627.5,4317,779486,99754.8,PushPop,myelin-exec:/blocks_3/attn/MatMul_1_myl2_46
+0.0,992938,60,16549.0,15548.0,12422,35568,3667.5,PushPop,TensorRT:/depth_head/layer2_rn/Conv + PWN(/depth_head/refinenet2/resConfUnit1/activation/Relu)
+0.0,872136,60,14535.6,11998.0,7401,114750,13927.5,PushPop,myelin-exec:/blocks_1/mlp/fc2/MatMul_myl2_25
+0.0,794936,60,13248.9,12744.5,8281,36076,3826.8,PushPop,TensorRT:/depth_head/refinenet2/out_conv/Conv + /depth_head/refinenet1/Add + PWN(/depth_head/refinenet1/resConfUnit2/activation/Relu)
+0.0,794312,60,13238.5,12201.0,9650,34654,3936.0,PushPop,TensorRT:/depth_head/resize_layers.0/ConvTranspose
+0.0,790980,60,13183.0,12188.5,9102,39914,4426.8,PushPop,TensorRT:/depth_head/projects.0/Conv
+0.0,790265,60,13171.1,11675.5,9455,34660,4246.6,PushPop,myelin-exec:__myl_TraCas_myl2_1
+0.0,752784,60,12546.4,10731.0,7804,69728,8468.3,PushPop,myelin-exec:/blocks_0/attn/MatMul_1_myl2_8
+0.0,745855,60,12430.9,10611.5,5463,98725,11724.3,PushPop,myelin-exec:/blocks_6/mlp/fc2/MatMul_myl2_89
+0.0,729915,60,12165.3,11335.0,6153,30110,3847.5,PushPop,myelin-exec:/blocks_8/mlp/fc2/MatMul_myl2_113
+0.0,725781,60,12096.4,11275.0,6740,24011,3499.3,PushPop,myelin-exec:/blocks_11/mlp/fc2/MatMul_myl2_151
+0.0,714935,60,11915.6,10967.5,6287,36327,4762.3,PushPop,myelin-exec:/blocks_3/mlp/fc2/MatMul_myl2_51
+0.0,700691,60,11678.2,10560.5,6707,45252,6003.0,PushPop,myelin-exec:/blocks_2/mlp/fc2/MatMul_myl2_37
+0.0,694577,60,11576.3,10531.0,7654,22863,3369.4,PushPop,TensorRT:/depth_head/refinenet2/resConfUnit1/conv1/Conv + /depth_head/refinenet2/resConfUnit1/activation_1/Relu
+0.0,676580,60,11276.3,10756.5,6283,21318,3115.9,PushPop,myelin-exec:/blocks_5/mlp/fc2/MatMul_myl2_75
+0.0,675349,60,11255.8,10714.0,6419,22143,3150.8,PushPop,myelin-exec:/blocks_10/mlp/fc2/MatMul_myl2_139
+0.0,672209,60,11203.5,10034.0,7747,23065,3323.1,StartEnd,myelin-exec:myelinGraphLoad
+0.0,659882,60,10998.0,11029.5,5941,32663,3903.5,PushPop,myelin-exec:/blocks_4/mlp/fc2/MatMul_myl2_63
+0.0,658010,1,658010.0,658010.0,658010,658010,0.0,StartEnd,myelin-exec:myelinGraphUnloadPersistent
+0.0,655767,60,10929.5,10702.5,6073,18244,2430.5,PushPop,myelin-exec:/blocks_9/mlp/fc2/MatMul_myl2_127
+0.0,630800,60,10513.3,10474.0,5814,23761,2891.8,PushPop,myelin-exec:/blocks_7/mlp/fc2/MatMul_myl2_101
+0.0,628087,60,10468.1,9328.5,6709,53753,5882.4,PushPop,TensorRT:/depth_head/projects.1/Conv
+0.0,599734,60,9995.6,8837.0,5759,32907,4137.3,PushPop,TensorRT:/depth_head/refinenet1/resConfUnit1/conv1/Conv + /depth_head/refinenet1/resConfUnit1/activation_1/Relu
+0.0,592654,60,9877.6,8275.0,4992,76073,9429.6,PushPop,myelin-exec:/blocks_0/attn/proj/MatMul_myl2_9
+0.0,588631,60,9810.5,8900.0,5746,21856,3630.3,PushPop,myelin-exec:/blocks_0/attn/MatMul_myl2_6
+0.0,572845,60,9547.4,7077.0,4437,116471,14303.2,PushPop,TensorRT:/depth_head/refinenet3/resConfUnit1/conv2/Conv + /depth_head/refinenet3/resConfUnit1/Add
+0.0,559694,60,9328.2,8938.5,5134,21333,2743.7,PushPop,TensorRT:/depth_head/projects.2/Conv
+0.0,554519,60,9242.0,8187.0,5740,56633,6383.5,PushPop,TensorRT:/depth_head/output_conv2/output_conv2.2/Conv + /depth_head/output_conv2/output_conv2.3/Relu + /Relu
+0.0,554142,60,9235.7,8057.5,5151,57315,6533.4,PushPop,TensorRT:/depth_head/refinenet3/out_conv/Conv + /depth_head/refinenet2/Add
+0.0,550190,60,9169.8,8393.0,5496,21953,3030.7,PushPop,TensorRT:/depth_head/refinenet4/Resize
+0.0,546267,60,9104.5,7286.5,4726,69567,8786.7,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_7
+0.0,536061,60,8934.4,8359.0,5787,25385,2979.5,PushPop,TensorRT:/depth_head/refinenet2/resConfUnit1/conv2/Conv + /depth_head/refinenet2/resConfUnit1/Add
+0.0,533375,60,8889.6,8675.5,5286,20740,2168.1,PushPop,TensorRT:/depth_head/layer3_rn/Conv
+0.0,530771,60,8846.2,6424.0,3922,122602,15191.7,PushPop,myelin-exec:/blocks_1/mlp/fc1/MatMul_myl2_23
+0.0,528315,60,8805.3,8078.0,4942,21911,3272.5,PushPop,TensorRT:/depth_head/output_conv1/Conv
+0.0,528225,60,8803.8,7240.5,4644,41594,5607.0,PushPop,myelin-exec:/blocks_7/attn/qkv/MatMul_myl2_91
+0.0,527901,60,8798.4,7909.0,5150,22923,3821.7,PushPop,myelin-exec:__myl_ConAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_2
+0.0,525910,60,8765.2,7462.0,4041,23338,4138.9,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_10
+0.0,504372,60,8406.2,8016.5,5378,25291,2643.9,PushPop,TensorRT:/depth_head/resize_layers.3/Conv
+0.0,503319,60,8388.6,7829.0,5106,20222,2388.4,PushPop,TensorRT:/depth_head/projects.3/Conv
+0.0,498889,60,8314.8,7248.0,4510,19777,3421.1,PushPop,myelin-exec:/blocks_1/attn/qkv/MatMul_myl2_15
+0.0,490398,60,8173.3,7538.0,5083,22802,2951.5,PushPop,TensorRT:PWN(/depth_head/refinenet3/resConfUnit1/activation/Relu)
+0.0,486856,60,8114.3,7305.0,4156,19848,3087.3,PushPop,myelin-exec:/blocks_4/attn/qkv/MatMul_myl2_53
+0.0,484416,60,8073.6,7769.5,4980,18389,1846.4,PushPop,TensorRT:/depth_head/resize_layers.1/ConvTranspose
+0.0,482008,60,8033.5,6822.5,4007,58137,6950.0,PushPop,TensorRT:/depth_head/refinenet1/resConfUnit1/conv2/Conv + /depth_head/refinenet1/resConfUnit1/Add
+0.0,481316,60,8021.9,7510.5,5170,22611,2629.7,PushPop,TensorRT:/depth_head/refinenet1/out_conv/Conv
+0.0,478548,60,7975.8,7901.5,5211,11522,1488.8,PushPop,TensorRT:/depth_head/output_conv2/output_conv2.0/Conv + /depth_head/output_conv2/output_conv2.1/Relu
+0.0,477726,60,7962.1,7840.0,5632,11417,1275.4,PushPop,TensorRT:/depth_head/refinenet4/out_conv/Conv + /depth_head/refinenet3/Add
+0.0,468882,60,7814.7,7836.0,5107,11341,1434.2,PushPop,TensorRT:/depth_head/refinenet4/resConfUnit2/conv2/Conv + /depth_head/refinenet4/resConfUnit2/Add
+0.0,464956,60,7749.3,6947.0,5097,26806,3205.4,PushPop,myelin-exec:/blocks_3/attn/proj/MatMul_myl2_47
+0.0,463684,60,7728.1,6996.5,4280,23457,3214.3,PushPop,myelin-exec:/blocks_1/attn/MatMul_myl2_18
+0.0,461856,60,7697.6,7069.5,4060,20038,2785.9,PushPop,myelin-exec:/blocks_2/attn/MatMul_1_myl2_32
+0.0,459941,60,7665.7,6694.0,4005,23756,3427.2,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_16
+0.0,454637,60,7577.3,6918.5,3850,23605,3392.7,PushPop,myelin-exec:/blocks_4/attn/MatMul_myl2_56
+0.0,454124,60,7568.7,6565.5,4127,28307,3821.8,PushPop,myelin-exec:/blocks_11/attn/MatMul_myl2_144
+0.0,453501,60,7558.4,7135.0,4184,19542,2251.5,PushPop,myelin-exec:/blocks_8/attn/MatMul_myl2_106
+0.0,452225,60,7537.1,6959.5,3933,19907,2910.9,PushPop,myelin-exec:__myl_AddSqrDivMulMulAddSliMulAdd_myl2_39
+0.0,451385,60,7523.1,6771.5,4050,38256,4500.7,PushPop,myelin-exec:/blocks_10/attn/qkv/MatMul_myl2_129
+0.0,451154,60,7519.2,7241.5,4378,19402,2149.9,PushPop,TensorRT:/depth_head/refinenet2/resConfUnit2/conv2/Conv + /depth_head/refinenet2/resConfUnit2/Add
+0.0,450601,60,7510.0,6886.5,4118,19152,3020.2,PushPop,myelin-exec:/blocks_7/attn/MatMul_myl2_94
+0.0,448665,60,7477.8,6944.5,4091,20937,2560.0,PushPop,myelin-exec:/blocks_2/attn/qkv/MatMul_myl2_27
+0.0,445719,60,7428.6,7211.0,3943,18387,2262.6,PushPop,myelin-exec:/blocks_6/attn/MatMul_1_myl2_84
+0.0,444228,60,7403.8,6861.5,4087,18602,2268.0,PushPop,myelin-exec:/blocks_8/attn/MatMul_1_myl2_108
+0.0,442619,60,7377.0,6370.0,3683,37497,5143.3,PushPop,myelin-exec:/blocks_6/attn/proj/MatMul_myl2_85
+0.0,440305,60,7338.4,6773.0,3993,18849,2547.9,PushPop,myelin-exec:/blocks_10/attn/MatMul_1_myl2_134
+0.0,440126,60,7335.4,6846.5,4660,20447,2537.6,PushPop,TensorRT:/depth_head/refinenet2/resConfUnit2/conv1/Conv + /depth_head/refinenet2/resConfUnit2/activation_1/Relu
+0.0,439664,60,7327.7,6772.5,3843,28820,3427.3,PushPop,myelin-exec:/blocks_8/attn/qkv/MatMul_myl2_103
+0.0,437649,60,7294.1,6820.0,4471,19386,2317.2,PushPop,myelin-exec:/blocks_3/attn/qkv/MatMul_myl2_41
+0.0,435939,60,7265.6,6836.0,4215,12765,1687.6,PushPop,myelin-exec:/blocks_9/attn/qkv/MatMul_myl2_117
+0.0,435639,60,7260.6,5214.0,2956,119330,14811.8,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_22
+0.0,435033,60,7250.6,6829.5,4071,18730,2718.1,PushPop,myelin-exec:/blocks_5/attn/qkv/MatMul_myl2_65
+0.0,434432,60,7240.5,6896.5,4391,13967,1755.2,PushPop,myelin-exec:/blocks_11/attn/qkv/MatMul_myl2_141
+0.0,433578,60,7226.3,6919.0,4600,17817,1985.4,PushPop,TensorRT:PWN(/depth_head/refinenet4/resConfUnit2/activation/Relu)
+0.0,433483,60,7224.7,6581.0,3877,22684,2931.6,PushPop,myelin-exec:/blocks_9/mlp/fc1/MatMul_myl2_125
+0.0,433178,60,7219.6,6668.5,4026,29133,3485.0,PushPop,myelin-exec:/blocks_11/attn/MatMul_1_myl2_146
+0.0,432718,60,7212.0,6833.5,4287,20662,2513.6,PushPop,TensorRT:PWN(/depth_head/refinenet2/resConfUnit2/activation/Relu)
+0.0,431515,60,7191.9,6925.5,4306,10826,1556.7,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to /depth_head/projects.1/Conv
+0.0,431202,60,7186.7,6853.0,3914,17794,1955.8,PushPop,TensorRT:/depth_head/refinenet3/resConfUnit2/conv1/Conv + /depth_head/refinenet3/resConfUnit2/activation_1/Relu
+0.0,430738,60,7179.0,6413.5,3743,31437,3975.8,PushPop,myelin-exec:/blocks_2/attn/MatMul_myl2_30
+0.0,430718,60,7178.6,7129.5,4216,10059,1276.9,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to /depth_head/projects.3/Conv
+0.0,429395,60,7156.6,6858.0,4319,18763,2138.4,PushPop,TensorRT:/depth_head/refinenet3/resConfUnit2/conv2/Conv + /depth_head/refinenet3/resConfUnit2/Add
+0.0,429242,60,7154.0,6728.5,4015,20224,2339.6,PushPop,TensorRT:/depth_head/refinenet3/resConfUnit1/conv1/Conv + /depth_head/refinenet3/resConfUnit1/activation_1/Relu
+0.0,428570,60,7142.8,6571.0,4387,18497,2474.1,PushPop,myelin-exec:/blocks_10/attn/MatMul_myl2_132
+0.0,427606,60,7126.8,6825.0,4470,20047,2291.9,PushPop,myelin-exec:/blocks_1/attn/MatMul_1_myl2_20
+0.0,426508,60,7108.5,6511.5,3800,37808,4478.8,PushPop,TensorRT:/depth_head/refinenet1/resConfUnit2/conv2/Conv + /depth_head/refinenet1/resConfUnit2/Add
+0.0,426087,60,7101.4,6877.0,4492,13135,1306.9,PushPop,myelin-exec:/blocks_9/attn/MatMul_1_myl2_122
+0.0,424137,60,7068.9,6555.5,4257,20059,2309.6,PushPop,myelin-exec:/blocks_9/attn/MatMul_myl2_120
+0.0,421363,60,7022.7,6536.0,3869,24751,3160.3,PushPop,TensorRT:/depth_head/refinenet1/resConfUnit2/conv1/Conv + /depth_head/refinenet1/resConfUnit2/activation_1/Relu
+0.0,419728,60,6995.5,6556.0,3709,26421,2944.6,PushPop,myelin-exec:/blocks_10/attn/proj/MatMul_myl2_135
+0.0,418596,60,6976.6,6499.0,3771,25560,2979.6,PushPop,myelin-exec:/blocks_10/mlp/fc1/MatMul_myl2_137
+0.0,417052,60,6950.9,6724.0,4079,12696,1703.4,PushPop,myelin-exec:/blocks_6/attn/qkv/MatMul_myl2_79
+0.0,415818,60,6930.3,6563.5,3913,13045,1884.1,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to /depth_head/projects.2/Conv
+0.0,415118,60,6918.6,6330.5,3696,17691,2806.5,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_12
+0.0,414486,60,6908.1,6477.5,4374,17279,2373.0,PushPop,myelin-exec:__myl_MulAddMeaSubMulMea_myl2_38
+0.0,412590,60,6876.5,6726.0,3706,13153,1976.6,PushPop,myelin-exec:/blocks_4/attn/MatMul_1_myl2_58
+0.0,412502,60,6875.0,6680.0,3976,18087,2297.1,PushPop,myelin-exec:/blocks_0/mlp/fc1/MatMul_myl2_11
+0.0,411834,60,6863.9,6105.5,3648,23192,3184.9,PushPop,myelin-exec:__myl_MulAddMeaSubMulMea_myl2_152
+0.0,411513,60,6858.6,6332.0,3555,36543,4106.7,PushPop,myelin-exec:/blocks_8/attn/proj/MatMul_myl2_109
+0.0,411330,60,6855.5,6660.0,3994,14023,1793.1,PushPop,TensorRT:/depth_head/layer4_rn/Conv
+0.0,410411,60,6840.2,6618.5,4116,11908,1635.4,PushPop,myelin-exec:/blocks_3/attn/MatMul_myl2_44
+0.0,408596,60,6809.9,6530.0,3869,16014,2390.8,PushPop,myelin-exec:/blocks_2/mlp/fc1/MatMul_myl2_35
+0.0,408142,60,6802.4,6627.5,4056,9977,1365.4,PushPop,TensorRT:/depth_head/refinenet4/resConfUnit2/conv1/Conv + /depth_head/refinenet4/resConfUnit2/activation_1/Relu
+0.0,407083,60,6784.7,6751.5,3790,10947,1530.4,PushPop,myelin-exec:/blocks_7/mlp/fc1/MatMul_myl2_99
+0.0,404850,60,6747.5,6111.5,3875,17953,2683.2,PushPop,myelin-exec:__myl_ResTra_myl2_5
+0.0,403247,60,6720.8,6439.5,3862,18769,2407.5,PushPop,myelin-exec:/blocks_8/mlp/fc1/MatMul_myl2_111
+0.0,402194,60,6703.2,6376.5,3921,16256,1838.4,PushPop,myelin-exec:/blocks_9/attn/proj/MatMul_myl2_123
+0.0,401018,60,6683.6,6543.5,4063,15619,1843.7,PushPop,myelin-exec:/blocks_6/attn/MatMul_myl2_82
+0.0,400544,60,6675.7,6479.5,3683,18396,2076.6,PushPop,myelin-exec:/blocks_3/mlp/fc1/MatMul_myl2_49
+0.0,399490,60,6658.2,6330.5,3608,23322,3133.3,PushPop,myelin-exec:/blocks_4/attn/proj/MatMul_myl2_59
+0.0,398730,60,6645.5,6680.5,4046,9821,1416.8,PushPop,myelin-exec:/blocks_7/attn/MatMul_1_myl2_96
+0.0,398520,60,6642.0,6375.0,3842,16272,2278.2,PushPop,myelin-exec:/blocks_5/mlp/fc1/MatMul_myl2_73
+0.0,395859,60,6597.6,6342.5,3439,21196,2548.1,PushPop,myelin-exec:/blocks_6/mlp/fc1/MatMul_myl2_87
+0.0,394858,60,6581.0,6294.0,3825,14535,2100.8,PushPop,myelin-exec:/blocks_2/attn/proj/MatMul_myl2_33
+0.0,394476,60,6574.6,6404.5,3631,11744,1528.3,PushPop,myelin-exec:/blocks_5/attn/MatMul_1_myl2_70
+0.0,393728,60,6562.1,5358.0,2876,54451,6777.3,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_31
+0.0,392948,60,6549.1,6273.5,3583,18084,1954.2,PushPop,myelin-exec:/blocks_11/attn/proj/MatMul_myl2_147
+0.0,392615,60,6543.6,6174.0,3904,17094,2360.4,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_4
+0.0,391565,60,6526.1,6354.0,3877,10706,1376.8,PushPop,myelin-exec:/blocks_11/mlp/fc1/MatMul_myl2_149
+0.0,390864,60,6514.4,6384.0,3768,14975,1774.7,PushPop,myelin-exec:/blocks_1/attn/proj/MatMul_myl2_21
+0.0,390052,60,6500.9,6208.0,3663,19003,2578.3,PushPop,myelin-exec:/blocks_7/attn/proj/MatMul_myl2_97
+0.0,388217,60,6470.3,6361.5,3725,11234,1531.1,PushPop,myelin-exec:/blocks_4/mlp/fc1/MatMul_myl2_61
+0.0,385052,60,6417.5,6363.0,3631,11202,1568.1,PushPop,myelin-exec:/blocks_5/attn/MatMul_myl2_68
+0.0,384927,60,6415.4,6106.0,3793,23149,2621.0,PushPop,myelin-exec:__myl_AddSqrDivMulMulAddMulAddSli_myl2_77
+0.0,383550,60,6392.5,5446.5,2747,48179,5813.2,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_24
+0.0,383435,60,6390.6,6031.0,3159,18822,2172.3,PushPop,myelin-exec:__myl_CasTra_myl2_116
+0.0,382820,60,6380.3,6270.0,3859,11653,1658.8,PushPop,myelin-exec:/blocks_5/attn/proj/MatMul_myl2_71
+0.0,382033,60,6367.2,5119.0,2788,36384,5700.0,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_102
+0.0,374609,60,6243.5,6001.5,3616,11804,1507.0,PushPop,myelin-exec:__myl_AddSqrDivMulMulAddSli_myl2_153
+0.0,372970,60,6216.2,5330.0,2998,21628,3508.4,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_14
+0.0,371369,60,6189.5,5848.5,3002,16392,2373.3,PushPop,myelin-exec:__myl_MulAddMeaSubMulMea_myl2_76
+0.0,367790,60,6129.8,5968.5,3289,16833,2119.4,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_69
+0.0,367701,60,6128.4,5144.5,2769,58215,6959.2,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_112
+0.0,367420,60,6123.7,4965.0,2640,47301,6136.5,PushPop,myelin-exec:__myl_CasTra_myl2_78
+0.0,364932,60,6082.2,5811.5,4467,18818,1784.2,StartEnd,myelin-exec:myelinGraphUnload
+0.0,363628,60,6060.5,5957.0,2877,10682,1490.0,PushPop,myelin-exec:__myl_ResTra_myl2_17
+0.0,360687,60,6011.4,5912.0,3597,10512,1431.3,PushPop,myelin-exec:__myl_CasTra_myl2_40
+0.0,360356,60,6005.9,5703.0,2989,14221,1833.4,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_136
+0.0,359967,60,5999.4,5439.5,2838,18777,2894.5,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_50
+0.0,354849,60,5914.1,5651.5,2866,17009,2012.0,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_121
+0.0,353291,60,5888.2,5485.5,3088,16179,2354.2,PushPop,TensorRT:/depth_head/Resize
+0.0,352712,60,5878.5,5448.5,3145,17312,2523.7,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_48
+0.0,351513,60,5858.6,5561.5,3237,17634,2457.9,PushPop,TensorRT:/depth_head/refinenet3/Resize
+0.0,350398,60,5840.0,5458.0,2747,17952,2481.6,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_145
+0.0,349274,60,5821.2,5639.5,3507,16730,1805.2,PushPop,TensorRT:PWN(/depth_head/refinenet3/resConfUnit2/activation/Relu)
+0.0,347182,60,5786.4,5542.0,2852,10938,1542.8,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_107
+0.0,345311,60,5755.2,5923.0,2998,8721,1406.9,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_54
+0.0,344375,60,5739.6,5463.0,3021,15342,1873.8,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_19
+0.0,344200,60,5736.7,5266.0,2825,21590,2816.4,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_124
+0.0,343993,60,5733.2,5136.0,2536,23639,3316.8,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_83
+0.0,340702,60,5678.4,5395.5,2790,13776,2172.4,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_26
+0.0,340134,60,5668.9,5070.5,2808,27067,3121.1,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_126
+0.0,339930,60,5665.5,4951.0,2728,28218,3961.3,PushPop,myelin-exec:__myl_ResTra_myl2_67
+0.0,339500,60,5658.3,5826.5,3087,9627,1441.8,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_64
+0.0,336989,60,5616.5,5592.0,2986,9665,1285.1,PushPop,myelin-exec:__myl_AddSqrDivMulMulAddMulAddSli_myl2_115
+0.0,336494,60,5608.2,5590.5,2785,11499,1467.5,PushPop,myelin-exec:__myl_ResTra_myl2_143
+0.0,334725,60,5578.8,5395.5,3120,16688,1974.3,PushPop,TensorRT:/depth_head/refinenet1/Resize
+0.0,333890,60,5564.8,5243.0,2896,14431,1800.9,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_150
+0.0,332553,60,5542.6,5300.5,3016,13835,1582.6,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_133
+0.0,332509,60,5541.8,5358.5,2905,17284,2380.3,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_57
+0.0,332050,60,5534.2,5111.0,2669,28938,3544.6,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_60
+0.0,331286,60,5521.4,5208.5,2499,23530,2899.3,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_140
+0.0,331044,60,5517.4,5163.0,2900,12657,2250.8,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_34
+0.0,331013,60,5516.9,5409.0,3150,18120,2050.8,PushPop,TensorRT:/depth_head/refinenet2/Resize
+0.0,330295,60,5504.9,5452.5,2969,9597,1411.7,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_128
+0.0,330286,60,5504.8,5313.5,2840,17623,2051.8,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_110
+0.0,329365,60,5489.4,5169.5,2865,11277,1749.9,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_28
+0.0,329149,60,5485.8,5395.5,2953,10826,1283.0,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_142
+0.0,328073,60,5467.9,5368.0,2911,12339,1665.4,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_138
+0.0,327581,60,5459.7,5099.5,2647,15369,2204.6,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_36
+0.0,325445,60,5424.1,5187.0,2855,20018,2685.4,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_148
+0.0,323870,60,5397.8,5240.5,2816,10351,1570.9,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_80
+0.0,322885,60,5381.4,5239.0,3054,10289,1608.1,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_72
+0.0,322871,60,5381.2,5022.0,2731,23035,2723.3,PushPop,myelin-exec:__myl_ResTra_myl2_43
+0.0,322278,60,5371.3,5108.0,2660,32425,3812.2,PushPop,myelin-exec:__myl_ResTra_myl2_55
+0.0,321945,60,5365.8,5370.5,2820,9217,1303.5,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_95
+0.0,321290,60,5354.8,4887.5,2628,33551,3937.7,PushPop,myelin-exec:__myl_ResTra_myl2_93
+0.0,321145,60,5352.4,5352.5,3054,9510,1470.2,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_90
+0.0,320763,60,5346.1,5100.0,3028,9743,1398.3,PushPop,myelin-exec:__myl_MaxSubExpSumDivMul_myl2_45
+0.0,319246,60,5320.8,5251.5,2919,16271,1858.2,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_98
+0.0,318772,60,5312.9,5297.0,3000,9724,1417.4,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_42
+0.0,318643,60,5310.7,5420.0,2882,8435,1283.6,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_62
+0.0,316581,60,5276.4,5249.5,2901,8997,1130.8,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_130
+0.0,312515,60,5208.6,5208.5,2765,8468,1221.2,PushPop,myelin-exec:__myl_MulAddMeaSubMulMea_myl2_114
+0.0,312222,60,5203.7,5173.5,2918,9373,1211.1,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_104
+0.0,310565,60,5176.1,5284.5,2755,8352,1494.6,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_52
+0.0,310514,60,5175.2,5190.5,2739,9801,1510.4,PushPop,myelin-exec:__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_myl2_86
+0.0,309095,60,5151.6,5119.5,2710,9837,1524.5,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_66
+0.0,306443,60,5107.4,5008.0,2812,9824,1400.6,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_92
+0.0,304051,60,5067.5,5073.0,2697,9788,1372.8,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_74
+0.0,303939,60,5065.6,5060.0,2520,7762,1213.7,PushPop,myelin-exec:__myl_ResTra_myl2_131
+0.0,303338,60,5055.6,5062.5,2955,10521,1319.3,PushPop,myelin-exec:__myl_CasTra_myl2_154
+0.0,302883,60,5048.1,5175.0,2796,8640,1298.2,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_100
+0.0,302578,60,5043.0,5049.0,2495,9711,1513.7,PushPop,myelin-exec:__myl_DivErfAddMulMul_myl2_88
+0.0,302028,60,5033.8,4981.0,2692,12355,1679.0,PushPop,myelin-exec:__myl_ResTra_myl2_29
+0.0,299965,60,4999.4,4985.5,2783,9610,1292.7,PushPop,myelin-exec:__myl_CasResTraCasSliSliSli_myl2_118
+0.0,299177,60,4986.3,4971.0,2656,9893,1479.4,PushPop,myelin-exec:__myl_ResTra_myl2_81
+0.0,295403,60,4923.4,4985.0,2539,8573,1229.5,PushPop,myelin-exec:__myl_ResTra_myl2_105
+0.0,286381,60,4773.0,4932.5,2775,9296,1431.0,PushPop,myelin-exec:__myl_ResTra_myl2_119
+0.0,70690,60,1178.2,1116.0,647,4243,456.8,StartEnd,myelin-exec:myelinTensorGetInputMemoryBatch
+0.0,57001,60,950.0,875.0,712,3442,354.6,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to /depth_head/refinenet4/resConfUnit2/conv1/Conv + /depth_head/refinenet4/resConfUnit2/activation_1/Relu
+0.0,43406,60,723.4,705.5,561,1144,103.2,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to PWN(/depth_head/refinenet3/resConfUnit1/activation/Relu)
+0.0,41936,60,698.9,709.0,408,1192,175.1,PushPop,myelin-exec:dummy_shape_call__mye47966_0_myl2_0
+0.0,40677,60,678.0,647.5,413,2350,261.5,StartEnd,myelin-exec:myelinTensorGetOutputMemoryBatch
+0.0,36355,60,605.9,353.5,241,11707,1522.3,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to PWN(/depth_head/refinenet4/resConfUnit2/activation/Relu)
+0.0,31491,60,524.9,498.5,257,1629,186.5,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to PWN(/depth_head/refinenet3/resConfUnit2/activation/Relu)
+0.0,30341,60,505.7,416.5,317,4027,473.6,PushPop,TensorRT:/Squeeze
+0.0,29476,60,491.3,427.0,317,3004,339.9,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to /depth_head/refinenet3/resConfUnit1/conv1/Conv + /depth_head/refinenet3/resConfUnit1/activation_1/Relu
+0.0,28218,60,470.3,426.5,266,2261,258.5,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to /Squeeze
+0.0,24553,60,409.2,400.5,214,784,97.6,PushPop,TensorRT:Reformatting CopyNode for Input Tensor 0 to /depth_head/refinenet3/resConfUnit2/conv1/Conv + /depth_head/refinenet3/resConfUnit2/activation_1/Relu
+0.0,22273,60,371.2,262.0,148,6324,784.3,StartEnd,myelin-exec:myelinTensorSetInputMemoryBatch
+0.0,18568,60,309.5,194.5,130,6211,777.3,StartEnd,myelin-exec:myelinTensorSetOutputMemoryBatch
+0.0,3324,1,3324.0,3324.0,3324,3324,0.0,StartEnd,:myelinBinaryGraphCreate
+0.0,1319,1,1319.0,1319.0,1319,1319,0.0,StartEnd,myelin-exec:myelinGraphResolveShapes 
+
+Processing [data/generated/depth/v21_profile/timeline-fixed.sqlite] with [/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2026.5.1.161/opt/nvidia/nsight-systems-cli/2026.5.1/target-linux-x64/reports/cuda_gpu_kern_sum.py]... 
+Time (%),Total Time (ns),Instances,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+23.9,136743318,2160,63307.1,77116.0,32363,81894,21641.5,sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x64x8_stage3_warpsize2x2x1_ffma_aligna4_alignc4_execute_kernel_trt
+23.7,135235901,720,187827.6,187612.5,184161,194209,1653.6,__myl_MaxSubExpSumDivMul_0x3dd19ba85342977829964f117a5c7495
+19.6,111795443,720,155271.4,155373.0,143538,159719,1760.0,trt_ampere_sgemm_64x32_sliced1x4_nn_v1
+13.2,75463358,720,104810.2,104918.0,103346,106305,482.0,sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_alignc4_execute_kernel_trt
+8.2,47059212,720,65360.0,64973.0,63555,69504,1255.0,sm80_xmma_gemm_f32f32_f32f32_f32_nn_n_tilesize128x256x8_stage3_warpsize2x4x1_ffma_aligna4_alignc4_execute_kernel_trt
+1.5,8526100,1200,7105.1,7982.0,4900,8815,1393.3,__myl_MulAddMeaSubMulMeaAddSqrDivMulMulAdd_0x31d561abc0fe9ef9cf78c80d1df3cc39
+1.1,6261094,720,8696.0,8661.0,8260,9246,113.6,__myl_DivErfAddMulMul_0x6e14b0cc581b57a6d1952c4c825d3a1d
+0.8,4800074,240,20000.3,19942.0,19294,20990,373.2,sm75_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize128x64x32_stage1_warpsize2x2x1_g1_tensor16x8x8_t1r3s3_execute_kernel_trt
+0.7,4071685,660,6169.2,6164.0,5918,6534,140.9,__myl_CasResTraCasSliSliSli_0xe8e18330cfe418933166fa732d2243e8
+0.7,4016119,60,66935.3,66929.5,65929,67962,345.7,sm75_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize128x32x32_stage1_warpsize4x1x1_g1_tensor16x8x8_t1r3s3_execute_kernel_trt
+0.7,4000719,720,5556.6,5517.0,5332,6164,140.5,__myl_ResTra_0x1e5ff0dcb54235f4c5ccaebbb8d6fac0
+0.7,3750106,60,62501.8,62476.5,62291,62938,138.8,trt_ampere_scudnn_128x128_relu_interior_nn_v1
+0.5,3041784,60,50696.4,50671.0,49870,51472,304.6,sm75_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x32x64_stage1_warpsize2x1x2_g1_tensor16x8x8_execute_kernel_trt
+0.4,2528966,60,42149.4,42102.5,41024,43120,482.0,sm50_xmma_cublas_gemvx_f32f32_f32_f32_nn_n_int32_unit_m_launch_param64x2x1_strided_unit_stride_execute_kernel_trt
+0.4,2385613,360,6626.7,4870.0,4623,11805,2698.4,sm80_xmma_fprop_implicit_gemm_indexed_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x32x64_stage5_warpsize2x2x1_g1_tensor16x8x16_execute_kernel_trt
+0.4,2241925,60,37365.4,37233.0,36708,40253,573.3,"void CUTENSOR_NAMESPACE::permutationKernelPLC3<CUTENSOR_NAMESPACE::VectorWrite2DTensorView<(unsigned char)0, (unsigned char)1, (bool)0, (unsigned int)4, float, float, CUTENSOR_NAMESPACE::GeneralUnarySmall<float>>, CUTENSOR_NAMESPACE::VectorRead2DTensorView<(unsigned char)0, (unsigned char)1, (bool)0, (unsigned int)4, float, __half, CUTENSOR_NAMESPACE::GeneralUnarySmall<float>>, CUTENSOR_NAMESPACE::ThreadLevelElementwise<CUTENSOR_NAMESPACE::ElementwiseConfig2DCommonCase<CUTENSOR_NAMESPACE::GeneralUnarySmall<float>, CUTENSOR_NAMESPACE::GeneralBinary<float>, (int)2, (int)32, (int)32, (int)128, (signed char)4, (bool)1, (bool)0, (bool)1, (bool)0, (bool)0>, float>, CUTENSOR_NAMESPACE::ElementwiseRuntimePLC3<__half, float, float, float>::Params>(T4)"
+0.3,1996191,300,6654.0,3791.0,1264,15904,5701.2,ResizeVectorizedH2x4BilinearKernel
+0.3,1633195,120,13610.0,13500.5,7181,20158,6292.8,sm75_xmma_fprop_implicit_gemm_indexed_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize128x64x32_stage1_warpsize2x2x1_g1_tensor16x8x8_execute_kernel_trt
+0.2,1400401,240,5835.0,6165.0,4253,7058,899.4,"void cuInt8::nchwTonhwc<__half, (int)32, (int)32, (int)2>(const T1 *, __half *, int, int, int, int, int, int, int, int)"
+0.2,1293595,180,7186.6,7181.0,6904,7552,117.2,__myl_MulAddMeaSubMulMea_0x57dd8051b6625b663fb3fb9046fdf313
+0.2,1284873,120,10707.3,10664.5,4962,16644,5691.9,sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x64x64_stage4_warpsize2x2x1_g1_tensor16x8x16_t1r3s3_aACCESS_execute_kernel_trt
+0.2,1071866,120,8932.2,8907.5,8415,9770,354.6,sm80_xmma_fprop_implicit_gemm_indexed_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize128x64x64_stage3_warpsize2x2x1_g1_tensor16x8x16_execute_kernel_trt
+0.2,1062739,60,17712.3,17630.0,16983,18277,299.8,sm75_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize128x64x32_stage1_warpsize2x2x1_g1_tensor16x8x8_t1r1s1_execute_kernel_trt
+0.2,1058114,120,8817.6,8846.0,8537,9031,120.9,sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize128x64x32_stage5_warpsize2x2x1_g1_tensor16x8x16_execute_kernel_trt
+0.2,987066,360,2741.8,1541.5,1232,5641,1877.0,generatedNativePointwise
+0.1,848499,240,3535.4,3514.0,3421,3730,63.1,__myl_CasTra_0x57eea9463d9bb36accf17304879f5a0b
+0.1,650457,60,10841.0,10818.5,10695,11065,76.2,sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize128x64x32_stage5_warpsize2x2x1_g1_tensor16x8x16_t1r3s3
+0.1,623345,120,5194.5,5209.0,4900,5363,73.8,__myl_AddSqrDivMulMulAddMulAddSli_0x10c30a3c9628ec0e91172b5f38ec8806
+0.1,566504,60,9441.7,9462.0,9185,9648,98.7,sm80_xmma_gemm_f16f16_f16f16_f16_tn_n_tilesize128x128x32_stage4_warpsize2x2x1_tensor16x8x16_execute_kernel_trt
+0.1,545953,60,9099.2,9154.0,7551,9431,264.4,__myl_ConAddMeaSubMulMeaAddSqrDivMulMulAdd_0x078956a3ffb6fb09feddc3b3edf436b4
+0.1,507296,60,8454.9,8476.0,7952,8661,112.7,sm75_xmma_deconv_implicit_gemm_indexed_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize256x64x32_stage1_warpsize4x1x1_g1_tensor16x8x8_strided_execute_kernel_trt
+0.1,381484,60,6358.1,6365.0,6072,6534,87.6,sm80_xmma_gemm_f16f16_f16f16_f16_nn_n_tilesize64x128x32_stage5_warpsize2x2x1_tensor16x8x16_execute_kernel_trt
+0.1,377567,60,6292.8,6287.0,5979,6565,88.9,sm75_xmma_deconv_implicit_gemm_indexed_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x128x32_stage1_warpsize2x2x1_g1_tensor16x8x8_strided_execute_kernel_trt
+0.1,375715,60,6261.9,6257.0,5949,6503,77.0,__myl_CasResTraCasSliSliSli_0xa0f2545b4951b5ed313ffb18ef692a3f
+0.1,314725,60,5245.4,5240.0,5148,5425,52.2,__myl_AddSqrDivMulMulAddSliMulAdd_0x89591ce6ba6abde8db48a1e80b309c39
+0.1,296716,60,4945.3,4932.0,4839,5116,49.9,sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x32x64_stage5_warpsize2x2x1_g1_tensor16x8x16_t1r3s3_execute_kernel_trt
+0.1,291448,60,4857.5,4839.0,4716,5117,84.8,__myl_MulAddMeaSubMulMea_0x9f480ab47de3d90521e6560ee0f615ae
+0.0,284142,60,4735.7,4746.0,4561,4993,92.3,trt_ampere_h16816gemm_64x64_ldg8_relu_stages_64x5_tn_v1
+0.0,243120,60,4052.0,4038.0,3945,4223,63.5,trt_ampere_h16816gemm_64x128_ldg8_relu_stages_32x6_tn_v1
+0.0,240105,60,4001.8,4007.0,3853,4099,51.5,sm80_xmma_gemm_f16f16_f16f16_f16_nn_n_tilesize64x32x64_stage5_warpsize2x2x1_tensor16x8x16_execute_kernel_trt
+0.0,227467,60,3791.1,3791.0,3514,3976,80.2,__myl_TraCas_0x7a234e6cbd356777673b9278aaea04b2
+0.0,199262,60,3321.0,3298.0,3236,3452,51.2,__myl_AddSqrDivMulMulAddSli_0x0dbef0403d83f91f1b805fc04db84af5
+0.0,182590,60,3043.2,3051.0,2959,3144,37.6,sm80_xmma_gemm_f16f16_f16f16_f16_tn_n_tilesize64x32x128_stage4_warpsize4x1x1_tensor16x8x16_execute_kernel_trt
+0.0,147485,60,2458.1,2465.5,2434,2558,22.5,"void genericReformat::copyVectorizedKernel<double, float, __half, (bool)1, (bool)0, (int)1>(unsigned int, const void *, genericReformat::ArrayN<T6>, genericReformat::ArrayNWithReducedDivisors<T6>, genericReformat::ArrayN<T6>, int, const float *, void *, genericReformat::ArrayN<T6>, genericReformat::ArrayNWithReducedDivisors<T6>, genericReformat::ArrayN<T6>, int, const float *)"
+0.0,29096,4,7274.0,7274.0,4284,10264,3452.6,"void xmma_trt::implicit_gemm::strided_dgrad_indexed::kernel_helper_stage_3<xmma_trt::implicit_gemm::strided_dgrad_indexed::Params_pre_hopper>(T1, int)"
+0.0,8352,4,2088.0,2095.5,2034,2127,46.2,void xmma_trt::implicit_gemm::strided_dgrad_indexed::kernel_helper_stage_1<xmma_trt::implicit_gemm::strided_dgrad_indexed::Params_pre_hopper>(T1)
+0.0,6811,4,1702.8,1679.5,1418,2034,288.3,"void xmma_trt::implicit_gemm::strided_dgrad_indexed::kernel_helper_stage_2<xmma_trt::implicit_gemm::strided_dgrad_indexed::Params_pre_hopper>(T1, int)"
+0.0,5486,4,1371.5,1356.0,1264,1510,113.9,void xmma_trt::implicit_gemm::strided_dgrad_indexed::kernel_helper_stage_0<xmma_trt::implicit_gemm::strided_dgrad_indexed::Params_pre_hopper>(T1)
+0.0,1326,1,1326.0,1326.0,1326,1326,0.0,"void cask_trt::computeOffsetsKernel<(bool)0, (bool)0>(cask_trt::ComputeOffsetsParams)"
+
+Processing [data/generated/depth/v21_profile/timeline-fixed.sqlite] with [/home/qyc/.cache/miniinfer-depth/v2-tools/nsight_systems-2026.5.1.161/opt/nvidia/nsight-systems-cli/2026.5.1/target-linux-x64/reports/cuda_gpu_mem_time_sum.py]... 
+Time (%),Total Time (ns),Count,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Operation
+80.2,23670149,62,381776.6,250443.5,248209,7712073,947266.7,[CUDA memcpy Host-to-Device]
+16.6,4896985,62,78983.6,79212.0,1387,90185,14734.7,[CUDA memcpy Device-to-Host]
+3.2,957970,728,1315.9,771.0,370,241613,10202.8,[CUDA memset]
+0.0,6411,5,1282.2,1233.0,1079,1757,278.7,[CUDA memcpy Device-to-Device]
+
