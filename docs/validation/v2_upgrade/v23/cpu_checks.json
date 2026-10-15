@@ -1,0 +1,164 @@
+[
+  {
+    "name": "debug_configure",
+    "command": [
+      "cmake",
+      "-S",
+      ".",
+      "-B",
+      "/home/qyc/builds/MiniInfer/v23-upgrade-debug",
+      "-G",
+      "Ninja",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DMINIINFER_ENABLE_ORT=OFF",
+      "-DMINIINFER_ENABLE_TRT=OFF",
+      "-DMINIINFER_ENABLE_ASAN_UBSAN=OFF",
+      "-DMINIINFER_ENABLE_TSAN=OFF"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "debug_build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/qyc/builds/MiniInfer/v23-upgrade-debug",
+      "-j",
+      "8",
+      "--target",
+      "test_depth_sdk",
+      "test_depth_image",
+      "test_thread_pool",
+      "test_concurrency",
+      "test_shutdown",
+      "test_timing",
+      "test_runtime"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "debug_ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/qyc/builds/MiniInfer/v23-upgrade-debug",
+      "--output-on-failure",
+      "-R",
+      "^(depth_sdk_contract|depth_image_contract|thread_pool_contract|concurrency_contract|shutdown_contract|timing_contract|runtime_contract)$"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "asan-ubsan_configure",
+    "command": [
+      "cmake",
+      "-S",
+      ".",
+      "-B",
+      "/home/qyc/builds/MiniInfer/v23-upgrade-asan-ubsan",
+      "-G",
+      "Ninja",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DMINIINFER_ENABLE_ORT=OFF",
+      "-DMINIINFER_ENABLE_TRT=OFF",
+      "-DMINIINFER_ENABLE_ASAN_UBSAN=ON",
+      "-DMINIINFER_ENABLE_TSAN=OFF"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "asan-ubsan_build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/qyc/builds/MiniInfer/v23-upgrade-asan-ubsan",
+      "-j",
+      "8",
+      "--target",
+      "test_depth_sdk",
+      "test_depth_image",
+      "test_thread_pool",
+      "test_concurrency",
+      "test_shutdown",
+      "test_timing",
+      "test_runtime"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "asan-ubsan_ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/qyc/builds/MiniInfer/v23-upgrade-asan-ubsan",
+      "--output-on-failure",
+      "-R",
+      "^(depth_sdk_contract|depth_image_contract|thread_pool_contract|concurrency_contract|shutdown_contract|timing_contract|runtime_contract)$"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tsan_configure",
+    "command": [
+      "cmake",
+      "-S",
+      ".",
+      "-B",
+      "/home/qyc/builds/MiniInfer/v23-upgrade-tsan",
+      "-G",
+      "Ninja",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DMINIINFER_ENABLE_ORT=OFF",
+      "-DMINIINFER_ENABLE_TRT=OFF",
+      "-DMINIINFER_ENABLE_ASAN_UBSAN=OFF",
+      "-DMINIINFER_ENABLE_TSAN=ON"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tsan_build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/qyc/builds/MiniInfer/v23-upgrade-tsan",
+      "-j",
+      "8",
+      "--target",
+      "test_depth_sdk",
+      "test_depth_image",
+      "test_thread_pool",
+      "test_concurrency",
+      "test_shutdown",
+      "test_timing",
+      "test_runtime"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tsan_ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/qyc/builds/MiniInfer/v23-upgrade-tsan",
+      "--output-on-failure",
+      "-R",
+      "^(depth_sdk_contract|depth_image_contract|thread_pool_contract|concurrency_contract|shutdown_contract|timing_contract|runtime_contract)$"
+    ],
+    "exit": 8
+  },
+  {
+    "name": "tsan_ctest_setarch",
+    "command": [
+      "setarch",
+      "x86_64",
+      "-R",
+      "ctest",
+      "--test-dir",
+      "/home/qyc/builds/MiniInfer/v23-upgrade-tsan",
+      "--output-on-failure",
+      "-R",
+      "^(depth_sdk_contract|depth_image_contract|thread_pool_contract|concurrency_contract|shutdown_contract|timing_contract|runtime_contract)$"
+    ],
+    "exit": 0
+  }
+]

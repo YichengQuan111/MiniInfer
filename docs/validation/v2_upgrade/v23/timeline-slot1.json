@@ -1,0 +1,65 @@
+{
+  "source": "data/generated/depth/v2-upgrade/v23-slot1.sqlite",
+  "scope": "Separate profiler run, includes warmup; stream overlap is actual interval intersection.",
+  "streams": [
+    {
+      "context": 1,
+      "stream": 17,
+      "raw_output_copies": 236,
+      "kernel_count": 42244,
+      "kernel_busy_ms": 2767.062058
+    }
+  ],
+  "observed_interval_ms": 4000.624675,
+  "application_gpu_busy_ms": 2854.353569,
+  "two_stream_kernel_overlap_ms": null,
+  "cpu_preprocess_gpu_overlap_ms": 933.846912,
+  "nvtx": {
+    "depth.submit": {
+      "calls": 320,
+      "total_ms": 204.37590300000014,
+      "mean_ms": 0.6386746968750004
+    },
+    "depth.execute": {
+      "calls": 236,
+      "total_ms": 6765.799637999997,
+      "mean_ms": 28.668642533898293
+    },
+    "depth.preprocess.reuse": {
+      "calls": 236,
+      "total_ms": 1529.667371000001,
+      "mean_ms": 6.481641402542377
+    },
+    "depth.preprocess.cpu.convert": {
+      "calls": 236,
+      "total_ms": 455.22372200000024,
+      "mean_ms": 1.9289140762711874
+    },
+    "depth.preprocess.cpu.resize": {
+      "calls": 236,
+      "total_ms": 827.4833849999998,
+      "mean_ms": 3.506285529661016
+    },
+    "depth.preprocess.cpu.pad_normalize_hwc_to_nchw": {
+      "calls": 236,
+      "total_ms": 153.17006999999992,
+      "mean_ms": 0.6490257203389828
+    },
+    "depth.gpu_slot0": {
+      "calls": 236,
+      "total_ms": 3328.6841379999996,
+      "mean_ms": 14.104593805084745
+    },
+    "depth.trt.h2d_execute_d2h": {
+      "calls": 236,
+      "total_ms": 3327.5841409999975,
+      "mean_ms": 14.099932800847448
+    },
+    "depth.postprocess.reuse": {
+      "calls": 236,
+      "total_ms": 953.3743969999999,
+      "mean_ms": 4.03972202118644
+    }
+  },
+  "trace_sha256": "9e909e21f021fbde71145f9f8af3be3f3273ce692eb608e02173d16b2ec7240f"
+}

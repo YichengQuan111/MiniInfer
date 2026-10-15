@@ -1,0 +1,77 @@
+{
+  "source": "data/generated/depth/v2-upgrade/v23-slot2.sqlite",
+  "scope": "Separate profiler run, includes warmup; stream overlap is actual interval intersection.",
+  "streams": [
+    {
+      "context": 1,
+      "stream": 17,
+      "raw_output_copies": 158,
+      "kernel_count": 28282,
+      "kernel_busy_ms": 1784.542969
+    },
+    {
+      "context": 1,
+      "stream": 22,
+      "raw_output_copies": 99,
+      "kernel_count": 17721,
+      "kernel_busy_ms": 1116.319851
+    }
+  ],
+  "observed_interval_ms": 4006.005145,
+  "application_gpu_busy_ms": 2980.896104,
+  "two_stream_kernel_overlap_ms": 6.843929,
+  "cpu_preprocess_gpu_overlap_ms": 1027.552224,
+  "nvtx": {
+    "depth.submit": {
+      "calls": 320,
+      "total_ms": 227.96540799999997,
+      "mean_ms": 0.7123918999999999
+    },
+    "depth.execute": {
+      "calls": 257,
+      "total_ms": 6613.037707000002,
+      "mean_ms": 25.731664229571994
+    },
+    "depth.preprocess.reuse": {
+      "calls": 257,
+      "total_ms": 1574.3120540000002,
+      "mean_ms": 6.1257278365758765
+    },
+    "depth.preprocess.cpu.convert": {
+      "calls": 257,
+      "total_ms": 472.0222740000001,
+      "mean_ms": 1.8366625447470821
+    },
+    "depth.preprocess.cpu.resize": {
+      "calls": 257,
+      "total_ms": 865.0576349999997,
+      "mean_ms": 3.365983015564201
+    },
+    "depth.preprocess.cpu.pad_normalize_hwc_to_nchw": {
+      "calls": 257,
+      "total_ms": 156.54639199999988,
+      "mean_ms": 0.6091299299610891
+    },
+    "depth.gpu_slot0": {
+      "calls": 158,
+      "total_ms": 2245.131769,
+      "mean_ms": 14.209694740506329
+    },
+    "depth.trt.h2d_execute_d2h": {
+      "calls": 257,
+      "total_ms": 3756.8157209999986,
+      "mean_ms": 14.617960003891046
+    },
+    "depth.postprocess.reuse": {
+      "calls": 257,
+      "total_ms": 977.7136720000003,
+      "mean_ms": 3.804333354085604
+    },
+    "depth.gpu_slot1": {
+      "calls": 99,
+      "total_ms": 1512.5424269999999,
+      "mean_ms": 15.278206333333332
+    }
+  },
+  "trace_sha256": "3537be36cadf150db20aeea7c249bc50700a1acf151b11130b127308774706d3"
+}

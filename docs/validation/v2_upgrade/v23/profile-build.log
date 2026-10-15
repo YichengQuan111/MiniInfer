@@ -1,0 +1,41 @@
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Configuring done (14.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/qyc/builds/MiniInfer/v23-upgrade-profile
+-- Configuring done (5.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/qyc/builds/MiniInfer/v23-upgrade-profile
+[1/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/version.cpp.o
+[2/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/checked_size.cpp.o
+[3/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/buffer.cpp.o
+[4/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_ops.cpp.o
+[5/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_model.cpp.o
+[6/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/data_io.cpp.o
+[7/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_input.cpp.o
+[8/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_result.cpp.o
+[9/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/workspace.cpp.o
+[10/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_executor.cpp.o
+[11/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/thread_pool.cpp.o
+[12/26] Building CXX object CMakeFiles/miniinfer_depth_image.dir/src/depth/image.cpp.o
+[13/26] Building CXX object CMakeFiles/miniinfer_core.dir/src/runtime.cpp.o
+[14/26] Linking CXX static library libminiinfer_core.a
+[15/26] Building CXX object CMakeFiles/miniinfer_depth_ort.dir/src/depth/ort_runner.cpp.o
+[16/26] Building CXX object CMakeFiles/miniinfer_depth_image.dir/src/depth/preprocess.cpp.o
+[17/26] Linking CXX static library libminiinfer_depth_image.a
+[18/26] Linking CXX static library libminiinfer_depth_ort.a
+[19/26] Building CXX object CMakeFiles/miniinfer_depth_artifact.dir/src/depth/artifact.cpp.o
+[20/26] Linking CXX static library libminiinfer_depth_artifact.a
+[21/26] Building CXX object CMakeFiles/depth_replay.dir/apps/depth_replay.cpp.o
+[22/26] Building CXX object CMakeFiles/miniinfer_depth_trt.dir/src/depth/trt_runner.cpp.o
+[23/26] Linking CXX static library libminiinfer_depth_trt.a
+[24/26] Building CXX object CMakeFiles/miniinfer_depth_sdk.dir/src/depth/sdk.cpp.o
+[25/26] Linking CXX static library libminiinfer_depth_sdk.a
+[26/26] Linking CXX executable bin/depth_replay

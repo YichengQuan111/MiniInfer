@@ -122,6 +122,29 @@ void static_sizes() {
     overflow.pad_right = std::numeric_limits<std::size_t>::max();
     invalid([&] { validate_geometry(overflow); }, "geometry arithmetic overflow accepted");
 }
+void reused_workspace() {
+    for (std::size_t size : {392, 518}) {
+        CpuWorkspace workspace(size);
+        const auto bytes = workspace.capacity_bytes();
+        for (const auto& shape : {std::pair<std::size_t,std::size_t>{1, 4096}, {127, 39}, {2048, 1024}, {3, 7}}) {
+            std::vector<std::uint8_t> pixels(shape.first * shape.second * 3);
+            for (std::size_t i = 0; i < pixels.size(); ++i) pixels[i] = static_cast<std::uint8_t>((i * 17 + 31) % 256);
+            const RgbImage image(shape.first, shape.second, std::move(pixels));
+            const auto reference = preprocess(image, size);
+            const auto& reused = workspace.prepare(image);
+            expect(reference.values() == reused.values(), "reused preprocessing changed float32 contract");
+            std::vector<float> values(size * size);
+            for (std::size_t i = 0; i < values.size(); ++i) values[i] = static_cast<float>(i) / 1337.0F;
+            const RawDepth raw(std::move(values));
+            const auto expected = postprocess(raw, reused.transform());
+            const auto actual = workspace.restore(raw, reused.transform());
+            expect(actual.values() == expected.values(), "reused restoration changed contract");
+            workspace.prepare(RgbImage(1, 1, {0, 0, 0}));
+            expect(actual.values() == expected.values(), "workspace reuse overwrote owning output");
+            expect(workspace.capacity_bytes() == bytes, "workspace exceeded preallocated bounds");
+        }
+    }
+}
 void artifacts() {
     Temporary temporary;
     const auto ppm = temporary.path / "image.ppm";
@@ -166,6 +189,7 @@ int main() {
         restoration_and_ownership();
         nonfinite();
         static_sizes();
+        reused_workspace();
         artifacts();
         std::cout << "Depth image contract passed\n";
         return 0;

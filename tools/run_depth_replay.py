@@ -21,6 +21,8 @@ STATUSES = ("succeeded", "busy", "closed", "invalid_input", "failure", "timeout"
 STAGES = ("admission_ms", "queue_ms", "preprocess_ms", "backend_ms", "postprocess_ms")
 CSV_FIELDS = ("phase", "request_id", "index", "image_index", "planned_ms", "generated_ms",
               "submit_ms", "ready_ms", "delivered_ms", "status", "accepted") + STAGES
+CSV_FIELDS_V2 = CSV_FIELDS + ("request_handle_id",)
+SCHEMAS = ("miniinfer-depth-replay-v1", "miniinfer-depth-replay-v2")
 
 
 def finite_number(value, name):
@@ -38,8 +40,22 @@ def integer_field(value, name, minimum=0, maximum=MAX_REQUESTS):
     return result
 
 
+def protocol_version(summary):
+    schema = summary["schema"]
+    if schema not in SCHEMAS:
+        raise ValueError("summary schema mismatch")
+    if schema == SCHEMAS[1]:
+        if not isinstance(summary["async_sdk"], bool):
+            raise ValueError("async_sdk must be Boolean")
+        return 2
+    return 1
+
+
 def summarize_csv(path, summary):
     """Bounded exact percentiles; stream rows and keep only <=1M numeric samples."""
+    version = protocol_version(summary)
+    asynchronous = version == 2 and summary["async_sdk"]
+    handle_ids = set()  # Bounded by the validated <=1M planned requests.
     rate = finite_number(summary["rate"], "rate")
     image_count = integer_field(summary["image_count"], "image_count", 1, 1024)
     max_lag = finite_number(summary["max_lag_ms"], "max_lag_ms")
@@ -61,12 +77,13 @@ def summarize_csv(path, summary):
                          "drain_ms": drain, "counts": dict.fromkeys(STATUSES, 0),
                          "submitted": 0, "accepted": 0, "accepted_succeeded": 0, "accepted_failed": 0,
                          "completed_in_window": 0, "succeeded_in_window": 0, "drain_completed": 0,
+                         "delivered_in_window": 0, "delivered_during_drain": 0,
                          "sdk": [], "replay": [], "delivery": [], "lag": [],
                          "stages": {stage: [] for stage in STAGES}, "rows": 0}
         offset += planned
     with Path(path).open(newline="", encoding="utf-8") as stream:
         reader = csv.DictReader(stream)
-        if reader.fieldnames != list(CSV_FIELDS):
+        if reader.fieldnames != list(CSV_FIELDS_V2 if version == 2 else CSV_FIELDS):
             raise ValueError("CSV schema mismatch")
         for row in reader:
             if None in row or any(value is None for value in row.values()):
@@ -95,6 +112,8 @@ def summarize_csv(path, summary):
             if status.startswith("not_submitted_"):
                 if any(row[key] != "" for key in ("submit_ms", "ready_ms", "delivered_ms", "accepted") + STAGES):
                     raise ValueError("unsubmitted request has execution fields")
+                if version == 2 and row["request_handle_id"] != "":
+                    raise ValueError("unsubmitted request has a handle ID")
                 if status == "not_submitted_late" and generated < state["duration"] and generated - planned <= max_lag:
                     raise ValueError("late status without missed deadline")
                 continue
@@ -106,6 +125,15 @@ def summarize_csv(path, summary):
             accepted = integer_field(row["accepted"], "accepted", 0, 1)
             if (status == "succeeded" and not accepted) or (status in ("busy", "closed", "invalid_input") and accepted):
                 raise ValueError("invalid acceptance/status relation")
+            if version == 2:
+                handle = row["request_handle_id"]
+                if asynchronous and accepted:
+                    identity = integer_field(handle, "request_handle_id", 1, 2**64-1)
+                    if identity in handle_ids:
+                        raise ValueError("duplicate SDK request handle ID")
+                    handle_ids.add(identity)
+                elif handle != "":
+                    raise ValueError("rejected or synchronous request has a handle ID")
             state["submitted"] += 1
             state["accepted"] += accepted
             if accepted:
@@ -116,6 +144,10 @@ def summarize_csv(path, summary):
                     state["succeeded_in_window"] += 1
             else:
                 state["drain_completed"] += 1
+            if delivered < state["duration"]:
+                state["delivered_in_window"] += 1
+            else:
+                state["delivered_during_drain"] += 1
             timings = {stage: finite_number(row[stage], stage) for stage in STAGES}
             if status == "succeeded":
                 # Percentiles cover successful requests planned in this phase,
@@ -133,7 +165,8 @@ def summarize_csv(path, summary):
         for key in ("submitted", "completed_in_window", "succeeded_in_window", "drain_completed"):
             if integer_field(spec[key], key) != state[key]:
                 raise ValueError(f"CSV/summary {key} mismatch")
-        if integer_field(spec["outstanding_at_window_end"], "outstanding_at_window_end") != state["drain_completed"]:
+        expected_outstanding = state["delivered_during_drain"] if version == 2 else state["drain_completed"]
+        if integer_field(spec["outstanding_at_window_end"], "outstanding_at_window_end") != expected_outstanding:
             raise ValueError("window pending/drain count mismatch")
         total = state["rows"]
         result[phase] = {"planned": total, "terminal_counts": state["counts"], "submitted": state["submitted"],
@@ -143,7 +176,12 @@ def summarize_csv(path, summary):
                          "window_success_rate_of_planned": state["succeeded_in_window"] / total if total else None,
                          "succeeded_in_window": state["succeeded_in_window"],
                          "successful_throughput_per_second": state["succeeded_in_window"] * 1000 / state["duration"] if state["duration"] else None,
-                         "outstanding_at_window_end": state["drain_completed"], "drain_completed": state["drain_completed"],
+                         "outstanding_at_window_end": expected_outstanding,
+                         "sdk_unfinished_at_window_end": state["drain_completed"],
+                         "undelivered_at_window_end": state["delivered_during_drain"],
+                         "delivered_in_window": state["delivered_in_window"],
+                         "delivered_during_drain": state["delivered_during_drain"],
+                         "drain_completed": state["drain_completed"],
                          "drain_ms": state["drain_ms"], "sdk_successful_latency": distribution(state["sdk"]),
                          "replay_successful_latency": distribution(state["replay"]), "delivery_successful_latency": distribution(state["delivery"]),
                          "generator_lag": distribution(state["lag"]),
@@ -159,6 +197,12 @@ def summarize_csv(path, summary):
                           ("inflight", 0), ("reserved_bytes", 0)):
         if integer_field(snapshot[key], key, maximum=2**63-1) != expected:
             raise ValueError(f"SDK snapshot {key} conservation mismatch")
+    if version == 2:
+        for key in ("queued", "executing", "ready", "abandoned", "abandoned_completed"):
+            if integer_field(snapshot[key], key) != 0:
+                raise ValueError(f"SDK final {key} conservation mismatch")
+        if len(handle_ids) != sum(s["accepted"] for s in states.values()) and asynchronous:
+            raise ValueError("SDK handle/accepted count mismatch")
     return result
 
 
@@ -199,8 +243,7 @@ class Protocol:
                 self.order.append(token)
                 self.phase = phase
             elif kind == "summary" and self.ready is not None and self.summary is None and self.order and self.order[-1] == ("drain", "steady"):
-                if event["schema"] != "miniinfer-depth-replay-v1":
-                    raise ValueError("summary schema mismatch")
+                protocol_version(event)
                 if event["warmup"]["duration_ms"] > 0 and ("drain", "warmup") not in self.order:
                     raise ValueError("warmup drain missing")
                 self.summary = event
@@ -211,13 +254,40 @@ class Protocol:
             self.error(error)
 
 
-def run_once(args, directory):
-    directory.mkdir()
+def build_command(args, directory):
     command = [str(args.executable), "--package", str(args.package), "--backend", args.backend,
                "--images-list", str(args.sequence), "--output", str(directory / "raw.csv"),
                "--duration", str(args.duration), "--warmup", str(args.warmup), "--rate", str(args.rate),
                "--sdk-workers", str(args.sdk_workers), "--workers", str(args.workers), "--max-outstanding", str(args.max_outstanding),
                "--queue", str(args.queue), "--budget", str(args.budget), "--max-lag-ms", str(args.max_lag_ms)]
+    if args.async_sdk:
+        command += ["--async-sdk", "1", "--slots", str(args.slots), "--reuse-host", str(args.reuse_host),
+                    "--reuse-gpu", str(args.reuse_gpu), "--consumer-delay-ms", str(args.consumer_delay_ms)]
+    return command
+
+
+def validate_configuration(args, summary):
+    version = protocol_version(summary)
+    if args.async_sdk and version != 2:
+        raise ValueError("async request requires v2 replay protocol")
+    if version == 2:
+        expected = {"async_sdk": args.async_sdk, "slots": args.slots,
+                    "reuse_host": bool(args.reuse_host), "reuse_gpu": bool(args.reuse_gpu),
+                    "consumer_delay_ms": args.consumer_delay_ms}
+        for key, value in expected.items():
+            if key in ("async_sdk", "reuse_host", "reuse_gpu") and not isinstance(summary[key], bool):
+                raise ValueError(f"summary {key} must be Boolean")
+            if key == "slots":
+                integer_field(summary[key], key, 1, 2)
+            elif key == "consumer_delay_ms":
+                integer_field(summary[key], key, 0, 60000)
+            if summary[key] != value:
+                raise ValueError(f"requested configuration/summary {key} mismatch")
+
+
+def run_once(args, directory):
+    directory.mkdir()
+    command = build_command(args, directory)
     protocol = Protocol()
     events = queue.Queue(maxsize=32)
     start = time.perf_counter()
@@ -349,6 +419,7 @@ def run_once(args, directory):
     if protocol.summary is not None:
         try:
             summary = protocol.summary
+            validate_configuration(args, summary)
             if (summary["rate"] != args.rate or summary["image_count"] != len(args.images)
                 or summary["max_lag_ms"] != args.max_lag_ms
                 or summary["steady"]["duration_ms"] != args.duration * 1000
@@ -410,6 +481,11 @@ def parser():
     result.add_argument("--budget", type=positive, default=128 * 1024 * 1024, help="SDK admission bytes, excludes image sequence/model")
     result.add_argument("--max-lag-ms", type=finite_positive, default=100.)
     result.add_argument("--repeats", type=positive, default=3)
+    result.add_argument("--async-sdk", action="store_true", help="submit on schedule; SDK ready_at separates execution from consumption")
+    result.add_argument("--slots", type=int, choices=(1, 2), default=1)
+    result.add_argument("--reuse-host", type=int, choices=(0, 1), default=1)
+    result.add_argument("--reuse-gpu", type=int, choices=(0, 1), default=1)
+    result.add_argument("--consumer-delay-ms", type=int, default=0, help="0..60000; delay after wait, before get; async only")
     result.add_argument("--device", type=int, choices=(0,), default=0, help="V1 SDK uses device 0")
     result.add_argument("--process-timeout-seconds", type=finite_positive, default=3600.)
     result.add_argument("--environment-note", default="", help="power/background load/build type and external profiler conditions")
@@ -417,6 +493,12 @@ def parser():
 
 
 def validate_args(args):
+    if not 0 <= args.consumer_delay_ms <= 60000:
+        raise ValueError("consumer delay must be in 0..60000 ms")
+    if not args.async_sdk and (args.slots != 1 or args.reuse_host != 1 or args.reuse_gpu != 1 or args.consumer_delay_ms != 0):
+        raise ValueError("nondefault slots/reuse/consumer delay require --async-sdk")
+    if args.backend == "ort" and args.slots != 1:
+        raise ValueError("ORT supports one SDK slot")
     if (args.duration > 86400 or args.warmup > 3600 or args.rate > 100000 or args.sdk_workers > 256 or args.workers > 256
         or args.max_outstanding > 100000 or args.queue > 100000 or args.repeats > 100
         or math.ceil(args.duration * args.rate) + math.ceil(args.warmup * args.rate) > MAX_REQUESTS):
@@ -483,15 +565,17 @@ def main():
     for path in sorted(args.package.rglob("*")):
         if path.is_file():
             package_identity.append({"path": str(path.relative_to(args.package)), "bytes": path.stat().st_size, "sha256": sha256(path)})
-    report = {"schema": "miniinfer-depth-replay-report-v1", "recorded_at": datetime.now(timezone.utc).isoformat(),
-              "case": {key: getattr(args, key) for key in ("backend", "duration", "warmup", "rate", "sdk_workers", "workers", "max_outstanding", "queue", "budget", "max_lag_ms", "repeats", "device", "process_timeout_seconds", "environment_note")},
+    report = {"schema": "miniinfer-depth-replay-report-v2", "recorded_at": datetime.now(timezone.utc).isoformat(),
+              "case": {key: getattr(args, key) for key in ("backend", "duration", "warmup", "rate", "sdk_workers", "workers", "max_outstanding", "queue", "budget", "max_lag_ms", "repeats", "device", "process_timeout_seconds", "environment_note", "async_sdk", "slots", "reuse_host", "reuse_gpu", "consumer_delay_ms")},
               "identity": {"executable": str(args.executable), "executable_sha256": sha256(args.executable),
                            "package": str(args.package), "package_files": package_identity,
                            "images": [{"path": str(path), "sha256": sha256(path)} for path in args.images], "sequence_sha256": sha256(args.sequence)},
               "environment": environment(),
               "measurement": {"schedule": "phase-relative index/rate; fixed image order, decoded before ready",
                               "unsubmitted": "explicit capacity or generator-late; lateness beyond max-lag or phase end never catches up silently",
-                              "latency": "successful requests planned in phase, including drain; V1 observed ready immediately at run return while output is alive; delivered after output consumption/destruction",
+                              "latency": ("successful requests planned in phase, including drain; async ready is actual SDK ready_at publication after synchronized execution and owning restoration; delivered follows get/consumption, including configured consumer delay"
+                                          if args.async_sdk else "successful requests planned in phase, including drain; synchronous ready observed immediately at run return while output is alive; delivered after output consumption/destruction"),
+                              "window_end": "SDK unfinished uses ready timestamp; client undelivered uses delivered timestamp; v1 outstanding_at_window_end retains its historical ready-based definition",
                               "acceptance": "DepthTiming; backend/admission failure distinguished; absolute admission/dequeue not exposed",
                               "stages": "CPU wall; backend wall is not CUDA Event device compute time",
                               "upload_bytes": "ready event lists RGB8 source sizes and FP32 model input bytes; phase h2d_bytes/fp32_h2d_bytes count actual transfers for successful backend completions; rgb8_h2d_bytes is zero in the CPU preprocessing baseline; CPU backend transfers are zero",

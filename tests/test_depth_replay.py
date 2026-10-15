@@ -3,13 +3,15 @@ import copy
 import contextlib
 import csv
 import io
+import json
 from pathlib import Path
 import sys
 import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from run_depth_replay import CSV_FIELDS, Protocol, STATUSES, parser, summarize_csv, validate_args
+from run_depth_replay import (CSV_FIELDS, CSV_FIELDS_V2, Protocol, STATUSES, build_command,
+                              parser, summarize_csv, validate_args, validate_configuration)
 
 
 class ReplayTests(unittest.TestCase):
@@ -42,6 +44,116 @@ class ReplayTests(unittest.TestCase):
                                     "rejected_busy": 1, "rejected_closed": 0, "rejected_invalid": 0,
                                     "inflight": 0, "reserved_bytes": 0}}
         return path, summary
+
+    def v2_fixture(self, directory, asynchronous=True):
+        path, summary = self.fixture(directory)
+        with path.open(newline="") as stream:
+            rows = list(csv.DictReader(stream))
+        for row in rows:
+            row["request_handle_id"] = row["request_id"] if asynchronous and row["accepted"] == "1" else ""
+        with path.open("w", newline="") as stream:
+            writer = csv.DictWriter(stream, fieldnames=CSV_FIELDS_V2)
+            writer.writeheader()
+            writer.writerows(rows)
+        summary.update(schema="miniinfer-depth-replay-v2", async_sdk=asynchronous, slots=1,
+                       reuse_host=True, reuse_gpu=True, consumer_delay_ms=0)
+        summary["sdk_snapshot"].update(queued=0, executing=0, ready=0, abandoned=0, abandoned_completed=0)
+        return path, summary, rows
+
+    def write_v2_rows(self, path, rows):
+        with path.open("w", newline="") as stream:
+            writer = csv.DictWriter(stream, fieldnames=CSV_FIELDS_V2)
+            writer.writeheader()
+            writer.writerows(rows)
+
+    def test_v2_handle_ids_required_unique_and_only_for_accepted(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, summary, rows = self.v2_fixture(directory)
+            self.assertEqual(summarize_csv(path, summary)["steady"]["accepted"], 2)
+            accepted = [index for index, row in enumerate(rows) if row["accepted"] == "1"]
+            denied = [index for index, row in enumerate(rows) if row["accepted"] != "1"]
+            changes = [(accepted[0], ""), (accepted[0], "0"), (accepted[0], "-1"),
+                       (accepted[0], str(2**64)), (accepted[1], rows[accepted[0]]["request_handle_id"]),
+                       (denied[0], "999"), (denied[1], "998")]
+            for index, handle in changes:
+                changed = copy.deepcopy(rows)
+                changed[index]["request_handle_id"] = handle
+                self.write_v2_rows(path, changed)
+                with self.subTest(index=index, handle=handle), self.assertRaises(ValueError):
+                    summarize_csv(path, summary)
+            # IDs are opaque uint64 values, not plan indices or bytearray offsets.
+            rows[accepted[0]]["request_handle_id"] = str(2**64-1)
+            self.write_v2_rows(path, rows)
+            self.assertEqual(summarize_csv(path, summary)["steady"]["accepted"], 2)
+
+    def test_v2_slow_consumer_uses_sdk_ready_for_throughput(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, summary, rows = self.v2_fixture(directory)
+            first = next(row for row in rows if row["request_id"] == "1")
+            first["delivered_ms"] = "1005" # Ready at 20ms; consumer delivers in drain.
+            summary["steady"]["outstanding_at_window_end"] = 2
+            summary["consumer_delay_ms"] = 985
+            self.write_v2_rows(path, rows)
+            result = summarize_csv(path, summary)["steady"]
+            self.assertEqual(result["successful_throughput_per_second"], 1)
+            self.assertEqual(result["sdk_successful_latency"]["p50_ms"], 133)
+            self.assertEqual(result["delivery_successful_latency"]["p50_ms"], 493)
+            self.assertEqual(result["sdk_unfinished_at_window_end"], 1)
+            self.assertEqual(result["outstanding_at_window_end"], 2)
+            self.assertEqual(result["undelivered_at_window_end"], 2)
+            self.assertEqual(result["delivered_in_window"], 1)
+            self.assertEqual(result["delivered_during_drain"], 2)
+            summary["steady"]["outstanding_at_window_end"] = 1
+            with self.assertRaises(ValueError):
+                summarize_csv(path, summary)
+
+    def test_v2_handle_id_cannot_be_reused_after_warmup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, summary, rows = self.v2_fixture(directory)
+            for row in rows:
+                row["request_id"] = str(int(row["request_id"]) + 1)
+            warmup = dict(zip(CSV_FIELDS_V2, ("warmup", "1", "0", "0", "0", "1", "2", "10", "11",
+                                              "succeeded", "1", "1", "1", "1", "1", "1", "900")))
+            rows.append(warmup)
+            summary["warmup"].update(planned=1, submitted=1, duration_ms=250, completed_in_window=1,
+                                     succeeded_in_window=1, peak_outstanding=1)
+            summary["warmup"]["counts"]["succeeded"] = 1
+            summary["sdk_snapshot"].update(accepted=3, succeeded=3, delivered=3)
+            self.write_v2_rows(path, rows)
+            self.assertEqual(summarize_csv(path, summary)["warmup"]["accepted"], 1)
+            warmup["request_handle_id"] = next(row["request_handle_id"] for row in rows if row["phase"] == "steady" and row["accepted"] == "1")
+            self.write_v2_rows(path, rows)
+            with self.assertRaisesRegex(ValueError, "duplicate SDK"):
+                summarize_csv(path, summary)
+
+    def test_v2_final_execution_ready_and_abandonment_are_zero(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, summary, _ = self.v2_fixture(directory)
+            for key in ("queued", "executing", "ready", "abandoned", "abandoned_completed"):
+                changed = copy.deepcopy(summary)
+                changed["sdk_snapshot"][key] = 1
+                with self.subTest(key=key), self.assertRaises(ValueError):
+                    summarize_csv(path, changed)
+                del changed["sdk_snapshot"][key]
+                with self.subTest(missing=key), self.assertRaises(KeyError):
+                    summarize_csv(path, changed)
+
+    def test_v1_and_v2_sync_protocol_remain_compatible(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, summary = self.fixture(directory)
+            original = summarize_csv(path, summary)
+            path, updated, _ = self.v2_fixture(directory, asynchronous=False)
+            self.assertEqual(original, summarize_csv(path, updated))
+            for version in (summary, updated):
+                protocol = Protocol()
+                for event in ({"event": "ready", "startup_ms": 10},
+                              {"event": "phase", "phase": "warmup"},
+                              {"event": "phase", "phase": "steady"},
+                              {"event": "phase", "phase": "drain", "source": "steady"},
+                              {"event": "summary", **version}):
+                    protocol.consume(json.dumps(event), .1)
+                self.assertEqual(protocol.errors, [])
+                self.assertEqual(protocol.summary["schema"], version["schema"])
 
     def test_full_denominator_success_percentile_and_window_throughput(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -180,6 +292,39 @@ class ReplayTests(unittest.TestCase):
             self.assertEqual(args.images, [image, image])
             self.assertEqual(args.repeats, 3)
             self.assertEqual(args.sdk_workers, 4)
+            args.sequence = root / "sequence.txt"
+            legacy_command = build_command(args, root / "repeat")
+            for flag in ("--async-sdk", "--slots", "--reuse-host", "--reuse-gpu", "--consumer-delay-ms"):
+                self.assertNotIn(flag, legacy_command)
+            _, legacy_summary = self.fixture(directory)
+            validate_configuration(args, legacy_summary)
+            async_args = parser().parse_args(base + ["--async-sdk", "--reuse-host", "0", "--reuse-gpu", "0", "--consumer-delay-ms", "60000"])
+            validate_args(async_args)
+            async_args.sequence = args.sequence
+            command = build_command(async_args, root / "repeat")
+            self.assertEqual(command[command.index("--async-sdk") + 1], "1")
+            self.assertEqual(command[command.index("--consumer-delay-ms") + 1], "60000")
+            dual_args = parser().parse_args(base + ["--backend", "trt", "--async-sdk", "--slots", "2"])
+            validate_args(dual_args)
+            dual_args.sequence = args.sequence
+            dual_command = build_command(dual_args, root / "repeat")
+            self.assertEqual(dual_command[dual_command.index("--slots") + 1], "2")
+            with self.assertRaises(ValueError):
+                validate_configuration(async_args, legacy_summary)
+            _, async_summary, _ = self.v2_fixture(directory)
+            async_summary.update(reuse_host=False, reuse_gpu=False, consumer_delay_ms=60000)
+            validate_configuration(async_args, async_summary)
+            for key, value in (("async_sdk", False), ("slots", 2), ("reuse_host", True), ("consumer_delay_ms", 0)):
+                changed = copy.deepcopy(async_summary)
+                changed[key] = value
+                with self.subTest(configuration=key), self.assertRaises(ValueError):
+                    validate_configuration(async_args, changed)
+            for flag, value in (("--slots", "2"), ("--reuse-host", "0"), ("--reuse-gpu", "0"), ("--consumer-delay-ms", "1")):
+                with self.subTest(nonasync=flag), self.assertRaises(ValueError):
+                    validate_args(parser().parse_args(base + [flag, value]))
+            for value in ("-1", "60001"):
+                with self.subTest(delay=value), self.assertRaises(ValueError):
+                    validate_args(parser().parse_args(base + ["--async-sdk", "--consumer-delay-ms", value]))
             for flag, value in (("--sdk-workers", "257"), ("--workers", "257"), ("--max-outstanding", "100001"),
                                 ("--duration", "86401"), ("--duration", "86400"),
                                 ("--repeats", "101"), ("--process-timeout-seconds", "10")):

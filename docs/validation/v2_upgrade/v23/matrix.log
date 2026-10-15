@@ -1,0 +1,12 @@
+{"case": "allocate-1", "completed": true}
+{"case": "gpu-reuse-1", "completed": true}
+{"case": "reuse-1", "completed": true}
+{"case": "reuse-2", "completed": true}
+{"case": "overload-1", "completed": true}
+{"case": "overload-2", "completed": true}
+{"case": "allocate-1", "sdk_p99_ms": [49.15496035, 49.14463136000082, 47.32908474000302], "success_qps": [20.0, 20.0, 19.98], "busy": [0, 0, 1]}
+{"case": "gpu-reuse-1", "sdk_p99_ms": [35.560958170003794, 35.95218753999839, 35.05995437999572], "success_qps": [20.0, 20.0, 20.0], "busy": [0, 0, 0]}
+{"case": "overload-1", "sdk_p99_ms": [34.482790649998705, 35.465157360000006, 37.60974339999967], "success_qps": [64.68, 60.7, 59.68], "busy": [764, 963, 1015]}
+{"case": "overload-2", "sdk_p99_ms": [38.26762339999964, 39.651170239997136, 36.06258693999891], "success_qps": [60.5, 59.98, 60.46], "busy": [973, 1000, 976]}
+{"case": "reuse-1", "sdk_p99_ms": [33.8927294100001, 34.71132516000067, 34.862074919998264], "success_qps": [20.0, 20.0, 20.0], "busy": [0, 0, 0]}
+{"case": "reuse-2", "sdk_p99_ms": [33.813943429996144, 34.51189674999932, 33.666454149994095], "success_qps": [20.0, 20.0, 20.0], "busy": [0, 0, 0]}

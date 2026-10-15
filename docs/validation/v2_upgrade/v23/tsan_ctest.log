@@ -1,0 +1,41 @@
+Internal ctest changing into directory: /home/qyc/builds/MiniInfer/v23-upgrade-tsan
+Test project /home/qyc/builds/MiniInfer/v23-upgrade-tsan
+    Start  1: depth_image_contract
+1/7 Test  #1: depth_image_contract .............***Failed    0.02 sec
+FATAL: ThreadSanitizer: unexpected memory mapping 0x5c6507506000-0x5c650750a000
+
+    Start  3: depth_sdk_contract
+2/7 Test  #3: depth_sdk_contract ...............***Failed    0.01 sec
+FATAL: ThreadSanitizer: unexpected memory mapping 0x62f932be9000-0x62f932bf5000
+
+    Start 18: runtime_contract
+3/7 Test #18: runtime_contract .................***Failed    0.01 sec
+FATAL: ThreadSanitizer: unexpected memory mapping 0x6518bda4a000-0x6518bda50000
+
+    Start 19: thread_pool_contract
+4/7 Test #19: thread_pool_contract .............***Failed    0.01 sec
+FATAL: ThreadSanitizer: unexpected memory mapping 0x5d9ea42cb000-0x5d9ea42d4000
+
+    Start 20: concurrency_contract
+5/7 Test #20: concurrency_contract .............   Passed   15.92 sec
+    Start 21: shutdown_contract
+6/7 Test #21: shutdown_contract ................***Failed    0.01 sec
+FATAL: ThreadSanitizer: unexpected memory mapping 0x62dd9b551000-0x62dd9b559000
+
+    Start 22: timing_contract
+7/7 Test #22: timing_contract ..................***Failed    0.01 sec
+FATAL: ThreadSanitizer: unexpected memory mapping 0x5ab210d58000-0x5ab210d5d000
+
+
+14% tests passed, 6 tests failed out of 7
+
+Total Test time (real) =  16.02 sec
+
+The following tests FAILED:
+	  1 - depth_image_contract (Failed)
+	  3 - depth_sdk_contract (Failed)
+	 18 - runtime_contract (Failed)
+	 19 - thread_pool_contract (Failed)
+	 21 - shutdown_contract (Failed)
+	 22 - timing_contract (Failed)
+Errors while running CTest

@@ -4,6 +4,8 @@
 #include <NvOnnxParser.h>
 #include <cuda_runtime_api.h>
 #include <sys/utsname.h>
+#include <algorithm>
+#include <atomic>
 #include <chrono>
 #include <cstring>
 #include <iostream>
@@ -204,25 +206,47 @@ public:
     std::mutex mutex;
     bool failed=false;
     std::size_t size=0;
-    Impl(std::vector<std::uint8_t> plan,Manifest validated,int target)
-        :device(target),metadata(std::move(validated)) {
+    bool reuse_buffers=true;
+    std::size_t context_required_bytes=0;
+    std::atomic<std::size_t> device_bytes{0}, pinned_bytes{0}, peak_device{0}, peak_pinned{0};
+    std::atomic<std::size_t> device_allocations{0}, pinned_allocations{0};
+    void allocate_buffers() {
+        const auto raw_elements=size*size, input_elements=3*raw_elements;
+        input=std::make_unique<Allocation>(input_elements*sizeof(float));
+        device_bytes += input_elements*sizeof(float); ++device_allocations;
+        peak_device.store(std::max(peak_device.load(),device_bytes.load()));
+        output=std::make_unique<Allocation>(raw_elements*sizeof(float));
+        device_bytes += raw_elements*sizeof(float); ++device_allocations;
+        peak_device.store(std::max(peak_device.load(),device_bytes.load()));
+        host_input=std::make_unique<Pinned>(input_elements);
+        pinned_bytes += input_elements*sizeof(float); ++pinned_allocations;
+        peak_pinned.store(std::max(peak_pinned.load(),pinned_bytes.load()));
+        host_output=std::make_unique<Pinned>(raw_elements);
+        pinned_bytes += raw_elements*sizeof(float); ++pinned_allocations;
+        peak_pinned.store(std::max(peak_pinned.load(),pinned_bytes.load()));
+        if(!context->setTensorAddress("image",input->pointer)||!context->setTensorAddress("depth",output->pointer))
+            throw std::runtime_error("bind engine tensor addresses failed");
+    }
+    void release_buffers() noexcept {
+        host_output.reset();host_input.reset();output.reset();input.reset();
+        pinned_bytes=0;device_bytes=0;
+    }
+    Impl(std::vector<std::uint8_t> plan,Manifest validated,int target,bool reuse)
+        :device(target),metadata(std::move(validated)),reuse_buffers(reuse) {
         Device guard(device);
         verify_environment(metadata,device);
         runtime=require(nvinfer1::createInferRuntime(logger),"create runtime failed");
         engine=require(runtime->deserializeCudaEngine(plan.data(),plan.size()),"load engine failed");
         size=verify_engine(*engine);
         require_equal(metadata,"contract",std::string(model_contract(size)));
-        const auto raw_elements=size*size, input_elements=3*raw_elements;
         context=require(engine->createExecutionContext(),"create context failed");
-        input=std::make_unique<Allocation>(input_elements*sizeof(float));
-        output=std::make_unique<Allocation>(raw_elements*sizeof(float));
-        host_input=std::make_unique<Pinned>(input_elements);
-        host_output=std::make_unique<Pinned>(raw_elements);
+        const auto required=engine->getDeviceMemorySizeV2();
+        if(required<0) throw std::runtime_error("invalid context memory requirement");
+        context_required_bytes=static_cast<std::size_t>(required);
         begin=std::make_unique<Event>();h2d_end=std::make_unique<Event>();
         compute_end=std::make_unique<Event>();d2h_end=std::make_unique<Event>();
         stream=std::make_unique<Stream>();
-        if(!context->setTensorAddress("image",input->pointer)||!context->setTensorAddress("depth",output->pointer))
-            throw std::runtime_error("bind engine tensor addresses failed");
+        if(reuse_buffers) allocate_buffers();
     }
     ~Impl() {
         // CUDA resources belong to their original device even when the final
@@ -231,12 +255,12 @@ public:
         (void)cudaGetDevice(&previous);
         (void)cudaSetDevice(device);
         stream.reset();d2h_end.reset();compute_end.reset();h2d_end.reset();begin.reset();
-        host_output.reset();host_input.reset();output.reset();input.reset();
+        release_buffers();
         context.reset();engine.reset();runtime.reset();
         if(previous!=device) (void)cudaSetDevice(previous);
     }
 };
-TrtRunner::TrtRunner(const std::filesystem::path& path,int device) {
+TrtRunner::TrtRunner(const std::filesystem::path& path,int device,bool reuse_buffers) {
     if(device<0) throw std::invalid_argument("CUDA device must be nonnegative");
     // Reject missing, malformed or corrupt files before initializing CUDA.
     auto metadata=read_manifest(path.string()+".manifest");
@@ -245,11 +269,15 @@ TrtRunner::TrtRunner(const std::filesystem::path& path,int device) {
     require_equal(metadata,"engine_sha256",sha256({reinterpret_cast<const char*>(plan.data()),plan.size()}));
     // Keep the selected device active while partially built Impl members unwind.
     Device guard(device);
-    impl_=std::make_unique<Impl>(std::move(plan),std::move(metadata),device);
+    impl_=std::make_unique<Impl>(std::move(plan),std::move(metadata),device,reuse_buffers);
 }
 TrtRunner::~TrtRunner()=default;
 const Manifest& TrtRunner::manifest() const noexcept { return impl_->metadata; }
 std::size_t TrtRunner::input_size() const noexcept { return impl_->size; }
+TrtResources TrtRunner::resource_snapshot() const noexcept {
+    return {impl_->device_bytes.load(),impl_->pinned_bytes.load(),impl_->peak_device.load(),impl_->peak_pinned.load(),
+            impl_->device_allocations.load(),impl_->pinned_allocations.load(),impl_->context_required_bytes};
+}
 RawDepth TrtRunner::run_raw(const PreparedImage& prepared,TrtTiming* timing) {
     ProfileRange profile("depth.trt.h2d_execute_d2h");
     const auto host_start=std::chrono::steady_clock::now();
@@ -261,8 +289,14 @@ RawDepth TrtRunner::run_raw(const PreparedImage& prepared,TrtTiming* timing) {
     std::lock_guard<std::mutex> lock(impl_->mutex);
     if(impl_->failed) throw std::runtime_error("TensorRT slot failed previously; reinitialize the runner");
     Device guard(impl_->device);
-    std::memcpy(impl_->host_input->pointer,prepared.values().data(),input_elements*sizeof(float));
+    struct Release {
+        Impl& impl;
+        bool active;
+        ~Release() { if(active) impl.release_buffers(); }
+    } release{*impl_,!impl_->reuse_buffers};
     try {
+        if(!impl_->reuse_buffers) impl_->allocate_buffers();
+        std::memcpy(impl_->host_input->pointer,prepared.values().data(),input_elements*sizeof(float));
         if(timing) check(cudaEventRecord(impl_->begin->value,impl_->stream->value),"record input event");
         check(cudaMemcpyAsync(impl_->input->pointer,impl_->host_input->pointer,input_elements*sizeof(float),
                               cudaMemcpyHostToDevice,impl_->stream->value),"H2D copy");
@@ -286,6 +320,7 @@ RawDepth TrtRunner::run_raw(const PreparedImage& prepared,TrtTiming* timing) {
         throw;
     }
     RawDepth result(std::vector<float>(impl_->host_output->pointer,impl_->host_output->pointer+raw_elements));
+    if(release.active) { impl_->release_buffers(); release.active=false; }
     if(timing) timing->host_ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-host_start).count();
     return result;
 }

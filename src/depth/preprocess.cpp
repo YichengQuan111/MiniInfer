@@ -10,9 +10,9 @@
 namespace miniinfer::depth {
 namespace {
 struct Coordinate { std::size_t lower, upper; float weight; };
-std::vector<Coordinate> axis(std::size_t source, std::size_t target) {
+void axis(std::size_t source, std::size_t target, std::vector<Coordinate>& coordinates) {
     const float scale = static_cast<float>(static_cast<double>(source) / static_cast<double>(target));
-    std::vector<Coordinate> coordinates(target);
+    coordinates.resize(target);
     for (std::size_t index = 0; index < target; ++index) {
         const float center = static_cast<float>(index) + 0.5F;
         const float scaled = center * scale;
@@ -21,7 +21,39 @@ std::vector<Coordinate> axis(std::size_t source, std::size_t target) {
         const auto lower = static_cast<std::size_t>(std::floor(clamped));
         coordinates[index] = {lower, std::min(lower + 1, source - 1), clamped - static_cast<float>(lower)};
     }
-    return coordinates;
+}
+void bilinear_into(const std::vector<float>& source,
+    std::size_t source_width, std::size_t source_height, std::size_t channels,
+    std::size_t target_width, std::size_t target_height, std::vector<float>& result,
+    std::vector<Coordinate>& xs, std::vector<Coordinate>& ys) {
+    const auto source_pixels = validate_dimensions(source_width, source_height);
+    const auto target_pixels = validate_dimensions(target_width, target_height);
+    if (channels != 1 && channels != 3) throw std::invalid_argument("bilinear supports one or three channels");
+    if (source.size() != source_pixels * channels) throw std::invalid_argument("bilinear source length mismatch");
+    validate_finite(source);
+    axis(source_width, target_width, xs);
+    axis(source_height, target_height, ys);
+    result.resize(target_pixels * channels);
+    for (std::size_t y = 0; y < target_height; ++y) {
+        for (std::size_t x = 0; x < target_width; ++x) {
+            for (std::size_t c = 0; c < channels; ++c) {
+                const float a = source[(ys[y].lower * source_width + xs[x].lower) * channels + c];
+                const float b = source[(ys[y].lower * source_width + xs[x].upper) * channels + c];
+                const float d = source[(ys[y].upper * source_width + xs[x].lower) * channels + c];
+                const float e = source[(ys[y].upper * source_width + xs[x].upper) * channels + c];
+                const float upper_difference = b - a;
+                const float upper_weighted = upper_difference * xs[x].weight;
+                const float upper = a + upper_weighted;
+                const float lower_difference = e - d;
+                const float lower_weighted = lower_difference * xs[x].weight;
+                const float lower = d + lower_weighted;
+                const float vertical_difference = lower - upper;
+                const float vertical_weighted = vertical_difference * ys[y].weight;
+                result[(y * target_width + x) * channels + c] = upper + vertical_weighted;
+            }
+        }
+    }
+    validate_finite(result);
 }
 }  // namespace
 
@@ -66,34 +98,9 @@ PreparedImage::PreparedImage(std::vector<float> nchw, Geometry transform)
 std::vector<float> bilinear_half_pixel(const std::vector<float>& source,
     std::size_t source_width, std::size_t source_height, std::size_t channels,
     std::size_t target_width, std::size_t target_height) {
-    const auto source_pixels = validate_dimensions(source_width, source_height);
-    const auto target_pixels = validate_dimensions(target_width, target_height);
-    if (channels != 1 && channels != 3) throw std::invalid_argument("bilinear supports one or three channels");
-    if (source.size() != source_pixels * channels) throw std::invalid_argument("bilinear source length mismatch");
-    validate_finite(source);
-    const auto xs = axis(source_width, target_width);
-    const auto ys = axis(source_height, target_height);
-    std::vector<float> result(target_pixels * channels);
-    for (std::size_t y = 0; y < target_height; ++y) {
-        for (std::size_t x = 0; x < target_width; ++x) {
-            for (std::size_t c = 0; c < channels; ++c) {
-                const float a = source[(ys[y].lower * source_width + xs[x].lower) * channels + c];
-                const float b = source[(ys[y].lower * source_width + xs[x].upper) * channels + c];
-                const float d = source[(ys[y].upper * source_width + xs[x].lower) * channels + c];
-                const float e = source[(ys[y].upper * source_width + xs[x].upper) * channels + c];
-                const float upper_difference = b - a;
-                const float upper_weighted = upper_difference * xs[x].weight;
-                const float upper = a + upper_weighted;
-                const float lower_difference = e - d;
-                const float lower_weighted = lower_difference * xs[x].weight;
-                const float lower = d + lower_weighted;
-                const float vertical_difference = lower - upper;
-                const float vertical_weighted = vertical_difference * ys[y].weight;
-                result[(y * target_width + x) * channels + c] = upper + vertical_weighted;
-            }
-        }
-    }
-    validate_finite(result);
+    std::vector<float> result;
+    std::vector<Coordinate> xs, ys;
+    bilinear_into(source, source_width, source_height, channels, target_width, target_height, result, xs, ys);
     return result;
 }
 
@@ -149,5 +156,75 @@ DepthMap postprocess(const RawDepth& raw, const Geometry& transform) {
     return DepthMap(transform.original_width, transform.original_height,
                    bilinear_half_pixel(cropped, transform.resized_width, transform.resized_height, 1,
                                        transform.original_width, transform.original_height));
+}
+class CpuWorkspace::Impl {
+public:
+    explicit Impl(std::size_t input_size)
+        : size(validate_model_size(input_size)), prepared(std::vector<float>(3 * size * size), geometry(1, 1, size)) {
+        pixels.reserve(3 * max_pixels);
+        resized.reserve(3 * size * size);
+        cropped.reserve(size * size);
+        xs.reserve(max_side); ys.reserve(max_side);
+        bytes = (pixels.capacity() + resized.capacity() + cropped.capacity() + prepared.values().capacity()) * sizeof(float)
+                + (xs.capacity() + ys.capacity()) * sizeof(Coordinate);
+    }
+    const std::size_t size;
+    std::size_t bytes = 0;
+    PreparedImage prepared;
+    std::vector<float> pixels, resized, cropped;
+    std::vector<Coordinate> xs, ys;
+};
+CpuWorkspace::CpuWorkspace(std::size_t size) : impl_(std::make_unique<Impl>(size)) {}
+CpuWorkspace::~CpuWorkspace() = default;
+std::size_t CpuWorkspace::capacity_bytes() const noexcept { return impl_->bytes; }
+const PreparedImage& CpuWorkspace::prepare(const RgbImage& image) {
+    ProfileRange profile("depth.preprocess.reuse");
+    auto& w = *impl_;
+    const auto transform = geometry(image.width(), image.height(), w.size);
+    if (image.pixels().size() != image.width() * image.height() * 3)
+        throw std::invalid_argument("RGB8 input storage length mismatch");
+    w.pixels.resize(image.pixels().size());
+    {
+        ProfileRange convert("depth.preprocess.cpu.convert");
+        for (std::size_t i = 0; i < w.pixels.size(); ++i) w.pixels[i] = static_cast<float>(image.pixels()[i]) / 255.0F;
+    }
+    {
+        ProfileRange resize("depth.preprocess.cpu.resize");
+        bilinear_into(w.pixels, image.width(), image.height(), 3, transform.resized_width, transform.resized_height,
+                      w.resized, w.xs, w.ys);
+    }
+    constexpr std::array<float, 3> mean{0.485F, 0.456F, 0.406F}, deviation{0.229F, 0.224F, 0.225F};
+    const auto area = w.size * w.size;
+    {
+        ProfileRange normalize("depth.preprocess.cpu.pad_normalize_hwc_to_nchw");
+        for (std::size_t c = 0; c < 3; ++c)
+        for (std::size_t y = 0; y < w.size; ++y)
+            for (std::size_t x = 0; x < w.size; ++x) {
+                float value = 0.0F;
+                if (x >= transform.pad_left && x < transform.pad_left + transform.resized_width
+                    && y >= transform.pad_top && y < transform.pad_top + transform.resized_height)
+                    value = w.resized[((y - transform.pad_top) * transform.resized_width + x - transform.pad_left) * 3 + c];
+                const float centered = value - mean[c];
+                w.prepared.values_[c * area + y * w.size + x] = centered / deviation[c];
+            }
+    }
+    w.prepared.transform_ = transform;
+    return w.prepared;
+}
+DepthMap CpuWorkspace::restore(const RawDepth& raw, const Geometry& transform) {
+    ProfileRange profile("depth.postprocess.reuse");
+    auto& w = *impl_;
+    validate_geometry(transform);
+    if (raw.size() != w.size || geometry_size(transform) != w.size)
+        throw std::invalid_argument("workspace/raw/geometry model sizes disagree");
+    validate_finite(raw.values());
+    w.cropped.resize(transform.resized_width * transform.resized_height);
+    for (std::size_t y = 0; y < transform.resized_height; ++y)
+        std::copy_n(raw.values().begin() + static_cast<std::ptrdiff_t>((y + transform.pad_top) * w.size + transform.pad_left),
+                    transform.resized_width, w.cropped.begin() + static_cast<std::ptrdiff_t>(y * transform.resized_width));
+    std::vector<float> output;
+    bilinear_into(w.cropped, transform.resized_width, transform.resized_height, 1,
+                  transform.original_width, transform.original_height, output, w.xs, w.ys);
+    return DepthMap(transform.original_width, transform.original_height, std::move(output));
 }
 }  // namespace miniinfer::depth

@@ -23,3 +23,10 @@ if(BUILD_TESTING)
     add_test(NAME depth_sdk_contract COMMAND test_depth_sdk)
     set_tests_properties(depth_sdk_contract PROPERTIES TIMEOUT 45)
 endif()
+
+# Explicit manual GPU test; no CTest model discovery or implicit GPU workload.
+if(BUILD_TESTING AND MINIINFER_ENABLE_TRT)
+    add_executable(test_depth_async_gpu "${PROJECT_SOURCE_DIR}/tests/test_depth_async_gpu.cpp")
+    target_link_libraries(test_depth_async_gpu PRIVATE miniinfer::depth_sdk)
+    miniinfer_configure_target(test_depth_async_gpu)
+endif()

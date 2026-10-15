@@ -69,10 +69,26 @@ int main(int argc,char** argv) {
             const auto result_a=a.get(),result_b=b.get();
             expect(result_a.values()==saved->values(),"concurrent output changed");
             expect(result_b.values()==saved->values(),"concurrent output changed");
+            const auto stats=runner.resource_snapshot();
+            expect(stats.device_allocation_calls==2&&stats.pinned_allocation_calls==2,
+                   "reused slot allocated IO on the hot path");
+            expect(stats.io_device_bytes==4*runner.input_size()*runner.input_size()*sizeof(float)
+                   &&stats.io_pinned_bytes==stats.io_device_bytes&&stats.context_required_bytes>0,
+                   "slot IO/context ledger mismatch");
         }
         const auto& input=*input_storage;
         const auto after_shutdown=postprocess(*saved,input.transform());
         expect(after_shutdown.width()==image.width(),"owned output lost after destruction");
+        {
+            TrtRunner allocated(argv[1],0,false);
+            for(int i=0;i<2;++i) {
+                const auto output=allocated.run_raw(input);
+                expect(output.values()==saved->values(),"per-request allocation changed output");
+            }
+            const auto stats=allocated.resource_snapshot();
+            expect(stats.io_device_bytes==0&&stats.io_pinned_bytes==0,"per-request IO not released");
+            expect(stats.device_allocation_calls==4&&stats.pinned_allocation_calls==4,"allocation control did not allocate per request");
+        }
         auto manifest=read_manifest(std::string(argv[1])+".manifest");
         manifest["contract"]="wrong-contract";
         write_text_exclusive(dir/"mismatch.manifest",manifest_text(manifest));

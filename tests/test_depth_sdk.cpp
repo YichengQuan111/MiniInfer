@@ -15,10 +15,13 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <type_traits>
 
 namespace {
 using namespace miniinfer::depth;
 using miniinfer::depth::detail::SdkTestAccess;
+static_assert(!std::is_copy_constructible_v<DepthRequest> && !std::is_copy_assignable_v<DepthRequest>);
+static_assert(std::is_nothrow_move_constructible_v<DepthRequest> && std::is_nothrow_move_assignable_v<DepthRequest>);
 void expect(bool value, const char* description) { if (!value) throw std::runtime_error(description); }
 template<class Callable> void error(SdkErrorCode code, Callable callable, const char* description) {
     try { callable(); } catch (const SdkError& failure) {
@@ -129,12 +132,12 @@ void worker_backend_ownership() {
     expect(destroyed == 0, "shutdown released a worker backend while execution was blocked");
     second_wave.release();
     delivery.wait(worker_count);
-    expect(!sdk->snapshot().shutdown_complete && destroyed == 0
-           && std::all_of(lifetimes.begin(), lifetimes.end(), [](const auto& lifetime) { return !lifetime.expired(); }),
-           "all worker backends must remain alive until accepted results are delivered");
+    shutdown.get();
+    expect(sdk->snapshot().shutdown_complete && destroyed == worker_count
+           && std::all_of(lifetimes.begin(), lifetimes.end(), [](const auto& lifetime) { return lifetime.expired(); }),
+           "backend resources must be released after execution while get delivery remains blocked");
     delivery.release();
     for (auto& future : running) results.push_back(future.get());
-    shutdown.get();
     expect(destroyed == worker_count
            && std::all_of(lifetimes.begin(), lifetimes.end(), [](const auto& lifetime) { return lifetime.expired(); }),
            "shutdown must release every worker backend after execution and delivery");
@@ -276,11 +279,11 @@ void ready_result_shutdown() {
     SdkTestAccess::wait(*sdk, [](const SdkSnapshot& state) { return !state.accepting; });
     auto shutdown_two = std::async(std::launch::async, [&] { sdk->shutdown(); });
     error(SdkErrorCode::Closed, [&] { sdk->run(input); }, "run during shutdown must be Closed");
-    expect(!sdk->snapshot().shutdown_complete, "shutdown finished while result awaited delivery");
-    delivery.release();
-    const auto result = run.get();
     shutdown_one.get();
     shutdown_two.get();
+    expect(sdk->snapshot().shutdown_complete, "shutdown must finish without consuming ready handles");
+    delivery.release();
+    const auto result = run.get();
     sdk->shutdown();
     const auto state = sdk->snapshot();
     expect(state.shutdown_complete && !state.accepting && state.inflight == 0 && state.reserved_bytes == 0,
@@ -365,6 +368,199 @@ void errors_and_reuse() {
     sdk.reset();
     expect(result.values()[0] == 4, "parallel result did not outlive recovered pool");
 }
+template<class Callable> void invalid_handle(Callable callable) {
+    try { callable(); } catch (const std::logic_error&) { return; }
+    throw std::runtime_error("invalid/moved/consumed request method succeeded");
+}
+void async_ownership_and_lifetime() {
+    Gate gate;
+    auto sdk = SdkTestAccess::create({}, [&](const RgbImage& input) { gate.block(); return output(input); });
+    auto source = image(31,2,2);
+    auto request = sdk->submit(source);
+    const auto id = request.id();
+    expect(id != 0 && request.valid(), "accepted request has no ID/valid handle");
+    gate.wait();
+    source = image(99,2,2);
+    expect(!request.ready() && !request.wait_for(std::chrono::milliseconds(1)), "unfinished request became ready");
+    try { request.wait_for(std::chrono::milliseconds(-1)); throw std::runtime_error("negative wait allowed"); }
+    catch (const std::invalid_argument&) {}
+    auto moved = std::move(request);
+    expect(!request.valid() && moved.id() == id, "move changed request identity");
+    invalid_handle([&] { request.id(); });
+    invalid_handle([&] { request.ready(); });
+    invalid_handle([&] { request.wait(); });
+    invalid_handle([&] { request.get(); });
+    gate.release(); moved.wait();
+    expect(moved.ready(), "wait returned before ready");
+    sdk.reset(); // Unconsumed ready handle remains valid after SDK destruction.
+    DepthTiming timing;
+    const auto result = moved.get(&timing);
+    expect(result.values() == std::vector<float>(4,31), "async input was borrowed or result died with SDK");
+    expect(timing.accepted && timing.ready_at != std::chrono::steady_clock::time_point{}, "actual ready timestamp missing");
+    expect(timing.ready_at <= std::chrono::steady_clock::now(), "ready timestamp lies in future");
+    invalid_handle([&] { moved.get(); });
+    moved.abandon(); moved.abandon(); // Invalid abandonment is harmless.
+}
+void ready_quota_and_abandonment() {
+    SdkConfig config; config.worker_count=1; config.queue_capacity=1;
+    const auto bytes=DepthSdk::reservation_bytes(1,1);
+    config.byte_budget=3*bytes; // Count bound reaches 2 first; bytes remain available.
+    auto sdk=SdkTestAccess::create(config,output);
+    auto first=sdk->submit(image(1)); first.wait();
+    auto second=sdk->submit(image(2)); second.wait();
+    auto state=sdk->snapshot();
+    expect(state.executing==0 && state.queued==0 && state.ready==2 && state.inflight==2
+           && state.reserved_bytes==2*bytes, "slow consumer escaped count/byte quota");
+    error(SdkErrorCode::Busy,[&] { sdk->submit(image()); },"ready results must exhaust total quota");
+    first.abandon(); first.abandon(); // Idempotent even before handle destruction.
+    state=sdk->snapshot();
+    expect(!first.valid() && state.abandoned==1 && state.abandoned_completed==1
+           && state.ready==1 && state.inflight==1 && state.reserved_bytes==bytes,"ready abandon did not release quota");
+    auto replacement=sdk->submit(image(3)); replacement.wait();
+    const auto old_id=second.id();
+    second=std::move(replacement); // Move assignment abandons its previous ready result.
+    expect(second.id()!=old_id && !replacement.valid(),"move assignment did not transfer identity");
+    expect(sdk->snapshot().abandoned_completed==2,"move assignment failed to abandon old handle");
+    const auto replacement_result=second.get();
+    expect(replacement_result.values()[0]==3,"replacement result association failed");
+    state=sdk->snapshot();
+    expect(state.accepted==3 && state.delivered==1 && state.abandoned_completed==2 && state.ready==0
+           && state.inflight==0 && state.reserved_bytes==0,"ready-consumer ledger conservation");
+}
+void pending_abandonment_and_shutdown() {
+    Gate gate; std::atomic<int> calls{0};
+    SdkConfig config; config.worker_count=1; config.queue_capacity=1;
+    auto sdk=SdkTestAccess::create(config,[&](const RgbImage& input) {
+        if(++calls==1) gate.block();
+        return output(input);
+    });
+    auto first=sdk->submit(image(10)); gate.wait();
+    auto waiting=sdk->submit(image(20));
+    const auto bytes=DepthSdk::reservation_bytes(1,1);
+    first.abandon(); waiting.abandon(); first.abandon(); waiting.abandon();
+    auto state=sdk->snapshot();
+    expect(state.abandoned==2 && state.abandoned_completed==0 && state.executing==1
+           && state.queued==1 && state.inflight==2 && state.reserved_bytes==2*bytes,
+           "pending abandonment prematurely freed input/execution quota");
+    error(SdkErrorCode::Busy,[&] { sdk->submit(image()); },"pending abandoned task lost quota");
+    auto shutdown=std::async(std::launch::async,[&] { sdk->shutdown(); });
+    SdkTestAccess::wait(*sdk,[](const SdkSnapshot& snapshot) {return !snapshot.accepting;});
+    expect(!sdk->snapshot().shutdown_complete,"shutdown did not wait for executing abandoned task");
+    error(SdkErrorCode::Closed,[&] { sdk->submit(image()); },"shutdown race accepted another task");
+    gate.release(); shutdown.get();
+    state=sdk->snapshot();
+    expect(calls==2 && state.succeeded==2 && state.abandoned_completed==2 && state.ready==0
+           && state.executing==0 && state.queued==0 && state.inflight==0 && state.reserved_bytes==0,
+           "abandoned accepted tasks were not drained and released");
+}
+void two_slot_out_of_order() {
+    Gate first_gate, second_gate;
+    std::mutex order_mutex; std::vector<unsigned> started;
+    SdkConfig config; config.worker_count=2; config.gpu_slots=2; config.queue_capacity=2;
+    auto sdk=SdkTestAccess::create(config,[&](const RgbImage& input) {
+        {std::lock_guard<std::mutex> lock(order_mutex); started.push_back(input.pixels()[0]);}
+        if(input.pixels()[0]==11) first_gate.block();
+        else if(input.pixels()[0]==22) second_gate.block();
+        return output(input);
+    });
+    auto first=sdk->submit(image(11)); first_gate.wait();
+    auto second=sdk->submit(image(22)); second_gate.wait();
+    auto third=sdk->submit(image(33));
+    auto fourth=sdk->submit(image(44));
+    expect(first.id()<second.id() && second.id()<third.id() && third.id()<fourth.id(),"IDs are not unique monotonic associations");
+    expect(sdk->snapshot().executing==2 && sdk->snapshot().queued==2,"two workers did not own separate active slots");
+    error(SdkErrorCode::Busy,[&] { sdk->submit(image()); },"two-slot queue+slot reservation bound exceeded");
+    second_gate.release();
+    second.wait(); third.wait(); fourth.wait();
+    expect(!first.ready(),"first request completed through a different slot");
+    const auto second_result=second.get(), third_result=third.get(), fourth_result=fourth.get();
+    expect(second_result.values()[0]==22 && third_result.values()[0]==33 && fourth_result.values()[0]==44,
+           "out-of-order result/request association changed");
+    {std::lock_guard<std::mutex> lock(order_mutex);
+        expect(started==std::vector<unsigned>{11,22,33,44},"waiting requests did not dequeue FIFO");}
+    first_gate.release();
+    const auto first_result=first.get();
+    expect(first_result.values()[0]==11,"slow first result corrupted by later slot work");
+    auto state=sdk->snapshot();
+    expect(state.accepted==4 && state.succeeded==4 && state.delivered==4 && state.inflight==0,
+           "two-slot terminal accounting mismatch");
+}
+void simultaneous_shutdown_submit() {
+    for(int iteration=0;iteration<12;++iteration) {
+        Gate execution, race;
+        SdkConfig config; config.worker_count=1; config.queue_capacity=1;
+        std::atomic<int> calls{0};
+        auto sdk=SdkTestAccess::create(config,[&](const RgbImage& input) {
+            if(++calls==1) execution.block();
+            return output(input);
+        });
+        auto first=sdk->submit(image(1)); execution.wait();
+        auto submit=std::async(std::launch::async,[&] {
+            race.block();
+            try {return sdk->submit(image(2));}
+            catch(const SdkError& failure) {
+                expect(failure.code()==SdkErrorCode::Closed,"submit/shutdown race gave wrong error");
+                return DepthRequest{};
+            }
+        });
+        auto shutdown=std::async(std::launch::async,[&] {race.block(); sdk->shutdown();});
+        auto shutdown_two=std::async(std::launch::async,[&] {race.block(); sdk->shutdown();});
+        race.wait(3); race.release();
+        auto second=submit.get();
+        SdkTestAccess::wait(*sdk,[](const SdkSnapshot& state) {return !state.accepting;});
+        execution.release(); shutdown.get(); shutdown_two.get();
+        const bool second_accepted=second.valid();
+        const auto first_result=first.get();
+        expect(first_result.values()[0]==1,"shutdown race lost first accepted output");
+        if(second_accepted) {
+            const auto second_result=second.get();
+            expect(second_result.values()[0]==2,"shutdown race lost newly accepted output");
+        }
+        const auto state=sdk->snapshot();
+        expect(state.shutdown_complete && state.accepted==(second_accepted?2U:1U)
+               && state.delivered==state.accepted && state.inflight==0 && state.reserved_bytes==0,
+               "submit/shutdown race ledger did not conserve accepted terminals");
+    }
+}
+void async_errors_and_fatal_stop() {
+    auto sdk=SdkTestAccess::create({},[](const RgbImage&) -> DepthMap {throw std::runtime_error("ordinary");});
+    auto request=sdk->submit(image()); const auto id=request.id();
+    DepthTiming timing;
+    try { request.get(&timing); throw std::runtime_error("missing correlated backend error"); }
+    catch(const SdkError& failure) {
+        expect(failure.code()==SdkErrorCode::BackendFailure && failure.request_id()==id,"failure lost request association");
+    }
+    expect(!request.valid() && timing.accepted && sdk->snapshot().inflight==0 && sdk->snapshot().accepting,
+           "ordinary failure consumed quota or stopped whole SDK");
+    invalid_handle([&] {request.get();});
+    Gate fatal_gate;
+    std::atomic<int> calls{0};
+    SdkConfig config; config.worker_count=1; config.queue_capacity=2;
+    auto fatal_sdk=SdkTestAccess::create(config,[&](const RgbImage&) -> DepthMap {
+        ++calls; fatal_gate.block(); throw std::runtime_error("fatal test device error");
+    },{},[](const std::exception_ptr&) {return true;});
+    auto first=fatal_sdk->submit(image()); fatal_gate.wait();
+    auto second=fatal_sdk->submit(image());
+    fatal_gate.release(); first.wait(); second.wait();
+    auto state=fatal_sdk->snapshot();
+    expect(state.fatal_backend && !state.accepting && state.failed==2 && calls==1,
+           "fatal error did not stop acceptance and explicitly fail queued tasks");
+    for(auto* pending : {&first,&second}) {
+        const auto pending_id=pending->id();
+        try {pending->get();throw std::runtime_error("fatal request unexpectedly succeeded");}
+        catch(const SdkError& failure) {expect(failure.request_id()==pending_id,"fatal terminal ID mismatch");}
+    }
+    error(SdkErrorCode::Closed,[&] {fatal_sdk->submit(image());},"fatal SDK resumed admission");
+    expect(fatal_sdk->snapshot().inflight==0 && fatal_sdk->snapshot().reserved_bytes==0,
+           "fatal task terminal leaked quota");
+    auto delivery_sdk=SdkTestAccess::create({},output,[] {throw std::runtime_error("delivery test error");});
+    auto delivery=delivery_sdk->submit(image()); const auto delivery_id=delivery.id();
+    try {delivery.get();throw std::runtime_error("missing delivery exception");}
+    catch(const SdkError& failure) {expect(failure.request_id()==delivery_id,"delivery error lost request ID");}
+    state=delivery_sdk->snapshot();
+    expect(!delivery.valid() && state.succeeded==1 && state.failed==0 && state.delivered==1
+           && state.inflight==0 && state.reserved_bytes==0,"delivery exception leaked quota or changed execution terminal");
+}
 struct Temporary {
     std::filesystem::path path;
     Temporary() {
@@ -391,6 +587,8 @@ void initialization() {
     config.worker_count = std::numeric_limits<std::size_t>::max();
     config.queue_capacity = 1;
     error(SdkErrorCode::InvalidInput, [&] { SdkTestAccess::create(config, output); }, "worker plus queue capacity overflow accepted");
+    config = {}; config.gpu_slots=3;
+    error(SdkErrorCode::InvalidInput,[&] {SdkTestAccess::create(config,output);},"unsupported slot count accepted");
     Temporary temporary;
     const auto package = temporary.path / "package";
     std::filesystem::create_directory(package);
@@ -452,6 +650,12 @@ int main() {
         ready_result_shutdown();
         drain_waiting_on_shutdown();
         errors_and_reuse();
+        async_ownership_and_lifetime();
+        ready_quota_and_abandonment();
+        pending_abandonment_and_shutdown();
+        two_slot_out_of_order();
+        simultaneous_shutdown_submit();
+        async_errors_and_fatal_stop();
         initialization();
         std::cout << "Depth SDK contract passed\n";
         return 0;

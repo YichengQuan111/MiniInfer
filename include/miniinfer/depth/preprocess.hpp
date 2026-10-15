@@ -1,6 +1,7 @@
 #pragma once
 
 #include "miniinfer/depth/image.hpp"
+#include <memory>
 
 namespace miniinfer::depth {
 
@@ -20,6 +21,7 @@ public:
     const std::vector<float>& values() const && = delete;
     Geometry transform() const noexcept { return transform_; }
 private:
+    friend class CpuWorkspace;
     std::vector<float> values_;
     Geometry transform_;
 };
@@ -31,5 +33,24 @@ std::vector<float> bilinear_half_pixel(const std::vector<float>& source,
     std::size_t target_width, std::size_t target_height);
 PreparedImage preprocess(const RgbImage& image, std::size_t size = model_size);
 DepthMap postprocess(const RawDepth& raw, const Geometry& transform);
+
+// One worker owns one workspace. Scratch is preallocated for admitted bounds;
+// prepare() is valid until the next prepare/destruction. restore() returns an
+// independent owning result. No caller may use this workspace concurrently.
+class CpuWorkspace final {
+public:
+    explicit CpuWorkspace(std::size_t size = model_size);
+    ~CpuWorkspace();
+    CpuWorkspace(const CpuWorkspace&) = delete;
+    CpuWorkspace& operator=(const CpuWorkspace&) = delete;
+    const PreparedImage& prepare(const RgbImage& image);
+    DepthMap restore(const RawDepth& raw, const Geometry& transform);
+    std::size_t capacity_bytes() const noexcept;
+    // Six preallocated vector storage blocks; excludes the small Impl object.
+    static constexpr std::size_t allocation_count = 6;
+private:
+    class Impl;
+    std::unique_ptr<Impl> impl_;
+};
 
 }  // namespace miniinfer::depth

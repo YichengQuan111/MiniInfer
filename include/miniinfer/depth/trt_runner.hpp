@@ -15,12 +15,18 @@ Manifest build_trt_engine(const std::filesystem::path& onnx,
     const std::filesystem::path& output, const TrtBuildOptions& options = {});
 Manifest trt_environment(int device = 0);
 struct TrtTiming { double h2d_ms=0, compute_ms=0, d2h_ms=0, host_ms=0; };
+struct TrtResources {
+    std::size_t io_device_bytes=0, io_pinned_bytes=0;
+    std::size_t peak_io_device_bytes=0, peak_io_pinned_bytes=0;
+    std::size_t device_allocation_calls=0, pinned_allocation_calls=0;
+    std::size_t context_required_bytes=0; // TensorRT requirement, excludes weights/libraries.
+};
 
 // One context/stream/buffer slot. Concurrent calls serialize. Completion is
 // synchronized before owned output is returned. Caller maintains object lifetime.
 class TrtRunner final {
 public:
-    explicit TrtRunner(const std::filesystem::path& engine, int device = 0);
+    explicit TrtRunner(const std::filesystem::path& engine, int device = 0, bool reuse_buffers = true);
     ~TrtRunner();
     TrtRunner(const TrtRunner&) = delete;
     TrtRunner& operator=(const TrtRunner&) = delete;
@@ -28,6 +34,7 @@ public:
     DepthMap run(const RgbImage& image);
     const Manifest& manifest() const noexcept;
     std::size_t input_size() const noexcept;
+    TrtResources resource_snapshot() const noexcept;
 private:
     class Impl;
     std::unique_ptr<Impl> impl_;
