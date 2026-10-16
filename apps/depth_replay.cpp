@@ -60,6 +60,7 @@ struct Args {
     std::size_t sdk_workers=4, workers=4, max_outstanding=4, queue=4, budget=128ULL*1024*1024;
     std::size_t slots=1, consumer_delay_ms=0;
     bool asynchronous=false, reuse_host=true, reuse_gpu=true;
+    PreprocessMode preprocess_mode=PreprocessMode::Cpu;
 };
 Args parse(int argc,char** argv) {
     Args out; std::set<std::string> seen;
@@ -76,6 +77,7 @@ Args parse(int argc,char** argv) {
         if(key=="--package") out.package=value;
         else if(key=="--backend") out.backend=value;
         else if(key=="--output") out.output=value;
+        else if(key=="--preprocess") out.preprocess_mode=parse_preprocess_mode(value);
         else if(key=="--images-list") {
             if(std::filesystem::file_size(value)>8ULL*1024*1024) throw std::invalid_argument("image list exceeds 8MiB");
             std::ifstream stream(value);
@@ -175,7 +177,7 @@ struct Record {
 struct Phase {
     Counts counts=empty_counts();
     std::size_t planned=0, submitted=0, succeeded_in_window=0, completed_in_window=0, drain_completed=0, peak_outstanding=0, h2d_bytes=0;
-    std::size_t undelivered_at_window_end=0;
+    std::size_t undelivered_at_window_end=0, rgb8_h2d_bytes=0;
     double duration_ms=0, drain_ms=0;
     std::string json() const {
         return "{\"planned\":"+std::to_string(planned)+",\"submitted\":"+std::to_string(submitted)+
@@ -185,7 +187,7 @@ struct Phase {
             ",\"drain_completed\":"+std::to_string(drain_completed)+
             ",\"peak_outstanding\":"+std::to_string(peak_outstanding)+
             ",\"h2d_bytes\":"+std::to_string(h2d_bytes)+
-            ",\"rgb8_h2d_bytes\":0,\"fp32_h2d_bytes\":"+std::to_string(h2d_bytes)+
+            ",\"rgb8_h2d_bytes\":"+std::to_string(rgb8_h2d_bytes)+",\"fp32_h2d_bytes\":"+std::to_string(h2d_bytes-rgb8_h2d_bytes)+
             ",\"duration_ms\":"+decimal(duration_ms)+",\"drain_ms\":"+decimal(drain_ms)+"}";
     }
 };
@@ -212,10 +214,18 @@ Phase replay(const std::string& phase, double seconds, const Args& args,
                 t.admission_ms,t.queue_ms,t.preprocess_ms,t.backend_ms,t.postprocess_ms)<0) ok=-1;
         } else if(std::fprintf(csv,",,,,,,")<0) ok=-1;
         if(record.sdk_id && std::fprintf(csv,"%llu",static_cast<unsigned long long>(*record.sdk_id))<0) ok=-1;
+        if(record.submit) {
+            const auto& t=record.timing;
+            for(double value:{t.slot_wait_ms,t.pinned_copy_ms,t.h2d_ms,t.gpu_preprocess_ms,t.model_ms,t.d2h_ms,t.synchronize_ms})
+                if(std::fprintf(csv,",%.17g",value)<0) ok=-1;
+            if(std::fprintf(csv,",%zu",t.h2d_bytes)<0) ok=-1;
+        } else if(std::fprintf(csv,",,,,,,,,")<0) ok=-1;
         if(std::fputc('\n',csv)==EOF) ok=-1;
         if(ok<0) write_failed=true;
         ++result.counts.at(record.status);
         result.h2d_bytes += record.timing.h2d_bytes;
+        if(args.preprocess_mode==PreprocessMode::CudaFullBasic || args.preprocess_mode==PreprocessMode::CudaFullFused)
+            result.rgb8_h2d_bytes += record.timing.h2d_bytes;
         if(record.submit) {
             if(*record.delivered>=result.duration_ms) ++result.undelivered_at_window_end;
             if(*record.ready<result.duration_ms) {
@@ -311,6 +321,7 @@ int main(int argc,char** argv) {
         std::cout<<"depth_replay --package DIR --images PPM...|--images-list FILE --output NEW.csv\n"
             "[--backend ort|trt --duration 10 --warmup 2 --rate 10 --workers 4 --max-outstanding 4\n"
             "--async-sdk 1 --slots 1 --reuse-host 1 --reuse-gpu 1 --consumer-delay-ms 0\n"
+            "--preprocess cpu|cuda-partial|cuda-full-basic|cuda-full-fused\n"
             " --sdk-workers 4 --queue 4 --budget 134217728 --max-lag-ms 100]\n"
             "Fixed open-loop schedule; async SDK mode records actual terminal publication and request handles.\n";
         return 0;
@@ -319,7 +330,7 @@ int main(int argc,char** argv) {
         const auto main_start=Clock::now(); const auto args=parse(argc,argv);
         std::unique_ptr<FILE,FileCloser> csv(std::fopen(args.output.c_str(),"wx"));
         if(!csv) throw std::runtime_error("cannot exclusively create CSV");
-        if(std::fprintf(csv.get(),"phase,request_id,index,image_index,planned_ms,generated_ms,submit_ms,ready_ms,delivered_ms,status,accepted,admission_ms,queue_ms,preprocess_ms,backend_ms,postprocess_ms,request_handle_id\n")<0)
+        if(std::fprintf(csv.get(),"phase,request_id,index,image_index,planned_ms,generated_ms,submit_ms,ready_ms,delivered_ms,status,accepted,admission_ms,queue_ms,preprocess_ms,backend_ms,postprocess_ms,request_handle_id,slot_wait_ms,pinned_copy_ms,h2d_ms,gpu_preprocess_ms,model_ms,d2h_ms,synchronize_ms,h2d_bytes\n")<0)
             throw std::runtime_error("CSV header write failed");
         std::vector<RgbImage> images; std::size_t image_bytes=0;
         for(const auto& path:args.paths) {
@@ -328,12 +339,18 @@ int main(int argc,char** argv) {
         }
         SdkConfig config; config.package_dir=args.package; config.queue_capacity=args.queue; config.byte_budget=args.budget; config.worker_count=args.sdk_workers;
         config.gpu_slots=args.slots;config.reuse_host_workspace=args.reuse_host;config.reuse_gpu_buffers=args.reuse_gpu;
+        config.preprocess_mode=args.preprocess_mode;
         DepthSdk sdk(config);
         if(!args.backend.empty() && sdk.snapshot().backend!=args.backend) throw std::invalid_argument("package backend mismatch");
         const auto input_size=contract_model_size(require_field(read_manifest(args.package/"manifest.txt"),"contract"));
         SyncAdapter adapter{sdk}; std::size_t next_id=0;
+        const auto initial=sdk.snapshot();
         std::cout<<std::setprecision(17)<<"{\"event\":\"ready\",\"startup_ms\":"<<since(main_start)
             <<",\"decoded_image_bytes\":"<<image_bytes<<",\"image_count\":"<<images.size()<<",\"sdk_worker_count\":"<<config.worker_count
+            <<",\"preprocess_mode\":\""<<preprocess_mode_name(args.preprocess_mode)<<"\""
+            <<",\"fixed_host_workspace_bytes\":"<<initial.host_workspace_bytes
+            <<",\"initial_io_device_bytes\":"<<initial.io_device_bytes<<",\"initial_io_pinned_bytes\":"<<initial.io_pinned_bytes
+            <<",\"context_required_bytes\":"<<initial.context_required_bytes<<",\"engine_serialized_bytes\":"<<initial.engine_serialized_bytes
             <<",\"fp32_model_input_bytes\":"<<(3*input_size*input_size*sizeof(float))<<",\"rgb8_input_bytes\":[";
         for(std::size_t i=0;i<images.size();++i) { if(i) std::cout<<","; std::cout<<images[i].pixels().size(); }
         std::cout<<"]}"<<std::endl;
@@ -342,7 +359,8 @@ int main(int argc,char** argv) {
         std::cout<<"{\"event\":\"phase\",\"phase\":\"steady\"}"<<std::endl;
         const auto steady=replay("steady",args.duration,args,images,adapter,csv.get(),next_id);
         sdk.shutdown(); const auto snapshot=sdk.snapshot();
-        std::cout<<"{\"event\":\"summary\",\"schema\":\"miniinfer-depth-replay-v2\",\"rate\":"<<args.rate
+        std::cout<<"{\"event\":\"summary\",\"schema\":\"miniinfer-depth-replay-v3\",\"rate\":"<<args.rate
+            <<",\"preprocess_mode\":\""<<preprocess_mode_name(args.preprocess_mode)<<"\""
             <<",\"max_lag_ms\":"<<args.max_lag_ms<<",\"image_count\":"<<images.size()
             <<",\"async_sdk\":"<<(args.asynchronous?"true":"false")<<",\"slots\":"<<args.slots
             <<",\"reuse_host\":"<<(args.reuse_host?"true":"false")<<",\"reuse_gpu\":"<<(args.reuse_gpu?"true":"false")
@@ -361,7 +379,8 @@ int main(int argc,char** argv) {
             <<",\"io_device_bytes\":"<<snapshot.io_device_bytes<<",\"io_pinned_bytes\":"<<snapshot.io_pinned_bytes
             <<",\"peak_io_device_bytes\":"<<snapshot.peak_io_device_bytes<<",\"peak_io_pinned_bytes\":"<<snapshot.peak_io_pinned_bytes
             <<",\"device_allocation_calls\":"<<snapshot.device_allocation_calls<<",\"pinned_allocation_calls\":"<<snapshot.pinned_allocation_calls
-            <<",\"context_required_bytes\":"<<snapshot.context_required_bytes<<"}}"<<std::endl;
+            <<",\"context_required_bytes\":"<<snapshot.context_required_bytes
+            <<",\"engine_serialized_bytes\":"<<snapshot.engine_serialized_bytes<<"}}"<<std::endl;
         return 0;
     } catch(const std::exception& error) { std::cerr<<"depth_replay: "<<error.what()<<'\n';return 1; }
 }

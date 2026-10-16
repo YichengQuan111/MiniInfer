@@ -1,0 +1,15 @@
+5/38 Testing: depth_preprocess_cuda_contract
+5/38 Test: depth_preprocess_cuda_contract
+Command: "/home/qyc/builds/MiniInfer/v24-upgrade/bin/test_depth_preprocess_cuda"
+Directory: /home/qyc/builds/MiniInfer/v24-upgrade
+"depth_preprocess_cuda_contract" start time: Oct 15 20:48 +08
+Output:
+----------------------------------------------------------
+CUDA preprocess passed: 28 cases x 3 kernels; atol=2e-06 rtol=1e-06 max_abs=0
+<end of output>
+Test time =   0.87 sec
+----------------------------------------------------------
+Test Passed.
+"depth_preprocess_cuda_contract" end time: Oct 15 20:48 +08
+"depth_preprocess_cuda_contract" time elapsed: 00:00:00
+----------------------------------------------------------

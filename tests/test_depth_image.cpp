@@ -1,6 +1,7 @@
 #include "miniinfer/depth/preprocess.hpp"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstdlib>
 #include <filesystem>
@@ -122,6 +123,14 @@ void static_sizes() {
     overflow.pad_right = std::numeric_limits<std::size_t>::max();
     invalid([&] { validate_geometry(overflow); }, "geometry arithmetic overflow accepted");
 }
+void preprocessing_modes() {
+    for (auto mode : {PreprocessMode::Cpu, PreprocessMode::CudaPartial, PreprocessMode::CudaFullBasic, PreprocessMode::CudaFullFused})
+        expect(parse_preprocess_mode(preprocess_mode_name(mode)) == mode, "mode parser/name roundtrip");
+    invalid([] { parse_preprocess_mode("cuda"); }, "ambiguous preprocessing mode accepted");
+    invalid([] { parse_preprocess_mode("CPU"); }, "noncanonical preprocessing mode accepted");
+    invalid([] { preprocess_mode_name(static_cast<PreprocessMode>(99)); }, "invalid preprocessing mode enum accepted");
+    invalid([] { PaddedImage bad({}, geometry(1, 1)); }, "invalid padded HWC storage accepted");
+}
 void reused_workspace() {
     for (std::size_t size : {392, 518}) {
         CpuWorkspace workspace(size);
@@ -131,6 +140,16 @@ void reused_workspace() {
             for (std::size_t i = 0; i < pixels.size(); ++i) pixels[i] = static_cast<std::uint8_t>((i * 17 + 31) % 256);
             const RgbImage image(shape.first, shape.second, std::move(pixels));
             const auto reference = preprocess(image, size);
+            const auto padded_reference = preprocess_hwc(image, size);
+            const auto& padded = workspace.prepare_hwc(image);
+            expect(padded.values() == padded_reference.values(), "reused padded HWC preprocessing changed contract");
+            constexpr std::array<float, 3> mean{0.485F, 0.456F, 0.406F}, deviation{0.229F, 0.224F, 0.225F};
+            for (std::size_t c = 0; c < 3; ++c)
+                for (std::size_t pixel = 0; pixel < size * size; ++pixel) {
+                    const float centered = padded.values()[3 * pixel + c] - mean[c];
+                    expect(centered / deviation[c] == reference.values()[c * size * size + pixel],
+                           "padded HWC normalization differs from frozen CPU NCHW");
+                }
             const auto& reused = workspace.prepare(image);
             expect(reference.values() == reused.values(), "reused preprocessing changed float32 contract");
             std::vector<float> values(size * size);
@@ -189,6 +208,7 @@ int main() {
         restoration_and_ownership();
         nonfinite();
         static_sizes();
+        preprocessing_modes();
         reused_workspace();
         artifacts();
         std::cout << "Depth image contract passed\n";

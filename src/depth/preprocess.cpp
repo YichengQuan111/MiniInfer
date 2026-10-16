@@ -57,6 +57,21 @@ void bilinear_into(const std::vector<float>& source,
 }
 }  // namespace
 
+const char* preprocess_mode_name(PreprocessMode mode) {
+    switch (mode) {
+        case PreprocessMode::Cpu: return "cpu";
+        case PreprocessMode::CudaPartial: return "cuda-partial";
+        case PreprocessMode::CudaFullBasic: return "cuda-full-basic";
+        case PreprocessMode::CudaFullFused: return "cuda-full-fused";
+    }
+    throw std::invalid_argument("invalid preprocessing mode enum");
+}
+PreprocessMode parse_preprocess_mode(const std::string& text) {
+    for (auto mode : {PreprocessMode::Cpu, PreprocessMode::CudaPartial,
+                     PreprocessMode::CudaFullBasic, PreprocessMode::CudaFullFused})
+        if (text == preprocess_mode_name(mode)) return mode;
+    throw std::invalid_argument("invalid preprocessing mode: " + text);
+}
 Geometry geometry(std::size_t width, std::size_t height, std::size_t model_size) {
     validate_model_size(model_size);
     validate_dimensions(width, height);
@@ -95,6 +110,38 @@ PreparedImage::PreparedImage(std::vector<float> nchw, Geometry transform)
     validate_finite(values_);
 }
 
+PaddedImage::PaddedImage(std::vector<float> hwc, Geometry transform)
+    : values_(std::move(hwc)), transform_(transform) {
+    validate_geometry(transform_);
+    const auto size = geometry_size(transform_);
+    if (values_.size() != 3 * size * size) throw std::invalid_argument("padded HWC input size disagrees with geometry");
+    validate_finite(values_);
+}
+PaddedImage preprocess_hwc(const RgbImage& image, std::size_t size) {
+    ProfileRange profile("depth.preprocess.cpu.hwc");
+    const auto transform = geometry(image.width(), image.height(), size);
+    if (image.pixels().size() != image.width() * image.height() * 3)
+        throw std::invalid_argument("RGB8 input storage length mismatch");
+    std::vector<float> pixels(image.pixels().size());
+    {
+        ProfileRange convert("depth.preprocess.cpu.convert");
+        for (std::size_t i = 0; i < pixels.size(); ++i) pixels[i] = static_cast<float>(image.pixels()[i]) / 255.0F;
+    }
+    const auto resized = [&] {
+        ProfileRange resize("depth.preprocess.cpu.resize");
+        return bilinear_half_pixel(pixels, image.width(), image.height(), 3,
+                                   transform.resized_width, transform.resized_height);
+    }();
+    std::vector<float> padded(3 * size * size, 0.0F);
+    {
+        ProfileRange pad("depth.preprocess.cpu.pad_hwc");
+        for (std::size_t y = 0; y < transform.resized_height; ++y)
+            std::copy_n(resized.begin() + static_cast<std::ptrdiff_t>(3 * y * transform.resized_width),
+                3 * transform.resized_width,
+                padded.begin() + static_cast<std::ptrdiff_t>(3 * ((y + transform.pad_top) * size + transform.pad_left)));
+    }
+    return PaddedImage(std::move(padded), transform);
+}
 std::vector<float> bilinear_half_pixel(const std::vector<float>& source,
     std::size_t source_width, std::size_t source_height, std::size_t channels,
     std::size_t target_width, std::size_t target_height) {
@@ -160,17 +207,19 @@ DepthMap postprocess(const RawDepth& raw, const Geometry& transform) {
 class CpuWorkspace::Impl {
 public:
     explicit Impl(std::size_t input_size)
-        : size(validate_model_size(input_size)), prepared(std::vector<float>(3 * size * size), geometry(1, 1, size)) {
+        : size(validate_model_size(input_size)), prepared(std::vector<float>(3 * size * size), geometry(1, 1, size)),
+          padded(std::vector<float>(3 * size * size), geometry(1, 1, size)) {
         pixels.reserve(3 * max_pixels);
         resized.reserve(3 * size * size);
         cropped.reserve(size * size);
         xs.reserve(max_side); ys.reserve(max_side);
-        bytes = (pixels.capacity() + resized.capacity() + cropped.capacity() + prepared.values().capacity()) * sizeof(float)
+        bytes = (pixels.capacity() + resized.capacity() + cropped.capacity() + prepared.values().capacity() + padded.values().capacity()) * sizeof(float)
                 + (xs.capacity() + ys.capacity()) * sizeof(Coordinate);
     }
     const std::size_t size;
     std::size_t bytes = 0;
     PreparedImage prepared;
+    PaddedImage padded;
     std::vector<float> pixels, resized, cropped;
     std::vector<Coordinate> xs, ys;
 };
@@ -210,6 +259,33 @@ const PreparedImage& CpuWorkspace::prepare(const RgbImage& image) {
     }
     w.prepared.transform_ = transform;
     return w.prepared;
+}
+const PaddedImage& CpuWorkspace::prepare_hwc(const RgbImage& image) {
+    ProfileRange profile("depth.preprocess.reuse.hwc");
+    auto& w = *impl_;
+    const auto transform = geometry(image.width(), image.height(), w.size);
+    if (image.pixels().size() != image.width() * image.height() * 3)
+        throw std::invalid_argument("RGB8 input storage length mismatch");
+    w.pixels.resize(image.pixels().size());
+    {
+        ProfileRange convert("depth.preprocess.cpu.convert");
+        for (std::size_t i = 0; i < w.pixels.size(); ++i) w.pixels[i] = static_cast<float>(image.pixels()[i]) / 255.0F;
+    }
+    {
+        ProfileRange resize("depth.preprocess.cpu.resize");
+        bilinear_into(w.pixels, image.width(), image.height(), 3, transform.resized_width, transform.resized_height,
+                      w.resized, w.xs, w.ys);
+    }
+    {
+        ProfileRange pad("depth.preprocess.cpu.pad_hwc");
+        std::fill(w.padded.values_.begin(), w.padded.values_.end(), 0.0F);
+        for (std::size_t y = 0; y < transform.resized_height; ++y)
+            std::copy_n(w.resized.begin() + static_cast<std::ptrdiff_t>(3 * y * transform.resized_width),
+                3 * transform.resized_width,
+                w.padded.values_.begin() + static_cast<std::ptrdiff_t>(3 * ((y + transform.pad_top) * w.size + transform.pad_left)));
+    }
+    w.padded.transform_ = transform;
+    return w.padded;
 }
 DepthMap CpuWorkspace::restore(const RawDepth& raw, const Geometry& transform) {
     ProfileRange profile("depth.postprocess.reuse");

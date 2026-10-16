@@ -27,6 +27,7 @@ int main(int argc,char** argv) {
           " [--connection-threads 4] [--waiting-connections 8] [--queue-capacity 4]\n"
           " [--sdk-bytes 134217728] [--network-requests 4] [--network-bytes 134217728]\n"
           " [--read-timeout-ms 5000] [--write-timeout-ms 5000]\n"
+          " [--sdk-workers 4] [--gpu-slots 1] [--preprocess cpu|cuda-partial|cuda-full-basic|cuda-full-fused]\n"
           "MINI v2 RGB8 -> relative FP32; local IPv4 by default. SIGINT/SIGTERM drains accepted work.\n";
         return 0;
     }
@@ -39,6 +40,9 @@ int main(int argc,char** argv) {
             if(i+1==argc||!seen.insert(key).second) throw std::invalid_argument("missing/duplicate option: "+key);
             const std::string value=argv[i+1];
             if(key=="--package") config.package_dir=value;
+            else if(key=="--preprocess") config.preprocess_mode=depth::parse_preprocess_mode(value);
+            else if(key=="--gpu-slots") config.gpu_slots=number(value,2);
+            else if(key=="--sdk-workers") config.worker_count=number(value,256);
             else if(key=="--host") server_config.host=value;
             else if(key=="--port") server_config.port=static_cast<std::uint16_t>(number(value,65535,true));
             else if(key=="--connections") server_config.max_connections=number(value,1000000,true);
@@ -74,7 +78,9 @@ int main(int argc,char** argv) {
         const auto ready=sdk.snapshot();
         std::cout<<"{\"event\":\"ready\",\"pid\":"<<getpid()<<",\"port\":"<<server.port()
             <<",\"startup_ms\":"<<std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-started).count()
-            <<",\"backend\":\""<<ready.backend<<"\",\"precision\":\""<<ready.precision<<"\"}"<<std::endl;
+            <<",\"backend\":\""<<ready.backend<<"\",\"precision\":\""<<ready.precision<<"\""
+            <<",\"preprocess_mode\":\""<<depth::preprocess_mode_name(config.preprocess_mode)<<"\""
+            <<",\"gpu_slots\":"<<config.gpu_slots<<",\"sdk_workers\":"<<config.worker_count<<"}"<<std::endl;
         while(!server.finished()) {
             const timespec wait{0,20000000};const int signal=sigtimedwait(&signals,nullptr,&wait);
             if(signal==SIGINT||signal==SIGTERM) break;

@@ -1,0 +1,90 @@
+{
+  "source": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/profile-cpu.sqlite",
+  "scope": "Separate profiler run, includes warmup; stream overlap is actual interval intersection.",
+  "streams": [
+    {
+      "context": 1,
+      "stream": 17,
+      "raw_output_copies": 254,
+      "kernel_count": 45466,
+      "kernel_busy_ms": 2808.170527
+    }
+  ],
+  "observed_interval_ms": 3995.276638,
+  "application_gpu_busy_ms": 2902.841564,
+  "two_stream_kernel_overlap_ms": null,
+  "cpu_preprocess_gpu_overlap_ms": 1002.974384,
+  "nvtx": {
+    "depth.submit": {
+      "calls": 320,
+      "total_ms": 178.66159499999986,
+      "mean_ms": 0.5583174843749996
+    },
+    "depth.execute": {
+      "calls": 254,
+      "total_ms": 6619.216657000006,
+      "mean_ms": 26.059908098425222
+    },
+    "depth.preprocess.reuse": {
+      "calls": 254,
+      "total_ms": 1514.6583600000001,
+      "mean_ms": 5.96322188976378
+    },
+    "depth.preprocess.cpu.convert": {
+      "calls": 254,
+      "total_ms": 466.4818349999997,
+      "mean_ms": 1.8365426574803139
+    },
+    "depth.preprocess.cpu.resize": {
+      "calls": 254,
+      "total_ms": 812.154044,
+      "mean_ms": 3.1974568661417324
+    },
+    "depth.preprocess.cpu.pad_normalize_hwc_to_nchw": {
+      "calls": 254,
+      "total_ms": 145.73169500000006,
+      "mean_ms": 0.5737468307086616
+    },
+    "depth.gpu_slot0": {
+      "calls": 254,
+      "total_ms": 3397.263372999999,
+      "mean_ms": 13.375052649606294
+    },
+    "depth.trt.pipeline": {
+      "calls": 254,
+      "total_ms": 3306.510616999998,
+      "mean_ms": 13.017758334645661
+    },
+    "depth.trt.pinned_copy": {
+      "calls": 254,
+      "total_ms": 75.36283600000002,
+      "mean_ms": 0.29670407874015753
+    },
+    "depth.trt.h2d": {
+      "calls": 254,
+      "total_ms": 7.267883999999997,
+      "mean_ms": 0.02861371653543306
+    },
+    "depth.trt.model": {
+      "calls": 254,
+      "total_ms": 534.5458330000001,
+      "mean_ms": 2.1045111535433074
+    },
+    "depth.trt.d2h": {
+      "calls": 254,
+      "total_ms": 5.5277910000000015,
+      "mean_ms": 0.02176295669291339
+    },
+    "depth.trt.synchronize": {
+      "calls": 254,
+      "total_ms": 2594.346128999998,
+      "mean_ms": 10.213961137795268
+    },
+    "depth.postprocess.reuse": {
+      "calls": 254,
+      "total_ms": 893.616627,
+      "mean_ms": 3.5181756968503937
+    }
+  },
+  "trace_sha256": "f8a1f78cc46c7fd2e8ff57cd273b78ac19bdbec2347437bc45e792969f0ecd1b"
+}

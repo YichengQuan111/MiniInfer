@@ -1,0 +1,13 @@
+CUDA preprocessing sanitizer checks after authorized Windows debug-interface enablement
+UTC timestamp: 2026-10-15T11:50:40Z
+Binary: tmp/v2-upgrade/cuda-build/test_depth_preprocess_cuda
+CPU reference: git 9262958 temporary snapshot; final CPU integration not yet relinked.
+Setting record: tmp/v2-upgrade/gpu-debug-setting.json
+Prior failure retained in tmp/v2-upgrade/cuda-validation.txt (no previous evidence overwritten).
+NVIDIA (R) Compute Sanitizer
+Copyright (c) 2020-2024 NVIDIA Corporation
+Version 2024.1.1.0 (build 34043715) (public-release)
+memcheck: exit 0, log docs/validation/v2_upgrade/v24/cuda-memcheck.log
+initcheck: exit 0, log docs/validation/v2_upgrade/v24/cuda-initcheck.log
+racecheck: exit 0, log docs/validation/v2_upgrade/v24/cuda-racecheck.log
+synccheck: exit 0, log docs/validation/v2_upgrade/v24/cuda-synccheck.log

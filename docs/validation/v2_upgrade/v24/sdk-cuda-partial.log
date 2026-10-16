@@ -1,0 +1,2 @@
+{"package": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected", "verified_files": 16, "model_size": 518, "validation_identity": "reference_manifest_sha256"}
+{"passed": true, "report": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/sdk-cuda-partial/report.json"}

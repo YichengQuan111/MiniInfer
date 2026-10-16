@@ -1,0 +1,6 @@
+Command: compute-sanitizer --tool racecheck --error-exitcode 1 tmp/v2-upgrade/cuda-build/test_depth_preprocess_cuda
+========= COMPUTE-SANITIZER
+CUDA preprocess passed: 28 cases x 3 kernels; atol=2e-06 rtol=1e-06 max_abs=0
+========= RACECHECK SUMMARY: 0 hazards displayed (0 errors, 0 warnings)
+
+Process exit code: 0

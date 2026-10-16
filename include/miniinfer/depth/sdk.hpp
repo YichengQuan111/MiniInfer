@@ -1,6 +1,6 @@
 #pragma once
 
-#include "miniinfer/depth/image.hpp"
+#include "miniinfer/depth/preprocess.hpp"
 #include <chrono>
 #include <cstdint>
 #include <exception>
@@ -33,6 +33,7 @@ struct SdkConfig {
     std::size_t worker_count = 4; // Independent CPU workers, each owning an ORT Session/workspace.
     std::size_t gpu_slots = 1; // Independent TensorRT contexts, 1 or 2; unrelated to worker_count.
     bool reuse_host_workspace = true, reuse_gpu_buffers = true;
+    PreprocessMode preprocess_mode = PreprocessMode::Cpu;
 };
 
 struct SdkSnapshot {
@@ -47,6 +48,7 @@ struct SdkSnapshot {
     // Sum of slot peaks, which need not occur at the same instant.
     std::size_t peak_io_device_bytes = 0, peak_io_pinned_bytes = 0;
     std::size_t device_allocation_calls = 0, pinned_allocation_calls = 0;
+    std::size_t engine_serialized_bytes = 0; // Per-slot serialized plan sum; historical after shutdown, not GPU weight bytes.
     std::size_t context_required_bytes = 0; // Static TRT requirement, excludes model weights/libs.
     // inflight = queued+executing+ready; accepted = delivered+
     // abandoned_completed+inflight; abandoned may include pending execution.
@@ -63,7 +65,10 @@ struct DepthTiming {
     bool accepted = false;
     double admission_ms = 0, queue_ms = 0, preprocess_ms = 0;
     double backend_ms = 0, postprocess_ms = 0;
-    std::size_t h2d_bytes = 0; // Successful actual FP32 prepared input transfer; zero for CPU.
+    // pinned_copy_ms covers input staging only; output ownership copy stays in backend_ms.
+    double slot_wait_ms = 0, pinned_copy_ms = 0, h2d_ms = 0;
+    double gpu_preprocess_ms = 0, model_ms = 0, d2h_ms = 0, synchronize_ms = 0;
+    std::size_t h2d_bytes = 0; // Actual successful GPU input bytes: FP32 for A/B, RGB8 for C; zero for ORT.
     // Actual terminal publication after synchronized execution and restoration;
     // read after get returns/throws, never replace with a late observer timestamp.
     std::chrono::steady_clock::time_point ready_at{};
@@ -101,8 +106,8 @@ private:
 // it does not wait for callers to consume ready handles. Per-slot TRT engines
 // are independent (including duplicate model storage), never writable-shared.
 // Per-request reservation is 19*pixels+16MiB through get/terminal abandonment. byte_budget
-// excludes caller storage and fixed model weights/ORT arena/GPU context; it is
-// an admission budget, not an upper bound on total process RSS or GPU memory.
+// excludes caller storage and fixed CPU/GPU workspace, model weights, ORT arenas
+// and GPU contexts; it is an admission budget, not a bound on total RSS/VRAM.
 class DepthSdk final {
 public:
     explicit DepthSdk(SdkConfig config);

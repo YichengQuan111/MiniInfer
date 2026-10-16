@@ -26,6 +26,8 @@ template<class F> void rejects_with(F action,const std::string& reason) {
 }
 void offline_rejection(const std::filesystem::path& dir) {
     const int unavailable_device=std::numeric_limits<int>::max();
+    rejects_with([&]{TrtRunner invalid(dir/"missing",unavailable_device,true,static_cast<PreprocessMode>(99));},
+                 "preprocessing mode enum");
     rejects_with([&]{TrtRunner missing(dir/"missing",unavailable_device);},"missing.manifest");
     write_text_exclusive(dir/"bad-schema.manifest","schema=wrong\n");
     rejects_with([&]{TrtRunner bad(dir/"bad-schema",unavailable_device);},"schema");
@@ -64,6 +66,14 @@ int main(int argc,char** argv) {
                    &&std::isfinite(timing.host_ms)&&timing.compute_ms>0&&timing.h2d_ms>=0
                    &&timing.d2h_ms>=0&&timing.host_ms>0,
                    "CUDA event timings must cover completed GPU execution");
+            std::vector<float> captured;
+            TrtTiming image_timing;
+            const auto image_raw=runner.run_image_raw(image,&image_timing,&captured);
+            expect(image_raw.values()==saved->values() && captured==input.values(),
+                   "run_image_raw must capture actual device FP32 input and preserve raw reference output");
+            expect(image_timing.h2d_bytes==input.values().size()*sizeof(float)
+                   &&image_timing.model_ms==image_timing.compute_ms&&image_timing.gpu_preprocess_ms==0,
+                   "CPU reference path stage/byte timings incorrect");
             auto a=std::async(std::launch::async,[&]{return runner.run_raw(input);});
             auto b=std::async(std::launch::async,[&]{return runner.run_raw(input);});
             const auto result_a=a.get(),result_b=b.get();
@@ -73,7 +83,8 @@ int main(int argc,char** argv) {
             expect(stats.device_allocation_calls==2&&stats.pinned_allocation_calls==2,
                    "reused slot allocated IO on the hot path");
             expect(stats.io_device_bytes==4*runner.input_size()*runner.input_size()*sizeof(float)
-                   &&stats.io_pinned_bytes==stats.io_device_bytes&&stats.context_required_bytes>0,
+                   &&stats.io_pinned_bytes==stats.io_device_bytes&&stats.context_required_bytes>0
+                   &&stats.engine_serialized_bytes==std::filesystem::file_size(argv[1]),
                    "slot IO/context ledger mismatch");
         }
         const auto& input=*input_storage;

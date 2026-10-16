@@ -1,4 +1,5 @@
 option(MINIINFER_ENABLE_TRT "Build TensorRT CUDA depth backend" OFF)
+option(MINIINFER_ENABLE_CUDA_PREPROCESS "Compile complete RGB8 GPU preprocessing kernels" OFF)
 set(MINIINFER_TRT_INCLUDE "" CACHE PATH "TensorRT 10.8 headers including NvOnnxParser.h")
 set(MINIINFER_TRT_LIB "" CACHE PATH "TensorRT shared library directory")
 set(MINIINFER_CUDA_RUNTIME "" CACHE PATH "CUDA runtime root with include/ and lib/")

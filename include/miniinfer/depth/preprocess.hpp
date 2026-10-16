@@ -2,8 +2,13 @@
 
 #include "miniinfer/depth/image.hpp"
 #include <memory>
+#include <string>
 
 namespace miniinfer::depth {
+
+enum class PreprocessMode { Cpu, CudaPartial, CudaFullBasic, CudaFullFused };
+const char* preprocess_mode_name(PreprocessMode mode);
+PreprocessMode parse_preprocess_mode(const std::string& text);
 
 struct Geometry {
     std::size_t original_width, original_height;
@@ -26,6 +31,20 @@ private:
     Geometry transform_;
 };
 
+// Resized, centered zero-padded FP32 HWC RGB/255, before normalization.
+class PaddedImage final {
+public:
+    PaddedImage(std::vector<float> hwc, Geometry transform);
+    const std::vector<float>& values() const & noexcept { return values_; }
+    const std::vector<float>& values() const && = delete;
+    Geometry transform() const noexcept { return transform_; }
+private:
+    friend class CpuWorkspace;
+    std::vector<float> values_;
+    Geometry transform_;
+};
+PaddedImage preprocess_hwc(const RgbImage& image, std::size_t size = model_size);
+
 // Interleaved HW/HWC FP32 resize. Explicit float32 half-pixel/clamp lerps.
 // Scalar operations must be built with -ffp-contract=off -fno-fast-math.
 std::vector<float> bilinear_half_pixel(const std::vector<float>& source,
@@ -44,10 +63,11 @@ public:
     CpuWorkspace(const CpuWorkspace&) = delete;
     CpuWorkspace& operator=(const CpuWorkspace&) = delete;
     const PreparedImage& prepare(const RgbImage& image);
+    const PaddedImage& prepare_hwc(const RgbImage& image);
     DepthMap restore(const RawDepth& raw, const Geometry& transform);
     std::size_t capacity_bytes() const noexcept;
-    // Six preallocated vector storage blocks; excludes the small Impl object.
-    static constexpr std::size_t allocation_count = 6;
+    // Seven preallocated vector storage blocks; excludes the small Impl object.
+    static constexpr std::size_t allocation_count = 7;
 private:
     class Impl;
     std::unique_ptr<Impl> impl_;

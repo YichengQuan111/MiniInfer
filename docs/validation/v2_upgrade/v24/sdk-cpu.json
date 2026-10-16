@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "errors": [],
+  "model_size": 518,
+  "contract": "depth-v1",
+  "reference_manifest_sha256": "8760db0953149f777a0f7bd8ac67274f76a8112e6db882eefa67cefffd361b65",
+  "command": [
+    "/home/qyc/builds/MiniInfer/v24-upgrade/bin/depth_sdk_cli",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected/golden/original.ppm",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/sdk-cpu/sdk.f32"
+  ],
+  "returncode": 0,
+  "stdout": "1600x1063 relative depth, trt/fp32, cpu, slots=1, delivered=1\n",
+  "stderr": "",
+  "cli_sha256": "c6552eb98041aff6a8692e4db73f7e4f57bfbe223517729597ef181fccc7f77c",
+  "package_sha256": "bb89d9e32e0ebc5658cc8187fdd4ea99fa12ac02de2b87c99df2cd32c7b4c15d",
+  "numerical": {
+    "count": 1700800,
+    "mae": 9.307135439715287e-07,
+    "rmse": 1.273369449943314e-06,
+    "max_abs": 2.0205974578857422e-05,
+    "p99_abs": 3.814697265625e-06,
+    "nonfinite_count": 0,
+    "violations": 0,
+    "violation_fraction": 0.0
+  },
+  "python_ordering": {
+    "correct": 3,
+    "total": 3,
+    "ignored": 0,
+    "ties": 0,
+    "accuracy": 1.0
+  },
+  "sdk_ordering": {
+    "correct": 3,
+    "total": 3,
+    "ignored": 0,
+    "ties": 0,
+    "accuracy": 1.0
+  },
+  "output_sha256": "c68ab9da5fb117a5f0d4af5985a2779c453a4447a7a190a066ea5cb8b3d86c53"
+}

@@ -587,6 +587,8 @@ void initialization() {
     config.worker_count = std::numeric_limits<std::size_t>::max();
     config.queue_capacity = 1;
     error(SdkErrorCode::InvalidInput, [&] { SdkTestAccess::create(config, output); }, "worker plus queue capacity overflow accepted");
+    config = {}; config.preprocess_mode=static_cast<PreprocessMode>(99);
+    error(SdkErrorCode::InvalidInput,[&] {SdkTestAccess::create(config,output);},"invalid preprocessing mode enum accepted");
     config = {}; config.gpu_slots=3;
     error(SdkErrorCode::InvalidInput,[&] {SdkTestAccess::create(config,output);},"unsupported slot count accepted");
     Temporary temporary;
@@ -631,6 +633,11 @@ void initialization() {
     set_manifest(trt);
     error(SdkErrorCode::ModelIncompatible, [&] { DepthSdk sdk(config); }, "TRT package versus engine precision mismatch accepted");
     set_manifest(base);
+    for (auto mode : {PreprocessMode::CudaPartial, PreprocessMode::CudaFullBasic, PreprocessMode::CudaFullFused}) {
+        config.preprocess_mode = mode;
+        error(SdkErrorCode::InvalidInput, [&] { DepthSdk sdk(config); }, "ORT accepted unsupported GPU preprocessing");
+    }
+    config.preprocess_mode = PreprocessMode::Cpu;
 #if defined(MINIINFER_SDK_HAS_ORT)
     error(SdkErrorCode::BackendFailure, [&] { DepthSdk sdk(config); }, "broken backend initialization category");
 #else

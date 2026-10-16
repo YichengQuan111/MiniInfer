@@ -1,0 +1,4204 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-15T12:59:05.323252+00:00",
+  "split": "final",
+  "scope": "frozen 16-image V2 smoke subset; not official DA-2K score",
+  "preprocess_tolerance": {
+    "atol": 2e-06,
+    "rtol": 1e-06
+  },
+  "new_ordering_errors_allowed": 0,
+  "input_sha256": {
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/samples_v2.json": "4c1161a881a25f464e64b5a88cfebce94fb098db64a806ac8da258d224d50445",
+    "/home/qyc/builds/MiniInfer/v24-upgrade/bin/test_depth_gpu_pipeline": "8a0279459733fa0ee1b7f1af9a972034bc98a1389c8cac4c46dd9bdd7a848fbc",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/manifest.json": "8760db0953149f777a0f7bd8ac67274f76a8112e6db882eefa67cefffd361b65",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples.json": "4c1161a881a25f464e64b5a88cfebce94fb098db64a806ac8da258d224d50445",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/contract.json": "95fb2b08d6ffe5ee48c90836cab16bc4b902ca5d9d456584421f840d8ca121a8",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/contract.json": "c82cab509da7a04dbae9f371ca8a4ebc0328b53a4be145eeb429d4f18aeaef18",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_adverse_style_0.ppm": "d9a63b45a08decb95f0d03c3b9afc059b99db9edbd91b5f718f2e96268ba5943",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_0/metadata.json": "c1638f608bd5ef628d147de3af99ed777ebd0be85eb088bcc859fe56c7914f54",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_0/original.rgb8": "fef64aeace3033d04fa1a67ffe7756774e6c6d29be529e2267c6643d74c56373",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_0/preprocessed.f32": "943ebfc73df59357eff90d36319768439726f526e62299b67e6f5fa7d8c3d747",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_0/raw.f32": "bae5f1815956cd5a28930447c2d6b0270b1a050161ba453f7da8b2ca4f93a129",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_0/restored.f32": "29cf9a3bd6eb28b94a78256ec2b2744d640c5413e3dc3136e500cc4f0d7dcf7b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_0/original.ppm": "d9a63b45a08decb95f0d03c3b9afc059b99db9edbd91b5f718f2e96268ba5943",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_adverse_style_1.ppm": "4fd548c1fad2baa32264edec0207815bd5ddd4152ec12d05f80cd210ce27e200",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_1/metadata.json": "5796a0f40244a9975242ec644809adaca36f0fc3cdd73d8e1a7d237cdcc17c5a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_1/original.rgb8": "aa0e88f62877e4fe7f39a9cfff8d14731e9aa05dcd4b5d005374f3ad9304e0b6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_1/preprocessed.f32": "489e908144ca4f2d27de0779fef85210e6baf461c601df70f6b9c97cbacb4ff9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_1/raw.f32": "4c7258c30284fe7e2cf62e3d5dbe8d5d70f4444d4820d45721152bd25e720670",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_1/restored.f32": "f8eababad6fb9602b9767192033ee5353400fcdc8fb99f9341861c46c099f216",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_adverse_style_1/original.ppm": "4fd548c1fad2baa32264edec0207815bd5ddd4152ec12d05f80cd210ce27e200",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_aerial_0.ppm": "37f844a626a7115915bd898b05ff08e31241b624b10f9181419b5ca06e5277e3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_0/metadata.json": "554cffb70f2d099fe99ed197de2358b095c39bb567ea080c894e22dedd916224",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_0/original.rgb8": "39cecf917e7273b723aba990e5250f1eba78fd092cd32c4071d0a29050ec9b01",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_0/preprocessed.f32": "2307933466e818a9e9b08456a5a01f13c7156b4a33eb70a5b1d992052906826a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_0/raw.f32": "a1755172f01a8f8db8cd41c2fce69fb05ae9984468c2034b033469057430dcac",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_0/restored.f32": "f9f2818d551f2eb930eef62d8a6f5122522713ab7f3a8087f63685c398a38154",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_0/original.ppm": "37f844a626a7115915bd898b05ff08e31241b624b10f9181419b5ca06e5277e3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_aerial_1.ppm": "1eddcf0ece9e6f830af499a6e1f2c92cae6bef8f24a0653be03c64f08ea59ae4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_1/metadata.json": "f4f2a877c4b76778e7ab23d9167aa994dc0c107401d9204e4d6b3a79e35c1d1f",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_1/original.rgb8": "cc539d7ef61762dee2f1e80be47481f33a3baabc64951414c91c7eb68076312f",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_1/preprocessed.f32": "7f32cb1b46a47a066839fb6981db5205ac5ebae32f4f5fa17396a3ff7f665742",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_1/raw.f32": "1445de1b5f0f51fd436092de40849d7bb8096bc194f9137f3a4a71edffaf1012",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_1/restored.f32": "c5c4d4a9a207ab1eeb52b3c45ebd45e583d213f659b33dbf46268e63f5fab91e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_aerial_1/original.ppm": "1eddcf0ece9e6f830af499a6e1f2c92cae6bef8f24a0653be03c64f08ea59ae4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_indoor_0.ppm": "2265795bd4ccbe31f11c57541c5138b4cfdb70dcf84db991a0a9e295df958523",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_0/metadata.json": "f1596c35777c9007a2b23f52e20bb2ed880201dcd5f79bfe7e098987eb7c032b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_0/original.rgb8": "1af220fa9bdfc55bfd4aa516f197d23aa14cd010019c53712efe469dd993e5b7",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_0/preprocessed.f32": "a661798382edc4c985949565b2b67a12e22cbd17b8189cbafdbba39b0135d3d3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_0/raw.f32": "b1491baa5bb5b96909129f7b93aa8150f7ea7947cd3ffa8a9128ac3f4449ef0e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_0/restored.f32": "b0fc8abe883920ba6b516f7cc7cdad31256a3f9e68af4fcf9cb1b8250abb8eca",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_0/original.ppm": "2265795bd4ccbe31f11c57541c5138b4cfdb70dcf84db991a0a9e295df958523",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_indoor_1.ppm": "0d1bae798f8ca6ee1affaa5d6495abdce199f318dfea1f025524ac6a96935758",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_1/metadata.json": "7ddfa2c449ae346509ff4238e842d26ce43e1cf92e8659ce163dea754312c174",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_1/original.rgb8": "12dbeb270dc4830dc552f55ac9066ce296bc1513a882619822d7ee64bef2383d",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_1/preprocessed.f32": "15b4c4f532d7a578f658febef60eefc68193bb2508ce30ce59841691e6beedb0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_1/raw.f32": "662539a76dfae79f4f0f499b006200cdd433debb0de9635dc0c375b4501d95b1",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_1/restored.f32": "8ecac02d5d484f7fe87e8aac147a81dca54044538ae4bae966c0e2a90b6667db",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_indoor_1/original.ppm": "0d1bae798f8ca6ee1affaa5d6495abdce199f318dfea1f025524ac6a96935758",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_non_real_0.ppm": "20ebac45dd47f8e50e748c1e0455a5ff48310dc533235c9a36e5bcc3f71055f4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_0/metadata.json": "5debb0556bb27a7a6a038002fff0fbd7a6ad00370759464bede5507726120596",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_0/original.rgb8": "b3b3796b81012769b4240219123f9b0a791ca5cc3e7408c7bba608952acfa6cb",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_0/preprocessed.f32": "3e7d17221f83de704c46d05e15f35a48143bd9813a3185f10a1176f09d237466",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_0/raw.f32": "c04514314335bde2948cc477cf602cf8a07aa8c2040c3a267d7dcb097e129d84",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_0/restored.f32": "56f0ba9a6f008c6b30d64c215f1c0f32ec1f5e2fa24c3fa69899f10a9307fcb2",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_0/original.ppm": "20ebac45dd47f8e50e748c1e0455a5ff48310dc533235c9a36e5bcc3f71055f4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_non_real_1.ppm": "c7e0b59c2a87af57c9fa984e527ab1686711bd56fb08399cfa6be6291c9887b0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_1/metadata.json": "54b6bd63dd55dc9daa3f838615644c87f851946d9d0d5570d377433879634762",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_1/original.rgb8": "83f78592b62e7b45693ff585b8a6f0b85f5251768891ebbc7e042fd4844a5569",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_1/preprocessed.f32": "4526fec72c70c513eaff6b875b4a81f5eb442d3b1983252953de305b96b81265",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_1/raw.f32": "1da786a4835bc530bc554df5328da476fdc7bf573e9e0c614858c9ffd728f461",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_1/restored.f32": "264b600175198f908d71c4218b74e646a2db052a7f7bd1c3b59e9690288b314a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_non_real_1/original.ppm": "c7e0b59c2a87af57c9fa984e527ab1686711bd56fb08399cfa6be6291c9887b0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_object_0.ppm": "41d078fe02e1868704682c234e6def6373c795d8fa361ffd1d5cea1d3c195ade",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_0/metadata.json": "90e2a52f6c2670fdcc57d1ffbda3db2ebb66518c80dc74172224898212f55cfa",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_0/original.rgb8": "1ab1f301e2ea3c682b7ff16821cef27f47be0974cff035af30a0a71e9ba254c6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_0/preprocessed.f32": "1c1fe540363e5cef786db68f027d85db9e4998bf00109834ed67346066e100f3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_0/raw.f32": "6bf7b6b6dfb9b361b9ce391b1e6a6eda0ed65c37a53a9dcf0a6a14f7102e3206",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_0/restored.f32": "84e48ce35d168b0361f5b158a974dcaddf3ce2b792f78cb2202e03e8c1092d7d",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_0/original.ppm": "41d078fe02e1868704682c234e6def6373c795d8fa361ffd1d5cea1d3c195ade",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_object_1.ppm": "22c332cebcb3454c68c4dd4f430aeb3d76d59f618f9e5261d7fb2cbde57a3363",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_1/metadata.json": "56878da722eb33015c509a6cf3f9b322cc5978a761c2fe7b9dd326b8a43616e2",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_1/original.rgb8": "93bbb075ee05474a6cb65e0b620662f1a850daef7dab5a3322accb354bd67556",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_1/preprocessed.f32": "d755b272bf201f01d8692703ae0346aaa05fdfd903bc2682c4976ce4f3c28eb4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_1/raw.f32": "25d2b0f9d5c4e454c8b5f09fb1bf9e17b5e2128c4a063ec61a5e3760b95adcae",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_1/restored.f32": "2c7f80b74dd5876851fb93922f80dfb6dfcae45ecff4e93cb9d36d0d38cb98ad",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_object_1/original.ppm": "22c332cebcb3454c68c4dd4f430aeb3d76d59f618f9e5261d7fb2cbde57a3363",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_outdoor_0.ppm": "31ec8bb288e27bf88b43632799ab8c68c07be61252fc213d78dc136930850f11",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_0/metadata.json": "c9252b3438a223b897615b56d5bd84ff43b0086f56a7ffa59fed2a035ff32b9d",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_0/original.rgb8": "611bc2decfe8830723d6b0572c7dfe5b4111b1bd0472f698573a8c5d93e7fdc4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_0/preprocessed.f32": "27085f66ddd553a3a502ce84bc43af6daa497e048ee01725c2d3bccd1c943316",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_0/raw.f32": "fba8b23938aa23dd79f5a20fca93820e530ea381410729a0ffe16113d09bef34",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_0/restored.f32": "ddd80695cb4c3d6f1f3dbe7d1ecda64f5d08c511a795cf52aa4f94f5eccbd0be",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_0/original.ppm": "31ec8bb288e27bf88b43632799ab8c68c07be61252fc213d78dc136930850f11",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_outdoor_1.ppm": "93a680aa96fc21ec6e033f46e1a3486ed55f6239d8eea78162ef99937a7c86d0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_1/metadata.json": "f3ffc987aaa2c5fd4835f548938e8bff67fbe54c27ab2d9d7e5dc2febc103d3e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_1/original.rgb8": "338ed9dd025264eaf080da14408cc34f438fec113fcbb559e101adfb2f1bc5ce",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_1/preprocessed.f32": "10d63b69bf6ef68bbceb07a57d539301c09bdc36dc1841bc833cb4e3f16ef146",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_1/raw.f32": "d18209622e3b00d51da2d8d0632242f5f2c26dbcaf9673554e0036d280c818b2",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_1/restored.f32": "7bc8bceae648010b67f07af44120caaa51f61ed9a92a089b68b286ae2a2a275b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_outdoor_1/original.ppm": "93a680aa96fc21ec6e033f46e1a3486ed55f6239d8eea78162ef99937a7c86d0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_transparent_reflective_0.ppm": "49cbeb39873af20db107befda01fa1e58506b4df134946b479c547a0ef10aa78",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_0/metadata.json": "f04f0a908eda6e8269e34f8bd9ef081e1124a2f56c92e30e02f6177c7278449b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_0/original.rgb8": "7fa826f0a9aa80eb2d123842d1861b89e733bfa4db2eba334f8fd24d50953eaa",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_0/preprocessed.f32": "bccca5f76073f80c4ceeb95da1a913add72099ae292e61f1a6b5cdeda4633c2d",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_0/raw.f32": "50e436bb9ce98df2f89389c22347394ac8afd614ca3e5b6182eddde66a1f9b90",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_0/restored.f32": "3a4b6f019f57fefd3b40334936380c826a07e0b107ad6886311766b58c7f0382",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_0/original.ppm": "49cbeb39873af20db107befda01fa1e58506b4df134946b479c547a0ef10aa78",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_transparent_reflective_1.ppm": "e37c3f52f08e0d10f9cfebbc50515da60252cbc9e05430d8f93825fd1c99abb3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_1/metadata.json": "8768072047f64ad29f13726ac8e627e25df322edf258ba602a3dca5331d252ad",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_1/original.rgb8": "9afcbbfbe2f819edf1436e3b09f92f52fc612ee90df32e98ca9410c4a442afd9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_1/preprocessed.f32": "315542c6f811e3bd8ac622ba8f4c3ebbd6d02b6e5cfdf6bbe324181ad90a986c",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_1/raw.f32": "5a43c0383b04584e7fa03edf80ea9683b461a7c0d0fc5502d906ab8bd4e366fd",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_1/restored.f32": "ab66531cb22d5f69e26c51540797398fc5f7e1651a4efa59d9606825692ed61a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_transparent_reflective_1/original.ppm": "e37c3f52f08e0d10f9cfebbc50515da60252cbc9e05430d8f93825fd1c99abb3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_underwater_0.ppm": "3ca62311d38fdb1f2578755917903381b769387698d6622e62403614e588bbb3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_0/metadata.json": "8e9dabac04412989b2dcb8318d384c31843749fda45b8e6cdb20284a9f7d5370",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_0/original.rgb8": "e0c3a423560a1743ae1a02c55eeb3a83207c29ef1adc3096afa8180ebeefd369",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_0/preprocessed.f32": "13fab2aef36ba46d9a97fc75f2d845d68f37497332b9019e56eb0c4a972c4889",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_0/raw.f32": "b6e7a263a7a5d97f0eae689fa03518c8c8d3fea080b3c295a513d5a17c4f2523",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_0/restored.f32": "5cca7a7eb601e93057e74610f831a2b007d360d63e82179b2a9cde3f8acfc60d",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_0/original.ppm": "3ca62311d38fdb1f2578755917903381b769387698d6622e62403614e588bbb3",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_underwater_1.ppm": "fe542a0f95f04c8a838365c6c05f3a971d27eec81abae0b59fb00b9be5a393dd",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_1/metadata.json": "4de08483ba33ab400a7ba129a33f88a21dd4795db30c665b36b246f8e5e47309",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_1/original.rgb8": "909d4881e95e096bff8a1bf62e7a69046e1a250488085d78170b90645b502e2f",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_1/preprocessed.f32": "564ca6da4fbb6c9fee918e252be851413ead4d692a409bace8897fed5d5c59a6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_1/raw.f32": "563929c46032897243523179d12132f2f570a9a33ada32f043afcbbb387c88a1",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_1/restored.f32": "a508049288bd2bcbacbd9fa0abbb37ce76794512e03d882a2710b776006324dc",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v22-reference-518/samples/v2_underwater_1/original.ppm": "fe542a0f95f04c8a838365c6c05f3a971d27eec81abae0b59fb00b9be5a393dd",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine": "eb9fbd41e015f4006918a2503522c054aabcd32d9b0abcfc37a98462e51759ab",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine.manifest": "564ea49e11cac963eb8e35e5fb55f1000cc1ac256bf510bf7cc3206b22f5a77e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/thresholds_trt_fp32.json": "4a13c5537bf21eb35379515d2a82af696c84aef521a53b0d69032ca12fe74b72",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32-samples.tsv": "89d57efb432c5c8d0a25a553dc4677edf8f260cbde6d3073a4668573d430f875"
+  },
+  "output_sha256": {
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/run.json": "356e2745059799aedb6afe943af5984df2be6c353a1b0ff653e0d5b3f6c463d9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/cpu/v2_adverse_style_1.nchw.f32": "489e908144ca4f2d27de0779fef85210e6baf461c601df70f6b9c97cbacb4ff9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_adverse_style_1.nchw.f32": "489e908144ca4f2d27de0779fef85210e6baf461c601df70f6b9c97cbacb4ff9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_adverse_style_1.raw.f32": "353c02153197d4712ef6dbf1797659cfde38cd0ae2354c073029a50ee1e1b2ae",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_adverse_style_1.restored.f32": "c68ab9da5fb117a5f0d4af5985a2779c453a4447a7a190a066ea5cb8b3d86c53",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_adverse_style_1.nchw.f32": "489e908144ca4f2d27de0779fef85210e6baf461c601df70f6b9c97cbacb4ff9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_adverse_style_1.raw.f32": "353c02153197d4712ef6dbf1797659cfde38cd0ae2354c073029a50ee1e1b2ae",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_adverse_style_1.restored.f32": "c68ab9da5fb117a5f0d4af5985a2779c453a4447a7a190a066ea5cb8b3d86c53",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_adverse_style_1.nchw.f32": "489e908144ca4f2d27de0779fef85210e6baf461c601df70f6b9c97cbacb4ff9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_adverse_style_1.raw.f32": "353c02153197d4712ef6dbf1797659cfde38cd0ae2354c073029a50ee1e1b2ae",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_adverse_style_1.restored.f32": "c68ab9da5fb117a5f0d4af5985a2779c453a4447a7a190a066ea5cb8b3d86c53",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_adverse_style_1.nchw.f32": "489e908144ca4f2d27de0779fef85210e6baf461c601df70f6b9c97cbacb4ff9",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_adverse_style_1.raw.f32": "353c02153197d4712ef6dbf1797659cfde38cd0ae2354c073029a50ee1e1b2ae",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_adverse_style_1.restored.f32": "c68ab9da5fb117a5f0d4af5985a2779c453a4447a7a190a066ea5cb8b3d86c53",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/cpu/v2_aerial_1.nchw.f32": "7f32cb1b46a47a066839fb6981db5205ac5ebae32f4f5fa17396a3ff7f665742",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_aerial_1.nchw.f32": "7f32cb1b46a47a066839fb6981db5205ac5ebae32f4f5fa17396a3ff7f665742",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_aerial_1.raw.f32": "80c307d5a023a83c6905adc9b97f29387cfce51204f3cf77cf975369c3fa2535",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_aerial_1.restored.f32": "8466f8b72e905b538c38fa244c4dd8149dac36e6ba91fe82c3a95b788e2ad7ba",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_aerial_1.nchw.f32": "7f32cb1b46a47a066839fb6981db5205ac5ebae32f4f5fa17396a3ff7f665742",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_aerial_1.raw.f32": "80c307d5a023a83c6905adc9b97f29387cfce51204f3cf77cf975369c3fa2535",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_aerial_1.restored.f32": "8466f8b72e905b538c38fa244c4dd8149dac36e6ba91fe82c3a95b788e2ad7ba",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_aerial_1.nchw.f32": "7f32cb1b46a47a066839fb6981db5205ac5ebae32f4f5fa17396a3ff7f665742",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_aerial_1.raw.f32": "80c307d5a023a83c6905adc9b97f29387cfce51204f3cf77cf975369c3fa2535",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_aerial_1.restored.f32": "8466f8b72e905b538c38fa244c4dd8149dac36e6ba91fe82c3a95b788e2ad7ba",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_aerial_1.nchw.f32": "7f32cb1b46a47a066839fb6981db5205ac5ebae32f4f5fa17396a3ff7f665742",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_aerial_1.raw.f32": "80c307d5a023a83c6905adc9b97f29387cfce51204f3cf77cf975369c3fa2535",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_aerial_1.restored.f32": "8466f8b72e905b538c38fa244c4dd8149dac36e6ba91fe82c3a95b788e2ad7ba",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/cpu/v2_indoor_1.nchw.f32": "15b4c4f532d7a578f658febef60eefc68193bb2508ce30ce59841691e6beedb0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_indoor_1.nchw.f32": "15b4c4f532d7a578f658febef60eefc68193bb2508ce30ce59841691e6beedb0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_indoor_1.raw.f32": "315b8a26cdd23c2f5055f4932b69440e6a6540057a125459fa2374cfebcd7b46",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_indoor_1.restored.f32": "21761933b52ff19861ad178215c92b910dcf8d08af3c6a5da2b503939878729e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_indoor_1.nchw.f32": "15b4c4f532d7a578f658febef60eefc68193bb2508ce30ce59841691e6beedb0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_indoor_1.raw.f32": "315b8a26cdd23c2f5055f4932b69440e6a6540057a125459fa2374cfebcd7b46",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_indoor_1.restored.f32": "21761933b52ff19861ad178215c92b910dcf8d08af3c6a5da2b503939878729e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_indoor_1.nchw.f32": "15b4c4f532d7a578f658febef60eefc68193bb2508ce30ce59841691e6beedb0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_indoor_1.raw.f32": "315b8a26cdd23c2f5055f4932b69440e6a6540057a125459fa2374cfebcd7b46",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_indoor_1.restored.f32": "21761933b52ff19861ad178215c92b910dcf8d08af3c6a5da2b503939878729e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_indoor_1.nchw.f32": "15b4c4f532d7a578f658febef60eefc68193bb2508ce30ce59841691e6beedb0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_indoor_1.raw.f32": "315b8a26cdd23c2f5055f4932b69440e6a6540057a125459fa2374cfebcd7b46",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_indoor_1.restored.f32": "21761933b52ff19861ad178215c92b910dcf8d08af3c6a5da2b503939878729e",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/cpu/v2_non_real_1.nchw.f32": "4526fec72c70c513eaff6b875b4a81f5eb442d3b1983252953de305b96b81265",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_non_real_1.nchw.f32": "4526fec72c70c513eaff6b875b4a81f5eb442d3b1983252953de305b96b81265",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_non_real_1.raw.f32": "89daac527cd3e549db5cdd6582e790995111755d1638324eacf22af6a19e3cd0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_non_real_1.restored.f32": "1a994ddfbc71871db0608145cafa18f439a2ef4e9eb1cb015f75d9b7f35df9af",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_non_real_1.nchw.f32": "4526fec72c70c513eaff6b875b4a81f5eb442d3b1983252953de305b96b81265",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_non_real_1.raw.f32": "89daac527cd3e549db5cdd6582e790995111755d1638324eacf22af6a19e3cd0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_non_real_1.restored.f32": "1a994ddfbc71871db0608145cafa18f439a2ef4e9eb1cb015f75d9b7f35df9af",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_non_real_1.nchw.f32": "4526fec72c70c513eaff6b875b4a81f5eb442d3b1983252953de305b96b81265",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_non_real_1.raw.f32": "89daac527cd3e549db5cdd6582e790995111755d1638324eacf22af6a19e3cd0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_non_real_1.restored.f32": "1a994ddfbc71871db0608145cafa18f439a2ef4e9eb1cb015f75d9b7f35df9af",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_non_real_1.nchw.f32": "4526fec72c70c513eaff6b875b4a81f5eb442d3b1983252953de305b96b81265",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_non_real_1.raw.f32": "89daac527cd3e549db5cdd6582e790995111755d1638324eacf22af6a19e3cd0",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_non_real_1.restored.f32": "1a994ddfbc71871db0608145cafa18f439a2ef4e9eb1cb015f75d9b7f35df9af",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/cpu/v2_object_1.nchw.f32": "d755b272bf201f01d8692703ae0346aaa05fdfd903bc2682c4976ce4f3c28eb4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_object_1.nchw.f32": "d755b272bf201f01d8692703ae0346aaa05fdfd903bc2682c4976ce4f3c28eb4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_object_1.raw.f32": "9169b5d104c366b35c302b90e402d82b1768d33e4555723e47094ee5b50fb807",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_object_1.restored.f32": "7fba375cfdc0c495d34b4a2edd5c0359a812b71276c4d24394382df686459df6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_object_1.nchw.f32": "d755b272bf201f01d8692703ae0346aaa05fdfd903bc2682c4976ce4f3c28eb4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_object_1.raw.f32": "9169b5d104c366b35c302b90e402d82b1768d33e4555723e47094ee5b50fb807",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_object_1.restored.f32": "7fba375cfdc0c495d34b4a2edd5c0359a812b71276c4d24394382df686459df6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_object_1.nchw.f32": "d755b272bf201f01d8692703ae0346aaa05fdfd903bc2682c4976ce4f3c28eb4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_object_1.raw.f32": "9169b5d104c366b35c302b90e402d82b1768d33e4555723e47094ee5b50fb807",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_object_1.restored.f32": "7fba375cfdc0c495d34b4a2edd5c0359a812b71276c4d24394382df686459df6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_object_1.nchw.f32": "d755b272bf201f01d8692703ae0346aaa05fdfd903bc2682c4976ce4f3c28eb4",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_object_1.raw.f32": "9169b5d104c366b35c302b90e402d82b1768d33e4555723e47094ee5b50fb807",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_object_1.restored.f32": "7fba375cfdc0c495d34b4a2edd5c0359a812b71276c4d24394382df686459df6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/cpu/v2_outdoor_1.nchw.f32": "10d63b69bf6ef68bbceb07a57d539301c09bdc36dc1841bc833cb4e3f16ef146",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_outdoor_1.nchw.f32": "10d63b69bf6ef68bbceb07a57d539301c09bdc36dc1841bc833cb4e3f16ef146",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_outdoor_1.raw.f32": "9d74f0a09c1cbf7afe987ed76936eda33d42fe8fbdb86a41f88375b29c3ffe35",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_outdoor_1.restored.f32": "499a7cea94d3de11995ae8c9b6216248185c4b6df64800c6aaf5b1981d416c3a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_outdoor_1.nchw.f32": "10d63b69bf6ef68bbceb07a57d539301c09bdc36dc1841bc833cb4e3f16ef146",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_outdoor_1.raw.f32": "9d74f0a09c1cbf7afe987ed76936eda33d42fe8fbdb86a41f88375b29c3ffe35",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_outdoor_1.restored.f32": "499a7cea94d3de11995ae8c9b6216248185c4b6df64800c6aaf5b1981d416c3a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_outdoor_1.nchw.f32": "10d63b69bf6ef68bbceb07a57d539301c09bdc36dc1841bc833cb4e3f16ef146",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_outdoor_1.raw.f32": "9d74f0a09c1cbf7afe987ed76936eda33d42fe8fbdb86a41f88375b29c3ffe35",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_outdoor_1.restored.f32": "499a7cea94d3de11995ae8c9b6216248185c4b6df64800c6aaf5b1981d416c3a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_outdoor_1.nchw.f32": "10d63b69bf6ef68bbceb07a57d539301c09bdc36dc1841bc833cb4e3f16ef146",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_outdoor_1.raw.f32": "9d74f0a09c1cbf7afe987ed76936eda33d42fe8fbdb86a41f88375b29c3ffe35",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_outdoor_1.restored.f32": "499a7cea94d3de11995ae8c9b6216248185c4b6df64800c6aaf5b1981d416c3a",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/cpu/v2_transparent_reflective_1.nchw.f32": "315542c6f811e3bd8ac622ba8f4c3ebbd6d02b6e5cfdf6bbe324181ad90a986c",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_transparent_reflective_1.nchw.f32": "315542c6f811e3bd8ac622ba8f4c3ebbd6d02b6e5cfdf6bbe324181ad90a986c",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_transparent_reflective_1.raw.f32": "334c7c7d31bcc45cce04043a98defa854e8588e6593d471411da7ba3f037a103",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_transparent_reflective_1.restored.f32": "cc223e198020b9301fd16c265e7d5614ae3555b6d1545bea8f234e95e1549dd2",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_transparent_reflective_1.nchw.f32": "315542c6f811e3bd8ac622ba8f4c3ebbd6d02b6e5cfdf6bbe324181ad90a986c",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_transparent_reflective_1.raw.f32": "334c7c7d31bcc45cce04043a98defa854e8588e6593d471411da7ba3f037a103",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_transparent_reflective_1.restored.f32": "cc223e198020b9301fd16c265e7d5614ae3555b6d1545bea8f234e95e1549dd2",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_transparent_reflective_1.nchw.f32": "315542c6f811e3bd8ac622ba8f4c3ebbd6d02b6e5cfdf6bbe324181ad90a986c",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_transparent_reflective_1.raw.f32": "334c7c7d31bcc45cce04043a98defa854e8588e6593d471411da7ba3f037a103",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_transparent_reflective_1.restored.f32": "cc223e198020b9301fd16c265e7d5614ae3555b6d1545bea8f234e95e1549dd2",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_transparent_reflective_1.nchw.f32": "315542c6f811e3bd8ac622ba8f4c3ebbd6d02b6e5cfdf6bbe324181ad90a986c",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_transparent_reflective_1.raw.f32": "334c7c7d31bcc45cce04043a98defa854e8588e6593d471411da7ba3f037a103",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_transparent_reflective_1.restored.f32": "cc223e198020b9301fd16c265e7d5614ae3555b6d1545bea8f234e95e1549dd2",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/cpu/v2_underwater_1.nchw.f32": "564ca6da4fbb6c9fee918e252be851413ead4d692a409bace8897fed5d5c59a6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_underwater_1.nchw.f32": "564ca6da4fbb6c9fee918e252be851413ead4d692a409bace8897fed5d5c59a6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_underwater_1.raw.f32": "a01bffb945c309cb5f4631a4654f4245a93fe918616e46a947b6b1ff8585b2e8",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/A/v2_underwater_1.restored.f32": "5a2acad15e49f53fdd9c867bee580dd92e270ed44d281ec4ac073d71ef9d849b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_underwater_1.nchw.f32": "564ca6da4fbb6c9fee918e252be851413ead4d692a409bace8897fed5d5c59a6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_underwater_1.raw.f32": "a01bffb945c309cb5f4631a4654f4245a93fe918616e46a947b6b1ff8585b2e8",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/B/v2_underwater_1.restored.f32": "5a2acad15e49f53fdd9c867bee580dd92e270ed44d281ec4ac073d71ef9d849b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_underwater_1.nchw.f32": "564ca6da4fbb6c9fee918e252be851413ead4d692a409bace8897fed5d5c59a6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_underwater_1.raw.f32": "a01bffb945c309cb5f4631a4654f4245a93fe918616e46a947b6b1ff8585b2e8",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-basic/v2_underwater_1.restored.f32": "5a2acad15e49f53fdd9c867bee580dd92e270ed44d281ec4ac073d71ef9d849b",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_underwater_1.nchw.f32": "564ca6da4fbb6c9fee918e252be851413ead4d692a409bace8897fed5d5c59a6",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_underwater_1.raw.f32": "a01bffb945c309cb5f4631a4654f4245a93fe918616e46a947b6b1ff8585b2e8",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32/C-fused/v2_underwater_1.restored.f32": "5a2acad15e49f53fdd9c867bee580dd92e270ed44d281ec4ac073d71ef9d849b"
+  },
+  "configurations": [
+    {
+      "model_size": 518,
+      "precision": "fp32",
+      "engine": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+      "thresholds": {
+        "schema_version": 1,
+        "backend": "tensorrt-fp32",
+        "atol": 0.001,
+        "rtol": 0.0001,
+        "max_violation_fraction": 0.0,
+        "preprocess_atol": 0.0,
+        "postprocess_atol": 0.0,
+        "max_ordering_drop": 0.0,
+        "max_p99_abs": 0.001,
+        "max_mae": 0.0005
+      },
+      "samples": [
+        {
+          "id": "v2_adverse_style_1",
+          "source_sha256": "4fd548c1fad2baa32264edec0207815bd5ddd4152ec12d05f80cd210ce27e200",
+          "python_ordering": {
+            "correct": 3,
+            "total": 3,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "A_ordering": {
+            "correct": 3,
+            "total": 3,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "modes": {
+            "A": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.6046020022921553e-06,
+                  "rmse": 2.1995311787528858e-06,
+                  "max_abs": 2.104043960571289e-05,
+                  "p99_abs": 5.7220458984375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1700800,
+                  "mae": 9.307135439715287e-07,
+                  "rmse": 1.273369449943314e-06,
+                  "max_abs": 2.0205974578857422e-05,
+                  "p99_abs": 3.814697265625e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1700800,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "B": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.6046020022921553e-06,
+                  "rmse": 2.1995311787528858e-06,
+                  "max_abs": 2.104043960571289e-05,
+                  "p99_abs": 5.7220458984375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1700800,
+                  "mae": 9.307135439715287e-07,
+                  "rmse": 1.273369449943314e-06,
+                  "max_abs": 2.0205974578857422e-05,
+                  "p99_abs": 3.814697265625e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1700800,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-basic": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.6046020022921553e-06,
+                  "rmse": 2.1995311787528858e-06,
+                  "max_abs": 2.104043960571289e-05,
+                  "p99_abs": 5.7220458984375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1700800,
+                  "mae": 9.307135439715287e-07,
+                  "rmse": 1.273369449943314e-06,
+                  "max_abs": 2.0205974578857422e-05,
+                  "p99_abs": 3.814697265625e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1700800,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-fused": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.6046020022921553e-06,
+                  "rmse": 2.1995311787528858e-06,
+                  "max_abs": 2.104043960571289e-05,
+                  "p99_abs": 5.7220458984375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1700800,
+                  "mae": 9.307135439715287e-07,
+                  "rmse": 1.273369449943314e-06,
+                  "max_abs": 2.0205974578857422e-05,
+                  "p99_abs": 3.814697265625e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1700800,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            }
+          },
+          "passed": true
+        },
+        {
+          "id": "v2_aerial_1",
+          "source_sha256": "1eddcf0ece9e6f830af499a6e1f2c92cae6bef8f24a0653be03c64f08ea59ae4",
+          "python_ordering": {
+            "correct": 3,
+            "total": 3,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "A_ordering": {
+            "correct": 3,
+            "total": 3,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "modes": {
+            "A": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.6743853259174682e-06,
+                  "rmse": 2.6780307930950814e-06,
+                  "max_abs": 4.332512617111206e-05,
+                  "p99_abs": 8.344650268554688e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1689600,
+                  "mae": 3.48002183816414e-07,
+                  "rmse": 7.084958874026754e-07,
+                  "max_abs": 3.9577484130859375e-05,
+                  "p99_abs": 2.5033950805664062e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1689600,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "B": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.6743853259174682e-06,
+                  "rmse": 2.6780307930950814e-06,
+                  "max_abs": 4.332512617111206e-05,
+                  "p99_abs": 8.344650268554688e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1689600,
+                  "mae": 3.48002183816414e-07,
+                  "rmse": 7.084958874026754e-07,
+                  "max_abs": 3.9577484130859375e-05,
+                  "p99_abs": 2.5033950805664062e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1689600,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-basic": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.6743853259174682e-06,
+                  "rmse": 2.6780307930950814e-06,
+                  "max_abs": 4.332512617111206e-05,
+                  "p99_abs": 8.344650268554688e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1689600,
+                  "mae": 3.48002183816414e-07,
+                  "rmse": 7.084958874026754e-07,
+                  "max_abs": 3.9577484130859375e-05,
+                  "p99_abs": 2.5033950805664062e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1689600,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-fused": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.6743853259174682e-06,
+                  "rmse": 2.6780307930950814e-06,
+                  "max_abs": 4.332512617111206e-05,
+                  "p99_abs": 8.344650268554688e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1689600,
+                  "mae": 3.48002183816414e-07,
+                  "rmse": 7.084958874026754e-07,
+                  "max_abs": 3.9577484130859375e-05,
+                  "p99_abs": 2.5033950805664062e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1689600,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            }
+          },
+          "passed": true
+        },
+        {
+          "id": "v2_indoor_1",
+          "source_sha256": "0d1bae798f8ca6ee1affaa5d6495abdce199f318dfea1f025524ac6a96935758",
+          "python_ordering": {
+            "correct": 3,
+            "total": 3,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "A_ordering": {
+            "correct": 3,
+            "total": 3,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "modes": {
+            "A": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 2.303854335415504e-06,
+                  "rmse": 3.1139000549273176e-06,
+                  "max_abs": 4.887580871582031e-05,
+                  "p99_abs": 8.106231689453125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1912832,
+                  "mae": 8.572268709081691e-07,
+                  "rmse": 1.1626730822109509e-06,
+                  "max_abs": 3.886222839355469e-05,
+                  "p99_abs": 3.337860107421875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1912832,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "B": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 2.303854335415504e-06,
+                  "rmse": 3.1139000549273176e-06,
+                  "max_abs": 4.887580871582031e-05,
+                  "p99_abs": 8.106231689453125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1912832,
+                  "mae": 8.572268709081691e-07,
+                  "rmse": 1.1626730822109509e-06,
+                  "max_abs": 3.886222839355469e-05,
+                  "p99_abs": 3.337860107421875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1912832,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-basic": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 2.303854335415504e-06,
+                  "rmse": 3.1139000549273176e-06,
+                  "max_abs": 4.887580871582031e-05,
+                  "p99_abs": 8.106231689453125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1912832,
+                  "mae": 8.572268709081691e-07,
+                  "rmse": 1.1626730822109509e-06,
+                  "max_abs": 3.886222839355469e-05,
+                  "p99_abs": 3.337860107421875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1912832,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-fused": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 2.303854335415504e-06,
+                  "rmse": 3.1139000549273176e-06,
+                  "max_abs": 4.887580871582031e-05,
+                  "p99_abs": 8.106231689453125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1912832,
+                  "mae": 8.572268709081691e-07,
+                  "rmse": 1.1626730822109509e-06,
+                  "max_abs": 3.886222839355469e-05,
+                  "p99_abs": 3.337860107421875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1912832,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            }
+          },
+          "passed": true
+        },
+        {
+          "id": "v2_non_real_1",
+          "source_sha256": "c7e0b59c2a87af57c9fa984e527ab1686711bd56fb08399cfa6be6291c9887b0",
+          "python_ordering": {
+            "correct": 1,
+            "total": 1,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "A_ordering": {
+            "correct": 1,
+            "total": 1,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "modes": {
+            "A": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.343958521534012e-06,
+                  "rmse": 1.8704571139786046e-06,
+                  "max_abs": 9.423494338989258e-05,
+                  "p99_abs": 5.0067901611328125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 744448,
+                  "mae": 1.461726954101779e-06,
+                  "rmse": 1.9779704313712367e-06,
+                  "max_abs": 8.07046890258789e-05,
+                  "p99_abs": 5.0067901611328125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 744448,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "B": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.343958521534012e-06,
+                  "rmse": 1.8704571139786046e-06,
+                  "max_abs": 9.423494338989258e-05,
+                  "p99_abs": 5.0067901611328125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 744448,
+                  "mae": 1.461726954101779e-06,
+                  "rmse": 1.9779704313712367e-06,
+                  "max_abs": 8.07046890258789e-05,
+                  "p99_abs": 5.0067901611328125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 744448,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-basic": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.343958521534012e-06,
+                  "rmse": 1.8704571139786046e-06,
+                  "max_abs": 9.423494338989258e-05,
+                  "p99_abs": 5.0067901611328125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 744448,
+                  "mae": 1.461726954101779e-06,
+                  "rmse": 1.9779704313712367e-06,
+                  "max_abs": 8.07046890258789e-05,
+                  "p99_abs": 5.0067901611328125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 744448,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-fused": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.343958521534012e-06,
+                  "rmse": 1.8704571139786046e-06,
+                  "max_abs": 9.423494338989258e-05,
+                  "p99_abs": 5.0067901611328125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 744448,
+                  "mae": 1.461726954101779e-06,
+                  "rmse": 1.9779704313712367e-06,
+                  "max_abs": 8.07046890258789e-05,
+                  "p99_abs": 5.0067901611328125e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 744448,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            }
+          },
+          "passed": true
+        },
+        {
+          "id": "v2_object_1",
+          "source_sha256": "22c332cebcb3454c68c4dd4f430aeb3d76d59f618f9e5261d7fb2cbde57a3363",
+          "python_ordering": {
+            "correct": 1,
+            "total": 1,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "A_ordering": {
+            "correct": 1,
+            "total": 1,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "modes": {
+            "A": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.4430626408174592e-06,
+                  "rmse": 2.240589974607644e-06,
+                  "max_abs": 3.0994415283203125e-05,
+                  "p99_abs": 6.4373016357421875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1474460,
+                  "mae": 8.812025712914918e-07,
+                  "rmse": 1.3358290440944938e-06,
+                  "max_abs": 2.7418136596679688e-05,
+                  "p99_abs": 4.410743713378906e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1474460,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "B": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.4430626408174592e-06,
+                  "rmse": 2.240589974607644e-06,
+                  "max_abs": 3.0994415283203125e-05,
+                  "p99_abs": 6.4373016357421875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1474460,
+                  "mae": 8.812025712914918e-07,
+                  "rmse": 1.3358290440944938e-06,
+                  "max_abs": 2.7418136596679688e-05,
+                  "p99_abs": 4.410743713378906e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1474460,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-basic": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.4430626408174592e-06,
+                  "rmse": 2.240589974607644e-06,
+                  "max_abs": 3.0994415283203125e-05,
+                  "p99_abs": 6.4373016357421875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1474460,
+                  "mae": 8.812025712914918e-07,
+                  "rmse": 1.3358290440944938e-06,
+                  "max_abs": 2.7418136596679688e-05,
+                  "p99_abs": 4.410743713378906e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1474460,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-fused": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.4430626408174592e-06,
+                  "rmse": 2.240589974607644e-06,
+                  "max_abs": 3.0994415283203125e-05,
+                  "p99_abs": 6.4373016357421875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1474460,
+                  "mae": 8.812025712914918e-07,
+                  "rmse": 1.3358290440944938e-06,
+                  "max_abs": 2.7418136596679688e-05,
+                  "p99_abs": 4.410743713378906e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1474460,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            }
+          },
+          "passed": true
+        },
+        {
+          "id": "v2_outdoor_1",
+          "source_sha256": "93a680aa96fc21ec6e033f46e1a3486ed55f6239d8eea78162ef99937a7c86d0",
+          "python_ordering": {
+            "correct": 3,
+            "total": 3,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "A_ordering": {
+            "correct": 3,
+            "total": 3,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "modes": {
+            "A": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 3.849581134772287e-06,
+                  "rmse": 5.244663539586905e-06,
+                  "max_abs": 4.4345855712890625e-05,
+                  "p99_abs": 1.33514404296875e-05,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1311800,
+                  "mae": 1.62853068614046e-06,
+                  "rmse": 1.9314219208903982e-06,
+                  "max_abs": 3.933906555175781e-05,
+                  "p99_abs": 4.887580871582031e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1311800,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "B": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 3.849581134772287e-06,
+                  "rmse": 5.244663539586905e-06,
+                  "max_abs": 4.4345855712890625e-05,
+                  "p99_abs": 1.33514404296875e-05,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1311800,
+                  "mae": 1.62853068614046e-06,
+                  "rmse": 1.9314219208903982e-06,
+                  "max_abs": 3.933906555175781e-05,
+                  "p99_abs": 4.887580871582031e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1311800,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-basic": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 3.849581134772287e-06,
+                  "rmse": 5.244663539586905e-06,
+                  "max_abs": 4.4345855712890625e-05,
+                  "p99_abs": 1.33514404296875e-05,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1311800,
+                  "mae": 1.62853068614046e-06,
+                  "rmse": 1.9314219208903982e-06,
+                  "max_abs": 3.933906555175781e-05,
+                  "p99_abs": 4.887580871582031e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1311800,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-fused": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 3.849581134772287e-06,
+                  "rmse": 5.244663539586905e-06,
+                  "max_abs": 4.4345855712890625e-05,
+                  "p99_abs": 1.33514404296875e-05,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 1311800,
+                  "mae": 1.62853068614046e-06,
+                  "rmse": 1.9314219208903982e-06,
+                  "max_abs": 3.933906555175781e-05,
+                  "p99_abs": 4.887580871582031e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 1311800,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 3,
+                "total": 3,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            }
+          },
+          "passed": true
+        },
+        {
+          "id": "v2_transparent_reflective_1",
+          "source_sha256": "e37c3f52f08e0d10f9cfebbc50515da60252cbc9e05430d8f93825fd1c99abb3",
+          "python_ordering": {
+            "correct": 1,
+            "total": 1,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "A_ordering": {
+            "correct": 1,
+            "total": 1,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "modes": {
+            "A": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.5376647420745464e-06,
+                  "rmse": 2.0720002026655264e-06,
+                  "max_abs": 2.8371810913085938e-05,
+                  "p99_abs": 5.7220458984375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 693594,
+                  "mae": 1.4857519566023978e-06,
+                  "rmse": 1.974028212134009e-06,
+                  "max_abs": 2.753734588623047e-05,
+                  "p99_abs": 4.857778549194336e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 693594,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "B": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.5376647420745464e-06,
+                  "rmse": 2.0720002026655264e-06,
+                  "max_abs": 2.8371810913085938e-05,
+                  "p99_abs": 5.7220458984375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 693594,
+                  "mae": 1.4857519566023978e-06,
+                  "rmse": 1.974028212134009e-06,
+                  "max_abs": 2.753734588623047e-05,
+                  "p99_abs": 4.857778549194336e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 693594,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-basic": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.5376647420745464e-06,
+                  "rmse": 2.0720002026655264e-06,
+                  "max_abs": 2.8371810913085938e-05,
+                  "p99_abs": 5.7220458984375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 693594,
+                  "mae": 1.4857519566023978e-06,
+                  "rmse": 1.974028212134009e-06,
+                  "max_abs": 2.753734588623047e-05,
+                  "p99_abs": 4.857778549194336e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 693594,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-fused": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.5376647420745464e-06,
+                  "rmse": 2.0720002026655264e-06,
+                  "max_abs": 2.8371810913085938e-05,
+                  "p99_abs": 5.7220458984375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 693594,
+                  "mae": 1.4857519566023978e-06,
+                  "rmse": 1.974028212134009e-06,
+                  "max_abs": 2.753734588623047e-05,
+                  "p99_abs": 4.857778549194336e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 693594,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 1,
+                "total": 1,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            }
+          },
+          "passed": true
+        },
+        {
+          "id": "v2_underwater_1",
+          "source_sha256": "fe542a0f95f04c8a838365c6c05f3a971d27eec81abae0b59fb00b9be5a393dd",
+          "python_ordering": {
+            "correct": 2,
+            "total": 2,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "A_ordering": {
+            "correct": 2,
+            "total": 2,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "modes": {
+            "A": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.414300539087637e-06,
+                  "rmse": 2.1249247798769696e-06,
+                  "max_abs": 5.7756900787353516e-05,
+                  "p99_abs": 7.152557373046875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 697344,
+                  "mae": 1.2067858852506254e-06,
+                  "rmse": 2.0037765412736197e-06,
+                  "max_abs": 4.7326087951660156e-05,
+                  "p99_abs": 6.67572021484375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 697344,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 2,
+                "total": 2,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "B": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.414300539087637e-06,
+                  "rmse": 2.1249247798769696e-06,
+                  "max_abs": 5.7756900787353516e-05,
+                  "p99_abs": 7.152557373046875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 697344,
+                  "mae": 1.2067858852506254e-06,
+                  "rmse": 2.0037765412736197e-06,
+                  "max_abs": 4.7326087951660156e-05,
+                  "p99_abs": 6.67572021484375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 697344,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 2,
+                "total": 2,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-basic": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.414300539087637e-06,
+                  "rmse": 2.1249247798769696e-06,
+                  "max_abs": 5.7756900787353516e-05,
+                  "p99_abs": 7.152557373046875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 697344,
+                  "mae": 1.2067858852506254e-06,
+                  "rmse": 2.0037765412736197e-06,
+                  "max_abs": 4.7326087951660156e-05,
+                  "p99_abs": 6.67572021484375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 697344,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 2,
+                "total": 2,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            },
+            "C-fused": {
+              "numerical": {
+                "cpu_input": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_raw": {
+                  "count": 268324,
+                  "mae": 1.414300539087637e-06,
+                  "rmse": 2.1249247798769696e-06,
+                  "max_abs": 5.7756900787353516e-05,
+                  "p99_abs": 7.152557373046875e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "python_restored": {
+                  "count": 697344,
+                  "mae": 1.2067858852506254e-06,
+                  "rmse": 2.0037765412736197e-06,
+                  "max_abs": 4.7326087951660156e-05,
+                  "p99_abs": 6.67572021484375e-06,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_nchw": {
+                  "count": 804972,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_raw": {
+                  "count": 268324,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                },
+                "A_restored": {
+                  "count": 697344,
+                  "mae": 0.0,
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "p99_abs": 0.0,
+                  "nonfinite_count": 0,
+                  "violations": 0,
+                  "violation_fraction": 0.0,
+                  "passed": true
+                }
+              },
+              "ordering": {
+                "correct": 2,
+                "total": 2,
+                "ignored": 0,
+                "ties": 0,
+                "accuracy": 1.0
+              },
+              "new_ordering_errors": {
+                "python": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                },
+                "A": {
+                  "count": 0,
+                  "pair_indices": [],
+                  "passed": true
+                }
+              },
+              "ordering_drop": {
+                "python": 0.0,
+                "A": 0.0
+              },
+              "passed": true
+            }
+          },
+          "passed": true
+        }
+      ],
+      "aggregate": {
+        "A": {
+          "numerical": {
+            "cpu_input": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_nchw": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_raw": {
+              "count": 2146592,
+              "mae": 1.8964261552388837e-06,
+              "rmse": 2.884007605315621e-06,
+              "max_abs": 9.423494338989258e-05,
+              "p99_abs": 1.049041748046875e-05,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_restored": {
+              "count": 10224878,
+              "mae": 9.98203677258601e-07,
+              "rmse": 1.4712181880698058e-06,
+              "max_abs": 8.07046890258789e-05,
+              "p99_abs": 4.76837158203125e-06,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_nchw": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_raw": {
+              "count": 2146592,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_restored": {
+              "count": 10224878,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            }
+          },
+          "ordering": {
+            "correct": 17,
+            "total": 17,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "new_ordering_errors": {
+            "python": 0,
+            "A": 0
+          },
+          "passed": true
+        },
+        "B": {
+          "numerical": {
+            "cpu_input": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_nchw": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_raw": {
+              "count": 2146592,
+              "mae": 1.8964261552388837e-06,
+              "rmse": 2.884007605315621e-06,
+              "max_abs": 9.423494338989258e-05,
+              "p99_abs": 1.049041748046875e-05,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_restored": {
+              "count": 10224878,
+              "mae": 9.98203677258601e-07,
+              "rmse": 1.4712181880698058e-06,
+              "max_abs": 8.07046890258789e-05,
+              "p99_abs": 4.76837158203125e-06,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_nchw": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_raw": {
+              "count": 2146592,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_restored": {
+              "count": 10224878,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            }
+          },
+          "ordering": {
+            "correct": 17,
+            "total": 17,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "new_ordering_errors": {
+            "python": 0,
+            "A": 0
+          },
+          "passed": true
+        },
+        "C-basic": {
+          "numerical": {
+            "cpu_input": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_nchw": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_raw": {
+              "count": 2146592,
+              "mae": 1.8964261552388837e-06,
+              "rmse": 2.884007605315621e-06,
+              "max_abs": 9.423494338989258e-05,
+              "p99_abs": 1.049041748046875e-05,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_restored": {
+              "count": 10224878,
+              "mae": 9.98203677258601e-07,
+              "rmse": 1.4712181880698058e-06,
+              "max_abs": 8.07046890258789e-05,
+              "p99_abs": 4.76837158203125e-06,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_nchw": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_raw": {
+              "count": 2146592,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_restored": {
+              "count": 10224878,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            }
+          },
+          "ordering": {
+            "correct": 17,
+            "total": 17,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "new_ordering_errors": {
+            "python": 0,
+            "A": 0
+          },
+          "passed": true
+        },
+        "C-fused": {
+          "numerical": {
+            "cpu_input": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_nchw": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_raw": {
+              "count": 2146592,
+              "mae": 1.8964261552388837e-06,
+              "rmse": 2.884007605315621e-06,
+              "max_abs": 9.423494338989258e-05,
+              "p99_abs": 1.049041748046875e-05,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "python_restored": {
+              "count": 10224878,
+              "mae": 9.98203677258601e-07,
+              "rmse": 1.4712181880698058e-06,
+              "max_abs": 8.07046890258789e-05,
+              "p99_abs": 4.76837158203125e-06,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_nchw": {
+              "count": 6439776,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_raw": {
+              "count": 2146592,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            },
+            "A_restored": {
+              "count": 10224878,
+              "mae": 0.0,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "p99_abs": 0.0,
+              "nonfinite_count": 0,
+              "violations": 0,
+              "violation_fraction": 0.0,
+              "passed": true
+            }
+          },
+          "ordering": {
+            "correct": 17,
+            "total": 17,
+            "ignored": 0,
+            "ties": 0,
+            "accuracy": 1.0
+          },
+          "new_ordering_errors": {
+            "python": 0,
+            "A": 0
+          },
+          "passed": true
+        },
+        "python_ordering": {
+          "correct": 17,
+          "total": 17,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        },
+        "A_ordering": {
+          "correct": 17,
+          "total": 17,
+          "ignored": 0,
+          "ties": 0,
+          "accuracy": 1.0
+        }
+      },
+      "passed": true,
+      "command": {
+        "argv": [
+          "/home/qyc/builds/MiniInfer/v24-upgrade/bin/test_depth_gpu_pipeline",
+          "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/engines/depth-fp32.engine",
+          "518",
+          "fp32",
+          "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32-samples.tsv",
+          "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/final/518-fp32",
+          "0"
+        ],
+        "returncode": 0,
+        "stdout": "{\"completed\":true,\"model_size\":518,\"precision\":\"fp32\",\"samples\":8,\"modes\":4}\n",
+        "stderr": ""
+      }
+    }
+  ],
+  "errors": [],
+  "passed": true,
+  "tools_sha256": {
+    "tools/validate_depth_gpu_pipeline.py": "d0378a1a708c1183141904c5ffb6a68579e09d85d786b35008283c2438ddfb44",
+    "tests/test_depth_gpu_pipeline.cpp": "0ada8620335e127ceffd6c5dd6d9b08ebca4c64a4c210581d0bad67df83ca49c",
+    "tools/depth/metrics.py": "fea717dfc0ddb3e87d106ca63d2051a2442a9baeee48b2703b5ed5ccf6956fae",
+    "tools/depth/preprocess.py": "a3e3799ca67b6f6f77e8fe6bd754afe788a1aaf84095be15e316c7a1bb28f485",
+    "tools/depth/reference.py": "20abc74b91b42d7d40180368c1bbbfdea0a5dfec00aa6274f2db9c8e38cf7da2",
+    "tools/depth/validate_backend.py": "8494d32cf715c19ba3232ce206069f096c95028b5c32b511bfdf6ff92b17b548"
+  }
+}

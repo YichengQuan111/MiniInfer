@@ -22,7 +22,12 @@ STAGES = ("admission_ms", "queue_ms", "preprocess_ms", "backend_ms", "postproces
 CSV_FIELDS = ("phase", "request_id", "index", "image_index", "planned_ms", "generated_ms",
               "submit_ms", "ready_ms", "delivered_ms", "status", "accepted") + STAGES
 CSV_FIELDS_V2 = CSV_FIELDS + ("request_handle_id",)
-SCHEMAS = ("miniinfer-depth-replay-v1", "miniinfer-depth-replay-v2")
+HOST_EXTRA = ("slot_wait_ms", "pinned_copy_ms", "synchronize_ms")
+DEVICE_STAGES = ("h2d_ms", "gpu_preprocess_ms", "model_ms", "d2h_ms")
+V3_EXTRA = ("slot_wait_ms", "pinned_copy_ms", "h2d_ms", "gpu_preprocess_ms", "model_ms", "d2h_ms", "synchronize_ms", "h2d_bytes")
+CSV_FIELDS_V3 = CSV_FIELDS_V2 + V3_EXTRA
+PREPROCESS_MODES = ("cpu", "cuda-partial", "cuda-full-basic", "cuda-full-fused")
+SCHEMAS = ("miniinfer-depth-replay-v1", "miniinfer-depth-replay-v2", "miniinfer-depth-replay-v3")
 
 
 def finite_number(value, name):
@@ -44,17 +49,19 @@ def protocol_version(summary):
     schema = summary["schema"]
     if schema not in SCHEMAS:
         raise ValueError("summary schema mismatch")
-    if schema == SCHEMAS[1]:
+    if schema != SCHEMAS[0]:
         if not isinstance(summary["async_sdk"], bool):
             raise ValueError("async_sdk must be Boolean")
-        return 2
-    return 1
+    return SCHEMAS.index(schema) + 1
 
 
 def summarize_csv(path, summary):
     """Bounded exact percentiles; stream rows and keep only <=1M numeric samples."""
     version = protocol_version(summary)
-    asynchronous = version == 2 and summary["async_sdk"]
+    asynchronous = version >= 2 and summary["async_sdk"]
+    wall_stages = STAGES + HOST_EXTRA if version >= 3 else STAGES
+    if version >= 3 and summary["preprocess_mode"] not in PREPROCESS_MODES:
+        raise ValueError("unknown preprocessing mode")
     handle_ids = set()  # Bounded by the validated <=1M planned requests.
     rate = finite_number(summary["rate"], "rate")
     image_count = integer_field(summary["image_count"], "image_count", 1, 1024)
@@ -79,11 +86,12 @@ def summarize_csv(path, summary):
                          "completed_in_window": 0, "succeeded_in_window": 0, "drain_completed": 0,
                          "delivered_in_window": 0, "delivered_during_drain": 0,
                          "sdk": [], "replay": [], "delivery": [], "lag": [],
-                         "stages": {stage: [] for stage in STAGES}, "rows": 0}
+                         "stages": {stage: [] for stage in wall_stages}, "rows": 0,
+                         "device_stages": {stage: [] for stage in DEVICE_STAGES}, "h2d_bytes": 0}
         offset += planned
     with Path(path).open(newline="", encoding="utf-8") as stream:
         reader = csv.DictReader(stream)
-        if reader.fieldnames != list(CSV_FIELDS_V2 if version == 2 else CSV_FIELDS):
+        if reader.fieldnames != list((CSV_FIELDS, CSV_FIELDS_V2, CSV_FIELDS_V3)[version-1]):
             raise ValueError("CSV schema mismatch")
         for row in reader:
             if None in row or any(value is None for value in row.values()):
@@ -112,8 +120,10 @@ def summarize_csv(path, summary):
             if status.startswith("not_submitted_"):
                 if any(row[key] != "" for key in ("submit_ms", "ready_ms", "delivered_ms", "accepted") + STAGES):
                     raise ValueError("unsubmitted request has execution fields")
-                if version == 2 and row["request_handle_id"] != "":
+                if version >= 2 and row["request_handle_id"] != "":
                     raise ValueError("unsubmitted request has a handle ID")
+                if version >= 3 and any(row[key] != "" for key in V3_EXTRA):
+                    raise ValueError("unsubmitted request has GPU execution fields")
                 if status == "not_submitted_late" and generated < state["duration"] and generated - planned <= max_lag:
                     raise ValueError("late status without missed deadline")
                 continue
@@ -125,7 +135,7 @@ def summarize_csv(path, summary):
             accepted = integer_field(row["accepted"], "accepted", 0, 1)
             if (status == "succeeded" and not accepted) or (status in ("busy", "closed", "invalid_input") and accepted):
                 raise ValueError("invalid acceptance/status relation")
-            if version == 2:
+            if version >= 2:
                 handle = row["request_handle_id"]
                 if asynchronous and accepted:
                     identity = integer_field(handle, "request_handle_id", 1, 2**64-1)
@@ -148,7 +158,13 @@ def summarize_csv(path, summary):
                 state["delivered_in_window"] += 1
             else:
                 state["delivered_during_drain"] += 1
-            timings = {stage: finite_number(row[stage], stage) for stage in STAGES}
+            timings = {stage: finite_number(row[stage], stage) for stage in wall_stages}
+            if version >= 3:
+                device = {stage: finite_number(row[stage], stage) for stage in DEVICE_STAGES}
+                transfer = integer_field(row["h2d_bytes"], "h2d_bytes", maximum=6291456)
+                if not accepted and (transfer or any(device.values())):
+                    raise ValueError("rejected request has GPU execution")
+                state["h2d_bytes"] += transfer
             if status == "succeeded":
                 # Percentiles cover successful requests planned in this phase,
                 # including drain; throughput uses only ready inside the window.
@@ -157,6 +173,9 @@ def summarize_csv(path, summary):
                 state["delivery"].append(delivered - ready)
                 for stage, value in timings.items():
                     state["stages"][stage].append(value)
+                if version >= 3:
+                    for stage, value in device.items():
+                        state["device_stages"][stage].append(value)
     result = {}
     for phase, state in states.items():
         spec = summary[phase]
@@ -165,7 +184,7 @@ def summarize_csv(path, summary):
         for key in ("submitted", "completed_in_window", "succeeded_in_window", "drain_completed"):
             if integer_field(spec[key], key) != state[key]:
                 raise ValueError(f"CSV/summary {key} mismatch")
-        expected_outstanding = state["delivered_during_drain"] if version == 2 else state["drain_completed"]
+        expected_outstanding = state["delivered_during_drain"] if version >= 2 else state["drain_completed"]
         if integer_field(spec["outstanding_at_window_end"], "outstanding_at_window_end") != expected_outstanding:
             raise ValueError("window pending/drain count mismatch")
         total = state["rows"]
@@ -186,6 +205,15 @@ def summarize_csv(path, summary):
                          "replay_successful_latency": distribution(state["replay"]), "delivery_successful_latency": distribution(state["delivery"]),
                          "generator_lag": distribution(state["lag"]),
                          "successful_cpu_wall_stages": {key: distribution(values) for key, values in state["stages"].items()}}
+        if version >= 3:
+            full = summary["preprocess_mode"].startswith("cuda-full-")
+            for key, expected in (("h2d_bytes", state["h2d_bytes"]),
+                    ("rgb8_h2d_bytes", state["h2d_bytes"] if full else 0),
+                    ("fp32_h2d_bytes", 0 if full else state["h2d_bytes"])):
+                if integer_field(spec[key], key, maximum=2**63-1) != expected:
+                    raise ValueError("upload byte accounting mismatch")
+            result[phase]["h2d_bytes"] = state["h2d_bytes"]
+            result[phase]["successful_device_stages"] = {key: distribution(values) for key, values in state["device_stages"].items()}
     snapshot = summary["sdk_snapshot"]
     for key, expected in (("accepted", sum(s["accepted"] for s in states.values())),
                           ("succeeded", sum(s["accepted_succeeded"] for s in states.values())),
@@ -197,7 +225,7 @@ def summarize_csv(path, summary):
                           ("inflight", 0), ("reserved_bytes", 0)):
         if integer_field(snapshot[key], key, maximum=2**63-1) != expected:
             raise ValueError(f"SDK snapshot {key} conservation mismatch")
-    if version == 2:
+    if version >= 2:
         for key in ("queued", "executing", "ready", "abandoned", "abandoned_completed"):
             if integer_field(snapshot[key], key) != 0:
                 raise ValueError(f"SDK final {key} conservation mismatch")
@@ -263,14 +291,16 @@ def build_command(args, directory):
     if args.async_sdk:
         command += ["--async-sdk", "1", "--slots", str(args.slots), "--reuse-host", str(args.reuse_host),
                     "--reuse-gpu", str(args.reuse_gpu), "--consumer-delay-ms", str(args.consumer_delay_ms)]
+    if args.preprocess != "cpu":
+        command += ["--preprocess", args.preprocess]
     return command
 
 
 def validate_configuration(args, summary):
     version = protocol_version(summary)
-    if args.async_sdk and version != 2:
+    if args.async_sdk and version < 2:
         raise ValueError("async request requires v2 replay protocol")
-    if version == 2:
+    if version >= 2:
         expected = {"async_sdk": args.async_sdk, "slots": args.slots,
                     "reuse_host": bool(args.reuse_host), "reuse_gpu": bool(args.reuse_gpu),
                     "consumer_delay_ms": args.consumer_delay_ms}
@@ -283,6 +313,10 @@ def validate_configuration(args, summary):
                 integer_field(summary[key], key, 0, 60000)
             if summary[key] != value:
                 raise ValueError(f"requested configuration/summary {key} mismatch")
+    if args.preprocess != "cpu" and version < 3:
+        raise ValueError("GPU preprocessing requires v3 replay protocol")
+    if version >= 3 and summary["preprocess_mode"] != args.preprocess:
+        raise ValueError("requested preprocessing/summary mismatch")
 
 
 def run_once(args, directory):
@@ -338,14 +372,15 @@ def run_once(args, directory):
             writer.writerow(((time.perf_counter() - start) * 1000, phase, role, metric, value))
             for scope in ("whole", phase):
                 key = f"{role}:{metric}:{scope}"
-                item = peaks.setdefault(key, {"samples": 0, "peak": None})
+                item = peaks.setdefault(key, {"samples": 0, "peak": None, "mean": None})
                 if value is not None:
+                    item["mean"] = ((item["mean"] or 0) * item["samples"] + value) / (item["samples"] + 1)
                     item["samples"] += 1
                     item["peak"] = value if item["peak"] is None else max(item["peak"], value)
 
     def gpu_sample():
         executable = shutil.which("nvidia-smi")
-        metrics = ("used_mib", "temperature_c", "sm_clock_mhz", "memory_clock_mhz")
+        metrics = ("used_mib", "temperature_c", "sm_clock_mhz", "memory_clock_mhz", "utilization_percent")
         if not executable:
             telemetry_errors.add("nvidia-smi unavailable")
             for metric in metrics:
@@ -353,15 +388,15 @@ def run_once(args, directory):
             return
         while not stop.is_set():
             began = time.perf_counter()
-            values = [None] * 4
+            values = [None] * len(metrics)
             try:
                 observation = subprocess.run([executable, f"--id={args.device}",
-                    "--query-gpu=memory.used,temperature.gpu,clocks.sm,clocks.mem", "--format=csv,noheader,nounits"],
+                    "--query-gpu=memory.used,temperature.gpu,clocks.sm,clocks.mem,utilization.gpu", "--format=csv,noheader,nounits"],
                     capture_output=True, text=True, timeout=3)
                 if observation.returncode:
                     raise ValueError("nvidia-smi query failed")
                 fields = observation.stdout.strip().split(",")
-                if len(fields) != 4:
+                if len(fields) != len(metrics):
                     raise ValueError("nvidia-smi field count")
                 for index, field in enumerate(fields):
                     try:
@@ -386,10 +421,20 @@ def run_once(args, directory):
                 break
             protocol.consume(line, elapsed)
 
+    previous_cpu = None
+    clock_ticks = os.sysconf("SC_CLK_TCK")
     try:
         while True:
             consume()
             sample("replay", "rss_kib", rss_kib(process.pid))
+            try:
+                stat = Path(f"/proc/{process.pid}/stat").read_text().rsplit(")", 1)[1].split()
+                current_cpu = (time.perf_counter(), (int(stat[11]) + int(stat[12])) / clock_ticks)
+                if previous_cpu and current_cpu[0] > previous_cpu[0]:
+                    sample("replay", "cpu_percent_one_core", 100 * (current_cpu[1]-previous_cpu[1]) / (current_cpu[0]-previous_cpu[0]))
+                previous_cpu = current_cpu
+            except (OSError, ValueError, IndexError):
+                pass  # Process teardown can remove /proc between observations.
             if process.poll() is not None:
                 break
             if time.perf_counter() - start > args.process_timeout_seconds:
@@ -485,6 +530,7 @@ def parser():
     result.add_argument("--slots", type=int, choices=(1, 2), default=1)
     result.add_argument("--reuse-host", type=int, choices=(0, 1), default=1)
     result.add_argument("--reuse-gpu", type=int, choices=(0, 1), default=1)
+    result.add_argument("--preprocess", choices=PREPROCESS_MODES, default="cpu")
     result.add_argument("--consumer-delay-ms", type=int, default=0, help="0..60000; delay after wait, before get; async only")
     result.add_argument("--device", type=int, choices=(0,), default=0, help="V1 SDK uses device 0")
     result.add_argument("--process-timeout-seconds", type=finite_positive, default=3600.)
@@ -499,6 +545,8 @@ def validate_args(args):
         raise ValueError("nondefault slots/reuse/consumer delay require --async-sdk")
     if args.backend == "ort" and args.slots != 1:
         raise ValueError("ORT supports one SDK slot")
+    if args.backend == "ort" and args.preprocess != "cpu":
+        raise ValueError("GPU preprocessing requires TensorRT")
     if (args.duration > 86400 or args.warmup > 3600 or args.rate > 100000 or args.sdk_workers > 256 or args.workers > 256
         or args.max_outstanding > 100000 or args.queue > 100000 or args.repeats > 100
         or math.ceil(args.duration * args.rate) + math.ceil(args.warmup * args.rate) > MAX_REQUESTS):
@@ -577,11 +625,12 @@ def main():
                                           if args.async_sdk else "successful requests planned in phase, including drain; synchronous ready observed immediately at run return while output is alive; delivered after output consumption/destruction"),
                               "window_end": "SDK unfinished uses ready timestamp; client undelivered uses delivered timestamp; v1 outstanding_at_window_end retains its historical ready-based definition",
                               "acceptance": "DepthTiming; backend/admission failure distinguished; absolute admission/dequeue not exposed",
-                              "stages": "CPU wall; backend wall is not CUDA Event device compute time",
-                              "upload_bytes": "ready event lists RGB8 source sizes and FP32 model input bytes; phase h2d_bytes/fp32_h2d_bytes count actual transfers for successful backend completions; rgb8_h2d_bytes is zero in the CPU preprocessing baseline; CPU backend transfers are zero",
+                              "stages": "Host wall stages and CUDA Event device stages are separate; synchronize_ms overlaps queued device execution and is not additive",
+                              "upload_bytes": "Actual input upload bytes for successful backend completions; full CUDA uploads original RGB8, A/B upload FP32; incomplete failing backends are excluded; ORT uploads zero",
                               "throughput": "success ready in [0,duration) / full duration; drain count and time separate",
                               "success_rate": "all planned requests denominator; eventual and in-window rates separate",
                               "rss": "process VmRSS sampled about every 50ms; excludes sampler process",
+                              "cpu": "delta process utime+stime / wall from /proc/PID/stat, 100 percent is one logical CPU; approximate 50ms samples",
                               "gpu": "device total, includes background load; target 200ms; unavailable fields null; temperatures and clocks included",
                               "sampling_phase": "stdout reception boundary, pipe/scheduling delay possible",
                               "bounds": "<=1M requests, <=1024 images, <=256MiB decoded; stream CSV/logs/telemetry; bounded numeric samples for exact linear percentiles",

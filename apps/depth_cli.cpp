@@ -22,6 +22,7 @@ struct Arguments {
     std::filesystem::path model, image, tensor, output;
     std::optional<std::size_t> width, height, model_size;
     int threads = 4;
+    PreprocessMode preprocess_mode = PreprocessMode::Cpu;
 };
 void help() {
     std::cout << "Usage: depth_cli --model MODEL --image IMAGE.ppm --output PREFIX [--threads 4]\n"
@@ -31,6 +32,9 @@ void help() {
                  "Writes PREFIX.preprocessed.f32, PREFIX.raw.f32, PREFIX.depth.f32, PREFIX.json.\n"
                  "All four output paths must be absent; parent directory must exist.\n"
                  "Input image is PPM P6 RGB8 maxval255. Depth values are relative; bigger means nearer.\n";
+#ifdef MINIINFER_CLI_TRT
+    std::cout << "Image mode: --preprocess cpu|cuda-partial|cuda-full-basic|cuda-full-fused.\n";
+#endif
 }
 std::size_t positive(const std::string& value, const std::string& name) {
     std::size_t result = 0;
@@ -56,6 +60,7 @@ Arguments parse(int argc, char** argv) {
         else if (name == "--width") args.width = positive(value, name);
         else if (name == "--height") args.height = positive(value, name);
         else if (name == "--model-size") args.model_size = validate_model_size(positive(value, name));
+        else if (name == "--preprocess") args.preprocess_mode = parse_preprocess_mode(value);
         else if (name == "--threads") {
 #ifdef MINIINFER_CLI_TRT
             throw std::invalid_argument("--threads applies only to ORT depth_cli");
@@ -67,6 +72,12 @@ Arguments parse(int argc, char** argv) {
     }
     if (args.model.empty() || args.output.empty()) throw std::invalid_argument("--model and --output are required");
     if (args.image.empty() == args.tensor.empty()) throw std::invalid_argument("specify exactly one of --image and --tensor");
+    if (args.preprocess_mode != PreprocessMode::Cpu) {
+#ifndef MINIINFER_CLI_TRT
+        throw std::invalid_argument("GPU preprocessing requires TensorRT");
+#endif
+        if (!args.tensor.empty()) throw std::invalid_argument("--preprocess GPU modes require decoded RGB8 image input");
+    }
     if (!args.tensor.empty()) {
         if (!args.width || !args.height) throw std::invalid_argument("--tensor requires --width and --height");
         validate_dimensions(*args.width, *args.height);
@@ -107,7 +118,7 @@ int main(int argc, char** argv) {
         if (!std::filesystem::is_directory(parent)) throw std::runtime_error("output parent directory does not exist: " + parent.string());
         const auto total_start = std::chrono::steady_clock::now();
 #ifdef MINIINFER_CLI_TRT
-        TrtRunner runner(args.model);
+        TrtRunner runner(args.model, 0, true, args.preprocess_mode);
         const std::string backend="tensorrt_"+runner.manifest().at("precision");
         const int host_threads=1;
 #else
@@ -117,23 +128,35 @@ int main(int argc, char** argv) {
 #endif
         const auto size = runner.input_size();
         if (args.model_size && *args.model_size != size) throw std::invalid_argument("--model-size disagrees with artifact");
-        const auto prepared = [&] {
-            if (!args.image.empty()) return preprocess(read_ppm(args.image), size);
-            return PreparedImage(read_f32(args.tensor, 3 * size * size), geometry(*args.width, *args.height, size));
-        }();
+        std::optional<RgbImage> decoded;
+        if (!args.image.empty()) decoded.emplace(read_ppm(args.image));
+        const auto transform = decoded ? geometry(decoded->width(), decoded->height(), size) : geometry(*args.width, *args.height, size);
+        std::optional<PreparedImage> prepared;
+        if (args.preprocess_mode == PreprocessMode::Cpu) {
+            if (decoded) prepared.emplace(preprocess(*decoded, size));
+            else prepared.emplace(read_f32(args.tensor, 3 * size * size), transform);
+        }
+        std::vector<float> captured;
         const auto model_start = std::chrono::steady_clock::now();
-        const auto raw = runner.run_raw(prepared);
+        const auto raw = [&] {
+#ifdef MINIINFER_CLI_TRT
+            if (args.preprocess_mode != PreprocessMode::Cpu)
+                return runner.run_image_raw(*decoded, nullptr, &captured);
+#endif
+            return runner.run_raw(*prepared);
+        }();
         const double model_seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - model_start).count();
-        const auto restored = postprocess(raw, prepared.transform());
+        const auto restored = postprocess(raw, transform);
         const double total_seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - total_start).count();
-        write_f32(suffixed(args.output, ".preprocessed.f32"), prepared.values());
+        write_f32(suffixed(args.output, ".preprocessed.f32"), prepared ? prepared->values() : captured);
         write_f32(suffixed(args.output, ".raw.f32"), raw.values());
         write_f32(suffixed(args.output, ".depth.f32"), restored.values());
-        const auto transform = prepared.transform();
         std::ostringstream metadata;
         metadata << std::setprecision(17)
                  << "{\n  \"contract_version\": " << quoted(std::string(model_contract(size))) << ",\n  \"model_size\": " << size
                  << ",\n  \"backend\": " << quoted(backend) << ",\n"
+                 << "  \"preprocess_mode\": " << quoted(preprocess_mode_name(args.preprocess_mode)) << ",\n"
+                 << "  \"model_seconds_scope\": \"backend call; GPU image modes include preprocessing and validation input readback\",\n"
                  << "  \"model_path\": " << quoted(std::filesystem::absolute(args.model).string()) << ",\n"
                  << "  \"source_path\": " << quoted(std::filesystem::absolute(args.image.empty() ? args.tensor : args.image).string()) << ",\n"
                  << "  \"threads\": " << host_threads << ",\n  \"geometry\": {"

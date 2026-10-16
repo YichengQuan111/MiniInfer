@@ -1,0 +1,87 @@
+{
+  "source": "data/generated/depth/v2-upgrade/v24/profile-selected-slot2.sqlite",
+  "scope": "Separate profiler run, includes warmup; stream overlap is actual interval intersection.",
+  "streams": [
+    {
+      "context": 1,
+      "stream": 17,
+      "raw_output_copies": 151,
+      "kernel_count": 27180,
+      "kernel_busy_ms": 1874.518046
+    },
+    {
+      "context": 1,
+      "stream": 22,
+      "raw_output_copies": 143,
+      "kernel_count": 25740,
+      "kernel_busy_ms": 1776.15223
+    }
+  ],
+  "observed_interval_ms": 4126.312883,
+  "application_gpu_busy_ms": 3797.553955,
+  "two_stream_kernel_overlap_ms": 7.002352,
+  "cpu_preprocess_gpu_overlap_ms": 0.0,
+  "nvtx": {
+    "depth.submit": {
+      "calls": 320,
+      "total_ms": 203.03829700000006,
+      "mean_ms": 0.6344946781250002
+    },
+    "depth.execute": {
+      "calls": 294,
+      "total_ms": 6642.276946999997,
+      "mean_ms": 22.592778731292505
+    },
+    "depth.gpu_slot0": {
+      "calls": 151,
+      "total_ms": 2683.093307,
+      "mean_ms": 17.76882984768212
+    },
+    "depth.trt.pipeline": {
+      "calls": 294,
+      "total_ms": 5264.727213,
+      "mean_ms": 17.907235418367346
+    },
+    "depth.trt.pinned_copy": {
+      "calls": 294,
+      "total_ms": 127.40084199999997,
+      "mean_ms": 0.4333361972789115
+    },
+    "depth.trt.h2d": {
+      "calls": 294,
+      "total_ms": 7.240723999999995,
+      "mean_ms": 0.02462831292517005
+    },
+    "depth.preprocess.cuda.full_basic": {
+      "calls": 294,
+      "total_ms": 12.533602000000002,
+      "mean_ms": 0.042631299319727894
+    },
+    "depth.trt.model": {
+      "calls": 294,
+      "total_ms": 638.2554850000004,
+      "mean_ms": 2.170937023809525
+    },
+    "depth.trt.d2h": {
+      "calls": 294,
+      "total_ms": 5.538474999999998,
+      "mean_ms": 0.018838350340136048
+    },
+    "depth.trt.synchronize": {
+      "calls": 294,
+      "total_ms": 4369.2838580000025,
+      "mean_ms": 14.861509721088444
+    },
+    "depth.postprocess.reuse": {
+      "calls": 294,
+      "total_ms": 1086.714108,
+      "mean_ms": 3.696306489795918
+    },
+    "depth.gpu_slot1": {
+      "calls": 143,
+      "total_ms": 2582.1820430000002,
+      "mean_ms": 18.057217083916086
+    }
+  },
+  "trace_sha256": "ccecefbfee009173575b2ed749e92dea501ec2e6af08f2e37b064d16d71dc4c8"
+}

@@ -84,7 +84,8 @@ public:
             owner.changed.notify_all();
         }
     };
-    RawDepth run(const PreparedImage& prepared) {
+    template<class Run> RawDepth run(Run action, DepthTiming* timing) {
+        const auto waiting = Clock::now();
         std::size_t index;
         {
             std::unique_lock<std::mutex> lock(mutex);
@@ -95,9 +96,23 @@ public:
             index = static_cast<std::size_t>(std::find(busy.begin(), busy.end(), false) - busy.begin());
             busy[index] = true;
         }
+        if (timing) timing->slot_wait_ms = elapsed(waiting);
         Lease lease{*this, index};
         ProfileRange profile(index == 0 ? "depth.gpu_slot0" : "depth.gpu_slot1");
-        try { return runners[index]->run_raw(prepared); }
+        try {
+            TrtTiming detail;
+            auto result = action(*runners[index], &detail);
+            if (timing) {
+                timing->pinned_copy_ms = detail.pinned_copy_ms;
+                timing->h2d_ms = detail.h2d_ms;
+                timing->gpu_preprocess_ms = detail.gpu_preprocess_ms;
+                timing->model_ms = detail.model_ms;
+                timing->d2h_ms = detail.d2h_ms;
+                timing->synchronize_ms = detail.synchronize_ms;
+                timing->h2d_bytes = detail.h2d_bytes;
+            }
+            return result;
+        }
         catch (...) {
             {
                 std::lock_guard<std::mutex> lock(mutex);
@@ -110,8 +125,38 @@ public:
         }
     }
 };
+DepthMap measured_gpu_run(GpuSlots& slots, PreprocessMode mode, std::size_t size,
+        CpuWorkspace* workspace, const RgbImage& image, DepthTiming* timing) {
+    auto begin = Clock::now();
+    const auto transform = geometry(image.width(), image.height(), size);
+    std::optional<PreparedImage> prepared_temporary;
+    std::optional<PaddedImage> padded_temporary;
+    const PreparedImage* prepared = nullptr;
+    const PaddedImage* padded = nullptr;
+    if (mode == PreprocessMode::Cpu) {
+        if (workspace) prepared = &workspace->prepare(image);
+        else { prepared_temporary.emplace(preprocess(image, size)); prepared = &*prepared_temporary; }
+    } else if (mode == PreprocessMode::CudaPartial) {
+        if (workspace) padded = &workspace->prepare_hwc(image);
+        else { padded_temporary.emplace(preprocess_hwc(image, size)); padded = &*padded_temporary; }
+    } // Full CUDA modes need geometry only before taking a GPU lease.
+    if (timing) timing->preprocess_ms = elapsed(begin);
+    begin = Clock::now();
+    auto raw = slots.run([&](TrtRunner& runner, TrtTiming* detail) {
+        if (prepared) return runner.run_raw(*prepared, detail);
+        if (padded) return runner.run_hwc_raw(*padded, detail);
+        return runner.run_image_raw(image, detail);
+    }, timing);
+    if (timing) timing->backend_ms = elapsed(begin); // Includes separately reported slot wait.
+    begin = Clock::now();
+    auto result = workspace ? workspace->restore(raw, transform) : postprocess(raw, transform);
+    if (timing) timing->postprocess_ms = elapsed(begin);
+    return result;
+}
 #endif
 void validate_config(const SdkConfig& config) {
+    try { (void)preprocess_mode_name(config.preprocess_mode); }
+    catch (const std::invalid_argument& error) { throw SdkError(SdkErrorCode::InvalidInput, error.what()); }
     if (config.gpu_slots < 1 || config.gpu_slots > 2)
         throw SdkError(SdkErrorCode::InvalidInput, "gpu_slots must be 1 or 2");
     if (config.worker_count == 0 || config.queue_capacity == 0
@@ -159,6 +204,8 @@ Loaded load_backend(const SdkConfig& config) {
     }
     try {
         if (backend == "ort") {
+            if (config.preprocess_mode != PreprocessMode::Cpu)
+                throw SdkError(SdkErrorCode::InvalidInput, "ORT supports CPU preprocessing only");
 #if defined(MINIINFER_SDK_HAS_ORT)
             std::vector<std::shared_ptr<OrtRunner>> runners;
             for (std::size_t worker = 0; worker < config.worker_count; ++worker) {
@@ -178,20 +225,19 @@ Loaded load_backend(const SdkConfig& config) {
 #if defined(MINIINFER_SDK_HAS_TRT)
         auto slots = std::make_shared<GpuSlots>();
         for (std::size_t slot = 0; slot < config.gpu_slots; ++slot) {
-            auto runner = std::make_shared<TrtRunner>(model, config.device, config.reuse_gpu_buffers);
+            auto runner = std::make_shared<TrtRunner>(model, config.device, config.reuse_gpu_buffers, config.preprocess_mode);
             if (runner->input_size() != expected_size) throw std::invalid_argument("package/model size mismatch");
             slots->runners.push_back(std::move(runner));
             slots->busy.push_back(false);
         }
         auto workspaces = create_workspaces(config, expected_size);
-        return {[slots, workspaces, expected_size](std::size_t worker, const RgbImage& image, DepthTiming* timing) {
-            return measured_run(expected_size, workspaces.at(worker).get(), image, timing,
-                [&](const PreparedImage& prepared) { return slots->run(prepared); }, true);
+        return {[slots, workspaces, expected_size, mode = config.preprocess_mode](std::size_t worker, const RgbImage& image, DepthTiming* timing) {
+            return measured_gpu_run(*slots, mode, expected_size, workspaces.at(worker).get(), image, timing);
         }, backend, precision, [slots, workspaces](SdkSnapshot& state) {
             state.io_device_bytes = 0; state.io_pinned_bytes = 0;
             state.peak_io_device_bytes = 0; state.peak_io_pinned_bytes = 0;
             state.device_allocation_calls = 0; state.pinned_allocation_calls = 0;
-            state.context_required_bytes = 0;
+            state.context_required_bytes = 0; state.engine_serialized_bytes = 0;
             workspace_resources(workspaces, state);
             for (const auto& runner : slots->runners) {
                 // resource_snapshot reads atomic counters, never runner locks.
@@ -203,6 +249,7 @@ Loaded load_backend(const SdkConfig& config) {
                 state.device_allocation_calls += item.device_allocation_calls;
                 state.pinned_allocation_calls += item.pinned_allocation_calls;
                 state.context_required_bytes += item.context_required_bytes;
+                state.engine_serialized_bytes += item.engine_serialized_bytes;
             }
         }};
 #else

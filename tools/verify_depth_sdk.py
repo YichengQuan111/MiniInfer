@@ -17,6 +17,8 @@ def main():
     parser.add_argument("--package", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--model-size", type=int, choices=(518, 392), help="assert package model size")
+    parser.add_argument("--preprocess", choices=("cpu", "cuda-partial", "cuda-full-basic", "cuda-full-fused"), default="cpu")
+    parser.add_argument("--slots", type=int, choices=(1, 2), default=1)
     args = parser.parse_args()
     root = Path(args.package).resolve(strict=True)
     output = Path(args.output).resolve()
@@ -37,6 +39,8 @@ def main():
         shape = (transform["original_height"], transform["original_width"])
         target = output / "sdk.f32"
         command = [str(Path(args.cli).resolve(strict=True)), str(root), str(root / "golden/original.ppm"), str(target)]
+        if args.preprocess != "cpu" or args.slots != 1:
+            command += [args.preprocess, str(args.slots)]
         run = subprocess.run(command, capture_output=True, text=True, timeout=180)
         report.update(command=command, returncode=run.returncode, stdout=run.stdout, stderr=run.stderr,
                       cli_sha256=sha256(Path(args.cli)), package_sha256=sha256(root / "package.json"))

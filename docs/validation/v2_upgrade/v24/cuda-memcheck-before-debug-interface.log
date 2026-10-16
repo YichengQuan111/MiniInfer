@@ -1,0 +1,20 @@
+Historical failed initialization, before Windows GPU debugger enablement.
+This preserves the output captured during the earlier tool invocation; it is
+not a new GPU run. Original finding is also retained in
+tmp/v2-upgrade/cuda-validation.txt.
+
+Command: compute-sanitizer --tool memcheck --error-exitcode 1 tmp/v2-upgrade/cuda-build/test_depth_preprocess_cuda
+========= COMPUTE-SANITIZER
+========= Error: Failed to initialize WDDM debugger interface. Please run EnableDebuggerInterface.bat as an administrator
+=========
+========= Error: Device not supported. Please refer to the "Supported Devices" section of the sanitizer documentation
+=========
+CUDA preprocess passed: 28 cases x 3 kernels; atol=2e-06 rtol=1e-06 max_abs=0
+========= ERROR SUMMARY: 2 errors
+
+Process exit code: 1
+
+Interpretation: sanitizer initialization blocked; not a passing memory check.
+Subsequent authorized enablement is recorded in
+tmp/v2-upgrade/gpu-debug-setting.json. The successful rerun and three additional
+checks are in cuda-sanitizer-summary.txt and the corresponding tool logs.

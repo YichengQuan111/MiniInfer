@@ -1,0 +1,82 @@
+Internal ctest changing into directory: /home/qyc/builds/MiniInfer/v24-upgrade
+Test project /home/qyc/builds/MiniInfer/v24-upgrade
+      Start  1: depth_image_contract
+ 1/38 Test  #1: depth_image_contract .....................   Passed    0.16 sec
+      Start  2: depth_ort_contract
+ 2/38 Test  #2: depth_ort_contract .......................   Passed    0.06 sec
+      Start  3: depth_artifact_contract
+ 3/38 Test  #3: depth_artifact_contract ..................   Passed    0.01 sec
+      Start  4: depth_trt_artifact_contract
+ 4/38 Test  #4: depth_trt_artifact_contract ..............   Passed    0.50 sec
+      Start  5: depth_preprocess_cuda_contract
+ 5/38 Test  #5: depth_preprocess_cuda_contract ...........   Passed    0.87 sec
+      Start  6: depth_sdk_contract
+ 6/38 Test  #6: depth_sdk_contract .......................   Passed    0.06 sec
+      Start  7: depth_net_contract
+ 7/38 Test  #7: depth_net_contract .......................   Passed    0.19 sec
+      Start  8: depth_replay_statistics
+ 8/38 Test  #8: depth_replay_statistics ..................   Passed    0.94 sec
+      Start  9: depth_reference_contract
+ 9/38 Test  #9: depth_reference_contract .................   Passed    2.00 sec
+      Start 10: depth_metrics_contract
+10/38 Test #10: depth_metrics_contract ...................   Passed    0.72 sec
+      Start 11: depth_validation_contract
+11/38 Test #11: depth_validation_contract ................   Passed   16.30 sec
+      Start 12: depth_package_contract
+12/38 Test #12: depth_package_contract ...................   Passed   12.55 sec
+      Start 13: depth_benchmark_statistics
+13/38 Test #13: depth_benchmark_statistics ...............   Passed    0.77 sec
+      Start 14: depth_concurrency_benchmark_statistics
+14/38 Test #14: depth_concurrency_benchmark_statistics ...   Passed    0.72 sec
+      Start 15: net_echo_contract
+15/38 Test #15: net_echo_contract ........................   Passed    0.00 sec
+      Start 16: net_concurrency_contract
+16/38 Test #16: net_concurrency_contract .................   Passed    0.35 sec
+      Start 17: net_shutdown_contract
+17/38 Test #17: net_shutdown_contract ....................   Passed    1.29 sec
+      Start 18: net_io_contract
+18/38 Test #18: net_io_contract ..........................   Passed    0.02 sec
+      Start 19: net_protocol_contract
+19/38 Test #19: net_protocol_contract ....................   Passed    0.00 sec
+      Start 20: project_contract
+20/38 Test #20: project_contract .........................   Passed    0.00 sec
+      Start 21: cli_contract
+21/38 Test #21: cli_contract .............................   Passed    0.68 sec
+      Start 22: buffer_contract
+22/38 Test #22: buffer_contract ..........................   Passed    0.01 sec
+      Start 23: tensor_view_contract
+23/38 Test #23: tensor_view_contract .....................   Passed    0.00 sec
+      Start 24: model_contract
+24/38 Test #24: model_contract ...........................   Passed    0.16 sec
+      Start 25: cpu_ops_contract
+25/38 Test #25: cpu_ops_contract .........................   Passed    0.00 sec
+      Start 26: inference_contract
+26/38 Test #26: inference_contract .......................   Passed    0.13 sec
+      Start 27: runtime_contract
+27/38 Test #27: runtime_contract .........................   Passed    0.81 sec
+      Start 28: thread_pool_contract
+28/38 Test #28: thread_pool_contract .....................   Passed    0.00 sec
+      Start 29: concurrency_contract
+29/38 Test #29: concurrency_contract .....................   Passed    0.53 sec
+      Start 30: shutdown_contract
+30/38 Test #30: shutdown_contract ........................   Passed    0.08 sec
+      Start 31: timing_contract
+31/38 Test #31: timing_contract ..........................   Passed    0.00 sec
+      Start 32: runtime_demo_contract
+32/38 Test #32: runtime_demo_contract ....................   Passed    0.09 sec
+      Start 33: net_baseline_driver_contract
+33/38 Test #33: net_baseline_driver_contract .............   Passed    1.96 sec
+      Start 34: net_client_contract
+34/38 Test #34: net_client_contract ......................   Passed    0.45 sec
+      Start 35: net_inference_contract
+35/38 Test #35: net_inference_contract ...................   Passed    0.57 sec
+      Start 36: net_cli_contract
+36/38 Test #36: net_cli_contract .........................   Passed    0.14 sec
+      Start 37: runtime_baseline_driver_contract
+37/38 Test #37: runtime_baseline_driver_contract .........   Passed    0.53 sec
+      Start 38: benchmark_cli_contract
+38/38 Test #38: benchmark_cli_contract ...................   Passed    0.76 sec
+
+100% tests passed, 0 tests failed out of 38
+
+Total Test time (real) =  44.72 sec

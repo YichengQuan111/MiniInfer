@@ -1,0 +1,95 @@
+{
+  "source": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/profile-cuda-partial.sqlite",
+  "scope": "Separate profiler run, includes warmup; stream overlap is actual interval intersection.",
+  "streams": [
+    {
+      "context": 1,
+      "stream": 17,
+      "raw_output_copies": 272,
+      "kernel_count": 48960,
+      "kernel_busy_ms": 2871.655126
+    }
+  ],
+  "observed_interval_ms": 3862.750346,
+  "application_gpu_busy_ms": 2962.804466,
+  "two_stream_kernel_overlap_ms": null,
+  "cpu_preprocess_gpu_overlap_ms": 969.363674,
+  "nvtx": {
+    "depth.submit": {
+      "calls": 320,
+      "total_ms": 201.69417699999994,
+      "mean_ms": 0.6302943031249998
+    },
+    "depth.execute": {
+      "calls": 272,
+      "total_ms": 6439.914016000006,
+      "mean_ms": 23.67615447058826
+    },
+    "depth.preprocess.reuse.hwc": {
+      "calls": 272,
+      "total_ms": 1366.666995,
+      "mean_ms": 5.0245110110294116
+    },
+    "depth.preprocess.cpu.convert": {
+      "calls": 272,
+      "total_ms": 439.49341699999957,
+      "mean_ms": 1.6157846213235278
+    },
+    "depth.preprocess.cpu.resize": {
+      "calls": 272,
+      "total_ms": 770.1239220000006,
+      "mean_ms": 2.8313379485294137
+    },
+    "depth.preprocess.cpu.pad_hwc": {
+      "calls": 272,
+      "total_ms": 81.55365399999998,
+      "mean_ms": 0.2998296102941176
+    },
+    "depth.gpu_slot0": {
+      "calls": 272,
+      "total_ms": 3398.7975969999998,
+      "mean_ms": 12.495579400735293
+    },
+    "depth.trt.pipeline": {
+      "calls": 272,
+      "total_ms": 3323.2348279999987,
+      "mean_ms": 12.217775102941172
+    },
+    "depth.trt.pinned_copy": {
+      "calls": 272,
+      "total_ms": 71.31437199999999,
+      "mean_ms": 0.26218519117647054
+    },
+    "depth.trt.h2d": {
+      "calls": 272,
+      "total_ms": 7.005974999999998,
+      "mean_ms": 0.025757261029411754
+    },
+    "depth.preprocess.cuda.partial": {
+      "calls": 272,
+      "total_ms": 12.976655999999991,
+      "mean_ms": 0.04770829411764703
+    },
+    "depth.trt.model": {
+      "calls": 272,
+      "total_ms": 493.85013500000036,
+      "mean_ms": 1.8156254963235308
+    },
+    "depth.trt.d2h": {
+      "calls": 272,
+      "total_ms": 5.048112000000004,
+      "mean_ms": 0.01855923529411766
+    },
+    "depth.trt.synchronize": {
+      "calls": 272,
+      "total_ms": 2647.977762000001,
+      "mean_ms": 9.73521236029412
+    },
+    "depth.postprocess.reuse": {
+      "calls": 272,
+      "total_ms": 869.8600179999992,
+      "mean_ms": 3.1980147720588206
+    }
+  },
+  "trace_sha256": "37be659bc4077dea0d196a399fc6a751101287be36fce94d16e4223ad1f8f5bc"
+}

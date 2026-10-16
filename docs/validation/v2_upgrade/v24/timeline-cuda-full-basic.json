@@ -1,0 +1,75 @@
+{
+  "source": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/profile-cuda-full-basic.sqlite",
+  "scope": "Separate profiler run, includes warmup; stream overlap is actual interval intersection.",
+  "streams": [
+    {
+      "context": 1,
+      "stream": 17,
+      "raw_output_copies": 291,
+      "kernel_count": 52380,
+      "kernel_busy_ms": 3297.848043
+    }
+  ],
+  "observed_interval_ms": 3988.228326,
+  "application_gpu_busy_ms": 3439.322413,
+  "two_stream_kernel_overlap_ms": null,
+  "cpu_preprocess_gpu_overlap_ms": 0.0,
+  "nvtx": {
+    "depth.submit": {
+      "calls": 320,
+      "total_ms": 195.04065500000007,
+      "mean_ms": 0.6095020468750002
+    },
+    "depth.execute": {
+      "calls": 291,
+      "total_ms": 6477.418203000004,
+      "mean_ms": 22.25916908247424
+    },
+    "depth.gpu_slot0": {
+      "calls": 291,
+      "total_ms": 3894.1180279999994,
+      "mean_ms": 13.381848893470789
+    },
+    "depth.trt.pipeline": {
+      "calls": 291,
+      "total_ms": 3893.284892999999,
+      "mean_ms": 13.378985886597935
+    },
+    "depth.trt.pinned_copy": {
+      "calls": 291,
+      "total_ms": 148.50485499999996,
+      "mean_ms": 0.5103259621993126
+    },
+    "depth.trt.h2d": {
+      "calls": 291,
+      "total_ms": 6.781917999999999,
+      "mean_ms": 0.023305560137457042
+    },
+    "depth.preprocess.cuda.full_basic": {
+      "calls": 291,
+      "total_ms": 12.578289999999999,
+      "mean_ms": 0.04322436426116838
+    },
+    "depth.trt.model": {
+      "calls": 291,
+      "total_ms": 515.376918,
+      "mean_ms": 1.771054701030928
+    },
+    "depth.trt.d2h": {
+      "calls": 291,
+      "total_ms": 5.088905,
+      "mean_ms": 0.017487646048109963
+    },
+    "depth.trt.synchronize": {
+      "calls": 291,
+      "total_ms": 3116.895794999997,
+      "mean_ms": 10.710982113402052
+    },
+    "depth.postprocess.reuse": {
+      "calls": 291,
+      "total_ms": 1007.8562019999999,
+      "mean_ms": 3.4634233745704464
+    }
+  },
+  "trace_sha256": "e56070b6172a301dadf9c57ad0c4b7554dd813ddf8297bdbd17acf407249f2ee"
+}

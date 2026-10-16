@@ -1,0 +1,1 @@
+Interrupted turn: no complete three-repeat report was produced. Kept as diagnostic evidence; the full case is rerun in replay/single-cuda-full-fused on 2026-10-16.

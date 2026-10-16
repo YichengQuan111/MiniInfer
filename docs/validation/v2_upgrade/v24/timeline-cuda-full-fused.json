@@ -1,0 +1,75 @@
+{
+  "source": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v24/profile-cuda-full-fused.sqlite",
+  "scope": "Separate profiler run, includes warmup; stream overlap is actual interval intersection.",
+  "streams": [
+    {
+      "context": 1,
+      "stream": 17,
+      "raw_output_copies": 291,
+      "kernel_count": 52380,
+      "kernel_busy_ms": 3248.979588
+    }
+  ],
+  "observed_interval_ms": 3969.721775,
+  "application_gpu_busy_ms": 3414.888719,
+  "two_stream_kernel_overlap_ms": null,
+  "cpu_preprocess_gpu_overlap_ms": 0.0,
+  "nvtx": {
+    "depth.submit": {
+      "calls": 320,
+      "total_ms": 171.75017499999998,
+      "mean_ms": 0.536719296875
+    },
+    "depth.execute": {
+      "calls": 291,
+      "total_ms": 6252.5565750000005,
+      "mean_ms": 21.48644871134021
+    },
+    "depth.gpu_slot0": {
+      "calls": 291,
+      "total_ms": 3876.475118999997,
+      "mean_ms": 13.321220340206175
+    },
+    "depth.trt.pipeline": {
+      "calls": 291,
+      "total_ms": 3875.736305999999,
+      "mean_ms": 13.318681463917521
+    },
+    "depth.trt.pinned_copy": {
+      "calls": 291,
+      "total_ms": 147.80749400000008,
+      "mean_ms": 0.5079295326460483
+    },
+    "depth.trt.h2d": {
+      "calls": 291,
+      "total_ms": 6.841584000000002,
+      "mean_ms": 0.023510597938144338
+    },
+    "depth.preprocess.cuda.full_fused": {
+      "calls": 291,
+      "total_ms": 17.57334299999999,
+      "mean_ms": 0.06038949484536079
+    },
+    "depth.trt.model": {
+      "calls": 291,
+      "total_ms": 521.2127019999996,
+      "mean_ms": 1.7911089415807546
+    },
+    "depth.trt.d2h": {
+      "calls": 291,
+      "total_ms": 5.048370999999998,
+      "mean_ms": 0.017348353951890026
+    },
+    "depth.trt.synchronize": {
+      "calls": 291,
+      "total_ms": 3089.9091740000026,
+      "mean_ms": 10.618244584192448
+    },
+    "depth.postprocess.reuse": {
+      "calls": 291,
+      "total_ms": 1003.2714760000002,
+      "mean_ms": 3.447668302405499
+    }
+  },
+  "trace_sha256": "7464f776a082b37ae239746231ddfd2cddcca6bc8e874a0932dc82a6be614e6a"
+}

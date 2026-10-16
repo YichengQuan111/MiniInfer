@@ -1,0 +1,65 @@
+[
+  {
+    "name": "ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/qyc/builds/MiniInfer/v24-upgrade",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "async_gpu_cpu",
+    "command": [
+      "/home/qyc/builds/MiniInfer/v24-upgrade/bin/test_depth_async_gpu",
+      "data/generated/depth/packages/v2-upgrade-selected",
+      "data/generated/depth/images-v2/v2_indoor_0.ppm",
+      "data/generated/depth/images-v2/v2_outdoor_1.ppm",
+      "cpu"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "async_gpu_cuda-partial",
+    "command": [
+      "/home/qyc/builds/MiniInfer/v24-upgrade/bin/test_depth_async_gpu",
+      "data/generated/depth/packages/v2-upgrade-selected",
+      "data/generated/depth/images-v2/v2_indoor_0.ppm",
+      "data/generated/depth/images-v2/v2_outdoor_1.ppm",
+      "cuda-partial"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "async_gpu_cuda-full-basic",
+    "command": [
+      "/home/qyc/builds/MiniInfer/v24-upgrade/bin/test_depth_async_gpu",
+      "data/generated/depth/packages/v2-upgrade-selected",
+      "data/generated/depth/images-v2/v2_indoor_0.ppm",
+      "data/generated/depth/images-v2/v2_outdoor_1.ppm",
+      "cuda-full-basic"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "async_gpu_cuda-full-fused",
+    "command": [
+      "/home/qyc/builds/MiniInfer/v24-upgrade/bin/test_depth_async_gpu",
+      "data/generated/depth/packages/v2-upgrade-selected",
+      "data/generated/depth/images-v2/v2_indoor_0.ppm",
+      "data/generated/depth/images-v2/v2_outdoor_1.ppm",
+      "cuda-full-fused"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "trt_gpu",
+    "command": [
+      "/home/qyc/builds/MiniInfer/v24-upgrade/bin/test_depth_trt",
+      "data/generated/depth/engines/depth-fp32.engine",
+      "data/generated/depth/images-v2/v2_indoor_1.ppm"
+    ],
+    "exit": 0
+  }
+]

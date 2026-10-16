@@ -10,11 +10,41 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from run_depth_replay import (CSV_FIELDS, CSV_FIELDS_V2, Protocol, STATUSES, build_command,
+from run_depth_replay import (CSV_FIELDS, CSV_FIELDS_V2, CSV_FIELDS_V3, V3_EXTRA, Protocol, STATUSES, build_command,
                               parser, summarize_csv, validate_args, validate_configuration)
 
 
 class ReplayTests(unittest.TestCase):
+    def test_v3_separates_device_time_and_checks_transfer_conservation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, summary, rows = self.v2_fixture(directory)
+            summary.update(schema="miniinfer-depth-replay-v3", preprocess_mode="cuda-full-fused")
+            for row in rows:
+                row.update({key: "0" if row["submit_ms"] else "" for key in V3_EXTRA})
+                if row["accepted"] == "1":
+                    row.update(h2d_bytes="300", h2d_ms="0.1", gpu_preprocess_ms="0.2", model_ms="3", d2h_ms="0.4")
+            summary["warmup"].update(h2d_bytes=0, rgb8_h2d_bytes=0, fp32_h2d_bytes=0)
+            summary["steady"].update(h2d_bytes=600, rgb8_h2d_bytes=600, fp32_h2d_bytes=0)
+            def write():
+                with path.open("w", newline="") as stream:
+                    writer = csv.DictWriter(stream, fieldnames=CSV_FIELDS_V3)
+                    writer.writeheader()
+                    writer.writerows(rows)
+            write()
+            actual = summarize_csv(path, summary)["steady"]
+            self.assertEqual(actual["successful_device_stages"]["model_ms"]["p99_ms"], 3)
+            self.assertNotIn("model_ms", actual["successful_cpu_wall_stages"])
+            self.assertEqual(actual["h2d_bytes"], 600)
+            summary["steady"]["rgb8_h2d_bytes"] = 599
+            with self.assertRaisesRegex(ValueError, "byte accounting"):
+                summarize_csv(path, summary)
+            summary["steady"]["rgb8_h2d_bytes"] = 600
+            rejected = next(row for row in rows if row["status"] == "busy")
+            rejected["model_ms"] = "1"
+            write()
+            with self.assertRaisesRegex(ValueError, "rejected request"):
+                summarize_csv(path, summary)
+
     def fixture(self, directory):
         path = Path(directory) / "raw.csv"
         # Four steady plans: two successes, one busy, one capacity drop. The
