@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/home/qyc/builds/MiniInfer/v26-upgrade-install/bin/depth_client",
+    "--image",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_indoor_1.ppm",
+    "--output",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-002/tcp-001.f32",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "46851",
+    "--timeout-ms",
+    "180000"
+  ],
+  "returncode": 0,
+  "stdout": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-002/tcp-001.stdout.log",
+  "stderr": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-002/tcp-001.stderr.log"
+}

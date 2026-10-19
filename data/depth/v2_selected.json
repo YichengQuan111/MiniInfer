@@ -17,5 +17,11 @@
   "model_decision": "docs/validation/v2_upgrade/v22/decision.json",
   "preprocess_decision": "docs/validation/v2_upgrade/v24/path-decision.json",
   "slot_decision": "docs/validation/v2_upgrade/v24/slot-decision.json",
-  "selection_scope": "Local regression selection with unlocked clocks; V2.5 and V2.6 acceptance recorded in docs/depth_v2_upgrade.md."
+  "selection_scope": "Local regression selection with unlocked clocks; V2.5 and V2.6 acceptance recorded in docs/depth_v2_upgrade.md.",
+  "validated_date": "2026-10-19",
+  "sdk_version": "2.6.0",
+  "final_quality": "docs/validation/v2_upgrade/v24/quality-final.json",
+  "long_soak_audit": "docs/validation/v2_upgrade/v25/final/soak-acceptance.json",
+  "installed_consumer_validation": "docs/validation/v2_upgrade/v26/external-sdk.json",
+  "installed_tcp_validation": "docs/validation/v2_upgrade/v26/tcp.json"
 }

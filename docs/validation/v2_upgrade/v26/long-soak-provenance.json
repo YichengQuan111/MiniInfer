@@ -1,0 +1,228 @@
+{
+  "passed": true,
+  "soak_commit": "562a4e0",
+  "production_source_files": [
+    {
+      "path": "src/buffer.cpp",
+      "normalized_sha256": "33823a25c4629053eb66dff161af05b47fa2e96c4fc19a1da09c6475b3ba3cb1"
+    },
+    {
+      "path": "src/checked_size.cpp",
+      "normalized_sha256": "1b8207c80a570ca54a54f9a3513d94d708ff54720f842ad5a01be0b3a0421118"
+    },
+    {
+      "path": "src/cpu_executor.cpp",
+      "normalized_sha256": "c22233dd2538318856aa8b2cf7f914715cad2ee908a6955c78eeb884b0fe5f18"
+    },
+    {
+      "path": "src/cpu_ops.cpp",
+      "normalized_sha256": "c20a812d57086a6589ba6b0591bd175543a23fcce5e4970589f4bc751a7ee99d"
+    },
+    {
+      "path": "src/data_io.cpp",
+      "normalized_sha256": "aae495bf2fe967455d12fee5f61457bd41b247bf93cc17e96381e6ffe622a1f9"
+    },
+    {
+      "path": "src/depth/artifact.cpp",
+      "normalized_sha256": "f2d6888b509ee72d672f136b2930f0bcb52d1d0462203a32130a2d5ec828464a"
+    },
+    {
+      "path": "src/depth/image.cpp",
+      "normalized_sha256": "50ca4c39dcf4996c9de3e531dea252e21a924b8837c6cb424fd54e0fd5538667"
+    },
+    {
+      "path": "src/depth/net.cpp",
+      "normalized_sha256": "0419a7d00f36cec79c0fa1638c3dc8db5cb768086f01807a7a091006ccf2c398"
+    },
+    {
+      "path": "src/depth/ort_runner.cpp",
+      "normalized_sha256": "4c641decbbe95364fdb94a3e0adac4c9a27717d2def0f4a9d2f6b8fda1d86cc7"
+    },
+    {
+      "path": "src/depth/preprocess.cpp",
+      "normalized_sha256": "d92b2ba8c8ac80f767354522c0763f726814b190c110ecdc33a863acec973777"
+    },
+    {
+      "path": "src/depth/preprocess_cuda.cu",
+      "normalized_sha256": "7841afd9319be0b50cdda68d5a4c7a3c5cb1a06fc1b02d9324b14ac810e0a6ee"
+    },
+    {
+      "path": "src/depth/preprocess_cuda.hpp",
+      "normalized_sha256": "5d954610b405a6a269c03889759a62faa4bc3164c819a65c22c4150ac950bc0b"
+    },
+    {
+      "path": "src/depth/sdk.cpp",
+      "normalized_sha256": "c9ed38774c48f88b8c1eecada911fd8acc344cf53d2aefc81e4e22a849524c92"
+    },
+    {
+      "path": "src/depth/trt_runner.cpp",
+      "normalized_sha256": "6fa0ed21bc991ee5d78add34f3bb9d17547a0b39155ed0978547d0984160efe9"
+    },
+    {
+      "path": "src/mlp_input.cpp",
+      "normalized_sha256": "7bce075e13778d89161b4eb69a124d161f7f82a6e57a5b2ec838b28aa037b820"
+    },
+    {
+      "path": "src/mlp_model.cpp",
+      "normalized_sha256": "4f9bcb8ab7f6dcedd5fa7219b9f61cf6417a41cbc6c34204d7505b24827dfd1c"
+    },
+    {
+      "path": "src/mlp_result.cpp",
+      "normalized_sha256": "3a93e4fbe102ee28651b04649185fce9bc4ed45134ea3406376cd534f744312c"
+    },
+    {
+      "path": "src/net/io.cpp",
+      "normalized_sha256": "a2e2f4d19b0d32ed6256e772d9f973817f04b601bab528d29f8bff1338369918"
+    },
+    {
+      "path": "src/net/protocol.cpp",
+      "normalized_sha256": "ac32ab8493b04fd6216ef7a6156a6e6958f5692eaa7b5984edf6e829d18b0010"
+    },
+    {
+      "path": "src/net/server.cpp",
+      "normalized_sha256": "b12a433021a4e2d0c567635216d9ce4b192edbd075d2fe102942b39a35ae13d3"
+    },
+    {
+      "path": "src/net/session.cpp",
+      "normalized_sha256": "64eeddce5234b8cd31f30b854ba258136af33497b845430a07ba4e29130b609a"
+    },
+    {
+      "path": "src/net/socket.cpp",
+      "normalized_sha256": "301ebecae33e2ab423a94717b22c82bc86641dc5d444f01688b4a701e6efe879"
+    },
+    {
+      "path": "src/runtime.cpp",
+      "normalized_sha256": "ede508b08f58e7da36741142c392ce7799f4e7ddd42d515fdc194525d3212a6f"
+    },
+    {
+      "path": "src/thread_pool.cpp",
+      "normalized_sha256": "55cea9685af57e6d0e2ab22b33b4925c93f3f0348bbc280ae0ba6a4ecceccdcb"
+    },
+    {
+      "path": "src/version.cpp",
+      "normalized_sha256": "4139fd8f701c4a7c0eea0996e399a4737be7f136e6029c377aca7c5046ca5d6b"
+    },
+    {
+      "path": "src/workspace.cpp",
+      "normalized_sha256": "8bd5fa3be3d0a76400c8949dcc63cd99e6b5a186637d56180bfe52d3ec8a3f32"
+    },
+    {
+      "path": "include/miniinfer/bounded_queue.hpp",
+      "normalized_sha256": "1ff638ad3954db7c8cb3a2b740a72f297ba61a50da4cffe412365ab220996bf1"
+    },
+    {
+      "path": "include/miniinfer/buffer.hpp",
+      "normalized_sha256": "88dc415371814940d4cbca18b9bdcd85bd61792ff7348a978c11ac3398fbcac2"
+    },
+    {
+      "path": "include/miniinfer/checked_size.hpp",
+      "normalized_sha256": "8f42cb1d8dcc0ae7854e384741a09308f1ac1f59e38ceba555954228456f560b"
+    },
+    {
+      "path": "include/miniinfer/cpu_executor.hpp",
+      "normalized_sha256": "e55c6191715dc9cb41fc1042e4d06813c066d61f04a516969758099b3994527b"
+    },
+    {
+      "path": "include/miniinfer/cpu_ops.hpp",
+      "normalized_sha256": "98a6b823a231df34043589ae591a819a962fd167b689308aaea2af4cbb8c6f2c"
+    },
+    {
+      "path": "include/miniinfer/data_io.hpp",
+      "normalized_sha256": "567cc582d263c1a8bb6a8622c9db20c33044e69d19a905047b2a6f15ad48aaa0"
+    },
+    {
+      "path": "include/miniinfer/depth/artifact.hpp",
+      "normalized_sha256": "69132432b48ffa2d92042b116d1515cdb6bd5cabef7c65a9300642e015248dbc"
+    },
+    {
+      "path": "include/miniinfer/depth/image.hpp",
+      "normalized_sha256": "3d63c2b40ae2e891fc0c29d9a2ee70a3c9277a4f329da36189fa97177de935b4"
+    },
+    {
+      "path": "include/miniinfer/depth/net.hpp",
+      "normalized_sha256": "e55eaedfac952a7d910b9308c88972e8c700fe4915574de12911b08a84798b11"
+    },
+    {
+      "path": "include/miniinfer/depth/ort_runner.hpp",
+      "normalized_sha256": "d84d539e4151f4a25bff1cc75334d8dc391b40c4b180c58d46d47e90d8b080af"
+    },
+    {
+      "path": "include/miniinfer/depth/preprocess.hpp",
+      "normalized_sha256": "310f5fd372f5c2cd9823b059e1a90683d50eee2474664a2de3a7a3719d0102a4"
+    },
+    {
+      "path": "include/miniinfer/depth/profile.hpp",
+      "normalized_sha256": "ff2980fddb2d61110fe95250ed13ee94f897182851049b37e9ede8b1885d489b"
+    },
+    {
+      "path": "include/miniinfer/depth/sdk.hpp",
+      "normalized_sha256": "33cc2cd6307e8be51064ff04e4b564a71caedf6ae0fa087a08afe9e1494728ce"
+    },
+    {
+      "path": "include/miniinfer/depth/trt_runner.hpp",
+      "normalized_sha256": "1fbe5c55fa5f20f21161b0def54ea2dc1ca9eed064c24bb103e2f4ea30b299cd"
+    },
+    {
+      "path": "include/miniinfer/mlp_input.hpp",
+      "normalized_sha256": "c8a9b2fdaf8ac621faa18e32631a43479f2bead699bfffd5f69f73d941e0699d"
+    },
+    {
+      "path": "include/miniinfer/mlp_model.hpp",
+      "normalized_sha256": "ff248edb832187155dd3a951a9bd4f0e2eb48c8a6a59f886de69f0f0265821ca"
+    },
+    {
+      "path": "include/miniinfer/mlp_result.hpp",
+      "normalized_sha256": "aeb357d9054019a09bb3accbb64bd35a42b8efc9380285eb24a41d10f5aa0a30"
+    },
+    {
+      "path": "include/miniinfer/net/io.hpp",
+      "normalized_sha256": "a4a0953651e2091f9d2e8df5f979e7484977ca1b4deae55e8392a5b5ccac0b72"
+    },
+    {
+      "path": "include/miniinfer/net/protocol.hpp",
+      "normalized_sha256": "f3778e1cdce67c17b906568e1170f29c49f5f66d71161e6330e34dd664954a3b"
+    },
+    {
+      "path": "include/miniinfer/net/server.hpp",
+      "normalized_sha256": "042389b0c6444b500fcdee6e50955cdfc477a8f75b84563734952309ef84b48e"
+    },
+    {
+      "path": "include/miniinfer/net/session.hpp",
+      "normalized_sha256": "c9215c030c5286665e0ce7b2ee0afb29f6b66f0de9aa220629f36ac5ee8aab7d"
+    },
+    {
+      "path": "include/miniinfer/net/socket.hpp",
+      "normalized_sha256": "c0061f369d6c6709ec6e7906d7d5ffc79bd015ef1162a04bf8e7187315b97afc"
+    },
+    {
+      "path": "include/miniinfer/net/unique_fd.hpp",
+      "normalized_sha256": "671cb3235a34bd1fb346495048e513e68e71a9468cd61ba56558c943fa535029"
+    },
+    {
+      "path": "include/miniinfer/runtime.hpp",
+      "normalized_sha256": "7dca3f2d98187b4bc9591672f261d224cde7284ad448454a851e1b427bac3089"
+    },
+    {
+      "path": "include/miniinfer/task_timing.hpp",
+      "normalized_sha256": "acbfea3b07a16c1684a62fd8c8b145e9749ae84095169b330b98058bd71f444b"
+    },
+    {
+      "path": "include/miniinfer/tensor_view.hpp",
+      "normalized_sha256": "7b6ccea93a147f9be92ba4f2cf9126d903f0c420d2c8e6f821b746995bd8ca26"
+    },
+    {
+      "path": "include/miniinfer/thread_pool.hpp",
+      "normalized_sha256": "44b17fb85d305d90258a2b1e922ddea0c48e843314d9d3d2c986843393c16a9e"
+    },
+    {
+      "path": "include/miniinfer/version.hpp",
+      "normalized_sha256": "95e0b5227df78d48b555b70db5bfc7f5b2a380bee748a8f7d2d1c03817845db9"
+    },
+    {
+      "path": "include/miniinfer/workspace.hpp",
+      "normalized_sha256": "49993b3839a76c9794d11b468032dfe1b891bae1b1c30756d4d58b826b84b4f2"
+    }
+  ],
+  "audited_report_and_csv_files_checked_against_commit": 44,
+  "scope": "V2.6 production source equals measured V2.5 source after text newline normalization. Installed binaries are rebuilt and separately checked; no new 30-minute V2.6 binary run is claimed."
+}

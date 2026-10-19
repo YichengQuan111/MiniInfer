@@ -15,7 +15,7 @@
 | V2.3 | 拥有型异步句柄、背压、缓冲复用、1/2 GPU 槽位 | 通过，选择复用、单槽位 |
 | V2.4 | A/B/C 三路径，完整 CUDA 基础/优化实现及实测 | 通过，选择完整C基础、单槽位 |
 | V2.5 | 过载、错误、慢消费者、关闭与至少30分钟长稳 | 通过，1800秒36000/36000成功 |
-| V2.6 | 最终组合复验、模型包与使用说明 | 待验收 |
+| V2.6 | 最终组合复验、模型包与使用说明 | 通过，安装SDK、外部示例与TCP复验 |
 
 CPU/网络回归与 GPU 设备检查分开执行；Nsight 和正常性能计时分开。硬件计数器不可用时记录工具原始错误，不能以普通计时代替计数器验证。CUDA 同步和 TensorRT 上下文隔离依据 [CUDA 异步执行](https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/asynchronous-execution.html)与 [TensorRT 10.x 性能说明](https://docs.nvidia.com/deeplearning/tensorrt/10.x.x/performance/optimization.html)。
 
@@ -143,3 +143,17 @@ SDK每秒采样请求守恒、预算、当前/峰值I/O和分配计数，正式�
 本轮长稳通过全部原冻结质量、计数、SLO、采样密度、内存增长与回收门槛。10月16日的短测和10月19日长稳使用同一冻结二进制；未锁频、桌面后台未隔离、供电状态未采样，结果仍限本机条件。中断的容量探针、两次不完整长稳及冻结前3秒preflight保留为诊断，不混入正式结果，也不拼接时长；证据口径见 [V2.5目录说明](validation/v2_upgrade/v25/README.md)。
 
 复现入口 `tools/run_depth_v25.py --executable BUILD/bin/depth_replay --package PACKAGE --images-list data/depth/replay_v2.txt --output NEW_DIR --preprocess cuda-full-basic --slots 1 --case soak`。它运行真实1800秒并调用严格审计；`tools/summarize_depth_soak.py AUDIT --output NEW.json`在核对审计和原始文件哈希后生成逐分钟统计。
+
+## V2.6：最终配置与可安装交付
+
+最终显式配置为 **TensorRT、518 FP32、完整CUDA基础预处理、1槽位、4个CPU Worker、主机/设备缓冲复用**，队列4、128MiB请求预算。模型与engine哈希继续使用V2.2通过开发集选择并完成最终回归的包；V2.4完成实际device输入、原始输出和恢复结果的四路径最终回归，V2.5在该组合上完成1800秒长稳。
+
+V2.6版本号为2.6.0，补齐安装的回放/预处理基准程序、选择配置、部署说明和验收材料。生产源码 `src/`、`include/` 共55个文件与长稳冻结源码逐一比较一致（统一文本换行后核对），未更改推理语义；39项Release回归再次通过。另核对44份正式审计依赖的报告/CSV：工作区与V2.5提交 `562a4e0` 内的原始字节都匹配审计SHA256，CSV未被Git换行转换破坏。[来源核对](validation/v2_upgrade/v26/long-soak-provenance.json)、[最终CTest](validation/v2_upgrade/v26/ctest.log)
+
+通过 `cmake --install` 安装到 `/home/qyc/builds/MiniInfer/v26-upgrade-install`，从安装后的示例目录单独配置外部C++17工程，仅编译和链接两步，无nvcc编译步骤。所选C基础模式的模型包golden验证通过，恢复输出MAE为9.31e-7、最大绝对误差2.03e-5、超差数0、排序3/3。[外部构建日志](validation/v2_upgrade/v26/external-build.log)、[golden验证](validation/v2_upgrade/v26/external-sdk.json)
+
+安装后的server/client/SDK CLI对8张最终回归图各执行2次TCP请求，**16/16成功**，返回FP32全图字节与同包同模式的SDK结果一致。ready记录确认 `cuda-full-basic`、1槽位、4个SDK Worker。SIGTERM后正常退出，网络active/pending/bytes及SDKinflight/bytes均为0，无推理、协议或I/O错误。[TCP逐图记录及停止状态](validation/v2_upgrade/v26/tcp.json)。这是功能与交付验证，不作为TCP性能结论。
+
+最终交付目录为 `data/generated/depth/v2-delivery`：`sdk/`包含已安装头文件、静态库、可执行程序、CMake导出、示例和文档；`model/`包含16项清单验证的模型工件；`evidence/`保存所选配置、最终质量和通过的长稳审计；`inventory.json`逐文件记录大小与SHA256并由打包工具复制后回读核对。模型及交付二进制按仓库规则留在Git忽略目录，构建方法、验证工具和结果证据进入Git。CUDA/TensorRT/ORT共享库与驱动仍由目标环境提供。
+
+至此 **V2.1–V2.6 P0通过**。V2.6重新构建的二进制单独完成上述安装/功能验证；长稳证据来自生产源码相同的V2.5冻结二进制，不冒充一次新的V2.6二进制30分钟运行。保留的限制包括：固定小规模回归集、未锁频的本机测量、Nsight Compute硬件计数器权限不可用。P1实时帧/INT8和E1设备分支未实现，不计入完成范围。

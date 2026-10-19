@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(MiniInfer VERSION 2.5.0 LANGUAGES CXX)
+project(MiniInfer VERSION 2.6.0 LANGUAGES CXX)
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
     message(FATAL_ERROR "MiniInfer targets Linux. On Windows, configure and build through WSL.")

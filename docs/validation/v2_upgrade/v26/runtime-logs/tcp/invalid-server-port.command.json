@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/home/qyc/builds/MiniInfer/v26-upgrade-install/bin/depth_server",
+    "--package",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected",
+    "--port",
+    "65536"
+  ],
+  "returncode": 1,
+  "stdout": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/invalid-server-port.stdout.log",
+  "stderr": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/invalid-server-port.stderr.log"
+}

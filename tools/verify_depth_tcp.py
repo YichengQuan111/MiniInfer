@@ -167,6 +167,8 @@ def verify_package(args, root, directory, executables):
     stdout_path, stderr_path = directory / "server.stdout.log", directory / "server.stderr.log"
     command = [str(executables["server"]), "--package", str(root), "--host", "127.0.0.1", "--port", "0",
                "--read-timeout-ms", str(args.client_timeout_ms), "--write-timeout-ms", str(args.client_timeout_ms)]
+    if args.preprocess != "cpu" or args.slots != 1:
+        command += ["--preprocess", args.preprocess, "--gpu-slots", str(args.slots)]
     record["server_command"] = command
     captured = b""
     reaped_output = False
@@ -179,6 +181,8 @@ def verify_package(args, root, directory, executables):
                 package = json.loads((root / "package.json").read_text(encoding="utf-8"))
                 if ready.get("backend") != package.get("backend") or ready.get("precision") != package.get("precision"):
                     raise RuntimeError("ready backend/precision differs from package")
+                if (args.preprocess != "cpu" or args.slots != 1) and (ready.get("preprocess_mode") != args.preprocess or ready.get("gpu_slots") != args.slots):
+                    raise RuntimeError("ready preprocessing/slots differs from requested configuration")
                 requests = 0
                 for index, image in enumerate(images):
                     image = image.resolve(strict=True)
@@ -186,8 +190,10 @@ def verify_package(args, root, directory, executables):
                     sample_dir = directory / (f"image-{index:03d}")
                     sample_dir.mkdir(exist_ok=False)
                     local = sample_dir / "sdk.f32"
-                    run_command([str(executables["sdk"]), str(root), str(image), str(local)],
-                                sample_dir, "sdk", args.command_timeout)
+                    sdk_command = [str(executables["sdk"]), str(root), str(image), str(local)]
+                    if args.preprocess != "cpu" or args.slots != 1:
+                        sdk_command += [args.preprocess, str(args.slots)]
+                    run_command(sdk_command, sample_dir, "sdk", args.command_timeout)
                     baseline = fp32_bytes(local, width * height)
                     sample = {"image": str(image), "width": width, "height": height,
                               "sdk_sha256": hashlib.sha256(baseline).hexdigest(), "requests": []}
@@ -243,6 +249,8 @@ def main():
     parser.add_argument("--bin-dir", required=True, help="directory containing depth_server, depth_client and depth_sdk_cli")
     parser.add_argument("--package", action="append", required=True, help="SDK model package; repeat for multiple backends")
     parser.add_argument("--image", action="append", default=[], help="optional P6 image; repeat to test each image on every package")
+    parser.add_argument("--preprocess", choices=("cpu", "cuda-partial", "cuda-full-basic", "cuda-full-fused"), default="cpu")
+    parser.add_argument("--slots", type=int, choices=(1, 2), default=1)
     parser.add_argument("--output", required=True, help="new output directory; existing paths are rejected")
     parser.add_argument("--requests-per-image", type=positive_count, default=2)
     parser.add_argument("--startup-timeout", type=positive_seconds, default=180, help="server ready timeout in seconds")

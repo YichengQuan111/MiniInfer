@@ -1,0 +1,2 @@
+{"package": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected", "verified_files": 16, "model_size": 518, "validation_identity": "reference_manifest_sha256"}
+{"passed": true, "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-delivery", "files": 2029, "inventory_sha256": "95fb5972ee42c5374f9077671e8962d28cee6724cb32f542f6ba1f7e5959e562"}

@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "comparison": "same-package exact little-endian FP32 bytes",
+  "packages": [
+    {
+      "package": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected",
+      "passed": true,
+      "samples": [
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_adverse_style_1.ppm",
+          "width": 1600,
+          "height": 1063,
+          "sdk_sha256": "c68ab9da5fb117a5f0d4af5985a2779c453a4447a7a190a066ea5cb8b3d86c53",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-000/tcp-000.f32",
+              "sha256": "c68ab9da5fb117a5f0d4af5985a2779c453a4447a7a190a066ea5cb8b3d86c53",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-000/tcp-001.f32",
+              "sha256": "c68ab9da5fb117a5f0d4af5985a2779c453a4447a7a190a066ea5cb8b3d86c53",
+              "exact_fp32": true
+            }
+          ]
+        },
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_aerial_1.ppm",
+          "width": 2048,
+          "height": 825,
+          "sdk_sha256": "8466f8b72e905b538c38fa244c4dd8149dac36e6ba91fe82c3a95b788e2ad7ba",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-001/tcp-000.f32",
+              "sha256": "8466f8b72e905b538c38fa244c4dd8149dac36e6ba91fe82c3a95b788e2ad7ba",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-001/tcp-001.f32",
+              "sha256": "8466f8b72e905b538c38fa244c4dd8149dac36e6ba91fe82c3a95b788e2ad7ba",
+              "exact_fp32": true
+            }
+          ]
+        },
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_indoor_1.ppm",
+          "width": 2048,
+          "height": 934,
+          "sdk_sha256": "21761933b52ff19861ad178215c92b910dcf8d08af3c6a5da2b503939878729e",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-002/tcp-000.f32",
+              "sha256": "21761933b52ff19861ad178215c92b910dcf8d08af3c6a5da2b503939878729e",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-002/tcp-001.f32",
+              "sha256": "21761933b52ff19861ad178215c92b910dcf8d08af3c6a5da2b503939878729e",
+              "exact_fp32": true
+            }
+          ]
+        },
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_non_real_1.ppm",
+          "width": 1024,
+          "height": 727,
+          "sdk_sha256": "1a994ddfbc71871db0608145cafa18f439a2ef4e9eb1cb015f75d9b7f35df9af",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-003/tcp-000.f32",
+              "sha256": "1a994ddfbc71871db0608145cafa18f439a2ef4e9eb1cb015f75d9b7f35df9af",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-003/tcp-001.f32",
+              "sha256": "1a994ddfbc71871db0608145cafa18f439a2ef4e9eb1cb015f75d9b7f35df9af",
+              "exact_fp32": true
+            }
+          ]
+        },
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_object_1.ppm",
+          "width": 1391,
+          "height": 1060,
+          "sdk_sha256": "7fba375cfdc0c495d34b4a2edd5c0359a812b71276c4d24394382df686459df6",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-004/tcp-000.f32",
+              "sha256": "7fba375cfdc0c495d34b4a2edd5c0359a812b71276c4d24394382df686459df6",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-004/tcp-001.f32",
+              "sha256": "7fba375cfdc0c495d34b4a2edd5c0359a812b71276c4d24394382df686459df6",
+              "exact_fp32": true
+            }
+          ]
+        },
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_outdoor_1.ppm",
+          "width": 937,
+          "height": 1400,
+          "sdk_sha256": "499a7cea94d3de11995ae8c9b6216248185c4b6df64800c6aaf5b1981d416c3a",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-005/tcp-000.f32",
+              "sha256": "499a7cea94d3de11995ae8c9b6216248185c4b6df64800c6aaf5b1981d416c3a",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-005/tcp-001.f32",
+              "sha256": "499a7cea94d3de11995ae8c9b6216248185c4b6df64800c6aaf5b1981d416c3a",
+              "exact_fp32": true
+            }
+          ]
+        },
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_transparent_reflective_1.ppm",
+          "width": 678,
+          "height": 1023,
+          "sdk_sha256": "cc223e198020b9301fd16c265e7d5614ae3555b6d1545bea8f234e95e1549dd2",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-006/tcp-000.f32",
+              "sha256": "cc223e198020b9301fd16c265e7d5614ae3555b6d1545bea8f234e95e1549dd2",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-006/tcp-001.f32",
+              "sha256": "cc223e198020b9301fd16c265e7d5614ae3555b6d1545bea8f234e95e1549dd2",
+              "exact_fp32": true
+            }
+          ]
+        },
+        {
+          "image": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_underwater_1.ppm",
+          "width": 1024,
+          "height": 681,
+          "sdk_sha256": "5a2acad15e49f53fdd9c867bee580dd92e270ed44d281ec4ac073d71ef9d849b",
+          "requests": [
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-007/tcp-000.f32",
+              "sha256": "5a2acad15e49f53fdd9c867bee580dd92e270ed44d281ec4ac073d71ef9d849b",
+              "exact_fp32": true
+            },
+            {
+              "output": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-007/tcp-001.f32",
+              "sha256": "5a2acad15e49f53fdd9c867bee580dd92e270ed44d281ec4ac073d71ef9d849b",
+              "exact_fp32": true
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "server_command": [
+        "/home/qyc/builds/MiniInfer/v26-upgrade-install/bin/depth_server",
+        "--package",
+        "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "0",
+        "--read-timeout-ms",
+        "180000",
+        "--write-timeout-ms",
+        "180000",
+        "--preprocess",
+        "cuda-full-basic",
+        "--gpu-slots",
+        "1"
+      ],
+      "ready": {
+        "event": "ready",
+        "pid": 3565,
+        "port": 46851,
+        "startup_ms": 4972.27,
+        "backend": "trt",
+        "precision": "fp32",
+        "preprocess_mode": "cuda-full-basic",
+        "gpu_slots": 1,
+        "sdk_workers": 4
+      },
+      "requests": 16,
+      "server_returncode": 0,
+      "stopped": {
+        "event": "stopped",
+        "requests": 16,
+        "responses": 16,
+        "accepted": 16,
+        "completed": 16,
+        "active": 0,
+        "pending": 0,
+        "rejected": 0,
+        "expired": 0,
+        "discarded": 0,
+        "bad_requests": 0,
+        "protocol_errors": 0,
+        "session_failures": 0,
+        "accept_errors": 0,
+        "busy": 0,
+        "inference_failures": 0,
+        "io_failures": 0,
+        "network_bytes": 0,
+        "network_peak_bytes": 27828224,
+        "network_inflight": 0,
+        "sdk_bytes": 0,
+        "sdk_inflight": 0,
+        "sdk_queued": 0,
+        "sdk_executing": 0,
+        "sdk_accepted": 16,
+        "sdk_succeeded": 16,
+        "sdk_failed": 0,
+        "sdk_delivered": 16,
+        "sdk_rejected_busy": 0,
+        "sdk_rejected_closed": 0,
+        "sdk_rejected_invalid": 0,
+        "sdk_accepting": false,
+        "sdk_shutdown_complete": true
+      },
+      "stdout": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/server.stdout.log",
+      "stderr": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/server.stderr.log"
+    }
+  ],
+  "errors": [],
+  "invalid_server_cli": {
+    "command": [
+      "/home/qyc/builds/MiniInfer/v26-upgrade-install/bin/depth_server",
+      "--package",
+      "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected",
+      "--port",
+      "65536"
+    ],
+    "returncode": 1,
+    "stdout": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/invalid-server-port.stdout.log",
+    "stderr": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/invalid-server-port.stderr.log"
+  }
+}

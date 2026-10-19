@@ -1,0 +1,16 @@
+[
+  "/home/qyc/.venvs/miniinfer-depth/bin/python",
+  "/mnt/c/Users/ASUS/Documents/MiniInfer/tools/assemble_depth_delivery.py",
+  "--sdk-install",
+  "/home/qyc/builds/MiniInfer/v26-upgrade-install",
+  "--package",
+  "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected",
+  "--selection",
+  "/mnt/c/Users/ASUS/Documents/MiniInfer/data/depth/v2_selected.json",
+  "--quality",
+  "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/v2_upgrade/v24/quality-final.json",
+  "--stability",
+  "/mnt/c/Users/ASUS/Documents/MiniInfer/docs/validation/v2_upgrade/v25/final/soak-acceptance.json",
+  "--output",
+  "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-delivery"
+]

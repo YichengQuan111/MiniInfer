@@ -79,11 +79,11 @@ benchmark_cli 另记调用前、submit 返回和 get 取得结果时间。排队
 
 `run` 与 `drain` 回调可能并发，捕获的 Runtime 必须比 TcpServer 存活久；不允许回调自 shutdown。重复、并发 shutdown 只执行一次 drain，其他调用等待相同完成边界。计算排空没有硬性时间保证。`snapshot` / `wait_for_stats` 在 mutex 下访问资源计数，业务/IO计数在会话结束时聚合；`responses` 表示服务端发送完成，不能代表客户端已收到。客户端独立统计成功、业务错误、协议/连接错误、超时、未尝试请求及建连错误。
 
-## 后续版本的计划边界
+## 视觉版本范围与实现入口
 
 - V1 以 Depth Anything V2 Small 为负载，新增 RGB / FP32 相对深度契约；完成 Python / ORT / TensorRT FP32 / FP16 精度对照，交付 C++ SDK、模型包、本地 / TCP 入口。单 GPU 槽位，稠密响应纳入数量与字节预算，engine 按目标环境构建与检查。
 - V2 P0 增加两种静态尺寸 / FP32 / FP16 取舍、可靠异步 SDK 与缓冲复用；按 1 / 2 槽位隔离上下文、Stream / Event、设备输入输出及 scratch，完整 GPU 路径另有每槽独立且有界的原图 RGB8 上传缓冲与所需 Pinned Memory，按原图上限及槽位数预算，不能按模型输入尺寸估算。有界 FIFO 规定出队顺序，完成可乱序并按 request_id 关联；H2D → GPU 预处理 → TensorRT → D2H → CPU 后处理遵守依赖，同 Stream 或 Event 衔接；结果进入独立拥有的存储后交付，异步使用安全结束后才复用或释放槽位资源。
-- V2.4 P0 必须实现、集成并验收完整 GPU 预处理：上传已解码 RGB8，由 GPU 完成除以 255、双线性 resize、padding、通道归一化及 HWC→NCHW，直接写入同槽位 TRT 输入，避免重复上传。CPU 保留校验、入口需要时的解码、几何元数据、调度与结果后处理；数值与几何契约沿用 CPU 参考，现有混合 FP16 engine 仍为 FP32 I/O。保留 A（完整 CPU）、B（CPU 除以 255 / resize / padding，GPU 归一化 / 布局）、C（完整 GPU）三路径对照，以全模型正确性、微基准、端到端和 Profiler 验收，并覆盖资源上限、过载与长稳。默认部署按实测选择，不要求 C 更快；B / C 尚未实施，未实现 C 不能标记 V2.4 完成。
+- V2.4 P0 必须实现、集成并验收完整 GPU 预处理：上传已解码 RGB8，由 GPU 完成除以 255、双线性 resize、padding、通道归一化及 HWC→NCHW，直接写入同槽位 TRT 输入，避免重复上传。CPU 保留校验、入口需要时的解码、几何元数据、调度与结果后处理；数值与几何契约沿用 CPU 参考，现有混合 FP16 engine 仍为 FP32 I/O。保留 A（完整 CPU）、B（CPU 除以 255 / resize / padding，GPU 归一化 / 布局）、C（完整 GPU）三路径对照，以全模型正确性、微基准、端到端和 Profiler 验收，并覆盖资源上限、过载与长稳。默认部署按实测选择，不要求 C 更快；B / C均已实现，基础/融合kernel及独立槽位证据见 [V2升级报告](depth_v2_upgrade.md)；完成状态由其验收表确认。
 - INT8 PTQ、实时帧策略、独立 LayerNorm / GEMM、TensorRT Plugin、epoll / eventfd 与 ROS2 等为 P1。量化若选做需验证真实 INT8 覆盖；实时帧若选做需明确淘汰 / 超期终态、结果年龄及发布顺序，不改变默认可靠请求语义。
 - 当前只有电脑和 NVIDIA GPU，真实端侧适配单列 E1；P1 / E1 均不阻塞 P0。若实施 P1 epoll，仍要求 I/O 不等待 GPU / future、有界完成队列、连接代次和安全关闭。
 

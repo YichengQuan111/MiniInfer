@@ -18,7 +18,7 @@ endforeach()
 install(TARGETS ${depth_install_targets} EXPORT MiniInferTargets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/miniinfer" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-foreach(app depth_cli depth_trt_cli depth_engine_builder depth_sdk_cli depth_server depth_client depth_benchmark)
+foreach(app depth_cli depth_trt_cli depth_engine_builder depth_sdk_cli depth_server depth_client depth_benchmark depth_replay depth_preprocess_benchmark)
     if(TARGET ${app})
         install(TARGETS ${app} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
     endif()
@@ -39,6 +39,8 @@ install(FILES "${PROJECT_SOURCE_DIR}/docs/depth_deployment.md"
     "${PROJECT_SOURCE_DIR}/docs/depth_tcp.md" "${PROJECT_SOURCE_DIR}/docs/depth_benchmark_method.md"
     "${PROJECT_SOURCE_DIR}/docs/depth_accuracy.md" "${PROJECT_SOURCE_DIR}/docs/depth_validation.md"
     "${PROJECT_SOURCE_DIR}/docs/depth_performance.md" "${PROJECT_SOURCE_DIR}/docs/depth_troubleshooting.md"
+    "${PROJECT_SOURCE_DIR}/docs/depth_v2_upgrade.md"
+    "${PROJECT_SOURCE_DIR}/docs/MiniInfer_V1_V2_求职改进策略.md"
     DESTINATION ${CMAKE_INSTALL_DATADIR}/MiniInfer/docs)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/depth/"
     DESTINATION ${CMAKE_INSTALL_DATADIR}/MiniInfer/data/depth)

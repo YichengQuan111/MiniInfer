@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/home/qyc/builds/MiniInfer/v26-upgrade-install/bin/depth_sdk_cli",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/packages/v2-upgrade-selected",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/images-v2/v2_adverse_style_1.ppm",
+    "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-000/sdk.f32",
+    "cuda-full-basic",
+    "1"
+  ],
+  "returncode": 0,
+  "stdout": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-000/sdk.stdout.log",
+  "stderr": "/mnt/c/Users/ASUS/Documents/MiniInfer/data/generated/depth/v2-upgrade/v26/tcp/package-000/image-000/sdk.stderr.log"
+}
