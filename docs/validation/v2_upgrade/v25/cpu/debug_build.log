@@ -1,0 +1,34 @@
+[1/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/version.cpp.o
+[2/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/checked_size.cpp.o
+[3/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/buffer.cpp.o
+[4/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_ops.cpp.o
+[5/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_model.cpp.o
+[6/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/data_io.cpp.o
+[7/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_input.cpp.o
+[8/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/workspace.cpp.o
+[9/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/mlp_result.cpp.o
+[10/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/cpu_executor.cpp.o
+[11/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/thread_pool.cpp.o
+[12/34] Building CXX object CMakeFiles/miniinfer_depth_image.dir/src/depth/image.cpp.o
+[13/34] Building CXX object CMakeFiles/miniinfer_depth_image.dir/src/depth/preprocess.cpp.o
+[14/34] Linking CXX static library libminiinfer_depth_image.a
+[15/34] Building CXX object CMakeFiles/miniinfer_core.dir/src/runtime.cpp.o
+[16/34] Linking CXX static library libminiinfer_core.a
+[17/34] Building CXX object CMakeFiles/miniinfer_depth_artifact.dir/src/depth/artifact.cpp.o
+[18/34] Linking CXX static library libminiinfer_depth_artifact.a
+[19/34] Building CXX object CMakeFiles/test_depth_image.dir/tests/test_depth_image.cpp.o
+[20/34] Building CXX object CMakeFiles/test_runtime.dir/tests/test_runtime.cpp.o
+[21/34] Linking CXX executable bin/test_depth_image
+[22/34] Building CXX object CMakeFiles/miniinfer_depth_sdk.dir/src/depth/sdk.cpp.o
+[23/34] Linking CXX static library libminiinfer_depth_sdk.a
+[24/34] Linking CXX executable bin/test_runtime
+[25/34] Building CXX object CMakeFiles/test_concurrency.dir/tests/test_concurrency.cpp.o
+[26/34] Linking CXX executable bin/test_concurrency
+[27/34] Building CXX object CMakeFiles/test_depth_sdk.dir/tests/test_depth_sdk.cpp.o
+[28/34] Building CXX object CMakeFiles/test_shutdown.dir/tests/test_shutdown.cpp.o
+[29/34] Building CXX object CMakeFiles/test_timing.dir/tests/test_timing.cpp.o
+[30/34] Building CXX object CMakeFiles/test_thread_pool.dir/tests/test_thread_pool.cpp.o
+[31/34] Linking CXX executable bin/test_depth_sdk
+[32/34] Linking CXX executable bin/test_shutdown
+[33/34] Linking CXX executable bin/test_timing
+[34/34] Linking CXX executable bin/test_thread_pool

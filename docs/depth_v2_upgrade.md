@@ -1,4 +1,4 @@
-# V2 升级与验收（2026-10-15—16）
+# V2 升级与验收（2026-10-15—19）
 
 本轮依据 [2026-10-15 I-S-O 计划](MiniInfer_V1_V2_求职改进策略.md)逐项升级，每个小版本完成后单独 Git commit。起点为 `bf55478`：四个 CPU Worker、每 Worker 独占 ORT Session；这些行为需要保留。V2.4 必须实现完整 RGB8 GPU 预处理，局部归一化路径不能替代它。
 
@@ -14,7 +14,7 @@
 | V2.2 | 518/392、FP32/混合 FP16 配置与质量取舍 | 通过，选择518 FP32 |
 | V2.3 | 拥有型异步句柄、背压、缓冲复用、1/2 GPU 槽位 | 通过，选择复用、单槽位 |
 | V2.4 | A/B/C 三路径，完整 CUDA 基础/优化实现及实测 | 通过，选择完整C基础、单槽位 |
-| V2.5 | 过载、错误、慢消费者、关闭与至少30分钟长稳 | 待验收 |
+| V2.5 | 过载、错误、慢消费者、关闭与至少30分钟长稳 | 通过，1800秒36000/36000成功 |
 | V2.6 | 最终组合复验、模型包与使用说明 | 待验收 |
 
 CPU/网络回归与 GPU 设备检查分开执行；Nsight 和正常性能计时分开。硬件计数器不可用时记录工具原始错误，不能以普通计时代替计数器验证。CUDA 同步和 TensorRT 上下文隔离依据 [CUDA 异步执行](https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/asynchronous-execution.html)与 [TensorRT 10.x 性能说明](https://docs.nvidia.com/deeplearning/tensorrt/10.x.x/performance/optimization.html)。
@@ -116,3 +116,30 @@ CUDA events微基准在上传完成后计时，每进程预热20次、测200次�
 独立Nsight Systems实测A/B/C基础/C融合分别捕获45466/48960/52380/52380个kernel；A/B的CPU像素预处理与GPU活动交叠约1003/969ms，C已经迁移像素运算，此项为0。选中C的双槽位时间线中两个流实际kernel交叠仅 **7.00ms/4.13秒**，不能把两个stream视为模型充分并行的证据。[双槽位实际时间线](validation/v2_upgrade/v24/timeline-selected-slot2.json)。
 
 完整测量使用 [冻结源码树](validation/v2_upgrade/v24/source-tree.txt)和独立构建；各报告记录可执行文件、模型包和输入哈希。运行入口 `tools/run_depth_v24.py` 支持 `--mode`、`--load` 和 `--slots`；最终显式运行配置保存在 [v2_selected.json](../data/depth/v2_selected.json)，SDK不会自动加载该文件。V2.5将使用该配置重新进行输出一致性与长稳验收。
+
+## V2.5：背压、结果检查与长稳
+
+最终配置固定为518 FP32、C基础、1槽位、4个SDK Worker、8个客户端、队列4、128MiB请求预算，主机/设备缓冲均复用。回放v4在启动时建立每图独立基线，之后每个成功结果检查尺寸和64点位模式，每128轮图像序列对接纳的各图执行完整哈希。基线调用与预热单独记账，输出检查位于SDK终结发布之后，不计入CUDA events；它仍产生真实的客户端CPU与交付开销。
+
+SDK每秒采样请求守恒、预算、当前/峰值I/O和分配计数，正式负载开始前同步写入带标记的边界样本。审查发现原周期采样会漏掉首个周期之前的分配增长，已修复并新增“早期增长、缺失/迟到/重复边界、允许预热分配”回归。严格审计重新读取CSV，核对报告统计与完整哈希检查次数；RSS使用60秒窗口，中位数增长及充分采样尾窗均受64MiB门槛约束，所有阶段的采样RSS峰值不超过2GiB。
+
+同一冻结代码Release CTest **39/39**；CPU Debug、ASan/UBSan、TSan各 **7/7**。统计单测15项、稳定性门禁单测20项包含在CTest中。最终C基础的真实GPU压力检查覆盖单/双槽位，各有执行中放弃与析构后交付、ready字节预算、四线程提交与双线程关闭竞争，共6场景；全图逐位结果、请求ID与H2D对应、账本及回收均通过。Compute Sanitizer memcheck同时通过，**0错误、0字节泄漏**。[Release](validation/v2_upgrade/v25/frozen-ctest.log)、[CPU检查](validation/v2_upgrade/v25/cpu/checks.json)、[GPU场景](validation/v2_upgrade/v25/selected-stress.json)、[设备检查](validation/v2_upgrade/v25/selected-stress-memcheck.log)
+
+每轮预热2秒、正式50秒，各场景3个独立进程；慢消费者在结果ready后延迟200ms再get。成功吞吐按窗口内终结发布计数，尾部drain结果仍计入总成功数；过载允许Busy，已接收失败、输出差异与回收失败仍不允许。
+
+| 场景 | 三轮SDK P99（ms） | 三轮成功QPS | 三轮成功总数 | 三轮Busy数 |
+|---|---|---|---|---|
+| 正常20请求/秒 | 26.33 / 26.22 / 26.35 | 20 / 20 / 20 | 1000 / 1000 / 1000 | 0 / 0 / 0 |
+| 容量探针40请求/秒 | 18.84 / 20.20 / 20.95 | 40 / 40 / 40 | 2000 / 2000 / 2000 | 0 / 0 / 0 |
+| 持续过载80请求/秒 | 31.32 / 32.16 / 32.11 | 73.40 / 70.34 / 70.42 | 3671 / 3518 / 3522 | 329 / 482 / 478 |
+| 慢消费者，20请求/秒 | 42.90 / 42.09 / 43.39 | 10 / 10 / 10 | 500 / 500 / 500 | 500 / 500 / 500 |
+
+四组均通过正式审计，无已接收失败、输出差异或生成漏发。40请求/秒未饱和，因此只称容量探针；80请求/秒已经出现背压，不追加160请求/秒实验。慢消费者可见ready结果持续占用额度，消费/关闭后归零。正常三轮replay P99为28.14/27.47/27.91ms，保留原50/55ms门槛。测量未锁频，40请求/秒的较低延迟不代表请求率增加必然降低延迟。[正常审计](validation/v2_upgrade/v25/final/normal-acceptance.json)、[容量探针](validation/v2_upgrade/v25/final/saturation-probe-acceptance.json)、[过载](validation/v2_upgrade/v25/final/overload-acceptance.json)、[慢消费者](validation/v2_upgrade/v25/final/slow-consumer-acceptance.json)
+
+10月19日完成连续 **1800秒** 正式长稳：20请求/秒，**36,000/36,000成功**，Busy、失败、超时和生成漏发均为0；SDK P50/P95/P99为24.41/26.12/**26.85ms**，replay P99为 **27.06ms**。包括40次预热的36,040次结果抽检、296次周期完整哈希均无差异；8次启动基线另计。30个逐分钟窗口均为20.0成功请求/秒，SDK P99范围23.07–29.19ms，最大replay P99为29.30ms，没有平均这些百分位。[完整严格审计](validation/v2_upgrade/v25/final/soak-acceptance.json)、[逐分钟延迟](validation/v2_upgrade/v25/soak-latency-windows.json)
+
+共35,715个稳态RSS采样，实际覆盖1799.936秒，最大间隔74.60ms；所有阶段RSS峰值 **566.08MiB**。29个完整60秒窗口和最后约59.92秒充分采样尾窗的中位数增长均 **0MiB**，满足冻结64MiB门槛。设备/页锁定分配计数从正式边界到关闭均保持3次，CPU工作区28次；单槽位I/O设备与页锁定容量各10,584,640字节。关闭后inflight、ready、预算、I/O及主机工作区全部归零；上下文需求等历史字段保留，不能解释为关闭后仍持有这些资源。
+
+本轮长稳通过全部原冻结质量、计数、SLO、采样密度、内存增长与回收门槛。10月16日的短测和10月19日长稳使用同一冻结二进制；未锁频、桌面后台未隔离、供电状态未采样，结果仍限本机条件。中断的容量探针、两次不完整长稳及冻结前3秒preflight保留为诊断，不混入正式结果，也不拼接时长；证据口径见 [V2.5目录说明](validation/v2_upgrade/v25/README.md)。
+
+复现入口 `tools/run_depth_v25.py --executable BUILD/bin/depth_replay --package PACKAGE --images-list data/depth/replay_v2.txt --output NEW_DIR --preprocess cuda-full-basic --slots 1 --case soak`。它运行真实1800秒并调用严格审计；`tools/summarize_depth_soak.py AUDIT --output NEW.json`在核对审计和原始文件哈希后生成逐分钟统计。

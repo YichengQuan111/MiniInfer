@@ -27,7 +27,7 @@ DEVICE_STAGES = ("h2d_ms", "gpu_preprocess_ms", "model_ms", "d2h_ms")
 V3_EXTRA = ("slot_wait_ms", "pinned_copy_ms", "h2d_ms", "gpu_preprocess_ms", "model_ms", "d2h_ms", "synchronize_ms", "h2d_bytes")
 CSV_FIELDS_V3 = CSV_FIELDS_V2 + V3_EXTRA
 PREPROCESS_MODES = ("cpu", "cuda-partial", "cuda-full-basic", "cuda-full-fused")
-SCHEMAS = ("miniinfer-depth-replay-v1", "miniinfer-depth-replay-v2", "miniinfer-depth-replay-v3")
+SCHEMAS = ("miniinfer-depth-replay-v1", "miniinfer-depth-replay-v2", "miniinfer-depth-replay-v3", "miniinfer-depth-replay-v4")
 
 
 def finite_number(value, name):
@@ -91,7 +91,7 @@ def summarize_csv(path, summary):
         offset += planned
     with Path(path).open(newline="", encoding="utf-8") as stream:
         reader = csv.DictReader(stream)
-        if reader.fieldnames != list((CSV_FIELDS, CSV_FIELDS_V2, CSV_FIELDS_V3)[version-1]):
+        if reader.fieldnames != list((CSV_FIELDS, CSV_FIELDS_V2, CSV_FIELDS_V3)[min(version, 3)-1]):
             raise ValueError("CSV schema mismatch")
         for row in reader:
             if None in row or any(value is None for value in row.values()):
@@ -215,10 +215,26 @@ def summarize_csv(path, summary):
             result[phase]["h2d_bytes"] = state["h2d_bytes"]
             result[phase]["successful_device_stages"] = {key: distribution(values) for key, values in state["device_stages"].items()}
     snapshot = summary["sdk_snapshot"]
-    for key, expected in (("accepted", sum(s["accepted"] for s in states.values())),
-                          ("succeeded", sum(s["accepted_succeeded"] for s in states.values())),
+    golden = 0
+    if version >= 4:
+        checks = summary["output_checks"]
+        if not isinstance(checks["enabled"], bool):
+            raise ValueError("output check enabled must be Boolean")
+        golden = integer_field(checks["startup_golden_calls"], "startup_golden_calls", 0, 1024)
+        if golden != (image_count if checks["enabled"] else 0):
+            raise ValueError("startup golden count mismatch")
+        sampled = sum(s["accepted_succeeded"] for s in states.values()) if checks["enabled"] else 0
+        if integer_field(checks["sampled"], "sampled") != sampled:
+            raise ValueError("output check count mismatch")
+        if integer_field(checks["failures"], "failures") != 0:
+            raise ValueError("output consistency failure")
+        full = integer_field(checks["full"], "full", 0, sampled)
+        if sampled and not full:
+            raise ValueError("no full output checks")
+    for key, expected in (("accepted", golden + sum(s["accepted"] for s in states.values())),
+                          ("succeeded", golden + sum(s["accepted_succeeded"] for s in states.values())),
                           ("failed", sum(s["accepted_failed"] for s in states.values())),
-                          ("delivered", sum(s["accepted"] for s in states.values())),
+                          ("delivered", golden + sum(s["accepted"] for s in states.values())),
                           ("rejected_busy", sum(s["counts"]["busy"] for s in states.values())),
                           ("rejected_closed", sum(s["counts"]["closed"] for s in states.values())),
                           ("rejected_invalid", sum(s["counts"]["invalid_input"] for s in states.values())),
@@ -239,6 +255,7 @@ class Protocol:
     def __init__(self):
         self.ready = None
         self.summary = None
+        self.phase_events = []
         self.phase = "startup"
         self.order = []
         self.errors = []
@@ -269,6 +286,7 @@ class Protocol:
                 if position >= len(allowed) or token != allowed[position]:
                     raise ValueError("phase events out of order")
                 self.order.append(token)
+                self.phase_events.append({"phase": phase, "source": source, "elapsed_ms": elapsed * 1000})
                 self.phase = phase
             elif kind == "summary" and self.ready is not None and self.summary is None and self.order and self.order[-1] == ("drain", "steady"):
                 protocol_version(event)
@@ -293,6 +311,10 @@ def build_command(args, directory):
                     "--reuse-gpu", str(args.reuse_gpu), "--consumer-delay-ms", str(args.consumer_delay_ms)]
     if args.preprocess != "cpu":
         command += ["--preprocess", args.preprocess]
+    if args.check_outputs:
+        command += ["--check-outputs", "1"]
+    if args.sdk_telemetry:
+        command += ["--sdk-telemetry", str(directory / "sdk.csv")]
     return command
 
 
@@ -317,6 +339,11 @@ def validate_configuration(args, summary):
         raise ValueError("GPU preprocessing requires v3 replay protocol")
     if version >= 3 and summary["preprocess_mode"] != args.preprocess:
         raise ValueError("requested preprocessing/summary mismatch")
+    if (args.check_outputs or args.sdk_telemetry) and version < 4:
+        raise ValueError("output checks/SDK telemetry require v4 protocol")
+    if version >= 4:
+        if summary["output_checks"]["enabled"] != args.check_outputs or summary["sdk_telemetry_enabled"] != args.sdk_telemetry:
+            raise ValueError("requested checks/telemetry configuration mismatch")
 
 
 def run_once(args, directory):
@@ -363,7 +390,7 @@ def run_once(args, directory):
                     protocol.error("stderr log limit exceeded")
 
     memory_stream = (directory / "memory.csv").open("x", newline="", encoding="utf-8")
-    writer = csv.writer(memory_stream)
+    writer = csv.writer(memory_stream, lineterminator="\n")
     writer.writerow(("elapsed_ms", "phase", "role", "metric", "value"))
 
     def sample(role, metric, value):
@@ -479,9 +506,10 @@ def run_once(args, directory):
         except (OSError, ValueError, KeyError, TypeError, OverflowError) as error:
             protocol.error(error)
     result = {"command": command, "pid": process.pid, "returncode": process.returncode,
-              "ready": protocol.ready, "process_summary": protocol.summary, "statistics": statistics,
+              "ready": protocol.ready, "process_summary": protocol.summary, "statistics": statistics, "phase_events": protocol.phase_events,
               "memory_peaks": peaks, "telemetry_errors": sorted(telemetry_errors), "errors": protocol.errors,
-              "stdout": "stdout.log", "stderr": "stderr.log", "memory_csv": "memory.csv", "request_csv": "raw.csv"}
+              "stdout": "stdout.log", "stderr": "stderr.log", "memory_csv": "memory.csv", "request_csv": "raw.csv",
+              "sdk_csv": "sdk.csv" if args.sdk_telemetry else None}
     json_exclusive(directory / "summary.json", result)
     return result
 
@@ -531,6 +559,8 @@ def parser():
     result.add_argument("--reuse-host", type=int, choices=(0, 1), default=1)
     result.add_argument("--reuse-gpu", type=int, choices=(0, 1), default=1)
     result.add_argument("--preprocess", choices=PREPROCESS_MODES, default="cpu")
+    result.add_argument("--check-outputs", action="store_true", help="64 bitwise anchors per result; periodic full-map hash against startup per-image baseline")
+    result.add_argument("--sdk-telemetry", action="store_true", help="record SDK ledger/resources every second and after shutdown")
     result.add_argument("--consumer-delay-ms", type=int, default=0, help="0..60000; delay after wait, before get; async only")
     result.add_argument("--device", type=int, choices=(0,), default=0, help="V1 SDK uses device 0")
     result.add_argument("--process-timeout-seconds", type=finite_positive, default=3600.)
@@ -614,7 +644,7 @@ def main():
         if path.is_file():
             package_identity.append({"path": str(path.relative_to(args.package)), "bytes": path.stat().st_size, "sha256": sha256(path)})
     report = {"schema": "miniinfer-depth-replay-report-v2", "recorded_at": datetime.now(timezone.utc).isoformat(),
-              "case": {key: getattr(args, key) for key in ("backend", "duration", "warmup", "rate", "sdk_workers", "workers", "max_outstanding", "queue", "budget", "max_lag_ms", "repeats", "device", "process_timeout_seconds", "environment_note", "async_sdk", "slots", "reuse_host", "reuse_gpu", "consumer_delay_ms")},
+              "case": {key: getattr(args, key) for key in ("backend", "duration", "warmup", "rate", "sdk_workers", "workers", "max_outstanding", "queue", "budget", "max_lag_ms", "repeats", "device", "process_timeout_seconds", "environment_note", "async_sdk", "slots", "reuse_host", "reuse_gpu", "consumer_delay_ms", "preprocess", "check_outputs", "sdk_telemetry")},
               "identity": {"executable": str(args.executable), "executable_sha256": sha256(args.executable),
                            "package": str(args.package), "package_files": package_identity,
                            "images": [{"path": str(path), "sha256": sha256(path)} for path in args.images], "sequence_sha256": sha256(args.sequence)},

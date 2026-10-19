@@ -1,0 +1,20 @@
+Internal ctest changing into directory: /home/qyc/builds/MiniInfer/v25-upgrade-tsan
+Test project /home/qyc/builds/MiniInfer/v25-upgrade-tsan
+    Start  1: depth_image_contract
+1/7 Test  #1: depth_image_contract .............   Passed    9.51 sec
+    Start  3: depth_sdk_contract
+2/7 Test  #3: depth_sdk_contract ...............   Passed    0.05 sec
+    Start 19: runtime_contract
+3/7 Test #19: runtime_contract .................   Passed    0.04 sec
+    Start 20: thread_pool_contract
+4/7 Test #20: thread_pool_contract .............   Passed    0.01 sec
+    Start 21: concurrency_contract
+5/7 Test #21: concurrency_contract .............   Passed   15.61 sec
+    Start 22: shutdown_contract
+6/7 Test #22: shutdown_contract ................   Passed    0.03 sec
+    Start 23: timing_contract
+7/7 Test #23: timing_contract ..................   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =  25.34 sec

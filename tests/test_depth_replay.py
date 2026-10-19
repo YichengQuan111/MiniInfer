@@ -15,6 +15,32 @@ from run_depth_replay import (CSV_FIELDS, CSV_FIELDS_V2, CSV_FIELDS_V3, V3_EXTRA
 
 
 class ReplayTests(unittest.TestCase):
+    def test_v4_output_checks_exclude_startup_from_steady_counts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path, summary, rows = self.v2_fixture(directory)
+            summary.update(schema="miniinfer-depth-replay-v4", preprocess_mode="cpu", sdk_telemetry_enabled=True,
+                output_checks={"enabled": True, "startup_golden_calls": 2, "sampled": 2, "full": 2, "failures": 0})
+            for row in rows:
+                row.update({key: "0" if row["submit_ms"] else "" for key in V3_EXTRA})
+            for phase in ("warmup", "steady"):
+                summary[phase].update(h2d_bytes=0, rgb8_h2d_bytes=0, fp32_h2d_bytes=0)
+            summary["sdk_snapshot"].update(accepted=4, succeeded=4, delivered=4)
+            with path.open("w", newline="") as stream:
+                writer = csv.DictWriter(stream, fieldnames=CSV_FIELDS_V3)
+                writer.writeheader()
+                writer.writerows(rows)
+            actual = summarize_csv(path, summary)["steady"]
+            self.assertEqual(actual["accepted_succeeded"], 2)
+            self.assertEqual(actual["successful_throughput_per_second"], 1)
+            for field, value in (("enabled", 1), ("startup_golden_calls", 1), ("sampled", 1), ("full", 0), ("failures", 1)):
+                changed = copy.deepcopy(summary)
+                changed["output_checks"][field] = value
+                with self.subTest(field=field), self.assertRaises(ValueError):
+                    summarize_csv(path, changed)
+            summary["sdk_snapshot"]["accepted"] = 2
+            with self.assertRaisesRegex(ValueError, "conservation"):
+                summarize_csv(path, summary)
+
     def test_v3_separates_device_time_and_checks_transfer_conservation(self):
         with tempfile.TemporaryDirectory() as directory:
             path, summary, rows = self.v2_fixture(directory)

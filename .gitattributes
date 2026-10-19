@@ -1,3 +1,6 @@
 * text=auto eol=lf
 *.f32 binary
 *.i32 binary
+# Stability audits hash the exact CSV bytes, including older CRLF preflights.
+docs/validation/v2_upgrade/v25/**/*.csv -text
+docs/validation/v2_upgrade/v26/**/*.csv -text

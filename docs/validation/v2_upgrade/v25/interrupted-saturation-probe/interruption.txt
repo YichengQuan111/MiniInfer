@@ -1,0 +1,1 @@
+2026-10-16: app/turn interrupted during repeat 3 near steady second 6. Confirmed no running replay. Entire partial batch retained as diagnostic evidence; excluded from formal summary. Normal case had already completed and passed its audit. Only the interrupted and remaining cases are rerun using the same frozen V2.5 executable and source tree.

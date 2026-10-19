@@ -1,6 +1,7 @@
 #include "miniinfer/depth/sdk.hpp"
 #include "miniinfer/depth/artifact.hpp"
 #include "miniinfer/depth/preprocess.hpp"
+#include "depth_replay_checks.hpp"
 
 #include <charconv>
 #include <chrono>
@@ -22,6 +23,8 @@
 namespace {
 using namespace miniinfer::depth;
 using Clock = std::chrono::steady_clock;
+using replay_detail::OutputCheck;
+using replay_detail::SdkSampler;
 using Counts = std::map<std::string, std::size_t>;
 constexpr std::size_t max_requests = 1000000;
 Counts empty_counts() { return {{"succeeded",0},{"busy",0},{"closed",0},{"invalid_input",0},
@@ -53,13 +56,13 @@ double real(const std::string& value, bool allow_zero=false) {
     return out;
 }
 struct Args {
-    std::filesystem::path package, output;
+    std::filesystem::path package, output, sdk_telemetry;
     std::vector<std::filesystem::path> paths;
     std::string backend;
     double duration=10, warmup=2, rate=10, max_lag_ms=100;
     std::size_t sdk_workers=4, workers=4, max_outstanding=4, queue=4, budget=128ULL*1024*1024;
     std::size_t slots=1, consumer_delay_ms=0;
-    bool asynchronous=false, reuse_host=true, reuse_gpu=true;
+    bool asynchronous=false, reuse_host=true, reuse_gpu=true, check_outputs=false;
     PreprocessMode preprocess_mode=PreprocessMode::Cpu;
 };
 Args parse(int argc,char** argv) {
@@ -77,6 +80,7 @@ Args parse(int argc,char** argv) {
         if(key=="--package") out.package=value;
         else if(key=="--backend") out.backend=value;
         else if(key=="--output") out.output=value;
+        else if(key=="--sdk-telemetry") out.sdk_telemetry=value;
         else if(key=="--preprocess") out.preprocess_mode=parse_preprocess_mode(value);
         else if(key=="--images-list") {
             if(std::filesystem::file_size(value)>8ULL*1024*1024) throw std::invalid_argument("image list exceeds 8MiB");
@@ -104,12 +108,13 @@ Args parse(int argc,char** argv) {
         else if(key=="--budget") out.budget=integer(value);
         else if(key=="--slots") out.slots=integer(value);
         else if(key=="--consumer-delay-ms") out.consumer_delay_ms=integer(value,true);
-        else if(key=="--async-sdk" || key=="--reuse-host" || key=="--reuse-gpu") {
+        else if(key=="--async-sdk" || key=="--reuse-host" || key=="--reuse-gpu" || key=="--check-outputs") {
             const auto flag=integer(value,true);
             if(flag>1) throw std::invalid_argument("boolean options require 0 or 1");
             if(key=="--async-sdk") out.asynchronous=flag;
             else if(key=="--reuse-host") out.reuse_host=flag;
-            else out.reuse_gpu=flag;
+            else if(key=="--reuse-gpu") out.reuse_gpu=flag;
+            else out.check_outputs=flag;
         }
         else throw std::invalid_argument("unknown option: "+key);
     }
@@ -137,10 +142,14 @@ std::string error_status(const SdkError& error) {
 // directly on the generator thread and records SDK terminal publication time.
 struct SyncAdapter {
     DepthSdk& sdk;
-    std::string execute(const RgbImage& image, DepthTiming& timing, Clock::time_point origin, double& ready) {
+    OutputCheck* checks;
+    std::atomic<int>& phase;
+    std::string execute(const RgbImage& image, DepthTiming& timing, Clock::time_point origin, double& ready,
+                        std::size_t image_index, std::size_t index) {
         try {
             auto result=sdk.run(image,&timing);
             ready=since(origin); // Result still owns its output: exclude destruction.
+            if(checks) checks->check(image_index,index,result);
             return "succeeded";
         }
         catch(const SdkError& error) {
@@ -150,7 +159,7 @@ struct SyncAdapter {
         catch(const std::exception&) { ready=since(origin); return "failure"; }
     }
     std::string collect(DepthRequest& request, DepthTiming& timing, Clock::time_point origin,
-                        double& ready, std::size_t delay_ms) {
+                        double& ready, std::size_t delay_ms, std::size_t image_index, std::size_t index) {
         auto set_ready=[&] {
             ready=timing.ready_at==Clock::time_point{} ? since(origin) :
                 std::chrono::duration<double,std::milli>(timing.ready_at-origin).count();
@@ -160,6 +169,7 @@ struct SyncAdapter {
             if(delay_ms) std::this_thread::sleep_for(std::chrono::milliseconds(delay_ms));
             auto result=request.get(&timing);
             set_ready();
+            if(checks) checks->check(image_index,index,result);
             return "succeeded";
         } catch(const SdkError& error) { set_ready(); return error_status(error); }
         catch(const std::exception&) { set_ready(); return "failure"; }
@@ -246,10 +256,10 @@ Phase replay(const std::string& phase, double seconds, const Args& args,
             }
             double ready=0;
             if(args.asynchronous) {
-                record.status=adapter.collect(*record.request,record.timing,origin,ready,args.consumer_delay_ms);
+                record.status=adapter.collect(*record.request,record.timing,origin,ready,args.consumer_delay_ms,record.image,record.index);
             } else {
                 record.submit=since(origin);
-                record.status=adapter.execute(images.at(record.image),record.timing,origin,ready);
+                record.status=adapter.execute(images.at(record.image),record.timing,origin,ready,record.image,record.index);
             }
             record.ready=ready;
             record.delivered=since(origin);
@@ -295,6 +305,7 @@ Phase replay(const std::string& phase, double seconds, const Args& args,
             }
         }
         std::this_thread::sleep_until(end);
+        adapter.phase=phase=="warmup" ? 2 : 4;
         std::cout<<"{\"event\":\"phase\",\"phase\":\"drain\",\"source\":\""<<phase<<"\"}"<<std::endl;
         {
             std::unique_lock<std::mutex> lock(mutex);
@@ -322,6 +333,7 @@ int main(int argc,char** argv) {
             "[--backend ort|trt --duration 10 --warmup 2 --rate 10 --workers 4 --max-outstanding 4\n"
             "--async-sdk 1 --slots 1 --reuse-host 1 --reuse-gpu 1 --consumer-delay-ms 0\n"
             "--preprocess cpu|cuda-partial|cuda-full-basic|cuda-full-fused\n"
+            "--check-outputs 0|1 --sdk-telemetry NEW.csv\n"
             " --sdk-workers 4 --queue 4 --budget 134217728 --max-lag-ms 100]\n"
             "Fixed open-loop schedule; async SDK mode records actual terminal publication and request handles.\n";
         return 0;
@@ -343,7 +355,12 @@ int main(int argc,char** argv) {
         DepthSdk sdk(config);
         if(!args.backend.empty() && sdk.snapshot().backend!=args.backend) throw std::invalid_argument("package backend mismatch");
         const auto input_size=contract_model_size(require_field(read_manifest(args.package/"manifest.txt"),"contract"));
-        SyncAdapter adapter{sdk}; std::size_t next_id=0;
+        std::atomic<int> sample_phase{0};
+        std::unique_ptr<SdkSampler> sampler;
+        if(!args.sdk_telemetry.empty()) sampler=std::make_unique<SdkSampler>(sdk,sample_phase,args.sdk_telemetry);
+        OutputCheck checks;
+        if(args.check_outputs) for(const auto& image:images) checks.add(sdk.run(image));
+        SyncAdapter adapter{sdk,args.check_outputs?&checks:nullptr,sample_phase}; std::size_t next_id=0;
         const auto initial=sdk.snapshot();
         std::cout<<std::setprecision(17)<<"{\"event\":\"ready\",\"startup_ms\":"<<since(main_start)
             <<",\"decoded_image_bytes\":"<<image_bytes<<",\"image_count\":"<<images.size()<<",\"sdk_worker_count\":"<<config.worker_count
@@ -354,17 +371,26 @@ int main(int argc,char** argv) {
             <<",\"fp32_model_input_bytes\":"<<(3*input_size*input_size*sizeof(float))<<",\"rgb8_input_bytes\":[";
         for(std::size_t i=0;i<images.size();++i) { if(i) std::cout<<","; std::cout<<images[i].pixels().size(); }
         std::cout<<"]}"<<std::endl;
+        sample_phase=1;
         std::cout<<"{\"event\":\"phase\",\"phase\":\"warmup\"}"<<std::endl;
         const auto warmup=replay("warmup",args.warmup,args,images,adapter,csv.get(),next_id);
+        if(sampler) sampler->begin_phase(3);
+        else sample_phase=3;
         std::cout<<"{\"event\":\"phase\",\"phase\":\"steady\"}"<<std::endl;
         const auto steady=replay("steady",args.duration,args,images,adapter,csv.get(),next_id);
+        sample_phase=5;
         sdk.shutdown(); const auto snapshot=sdk.snapshot();
-        std::cout<<"{\"event\":\"summary\",\"schema\":\"miniinfer-depth-replay-v3\",\"rate\":"<<args.rate
+        if(sampler) {sampler->stop();if(sampler->failed()) throw std::runtime_error("SDK telemetry write failed");}
+        std::cout<<"{\"event\":\"summary\",\"schema\":\"miniinfer-depth-replay-v4\",\"rate\":"<<args.rate
             <<",\"preprocess_mode\":\""<<preprocess_mode_name(args.preprocess_mode)<<"\""
             <<",\"max_lag_ms\":"<<args.max_lag_ms<<",\"image_count\":"<<images.size()
             <<",\"async_sdk\":"<<(args.asynchronous?"true":"false")<<",\"slots\":"<<args.slots
             <<",\"reuse_host\":"<<(args.reuse_host?"true":"false")<<",\"reuse_gpu\":"<<(args.reuse_gpu?"true":"false")
             <<",\"consumer_delay_ms\":"<<args.consumer_delay_ms
+            <<",\"output_checks\":{\"enabled\":"<<(args.check_outputs?"true":"false")
+            <<",\"startup_golden_calls\":"<<(args.check_outputs?images.size():0)
+            <<",\"sampled\":"<<checks.sampled()<<",\"full\":"<<checks.full()<<",\"failures\":"<<checks.failures()<<"}"
+            <<",\"sdk_telemetry_enabled\":"<<(sampler?"true":"false")
             <<",\"warmup\":"<<warmup.json()<<",\"steady\":"<<steady.json()
             <<",\"sdk_snapshot\":{\"accepted\":"<<snapshot.accepted<<",\"succeeded\":"<<snapshot.succeeded
             <<",\"failed\":"<<snapshot.failed<<",\"delivered\":"<<snapshot.delivered

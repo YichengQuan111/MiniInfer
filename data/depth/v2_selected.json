@@ -9,7 +9,7 @@
   "worker_count": 4,
   "queue_capacity": 4,
   "byte_budget": 134217728,
-  "reuse_host_buffers": true,
+  "reuse_host_workspace": true,
   "reuse_gpu_buffers": true,
   "engine_sha256": "eb9fbd41e015f4006918a2503522c054aabcd32d9b0abcfc37a98462e51759ab",
   "package": "data/generated/depth/packages/v2-upgrade-selected",

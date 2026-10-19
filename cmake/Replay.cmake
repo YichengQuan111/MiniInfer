@@ -11,3 +11,10 @@ if(BUILD_TESTING)
         set_tests_properties(depth_replay_statistics PROPERTIES TIMEOUT 30)
     endif()
 endif()
+
+if(BUILD_TESTING AND Python3_Interpreter_FOUND)
+    add_test(NAME depth_stability_contract
+        COMMAND "${Python3_EXECUTABLE}" -m unittest discover
+            -s "${PROJECT_SOURCE_DIR}/tests" -p test_depth_stability.py -v)
+    set_tests_properties(depth_stability_contract PROPERTIES TIMEOUT 60)
+endif()

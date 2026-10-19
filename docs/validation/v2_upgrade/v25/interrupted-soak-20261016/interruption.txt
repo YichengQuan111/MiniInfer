@@ -1,0 +1,1 @@
+The 2026-10-16 soak was interrupted after about 305 steady seconds, without completion or audit. On 2026-10-17 confirmed no replay process remained. This partial diagnostic is not long-soak acceptance evidence. A complete fresh 1800-second run uses the same frozen executable and configuration; all four already completed short-case audits remain valid.
